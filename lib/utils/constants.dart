@@ -1,5 +1,7 @@
 class ApiConstants {
-  static const String baseUrl = 'https://www.mafatihuljinan.org/wp-json/customapi/v1/';
+  static const String baseUrl =
+      'https://www.mafatihuljinan.org/wp-json/customapi/v1/';
+  static const String token = "MTAtMDctMjAyNCAwNTo1MjozOGNZUlNldVpVaG5vZDhGNVM=";
 
   static const String menuEndpoint = '/menuitems';
 
