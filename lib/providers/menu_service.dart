@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import '../modals/menu_list.dart';
 import '../utils/constants.dart';
-import '../utils/constants.dart';
 
 class MenuService {
   final Dio _dio;
@@ -9,7 +8,7 @@ class MenuService {
       : _dio = Dio(
           BaseOptions(
             baseUrl: ApiConstants.baseUrl,
-            connectTimeout: const Duration(milliseconds: 5000),
+            connectTimeout: const Duration(milliseconds: 15000),
             receiveTimeout: const Duration(milliseconds: 3000),
             headers: {
               'Authorization': 'Bearer $token',
