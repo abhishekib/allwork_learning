@@ -1,19 +1,30 @@
-import 'package:allwork/views/menu_list_view.dart';
+import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'views/menu_list_view.dart';
+import 'views/menu_detail_view.dart';
+import 'views/category_detail_view.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MenuListView(),
+      title: 'Menu App',
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => MenuListView()),
+        // GetPage(
+        //     name: '/menu-detail',
+        //     page: () => MenuDetailView(
+        //           menuItem: 's',
+        //         )),
+        GetPage(name: '/category-detail', page: () => CategoryDetailView()),
+      ],
     );
   }
 }
