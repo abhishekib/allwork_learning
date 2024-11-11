@@ -14,7 +14,7 @@ class MenuListView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Menu List"),
+        title: const Text("Menu List"),
       ),
       body: Obx(() {
         if (controller.isLoading.value) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/modals/category.dart';
@@ -5,13 +7,13 @@ import 'package:allwork/modals/category.dart';
 class CategoryListView extends StatelessWidget {
   final List<Category> categoryItems;
 
-  CategoryListView({required this.categoryItems});
+  const CategoryListView({super.key, required this.categoryItems});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Categories'),
+        title: const Text('Categories'),
       ),
       body: ListView.builder(
         itemCount: categoryItems.length,
@@ -20,6 +22,7 @@ class CategoryListView extends StatelessWidget {
           return ListTile(
             title: Text(item.title),
             onTap: () {
+              log(item.title);
               Get.toNamed(
                 '/category-detail',
                 arguments: item,

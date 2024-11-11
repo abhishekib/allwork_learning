@@ -1,17 +1,16 @@
-import 'dart:developer';
 import 'package:allwork/views/category_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:allwork/controllers/category_detail_controller.dart';
+import 'package:allwork/controllers/category_list_controller.dart';
 
 class MenuDetailView extends StatelessWidget {
   final String menuItem;
 
-  MenuDetailView({required this.menuItem});
+  const MenuDetailView({super.key, required this.menuItem});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(CategoryDetailController());
+    final controller = Get.put(CategoryListController());
 
     // Fetch data if not already fetched for the selected menu item
     if (controller.categoryData.isEmpty) {
@@ -24,9 +23,9 @@ class MenuDetailView extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (controller.categoryData.isEmpty) {
-          return Center(child: Text("No categories available"));
+          return const Center(child: Text("No categories available"));
         } else {
           return ListView.builder(
             itemCount: controller.categoryData.length,

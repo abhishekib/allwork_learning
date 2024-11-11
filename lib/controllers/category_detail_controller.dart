@@ -1,54 +1,87 @@
-import 'package:get/state_manager.dart';
-import 'package:allwork/modals/category.dart';
-import 'package:allwork/providers/category_provider.dart';
-import 'package:allwork/utils/constants.dart';
 import 'dart:developer';
 
+import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
+
 class CategoryDetailController extends GetxController {
-  var categoryData = <String, List<Category>>{}.obs;
+  // Audio Player Instance
+  final AudioPlayer _audioPlayer = AudioPlayer();
+
+  // Observables for time tracking
+  var currentTime = 0.0.obs;
+  var totalTime = 0.0.obs;
+
+  // Observables for managing the state
   var isLoading = true.obs;
+  var selectedType = 'Arabic'.obs;
 
-  final CategoryProvider _categoryProvider =
-      CategoryProvider(ApiConstants.token);
+  var lyricsList = <Map<String, dynamic>>[].obs;
 
-  // This method fetches data based on the selected menu item and its dynamic endpoint
-  Future<void> fetchCategoryData(String menuItem) async {
-    try {
-      isLoading(true);
-      final endpoint = _getEndpointForMenuItem(menuItem);
+  get audioPlayer => _audioPlayer;
 
-      if (endpoint.isNotEmpty) {
-        final response = await _categoryProvider.fetchCategoryData(endpoint);
-        categoryData.value = response.categories;
-      } else {
-        log("No endpoint found for $menuItem");
-      }
-    } catch (e) {
-      log("Error fetching category data for $menuItem: $e");
-    } finally {
-      isLoading(false);
+  @override
+  // ignore: unnecessary_overrides
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    _audioPlayer.dispose();
+  }
+
+  // Method to play or pause the audio
+  void playPauseAudio() {
+    if (_audioPlayer.playing) {
+      _audioPlayer.pause();
+    } else {
+      _audioPlayer.play();
     }
   }
 
-  // This function dynamically returns the endpoint URL for each menu item
-  String _getEndpointForMenuItem(String menuItem) {
-    switch (menuItem) {
-      case "Daily Dua":
-        return ApiConstants.dailyDuaEndpoint;
-      case "Surah":
-      // return ApiConstants.surahEndpoint;
-      case "Dua":
-        return ApiConstants.duaEndpoint;
-      case "Ziyarat":
-        return ApiConstants.ziyaratEndpoint;
-      case "Amaal":
-      // return ApiConstants.amaalEndpoint;
-      case "Munajat":
-        return ApiConstants.munajatEndpoint;
-      case "Travel Ziyarat":
-      // return ApiConstants.travelZiyaratEndpoint;
-      default:
-        return ApiConstants.baseUrl;
+  // Method to seek to a specific position in the audio
+  void seekTo(double position) {
+    _audioPlayer.seek(Duration(seconds: position.toInt()));
+  }
+
+  // Method to initialize and load the audio from URL
+  Future<void> initializeAudio(String audioUrl) async {
+    try {
+      await _audioPlayer.setUrl(audioUrl);
+      _audioPlayer.durationStream.listen((duration) {
+        if (duration != null) {
+          totalTime.value = duration.inSeconds.toDouble();
+        }
+      });
+
+      _audioPlayer.positionStream.listen((position) {
+        currentTime.value = position.inSeconds.toDouble();
+      });
+    } catch (e) {
+      // Handle any errors here
+      log('Error initializing audio: $e');
     }
+  }
+
+  void loadCategoryData(List<dynamic> cdata) {
+    isLoading(true); // Set loading state to true
+
+    // Extract lyrics data from cdata and set it to lyricsList
+    log("cat det cont----> started");
+    lyricsList.value =
+        cdata.map((item) => item as Map<String, dynamic>).toList();
+
+    // Initialize the audio with the first available audio URL
+    if (cdata.isNotEmpty && cdata[0]['audiourl'] != null) {
+      initializeAudio(cdata[0]['audiourl']);
+    }
+
+    isLoading(false); // Set loading state to false once data is loaded
+  }
+
+  // Method to switch between types (Arabic, Transliteration, Translation)
+  void changeType(String type) {
+    selectedType.value = type;
   }
 }

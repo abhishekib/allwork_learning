@@ -1,4 +1,4 @@
-import 'package:allwork/modals/contentData.dart';
+import 'package:allwork/modals/content_data.dart';
 
 class Category {
   final String category;
