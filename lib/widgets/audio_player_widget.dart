@@ -17,6 +17,7 @@ class AudioPlayerWidget extends StatefulWidget {
 class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
   bool isPlaying = false;
+  bool isCompleted = false;
   Duration currentTime = Duration.zero;
   Duration totalTime = Duration.zero;
 
@@ -30,6 +31,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Future<void> _setupAudio() async {
     try {
       await _audioPlayer.setUrl(widget.audioUrl);
+
+      // Listen to changes in the duration of the audio
       _audioPlayer.durationStream.listen((duration) {
         if (duration != null && mounted) {
           setState(() {
@@ -37,6 +40,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           });
         }
       });
+
+      // Listen to changes in the position of the audio
       _audioPlayer.positionStream.listen((position) {
         if (mounted) {
           setState(() {
@@ -47,25 +52,25 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           });
         }
       });
+
+      // Listen to changes in the player state
       _audioPlayer.playerStateStream.listen((playerState) {
         if (mounted) {
-          setState(() {
-            isPlaying = playerState.playing;
-
-            // When playback completes, set currentTime to totalTime and set isPlaying to false
-            if (playerState.processingState == ProcessingState.completed) {
-              currentTime = totalTime;
-              isPlaying =
-                  false; // Set isPlaying to false as playback has completed
-            }
-
-            // Handle state when the player is buffering or loading
-            if (playerState.processingState == ProcessingState.loading ||
-                playerState.processingState == ProcessingState.buffering) {
-              isPlaying =
-                  false; // Player is not actively playing when loading or buffering
-            }
-          });
+          if (playerState.processingState == ProcessingState.completed) {
+            // When audio is completed, reset everything to the initial state
+            setState(() {
+              currentTime = Duration.zero; // Reset to start
+              isPlaying = false; // Show the play icon
+              isCompleted = true; // Mark audio as completed
+            });
+          } else {
+            setState(() {
+              isPlaying = playerState.playing;
+              if (playerState.processingState != ProcessingState.completed) {
+                isCompleted = false; // If not completed, reset this flag
+              }
+            });
+          }
         }
       });
     } catch (e) {
@@ -107,7 +112,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   max: totalTime.inSeconds.toDouble(),
                   onChanged: (value) async {
                     await _audioPlayer.seek(Duration(seconds: value.toInt()));
-                    // If the slider is moved back to the start, change the icon to play
+                    // If seeking to the start, set isPlaying to false
                     if (value == 0) {
                       setState(() {
                         isPlaying = false;
@@ -144,9 +149,24 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               IconButton(
                 onPressed: () async {
                   if (isPlaying) {
+                    // If currently playing, pause the audio
                     await _audioPlayer.pause();
+                    setState(() {
+                      isPlaying = false;
+                    });
                   } else {
+                    // If the audio has completed, reset to the start before playing
+                    if (isCompleted) {
+                      await _audioPlayer.seek(Duration.zero);
+                      setState(() {
+                        isCompleted =
+                            false; // Reset completion flag before replaying
+                      });
+                    }
                     await _audioPlayer.play();
+                    setState(() {
+                      isPlaying = true;
+                    });
                   }
                 },
                 icon: Icon(
