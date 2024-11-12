@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'dart:math'; // Import to use min()
 
 class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
@@ -39,7 +40,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       _audioPlayer.positionStream.listen((position) {
         if (mounted) {
           setState(() {
-            currentTime = position;
+            // Ensure that currentTime doesn't exceed totalTime
+            currentTime = Duration(
+              seconds: min(position.inSeconds, totalTime.inSeconds),
+            );
           });
         }
       });
@@ -47,6 +51,20 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         if (mounted) {
           setState(() {
             isPlaying = playerState.playing;
+
+            // When playback completes, set currentTime to totalTime and set isPlaying to false
+            if (playerState.processingState == ProcessingState.completed) {
+              currentTime = totalTime;
+              isPlaying =
+                  false; // Set isPlaying to false as playback has completed
+            }
+
+            // Handle state when the player is buffering or loading
+            if (playerState.processingState == ProcessingState.loading ||
+                playerState.processingState == ProcessingState.buffering) {
+              isPlaying =
+                  false; // Player is not actively playing when loading or buffering
+            }
           });
         }
       });
@@ -89,6 +107,12 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   max: totalTime.inSeconds.toDouble(),
                   onChanged: (value) async {
                     await _audioPlayer.seek(Duration(seconds: value.toInt()));
+                    // If the slider is moved back to the start, change the icon to play
+                    if (value == 0) {
+                      setState(() {
+                        isPlaying = false;
+                      });
+                    }
                   },
                   activeColor: Colors.white,
                   inactiveColor: Colors.white54,

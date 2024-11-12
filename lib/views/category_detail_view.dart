@@ -54,6 +54,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
         currentAudioUrl = newAudioUrl;
       });
     });
+    log("---You are in CategoryDetailView---");
   }
 
   @override
