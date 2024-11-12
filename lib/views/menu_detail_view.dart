@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/views/category_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,9 +37,12 @@ class MenuDetailView extends StatelessWidget {
               return ListTile(
                 title: Text(categoryName),
                 onTap: () {
+                  log("menu detail view-------> $categoryName");
                   Get.to(
                     () => CategoryListView(
-                        categoryItems: controller.categoryData[categoryName]!),
+                      categoryItems: controller.categoryData[categoryName]!,
+                      argument: categoryName, // Pass the selected menuItem
+                    ),
                   );
                 },
               );

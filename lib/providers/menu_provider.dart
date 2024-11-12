@@ -9,8 +9,8 @@ class MenuService {
       : _dio = Dio(
           BaseOptions(
             baseUrl: ApiConstants.baseUrl,
-            connectTimeout: const Duration(milliseconds: 15000),
-            receiveTimeout: const Duration(milliseconds: 3000),
+            // connectTimeout: const Duration(milliseconds: 15000),
+            // receiveTimeout: const Duration(milliseconds: 3000),
             headers: {
               'Authorization': 'Bearer $token',
               'Content-Type': 'application/json',
