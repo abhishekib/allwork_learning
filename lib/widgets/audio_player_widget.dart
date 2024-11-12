@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'dart:math';
@@ -6,9 +7,9 @@ class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
 
   const AudioPlayerWidget({
-    Key? key,
+    super.key,
     required this.audioUrl,
-  }) : super(key: key);
+  });
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
@@ -75,7 +76,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       setState(() {
         hasError = true;
       });
-      print("Error loading audio: $e");
+      if (kDebugMode) {
+        print("Error loading audio: $e");
+      }
     }
   }
 

@@ -34,9 +34,8 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
     // Set the initial audio URL for the first tab if available
-    final String? initialAudioUrl = cdata.isNotEmpty &&
-            cdata[0].audiourl != null &&
-            cdata[0].audiourl!.isNotEmpty
+    final String? initialAudioUrl = cdata.isNotEmpty &&  
+            cdata[0].audiourl.isNotEmpty
         ? cdata[0].audiourl
         : null;
 
@@ -45,8 +44,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     // Listener to update audio URL based on the selected tab
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
-      final String? newAudioUrl = cdata[selectedIndex].audiourl != null &&
-              cdata[selectedIndex].audiourl!.isNotEmpty
+      final String? newAudioUrl = cdata[selectedIndex].audiourl.isNotEmpty
           ? cdata[selectedIndex].audiourl
           : null;
 

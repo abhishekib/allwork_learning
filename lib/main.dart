@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => const MenuListView()),
         GetPage(
             name: '/menu-detail',
-            page: () => MenuDetailView(
+            page: () => const MenuDetailView(
                   menuItem: '',
                 )),
         GetPage(

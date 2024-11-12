@@ -28,11 +28,11 @@ class LyricsTab extends StatelessWidget {
                 final isArabicHighlighted =
                     controller.selectedType.value == "Arabic";
                 return Visibility(
-                  visible: lyrics.arabic != null && lyrics.arabic!.isNotEmpty,
+                  visible: lyrics.arabic.isNotEmpty,
                   child: Text(
-                    lyrics.arabic!,
+                    lyrics.arabic,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: isArabicHighlighted ? 22 : 18,
                       fontWeight: isArabicHighlighted
                           ? FontWeight.bold
                           : FontWeight.normal,
@@ -47,12 +47,11 @@ class LyricsTab extends StatelessWidget {
                 final isTransliterationHighlighted =
                     controller.selectedType.value == "Transliteration";
                 return Visibility(
-                  visible: lyrics.translitration != null &&
-                      lyrics.translitration!.isNotEmpty,
+                  visible: lyrics.translitration.isNotEmpty,
                   child: Text(
-                    lyrics.translitration!,
+                    lyrics.translitration,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: isTransliterationHighlighted ? 20 : 16,
                       fontWeight: isTransliterationHighlighted
                           ? FontWeight.bold
                           : FontWeight.normal,
@@ -68,12 +67,11 @@ class LyricsTab extends StatelessWidget {
                 final isTranslationHighlighted =
                     controller.selectedType.value == "Translation";
                 return Visibility(
-                  visible: lyrics.translation != null &&
-                      lyrics.translation!.isNotEmpty,
+                  visible: lyrics.translation.isNotEmpty,
                   child: Text(
-                    lyrics.translation!,
+                    lyrics.translation,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: isTranslationHighlighted ? 20 : 16,
                       fontWeight: isTranslationHighlighted
                           ? FontWeight.bold
                           : FontWeight.normal,

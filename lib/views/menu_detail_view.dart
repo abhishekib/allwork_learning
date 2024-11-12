@@ -19,7 +19,7 @@ class MenuDetailView extends StatelessWidget {
       controller.fetchCategoryData(menuItem);
     }
 
-    Future<void> _refreshCategoryData() async {
+    Future<void> refreshCategoryData() async {
       // Fetch the latest category data
       await controller.fetchCategoryData(menuItem);
     }
@@ -35,7 +35,7 @@ class MenuDetailView extends StatelessWidget {
           return const Center(child: Text("No categories available"));
         } else {
           return RefreshIndicator(
-            onRefresh: _refreshCategoryData,
+            onRefresh: refreshCategoryData,
             child: ListView.builder(
               itemCount: controller.categoryData.length,
               itemBuilder: (context, index) {
