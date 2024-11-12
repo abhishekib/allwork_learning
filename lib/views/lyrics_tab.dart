@@ -1,11 +1,10 @@
-// lyrics_tab.dart
-
+import 'package:allwork/modals/content_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 
 class LyricsTab extends StatelessWidget {
-  final List<dynamic> lyricsList;
+  final List<Lyrics> lyricsList; // Updated to use List<Lyrics>
 
   const LyricsTab({super.key, required this.lyricsList});
 
@@ -13,44 +12,83 @@ class LyricsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<CategoryDetailController>();
 
-    return Obx(() {
-      return ListView.builder(
-        itemCount: lyricsList.length,
-        itemBuilder: (context, index) {
-          final lyrics = lyricsList[index];
-          final isHighlighted = lyrics['type'] == controller.selectedType.value;
+    return ListView.builder(
+      shrinkWrap: true, // Ensures ListView takes up minimal space
+      physics: const AlwaysScrollableScrollPhysics(), // Always allow scrolling
+      itemCount: lyricsList.length,
+      itemBuilder: (context, index) {
+        final lyrics = lyricsList[index];
 
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            color: isHighlighted ? Colors.yellowAccent : Colors.transparent,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(lyrics['arabic'] ?? '',
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(() {
+                final isArabicHighlighted =
+                    controller.selectedType.value == "Arabic";
+                return Visibility(
+                  visible: lyrics.arabic != null && lyrics.arabic!.isNotEmpty,
+                  child: Text(
+                    lyrics.arabic!,
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: isHighlighted
-                            ? FontWeight.bold
-                            : FontWeight.normal)),
-                if (lyrics['translation'] != null)
-                  Text(lyrics['translation'],
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: isHighlighted
-                              ? FontWeight.bold
-                              : FontWeight.normal)),
-                if (lyrics['translitration'] != null)
-                  Text(lyrics['translitration'],
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: isHighlighted
-                              ? FontWeight.bold
-                              : FontWeight.normal)),
-              ],
-            ),
-          );
-        },
-      );
-    });
+                      fontSize: 18,
+                      fontWeight: isArabicHighlighted
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color:
+                          isArabicHighlighted ? Colors.black87 : Colors.black54,
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 8),
+              Obx(() {
+                final isTransliterationHighlighted =
+                    controller.selectedType.value == "Transliteration";
+                return Visibility(
+                  visible: lyrics.translitration != null &&
+                      lyrics.translitration!.isNotEmpty,
+                  child: Text(
+                    lyrics.translitration!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: isTransliterationHighlighted
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: isTransliterationHighlighted
+                          ? Colors.black87
+                          : Colors.black54,
+                    ),
+                  ),
+                );
+              }),
+              const SizedBox(height: 8),
+              Obx(() {
+                final isTranslationHighlighted =
+                    controller.selectedType.value == "Translation";
+                return Visibility(
+                  visible: lyrics.translation != null &&
+                      lyrics.translation!.isNotEmpty,
+                  child: Text(
+                    lyrics.translation!,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: isTranslationHighlighted
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      color: isTranslationHighlighted
+                          ? Colors.black87
+                          : Colors.black54,
+                    ),
+                  ),
+                );
+              }),
+              const Divider(height: 16, thickness: 1),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
