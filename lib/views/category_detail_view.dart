@@ -7,8 +7,60 @@ import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
 
-class CategoryDetailView extends StatelessWidget {
+class CategoryDetailView extends StatefulWidget {
   const CategoryDetailView({super.key});
+
+  @override
+  _CategoryDetailViewState createState() => _CategoryDetailViewState();
+}
+
+class _CategoryDetailViewState extends State<CategoryDetailView>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  String? currentAudioUrl;
+
+  @override
+  void initState() {
+    super.initState();
+    final Category categoryDetails = Get.arguments as Category;
+    final cdata = categoryDetails.cdata;
+
+    // Set up TabController based on the number of available types
+    final availableTypes = cdata
+        .where((e) => e.lyrics.isNotEmpty)
+        .map((e) => e.type)
+        .toSet()
+        .toList();
+    _tabController = TabController(length: availableTypes.length, vsync: this);
+
+    // Set the initial audio URL for the first tab if available
+    final String? initialAudioUrl = cdata.isNotEmpty &&
+            cdata[0].audiourl != null &&
+            cdata[0].audiourl!.isNotEmpty
+        ? cdata[0].audiourl
+        : null;
+
+    currentAudioUrl = initialAudioUrl;
+
+    // Listener to update audio URL based on the selected tab
+    _tabController.addListener(() {
+      final selectedIndex = _tabController.index;
+      final String? newAudioUrl = cdata[selectedIndex].audiourl != null &&
+              cdata[selectedIndex].audiourl!.isNotEmpty
+          ? cdata[selectedIndex].audiourl
+          : null;
+
+      setState(() {
+        currentAudioUrl = newAudioUrl;
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +82,6 @@ class CategoryDetailView extends StatelessWidget {
         if (item.lyrics.isNotEmpty) item.type: item.lyrics
     };
 
-    // Find an available audio URL from cdata to use with the AudioPlayerWidget
-    final String audioUrl = cdata[0].audiourl;
-
     if (availableTypes.isEmpty) {
       return Scaffold(
         appBar: AppBar(
@@ -51,15 +100,16 @@ class CategoryDetailView extends StatelessWidget {
         child: Column(
           children: [
             // Only show the AudioPlayerWidget if a valid audio URL is available
-            if (audioUrl.isNotEmpty)
+            if (currentAudioUrl != null && currentAudioUrl!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: AudioPlayerWidget(
-                  audioUrl: audioUrl,
+                  audioUrl: currentAudioUrl!,
                 ),
               ),
             const SizedBox(height: 10),
             TabBar(
+              controller: _tabController,
               onTap: (index) {
                 controller.changeType(availableTypes[index]);
               },
@@ -69,6 +119,7 @@ class CategoryDetailView extends StatelessWidget {
             Flexible(
               fit: FlexFit.loose,
               child: TabBarView(
+                controller: _tabController,
                 children: availableTypes.map((type) {
                   final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                   return LyricsTab(lyricsList: lyricsList);
