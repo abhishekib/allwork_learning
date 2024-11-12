@@ -19,6 +19,11 @@ class MenuDetailView extends StatelessWidget {
       controller.fetchCategoryData(menuItem);
     }
 
+    Future<void> _refreshCategoryData() async {
+      // Fetch the latest category data
+      await controller.fetchCategoryData(menuItem);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(menuItem),
@@ -29,24 +34,27 @@ class MenuDetailView extends StatelessWidget {
         } else if (controller.categoryData.isEmpty) {
           return const Center(child: Text("No categories available"));
         } else {
-          return ListView.builder(
-            itemCount: controller.categoryData.length,
-            itemBuilder: (context, index) {
-              final categoryName =
-                  controller.categoryData.keys.elementAt(index);
-              return ListTile(
-                title: Text(categoryName),
-                onTap: () {
-                  log("menu detail view-------> $categoryName");
-                  Get.to(
-                    () => CategoryListView(
-                      categoryItems: controller.categoryData[categoryName]!,
-                      argument: categoryName, // Pass the selected menuItem
-                    ),
-                  );
-                },
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: _refreshCategoryData,
+            child: ListView.builder(
+              itemCount: controller.categoryData.length,
+              itemBuilder: (context, index) {
+                final categoryName =
+                    controller.categoryData.keys.elementAt(index);
+                return ListTile(
+                  title: Text(categoryName),
+                  onTap: () {
+                    log("menu detail view-------> $categoryName");
+                    Get.to(
+                      () => CategoryListView(
+                        categoryItems: controller.categoryData[categoryName]!,
+                        argument: categoryName, // Pass the selected menuItem
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
           );
         }
       }),
