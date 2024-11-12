@@ -12,6 +12,11 @@ class MenuListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(MenuListController());
 
+    Future<void> refreshMenuItems() async {
+      // Call the controller method to fetch the menu list again
+      controller.fetchMenuItems();
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Menu List"),
@@ -22,21 +27,23 @@ class MenuListView extends StatelessWidget {
         } else if (controller.menuList.value.items.isEmpty) {
           return const Center(child: Text("No menu items available"));
         } else {
-          return ListView.builder(
-            itemCount: controller.menuList.value.items.length,
-            itemBuilder: (context, index) {
-              final menuItem = controller.menuList.value.items[index];
-              return ListTile(
-                title: Text(menuItem),
-                onTap: () {
-                  log("selected ----> $menuItem");
-
-                  Get.to(() => MenuDetailView(
-                        menuItem: menuItem,
-                      ));
-                },
-              );
-            },
+          return RefreshIndicator(
+            onRefresh: refreshMenuItems,
+            child: ListView.builder(
+              itemCount: controller.menuList.value.items.length,
+              itemBuilder: (context, index) {
+                final menuItem = controller.menuList.value.items[index];
+                return ListTile(
+                  title: Text(menuItem),
+                  onTap: () {
+                    log("selected ----> $menuItem");
+                    Get.to(() => MenuDetailView(
+                          menuItem: menuItem,
+                        ));
+                  },
+                );
+              },
+            ),
           );
         }
       }),

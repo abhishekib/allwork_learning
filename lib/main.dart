@@ -1,3 +1,4 @@
+import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'views/menu_list_view.dart';
@@ -16,13 +17,21 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Menu App',
       initialRoute: '/',
+      theme: ThemeData(
+        pageTransitionsTheme: const PageTransitionsTheme(
+          builders: <TargetPlatform, PageTransitionsBuilder>{
+            // Set the predictive back transitions for Android.
+            TargetPlatform.android: PredictiveBackPageTransitionsBuilder(),
+          },
+        ),
+      ),
       getPages: [
         GetPage(name: '/', page: () => const MenuListView()),
-        // GetPage(
-        //     name: '/menu-detail',
-        //     page: () => MenuDetailView(
-        //           menuItem: 's',
-        //         )),
+        GetPage(
+            name: '/menu-detail',
+            page: () => MenuDetailView(
+                  menuItem: '',
+                )),
         GetPage(
             name: '/category-detail', page: () => const CategoryDetailView()),
       ],
