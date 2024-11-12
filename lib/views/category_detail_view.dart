@@ -10,20 +10,22 @@ class CategoryDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Instantiate the controller and load arguments
     final CategoryDetailController controller =
         Get.put(CategoryDetailController());
-    final Category categoryDetails =
-        Get.arguments as Category; // Data passed from CategoryListView
+    final Category categoryDetails = Get.arguments as Category;
 
-    // Extract the cdata to check for available types
     final cdata = categoryDetails.cdata;
 
-    // Filter available types and lyrics based on the data provided
-    final availableTypes = cdata.map((e) => e.type).toSet().toList();
-    final availableLyrics = {for (var item in cdata) item.type: item.lyrics};
+    final availableTypes = cdata
+        .where((e) => e.lyrics.isNotEmpty)
+        .map((e) => e.type)
+        .toSet()
+        .toList();
+    final availableLyrics = {
+      for (var item in cdata)
+        if (item.lyrics.isNotEmpty) item.type: item.lyrics
+    };
 
-    // Check if there's any valid type to display tabs
     if (availableTypes.isEmpty) {
       return Scaffold(
         appBar: AppBar(
@@ -41,21 +43,17 @@ class CategoryDetailView extends StatelessWidget {
         length: availableTypes.length,
         child: Column(
           children: [
-            // Dynamic Tab Selector for available types
             TabBar(
               onTap: (index) {
-                // Use the selected tab's type
                 controller.changeType(availableTypes[index]);
               },
               tabs: availableTypes.map((type) => Tab(text: type)).toList(),
             ),
             const SizedBox(height: 10),
-            // Use Flexible with loose fit to give TabBarView enough space
             Flexible(
               fit: FlexFit.loose,
               child: TabBarView(
                 children: availableTypes.map((type) {
-                  // Render corresponding lyrics in each tab
                   final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                   return LyricsTab(lyricsList: lyricsList);
                 }).toList(),
