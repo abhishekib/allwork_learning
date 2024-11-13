@@ -4,10 +4,13 @@ import 'dart:math';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
+  final ValueChanged<Duration>
+      onPositionChanged; // Callback for position changes
 
   const AudioPlayerWidget({
     Key? key,
     required this.audioUrl,
+    required this.onPositionChanged, // Required callback
   }) : super(key: key);
 
   @override
@@ -63,6 +66,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               seconds: min(position.inSeconds, totalTime.inSeconds),
             );
           });
+
+          // Notify the lyrics widget about the current audio position
+          widget.onPositionChanged(position);
         }
       });
 

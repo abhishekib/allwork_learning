@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:audioplayers/audioplayers.dart'; // Updated import to use audioplayers
+import 'package:audioplayers/audioplayers.dart'; // Import the audioplayers package
 
 class CategoryDetailController extends GetxController {
   // Audio Player Instance
@@ -19,49 +19,61 @@ class CategoryDetailController extends GetxController {
   get audioPlayer => _audioPlayer;
 
   @override
-  // ignore: unnecessary_overrides
   void onInit() {
     super.onInit();
+    log("CategoryDetailController initialized");
   }
 
   @override
   void onClose() {
     super.onClose();
     _audioPlayer.dispose();
+    log("Audio player disposed");
   }
 
   // Method to play or pause the audio
   void playPauseAudio() {
     if (_audioPlayer.state == PlayerState.playing) {
       _audioPlayer.pause();
+      log("Audio paused");
     } else {
       _audioPlayer.resume();
+      log("Audio resumed");
     }
   }
 
   // Method to seek to a specific position in the audio
   void seekTo(double position) {
     _audioPlayer.seek(Duration(seconds: position.toInt()));
+    log("Audio seeked to position: ${position.toInt()} seconds");
   }
 
   // Method to initialize and load the audio from URL
   Future<void> initializeAudio(String audioUrl) async {
     try {
-      await _audioPlayer.setSourceUrl(
-          audioUrl); // Changed to setSourceUrl to load audio without autoplay
+      log("Attempting to load audio from URL: $audioUrl");
 
-      _audioPlayer.onDurationChanged.listen((duration) {
+      await _audioPlayer.setSource(UrlSource(audioUrl));
+
+      log("Audio successfully loaded");
+
+          _audioPlayer.onDurationChanged.listen((duration) {
+        log("Audio duration changed: ${duration.inMilliseconds} ms");
         totalTime.value = duration.inSeconds.toDouble();
       });
 
       _audioPlayer.onPositionChanged.listen((position) {
+        log("Current audio position: ${position.inMilliseconds} ms");
         currentTime.value = position.inSeconds.toDouble();
       });
 
       _audioPlayer.onPlayerComplete.listen((event) {
+        log("Audio playback completed");
         currentTime.value = 0.0;
         isLoading.value = false;
       });
+
+      isLoading.value = false;
     } catch (e) {
       // Handle any errors here
       log('Error initializing audio: $e');
@@ -70,23 +82,27 @@ class CategoryDetailController extends GetxController {
   }
 
   void loadCategoryData(List<dynamic> cdata) {
-    isLoading(true); // Set loading state to true
+    isLoading(true);
 
-    // Extract lyrics data from cdata and set it to lyricsList
-    log("cat det cont----> started");
+    log("Loading category data...");
+
     lyricsList.value =
         cdata.map((item) => item as Map<String, dynamic>).toList();
 
+    log("Loaded ${lyricsList.length} lyrics items");
+
     // Initialize the audio with the first available audio URL
     if (cdata.isNotEmpty && cdata[0]['audiourl'] != null) {
+      log("Initializing audio with URL: ${cdata[0]['audiourl']}");
       initializeAudio(cdata[0]['audiourl']);
+    } else {
+      log("No valid audio URL found in category data");
+      isLoading.value = false;
     }
-
-    isLoading(false); // Set loading state to false once data is loaded
   }
 
-  // Method to switch between types (Arabic, Transliteration, Translation)
   void changeType(String type) {
     selectedType.value = type;
+    log("Changed selected type to: $type");
   }
 }

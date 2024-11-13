@@ -33,11 +33,10 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
         .toList();
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
-    // Set the initial audio URL for the first tab if available
-    final String? initialAudioUrl = cdata.isNotEmpty &&  
-            cdata[0].audiourl.isNotEmpty
-        ? cdata[0].audiourl
-        : null;
+    final String? initialAudioUrl =
+        cdata.isNotEmpty && cdata[0].audiourl.isNotEmpty
+            ? cdata[0].audiourl
+            : null;
 
     currentAudioUrl = initialAudioUrl;
 
@@ -104,6 +103,10 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
                 padding: const EdgeInsets.all(16.0),
                 child: AudioPlayerWidget(
                   audioUrl: currentAudioUrl!,
+                  onPositionChanged: (currentPosition) {
+                    controller.currentTime.value =
+                        currentPosition.inMilliseconds.toDouble();
+                  },
                 ),
               ),
             const SizedBox(height: 10),
