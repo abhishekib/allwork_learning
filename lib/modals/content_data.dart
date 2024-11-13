@@ -21,11 +21,13 @@ class ContentData {
 }
 
 class Lyrics {
+  final String time;
   final String arabic;
   final String translitration;
   final String translation;
 
   Lyrics({
+    required this.time,
     required this.arabic,
     required this.translitration,
     required this.translation,
@@ -33,6 +35,7 @@ class Lyrics {
 
   factory Lyrics.fromJson(Map<String, dynamic> json) {
     return Lyrics(
+      time: json['time'] ?? '',
       arabic: json['arabic'] ?? '',
       translitration: json['translitration'] ?? '',
       translation: json['translation'] ?? '',
