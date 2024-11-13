@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/content_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,6 +20,7 @@ class LyricsTab extends StatelessWidget {
       itemCount: lyricsList.length,
       itemBuilder: (context, index) {
         final lyrics = lyricsList[index];
+        log("${lyricsList[index].time}");
 
         return Container(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -25,8 +28,8 @@ class LyricsTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
-                final isArabicHighlighted = 
-                    controller.selectedType.value == "arabic";
+                final isArabicHighlighted =
+                    controller.selectedType.value.toLowerCase() == "arabic";
                 return Visibility(
                   visible: lyrics.arabic.isNotEmpty,
                   child: Text(
@@ -45,7 +48,8 @@ class LyricsTab extends StatelessWidget {
               const SizedBox(height: 8),
               Obx(() {
                 final isTransliterationHighlighted =
-                    controller.selectedType.value == "transliteration";
+                    controller.selectedType.value.toLowerCase() ==
+                        "transliteration";
                 return Visibility(
                   visible: lyrics.translitration.isNotEmpty,
                   child: Text(
@@ -65,7 +69,8 @@ class LyricsTab extends StatelessWidget {
               const SizedBox(height: 8),
               Obx(() {
                 final isTranslationHighlighted =
-                    controller.selectedType.value == "translation";
+                    controller.selectedType.value.toLowerCase() ==
+                        "translation";
                 return Visibility(
                   visible: lyrics.translation.isNotEmpty,
                   child: Text(
