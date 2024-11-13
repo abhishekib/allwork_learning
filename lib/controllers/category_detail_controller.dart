@@ -1,7 +1,6 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart'; // Updated import to use audioplayers
 
 class CategoryDetailController extends GetxController {
   // Audio Player Instance
@@ -33,10 +32,10 @@ class CategoryDetailController extends GetxController {
 
   // Method to play or pause the audio
   void playPauseAudio() {
-    if (_audioPlayer.playing) {
+    if (_audioPlayer.state == PlayerState.playing) {
       _audioPlayer.pause();
     } else {
-      _audioPlayer.play();
+      _audioPlayer.resume();
     }
   }
 
@@ -48,19 +47,25 @@ class CategoryDetailController extends GetxController {
   // Method to initialize and load the audio from URL
   Future<void> initializeAudio(String audioUrl) async {
     try {
-      await _audioPlayer.setUrl(audioUrl);
-      _audioPlayer.durationStream.listen((duration) {
-        if (duration != null) {
-          totalTime.value = duration.inSeconds.toDouble();
-        }
+      await _audioPlayer.setSourceUrl(
+          audioUrl); // Changed to setSourceUrl to load audio without autoplay
+
+      _audioPlayer.onDurationChanged.listen((duration) {
+        totalTime.value = duration.inSeconds.toDouble();
       });
 
-      _audioPlayer.positionStream.listen((position) {
+      _audioPlayer.onPositionChanged.listen((position) {
         currentTime.value = position.inSeconds.toDouble();
+      });
+
+      _audioPlayer.onPlayerComplete.listen((event) {
+        currentTime.value = 0.0;
+        isLoading.value = false;
       });
     } catch (e) {
       // Handle any errors here
       log('Error initializing audio: $e');
+      isLoading.value = false;
     }
   }
 

@@ -25,8 +25,8 @@ class LyricsTab extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Obx(() {
-                final isArabicHighlighted =
-                    controller.selectedType.value == "Arabic";
+                final isArabicHighlighted = 
+                    controller.selectedType.value == "arabic";
                 return Visibility(
                   visible: lyrics.arabic.isNotEmpty,
                   child: Text(
@@ -45,7 +45,7 @@ class LyricsTab extends StatelessWidget {
               const SizedBox(height: 8),
               Obx(() {
                 final isTransliterationHighlighted =
-                    controller.selectedType.value == "Transliteration";
+                    controller.selectedType.value == "transliteration";
                 return Visibility(
                   visible: lyrics.translitration.isNotEmpty,
                   child: Text(
@@ -65,7 +65,7 @@ class LyricsTab extends StatelessWidget {
               const SizedBox(height: 8),
               Obx(() {
                 final isTranslationHighlighted =
-                    controller.selectedType.value == "Translation";
+                    controller.selectedType.value == "translation";
                 return Visibility(
                   visible: lyrics.translation.isNotEmpty,
                   child: Text(

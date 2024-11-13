@@ -1,15 +1,14 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
 
   const AudioPlayerWidget({
-    super.key,
+    Key? key,
     required this.audioUrl,
-  });
+  }) : super(key: key);
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
@@ -19,9 +18,11 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
   bool isPlaying = false;
   bool isCompleted = false;
-  bool hasError = false; // New state to track loading errors
+  bool hasError = false;
+  bool isLoading = true;
   Duration currentTime = Duration.zero;
   Duration totalTime = Duration.zero;
+  double volume = 1.0;
 
   @override
   void initState() {
@@ -32,18 +33,30 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   Future<void> _setupAudio() async {
     try {
-      await _audioPlayer.setUrl(widget.audioUrl);
-      hasError = false; // Clear any previous error state
+      setState(() {
+        isLoading = true;
+      });
 
-      _audioPlayer.durationStream.listen((duration) {
-        if (duration != null && mounted) {
+      await _audioPlayer.setSource(UrlSource(widget.audioUrl));
+
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      final duration = await _audioPlayer.getDuration();
+      if (duration != null && mounted) {
+        setState(() {
+          totalTime = duration;
+        });
+      }
+
+      _audioPlayer.onDurationChanged.listen((duration) {
+        if (mounted) {
           setState(() {
             totalTime = duration;
           });
         }
       });
 
-      _audioPlayer.positionStream.listen((position) {
+      _audioPlayer.onPositionChanged.listen((position) {
         if (mounted) {
           setState(() {
             currentTime = Duration(
@@ -53,36 +66,34 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         }
       });
 
-      _audioPlayer.playerStateStream.listen((playerState) {
+      _audioPlayer.onPlayerComplete.listen((event) {
         if (mounted) {
-          if (playerState.processingState == ProcessingState.completed) {
-            setState(() {
-              currentTime = Duration.zero;
-              isPlaying = false;
-              isCompleted = true;
-            });
-          } else {
-            setState(() {
-              isPlaying = playerState.playing;
-              if (playerState.processingState != ProcessingState.completed) {
-                isCompleted = false;
-              }
-            });
-          }
+          setState(() {
+            currentTime = Duration.zero;
+            isPlaying = false;
+            isCompleted = true;
+          });
         }
       });
-    } catch (e) {
-      // Set error state if loading fails
+
       setState(() {
-        hasError = true;
+        isLoading = false;
+        hasError = false;
       });
-      if (kDebugMode) {
-        print("Error loading audio: $e");
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+          hasError = true;
+        });
       }
+      print("Error loading audio: $e");
     }
   }
 
   Future<void> _retryLoadingAudio() async {
+    if (!mounted) return;
+
     setState(() {
       hasError = false;
       currentTime = Duration.zero;
@@ -104,14 +115,17 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.grey[800],
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Show the retry button if there's an error loading the audio
-          if (hasError)
+          if (isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            )
+          else if (hasError)
             Column(
               children: [
                 const Text(
@@ -128,7 +142,6 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           else
             Column(
               children: [
-                // Playback Progress Slider
                 Row(
                   children: [
                     Text(
@@ -144,9 +157,11 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                           await _audioPlayer
                               .seek(Duration(seconds: value.toInt()));
                           if (value == 0) {
-                            setState(() {
-                              isPlaying = false;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                isPlaying = false;
+                              });
+                            }
                           }
                         },
                         activeColor: Colors.white,
@@ -166,13 +181,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        _audioPlayer
-                            .setVolume(_audioPlayer.volume == 0 ? 1 : 0);
+                        setState(() {
+                          volume = volume == 0 ? 1.0 : 0.0;
+                          _audioPlayer.setVolume(volume);
+                        });
                       },
                       icon: Icon(
-                        _audioPlayer.volume == 0
-                            ? Icons.volume_off
-                            : Icons.volume_up,
+                        volume == 0 ? Icons.volume_off : Icons.volume_up,
                         color: Colors.white,
                       ),
                     ),
@@ -180,20 +195,26 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       onPressed: () async {
                         if (isPlaying) {
                           await _audioPlayer.pause();
-                          setState(() {
-                            isPlaying = false;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              isPlaying = false;
+                            });
+                          }
                         } else {
                           if (isCompleted) {
                             await _audioPlayer.seek(Duration.zero);
+                            if (mounted) {
+                              setState(() {
+                                isCompleted = false;
+                              });
+                            }
+                          }
+                          await _audioPlayer.resume();
+                          if (mounted) {
                             setState(() {
-                              isCompleted = false;
+                              isPlaying = true;
                             });
                           }
-                          await _audioPlayer.play();
-                          setState(() {
-                            isPlaying = true;
-                          });
                         }
                       },
                       icon: Icon(
@@ -202,11 +223,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         size: 40,
                       ),
                     ),
-                    // Settings Button (Placeholder)
                     IconButton(
-                      onPressed: () {
-                        // Handle settings action
-                      },
+                      onPressed: () {},
                       icon: const Icon(
                         Icons.settings,
                         color: Colors.white,
@@ -221,7 +239,6 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     );
   }
 
-  // Helper function to format Duration to mm:ss
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
