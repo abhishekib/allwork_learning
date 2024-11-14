@@ -6,6 +6,7 @@ import 'dart:developer';
 
 class MenuListController extends GetxController {
   var menuList = MenuList(items: []).obs;
+  var gujaratiMenuList = MenuList(items: []).obs;
   var isLoading = true.obs;
 
   final MenuService _menuService = MenuService(ApiConstants.token);
@@ -22,6 +23,7 @@ class MenuListController extends GetxController {
       isLoading(true);
       // Make sure the fetch method returns MenuList, not just List<String>
       menuList.value = await _menuService.fetchMenuList();
+      gujaratiMenuList.value = await _menuService.fetchGujaratiMenuList();
     } catch (e) {
       log("Error fetching menu list: $e");
     } finally {

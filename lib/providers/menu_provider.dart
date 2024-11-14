@@ -27,4 +27,14 @@ class MenuService {
       throw Exception('Failed to fetch menu list');
     }
   }
+
+  Future<MenuList> fetchGujaratiMenuList() async {
+    final response = await _dio.get(ApiConstants.gujaratiMenuEndpoint);
+
+    if (response.statusCode == 200) {
+      return MenuList.fromJson(response.data);
+    } else {
+      throw Exception('Failed to fetch menu list');
+    }
+  }
 }
