@@ -1,3 +1,4 @@
+import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       getPages: [
-        GetPage(name: '/', page: () => const MenuListView()),
+        GetPage(name: '/', page: () => const MainMenuView()),
         GetPage(
             name: '/menu-detail',
             page: () => const MenuDetailView(

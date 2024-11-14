@@ -20,49 +20,39 @@ class MenuListView extends StatelessWidget {
       controller.fetchMenuItems();
     }
 
-    return BackgroundWrapper(
-      child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
-        appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: AppColors.backgroundBlue,
-          title: const Text(
-            "Menu List",
-            style: AppTextStyles.whiteBoldTitleText,
-          ),
-        ),
-        body: Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (controller.menuList.value.items.isEmpty) {
-            return const Center(child: Text("No menu items available"));
-          } else {
-            return RefreshIndicator(
-              onRefresh: refreshMenuItems,
-              child: ListView.builder(
-                itemCount: controller.menuList.value.items.length,
-                itemBuilder: (context, index) {
-                  final menuItem = controller.menuList.value.items[index];
-                  return ListTile(
-                    title: Center(
-                      child: Text(
-                        menuItem,
-                        style: AppTextStyles.whiteBoldText,
-                      ),
+    return Scaffold(
+      backgroundColor: AppColors.backgroundBlue,
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (controller.menuList.value.items.isEmpty) {
+          return const Center(child: Text("No menu items available"));
+        } else {
+          return RefreshIndicator(
+            onRefresh: refreshMenuItems,
+            child: ListView.builder(
+              itemCount: controller.menuList.value.items.length,
+              itemBuilder: (context, index) {
+                final menuItem = controller.menuList.value.items[index];
+                return ListTile(
+                  title: Center(
+                    child: Text(
+                      menuItem,
+                      style: AppTextStyles.whiteBoldText,
                     ),
-                    onTap: () {
-                      log("selected ----> $menuItem");
-                      Get.to(() => MenuDetailView(
-                            menuItem: menuItem,
-                          ));
-                    },
-                  );
-                },
-              ),
-            );
-          }
-        }),
-      ),
+                  ),
+                  onTap: () {
+                    log("selected ----> $menuItem");
+                    Get.to(() => MenuDetailView(
+                          menuItem: menuItem,
+                        ));
+                  },
+                );
+              },
+            ),
+          );
+        }
+      }),
     );
   }
 }
