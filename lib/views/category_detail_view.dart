@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
+import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
@@ -89,46 +90,48 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(categoryDetails.title),
-      ),
-      body: DefaultTabController(
-        length: availableTypes.length,
-        child: Column(
-          children: [
-            // Only show the AudioPlayerWidget if a valid audio URL is available
-            if (currentAudioUrl != null && currentAudioUrl!.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: AudioPlayerWidget(
-                  audioUrl: currentAudioUrl!,
-                  onPositionChanged: (currentPosition) {
-                    controller.currentTime.value =
-                        currentPosition.inMilliseconds.toDouble();
-                  },
+    return BackgroundWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(categoryDetails.title),
+        ),
+        body: DefaultTabController(
+          length: availableTypes.length,
+          child: Column(
+            children: [
+              // Only show the AudioPlayerWidget if a valid audio URL is available
+              if (currentAudioUrl != null && currentAudioUrl!.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: AudioPlayerWidget(
+                    audioUrl: currentAudioUrl!,
+                    onPositionChanged: (currentPosition) {
+                      controller.currentTime.value =
+                          currentPosition.inMilliseconds.toDouble();
+                    },
+                  ),
+                ),
+              const SizedBox(height: 10),
+              TabBar(
+                controller: _tabController,
+                onTap: (index) {
+                  controller.changeType(availableTypes[index]);
+                },
+                tabs: availableTypes.map((type) => Tab(text: type)).toList(),
+              ),
+              const SizedBox(height: 10),
+              Flexible(
+                fit: FlexFit.loose,
+                child: TabBarView(
+                  controller: _tabController,
+                  children: availableTypes.map((type) {
+                    final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
+                    return LyricsTab(lyricsList: lyricsList);
+                  }).toList(),
                 ),
               ),
-            const SizedBox(height: 10),
-            TabBar(
-              controller: _tabController,
-              onTap: (index) {
-                controller.changeType(availableTypes[index]);
-              },
-              tabs: availableTypes.map((type) => Tab(text: type)).toList(),
-            ),
-            const SizedBox(height: 10),
-            Flexible(
-              fit: FlexFit.loose,
-              child: TabBarView(
-                controller: _tabController,
-                children: availableTypes.map((type) {
-                  final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
-                  return LyricsTab(lyricsList: lyricsList);
-                }).toList(),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -6,7 +6,7 @@ class ApiConstants {
 
   static const String menuEndpoint = '/menuitems';
 
-  static const String dailyDuaEndpoint = 'dailydua?lang=english&day=sunday';
+  static const String dailyDuaEndpoint = 'dailydua?lang=english&day=thursday';
   static const String duaEndpoint = 'duas?lang=english';
   // static const String duas = '/dailydua';
   static const String ziyaratEndpoint = 'ziyarat?lang=english';
