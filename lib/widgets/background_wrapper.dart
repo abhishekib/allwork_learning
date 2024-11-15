@@ -37,7 +37,7 @@ class BackgroundWrapper extends StatelessWidget {
       ),
       child: Center(
         child: Container(
-          padding: const EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(28.0),
           child: child,
         ),
       ),
