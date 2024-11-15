@@ -1,3 +1,4 @@
+import 'package:allwork/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
@@ -120,7 +121,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[800],
+        color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white),
       ),
@@ -136,7 +137,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               children: [
                 const Text(
                   "Failed to load audio. Please try again.",
-                  style: TextStyle(color: Colors.white, fontSize: 16),
+                  style: TextStyle(color: Colors.black, fontSize: 16),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
@@ -152,7 +153,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   children: [
                     Text(
                       _formatDuration(currentTime),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
                     ),
                     Expanded(
                       child: Slider(
@@ -170,13 +174,17 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                             }
                           }
                         },
-                        activeColor: Colors.white,
-                        inactiveColor: Colors.white54,
+                        activeColor: AppColors.backgroundBlue,
+                        inactiveColor: AppColors.backgroundBlue,
                       ),
                     ),
                     Text(
                       _formatDuration(totalTime),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -194,7 +202,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       },
                       icon: Icon(
                         volume == 0 ? Icons.volume_off : Icons.volume_up,
-                        color: Colors.white,
+                        color: AppColors.backgroundBlue,
                       ),
                     ),
                     IconButton(
@@ -225,7 +233,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       },
                       icon: Icon(
                         isPlaying ? Icons.pause : Icons.play_arrow,
-                        color: Colors.white,
+                        color: AppColors.backgroundBlue,
                         size: 40,
                       ),
                     ),
@@ -233,7 +241,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       onPressed: () {},
                       icon: const Icon(
                         Icons.settings,
-                        color: Colors.white,
+                        color: AppColors.backgroundBlue,
                       ),
                     ),
                   ],
