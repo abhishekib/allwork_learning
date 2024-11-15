@@ -5,16 +5,16 @@ class AppTextStyles {
   static const TextStyle whiteBoldText = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
-    fontSize: 20.0, // You can adjust the default font size as needed
+    fontSize: 20.0,
   );
   static const TextStyle whiteText = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.normal,
-    fontSize: 16.0, // You can adjust the default font size as needed
+    fontSize: 16.0,
   );
   static const TextStyle whiteBoldTitleText = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,
-    fontSize: 30.0, // You can adjust the default font size as needed
+    fontSize: 30.0,
   );
 }
