@@ -1,15 +1,15 @@
 import 'dart:developer';
-
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/menu_detail_view.dart';
-import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/menu_list_controller.dart';
 
 class MenuListView extends StatelessWidget {
-  const MenuListView({super.key});
+  final String selectedLanguage;
+
+  const MenuListView({super.key, required this.selectedLanguage});
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +23,22 @@ class MenuListView extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.backgroundBlue,
       body: Obx(() {
+        // Use the selected language to choose the appropriate list
+        final menuList = selectedLanguage == 'English'
+            ? controller.menuList.value
+            : controller.gujaratiMenuList.value;
+
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
-        } else if (controller.menuList.value.items.isEmpty) {
+        } else if (menuList.items.isEmpty) {
           return const Center(child: Text("No menu items available"));
         } else {
           return RefreshIndicator(
             onRefresh: refreshMenuItems,
             child: ListView.builder(
-              itemCount: controller.menuList.value.items.length,
+              itemCount: menuList.items.length,
               itemBuilder: (context, index) {
-                final menuItem = controller.menuList.value.items[index];
+                final menuItem = menuList.items[index];
                 return ListTile(
                   title: Center(
                     child: Text(

@@ -32,7 +32,7 @@ class MenuDetailView extends StatelessWidget {
         extendBodyBehindAppBar: true,
         backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: AppColors.backgroundBlue,
           centerTitle: true,
           title: Text(
             menuItem,

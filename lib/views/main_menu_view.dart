@@ -6,8 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/animated_text_controller.dart';
 
-class MainMenuView extends StatelessWidget {
+class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
+
+  @override
+  _MainMenuViewState createState() => _MainMenuViewState();
+}
+
+class _MainMenuViewState extends State<MainMenuView> {
+  String selectedLanguage = 'English'; // Default language selection
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +43,62 @@ class MainMenuView extends StatelessWidget {
                 );
               }
             }),
+            const SizedBox(height: 10),
+            // Dropdown menu for language selection
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        selectedLanguage == 'English'
+                            ? 'Language Selection : '
+                            : 'ભાષા પસંદગી : ',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Text(
+                        'English & ગુજરાતી',
+                        style: TextStyle(fontSize: 18, color: Colors.white38),
+                      ),
+                    ],
+                  ),
+                  DropdownButton<String>(
+                    value: selectedLanguage,
+                    dropdownColor: AppColors.backgroundBlue,
+                    items: <String>['English', 'Gujarati'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(
+                          value,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        selectedLanguage = newValue!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
             // Rest of the body with MenuListView
             Expanded(
-              child: MenuListView(),
+              child: MenuListView(
+                selectedLanguage: selectedLanguage,
+              ),
             ),
           ],
         ),
