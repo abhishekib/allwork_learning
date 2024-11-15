@@ -15,6 +15,9 @@ class ApiConstants {
   static const String gujaratiDailyDuaEndpoint =
       'dailydua?lang=gujarati&day=thursday';
 
+  static const String surahEndpoint = 'duas?lang=english';
+  static const String gujaratiSurahEndpoint = 'duas?lang=gujarati';
+
   static const String duaEndpoint = 'duas?lang=english';
   static const String gujaratiDuaEndpoint = 'duas?lang=gujarati';
   // static const String duas = '/dailydua';

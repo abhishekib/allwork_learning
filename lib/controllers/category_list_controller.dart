@@ -36,7 +36,7 @@ class CategoryListController extends GetxController {
       case "Daily Dua":
         return ApiConstants.dailyDuaEndpoint;
       case "Surah":
-      // return ApiConstants.surahEndpoint;
+        return ApiConstants.surahEndpoint;
       case "Dua":
         return ApiConstants.duaEndpoint;
       case "Ziyarat":
@@ -45,7 +45,21 @@ class CategoryListController extends GetxController {
       // return ApiConstants.amaalEndpoint;
       case "Munajat":
         return ApiConstants.munajatEndpoint;
-      case "Travel Ziyarat":
+      // case "Travel Ziyarat":
+      // return ApiConstants.travelZiyaratEndpoint;
+      case "રોજની દોઆઓ":
+        return ApiConstants.gujaratiDailyDuaEndpoint;
+      case "સુરાહ":
+        return ApiConstants.gujaratiSurahEndpoint;
+      case "દોઆઓ":
+        return ApiConstants.gujaratiDuaEndpoint;
+      case "ઝિયારાત":
+        return ApiConstants.gujaratiZiyaratEndpoint;
+      // case "અમલ":
+      // return ApiConstants.amaalEndpoint;
+      case "મુનાજાત":
+        return ApiConstants.gujaratiMunajatEndpoint;
+      // case "Travel Ziyarat":
       // return ApiConstants.travelZiyaratEndpoint;
       default:
         return ApiConstants.baseUrl;
