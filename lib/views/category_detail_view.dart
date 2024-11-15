@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -92,8 +94,17 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
 
     return BackgroundWrapper(
       child: Scaffold(
+        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          title: Text(categoryDetails.title),
+          backgroundColor: AppColors.backgroundBlue,
+          iconTheme: IconThemeData(
+            color: Colors.white,
+            size: 30,
+          ),
+          title: Text(
+            categoryDetails.title,
+            style: AppTextStyles.whiteBoldTitleText,
+          ),
         ),
         body: DefaultTabController(
           length: availableTypes.length,
@@ -113,7 +124,13 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
                 ),
               const SizedBox(height: 10),
               TabBar(
+                isScrollable: true,
+                automaticIndicatorColorAdjustment: true,
+                tabAlignment: TabAlignment.start,
                 controller: _tabController,
+                labelStyle: AppTextStyles.whiteBoldText,
+                unselectedLabelStyle: TextStyle(color: Colors.white70),
+                indicatorColor: Colors.white,
                 onTap: (index) {
                   controller.changeType(availableTypes[index]);
                 },

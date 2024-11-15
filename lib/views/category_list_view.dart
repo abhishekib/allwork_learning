@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,15 +18,27 @@ class CategoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
+        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          title: Text(argument), // Display the selected menu title here
+          backgroundColor: AppColors.backgroundBlue,
+          iconTheme: IconThemeData(
+            color: Colors.white,
+            size: 30,
+          ),
+          title: Text(
+            argument,
+            style: AppTextStyles.whiteBoldTitleText,
+          ), // Display the selected menu title here
         ),
         body: ListView.builder(
           itemCount: categoryItems.length,
           itemBuilder: (context, index) {
             final item = categoryItems[index];
             return ListTile(
-              title: Text(item.title),
+              title: Text(
+                item.title,
+                style: AppTextStyles.whiteBoldText,
+              ),
               onTap: () {
                 log("Category List View------>${item.title}");
                 Get.toNamed(
