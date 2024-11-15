@@ -106,76 +106,82 @@ class _LyricsTabState extends State<LyricsTab> {
         final isHighlighted = index == _currentHighlightedIndex;
         // log("lyrics time from api------->${lyrics.time}");
 
-        return Container(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          color: isHighlighted
-              ? Colors.yellow.withOpacity(0.3)
-              : Colors.transparent,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Obx(() {
-                final isArabicHighlighted =
-                    controller.selectedType.value.toLowerCase() == "arabic";
-                return Visibility(
-                  visible: lyrics.arabic.isNotEmpty,
-                  child: Text(
-                    lyrics.arabic,
-                    style: TextStyle(
-                      fontSize: isArabicHighlighted ? 22 : 18,
-                      fontWeight: isArabicHighlighted
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color:
-                          isArabicHighlighted ? Colors.black87 : Colors.black54,
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Colors.white,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(() {
+                  final isArabicHighlighted =
+                      controller.selectedType.value.toLowerCase() == "arabic";
+                  return Visibility(
+                    visible: lyrics.arabic.isNotEmpty,
+                    child: Text(
+                      lyrics.arabic,
+                      textDirection: TextDirection.rtl,
+                      style: TextStyle(
+                        fontSize: isArabicHighlighted ? 30 : 18,
+                        fontWeight: isArabicHighlighted
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: isArabicHighlighted
+                            ? Colors.black87
+                            : Colors.black54,
+                      ),
                     ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 8),
-              Obx(() {
-                final isTransliterationHighlighted =
-                    controller.selectedType.value.toLowerCase() ==
-                        "transliteration";
-                return Visibility(
-                  visible: lyrics.translitration.isNotEmpty,
-                  child: Text(
-                    lyrics.translitration,
-                    style: TextStyle(
-                      fontSize: isTransliterationHighlighted ? 20 : 16,
-                      fontWeight: isTransliterationHighlighted
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isTransliterationHighlighted
-                          ? Colors.black87
-                          : Colors.black54,
+                  );
+                }),
+                const SizedBox(height: 8),
+                Obx(() {
+                  final isTransliterationHighlighted =
+                      controller.selectedType.value.toLowerCase() ==
+                          "transliteration";
+                  return Visibility(
+                    visible: lyrics.translitration.isNotEmpty,
+                    child: Text(
+                      lyrics.translitration,
+                      style: TextStyle(
+                        fontSize: isTransliterationHighlighted ? 20 : 16,
+                        fontWeight: isTransliterationHighlighted
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: isTransliterationHighlighted
+                            ? Colors.black87
+                            : Colors.black54,
+                      ),
                     ),
-                  ),
-                );
-              }),
-              const SizedBox(height: 8),
-              Obx(() {
-                final isTranslationHighlighted =
-                    controller.selectedType.value.toLowerCase() ==
-                        "translation";
-                return Visibility(
-                  visible: lyrics.translation.isNotEmpty,
-                  child: Text(
-                    lyrics.translation,
-                    style: TextStyle(
-                      fontSize: isTranslationHighlighted ? 20 : 16,
-                      fontWeight: isTranslationHighlighted
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isTranslationHighlighted
-                          ? Colors.black87
-                          : Colors.black54,
+                  );
+                }),
+                const SizedBox(height: 8),
+                Obx(() {
+                  final isTranslationHighlighted =
+                      controller.selectedType.value.toLowerCase() ==
+                          "translation";
+                  return Visibility(
+                    visible: lyrics.translation.isNotEmpty,
+                    child: Text(
+                      lyrics.translation,
+                      style: TextStyle(
+                        fontSize: isTranslationHighlighted ? 20 : 16,
+                        fontWeight: FontWeight.bold,
+                        color: isTranslationHighlighted
+                            ? Colors.black87
+                            : Colors.black54,
+                      ),
                     ),
-                  ),
-                );
-              }),
-              const Divider(height: 16, thickness: 1),
-            ],
+                  );
+                }),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
+            ),
           ),
         );
       },
