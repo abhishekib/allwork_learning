@@ -1,92 +1,96 @@
 # Flutter Dynamic Content App
 
-This Flutter app displays a structured and interactive interface with content fetched dynamically from APIs. The app follows a layered architecture with clear separation of concerns, using `providers` for data fetching, `controllers` for state management, `models` for defining data structures, and `views` for UI components.
+This Flutter app dynamically fetches and displays structured content from APIs. It is built on a modular architecture that emphasizes separation of concerns, with well-defined components for data management, business logic, and UI rendering.
+
+---
 
 ## Features
 
-- **Dynamic Main Menu**: Fetches a list of menu items from an API (e.g., "Daily Dua", "Surah") and displays them on the home screen.
-- **Category View**: Displays a list of categories for each menu item when clicked.
-- **Category Item View**: Shows individual titles in each category with an option to view lyrics and listen to audio.
-- **Lyrics & Audio View**: Plays audio synchronized with lyrics (in Arabic, Transliteration, and Translation) in a tabbed view.
+- **Dynamic Main Menu**: Displays a list of menu items fetched from an API (e.g., "Daily Dua", "Surah"). Clicking on a menu item leads to a category view.
+- **Category View**: Shows categories related to the selected menu item, fetched from a corresponding API.
+- **Category Item View**: Lists items within a category. Each item includes audio and lyrics.
+- **Audio and Lyrics View**: Plays audio and displays synchronized lyrics in three tabs: Arabic, Transliteration, and Translation.
 
-## Architecture Overview
-
-The app follows a layered architecture:
-
-- **Controllers**: Handle the logic and state management of the app, interacting with providers.
-- **Models**: Define the structure of the data fetched from APIs.
-- **Providers**: Manage API calls and provide data to controllers.
-- **Views**: UI components of the app.
+---
 
 ## Folder Structure
 
+The app's folder structure is organized as follows:
+
 ```
-   lib/
-   │
-   ├── controllers/                # Manages app state and logic
-   │   ├── menu_list_controller.dart
-   │   ├── category_controller.dart
-   │
-   ├── models/                     # Defines the data models
-   │   ├── menu_list.dart
+   lib
+   ├── controllers
+   │   ├── animated_text_controller.dart
+   │   ├── category_detail_controller.dart
+   │   ├── category_list_controller.dart
+   │   └── menu_list_controller.dart
+   ├── main.dart
+   ├── modals
+   │   ├── animated_text.dart
    │   ├── category.dart
+   │   ├── category_response.dart
    │   ├── content_data.dart
-   │   ├── audio_data.dart
-   │   └── lyrics.dart
-   │
-   ├── providers/                  # Responsible for making API calls
-   │   ├── menu_service.dart
-   │   └── category_provider.dart
-   │
-   ├── views/                      # UI components of the app
-   │   ├── menu_list_view.dart
-   │   ├── category_detail_view.dart
-   │   ├── category_item_view.dart
-   │   └── lyrics_audio_view.dart
-   │
-   ├── utils/                      # Holds utility functions and constants
+   │   └── menu_list.dart
+   ├── providers
+   │   ├── animated_text_provider.dart
+   │   ├── category_provider.dart
+   │   └── menu_provider.dart
+   ├── utils
+   │   ├── colors.dart
    │   ├── constants.dart
-   │   └── helpers.dart
-   │
-   └── main.dart                   # Entry point for the app
+   │   └── styles.dart
+   ├── views
+   │   ├── category_detail_view.dart
+   │   ├── category_list_view.dart
+   │   ├── lyrics_tab.dart
+   │   ├── main_menu_view.dart
+   │   ├── menu_detail_view.dart
+   │   └── menu_list_view.dart
+   └── widgets
+      ├── audio_player_widget.dart
+      ├── background_wrapper.dart
+      ├── custom_appbar.dart
+      └── marquee_appbar.dart
+
 ```
+
+---
 
 ## App Flow
 
 1. **Main Menu**:
 
-   - Displays dynamic menu items fetched from an endpoint (`baseUrl/menu`).
-   - Each item leads to a unique endpoint for fetching related data.
+   - Displays menu items fetched from an API endpoint.
+   - Each item navigates to a category view with content fetched dynamically.
 
 2. **Category View**:
-   - Opens when a menu item is clicked.
-   - Fetches categories for the selected menu item and displays them in a list.
+
+   - Lists categories associated with the selected menu item.
+   - Clicking a category navigates to the category item view.
+
 3. **Category Item View**:
 
-   - Opens when a category is clicked.
-   - Displays individual items under the category. Each item is clickable.
+   - Displays titles under the selected category.
+   - Clicking a title opens the lyrics and audio view.
 
 4. **Audio and Lyrics View**:
-   - Opens when a category item is selected.
-   - Plays associated audio and displays lyrics in three tabbed views (Arabic, Transliteration, and Translation).
-   - Audio syncs with the lyrics for a smooth experience.
+   - Plays audio synchronized with the lyrics.
+   - Lyrics are displayed across three tabs: Arabic, Transliteration, and Translation.
+
+---
 
 ## Dependencies
 
-- `flutter`: Core Flutter framework
-- `get`: State management
-- `dio`: For handling HTTP requests
-- `provider`: Dependency injection and state management
-- `cached_network_image`: Image caching (optional)
-
-Add the following to your `pubspec.yaml`:
+The following dependencies are used in this project:
 
 ```yaml
 dependencies:
   flutter:
     sdk: flutter
-  get: ^4.6.5
-  dio: ^5.1.0
-  provider: ^6.0.3
-  cached_network_image: ^3.2.0
+  get: ^4.6.5 # State management
+  dio: ^5.1.0 # HTTP requests
+  provider: ^6.0.3 # Dependency injection and state management
+  cached_network_image: ^3.2.0 # Image caching
+  audioplayers: ^0.20.1 # Audio playback
+  marquee: ^2.3.0 # Marquee Text
 ```
