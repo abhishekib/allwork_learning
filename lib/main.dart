@@ -2,7 +2,6 @@ import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'views/menu_list_view.dart';
 import 'views/category_detail_view.dart';
 
 void main() {

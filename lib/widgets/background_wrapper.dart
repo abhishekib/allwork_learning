@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../utils/colors.dart';
-
 class BackgroundWrapper extends StatelessWidget {
   final Widget child;
 
-  const BackgroundWrapper({Key? key, required this.child}) : super(key: key);
+  const BackgroundWrapper({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:allwork/modals/content_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -103,7 +101,7 @@ class _LyricsTabState extends State<LyricsTab> {
       itemCount: widget.lyricsList.length,
       itemBuilder: (context, index) {
         final lyrics = widget.lyricsList[index];
-        final isHighlighted = index == _currentHighlightedIndex;
+        // final isHighlighted = index == _currentHighlightedIndex;
         // log("lyrics time from api------->${lyrics.time}");
 
         return Padding(
