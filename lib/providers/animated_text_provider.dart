@@ -10,6 +10,7 @@ class AnimatedTextProvider {
   AnimatedTextProvider(String token)
       : _dio = Dio(
           BaseOptions(
+            baseUrl: ApiConstants.myDuaBaseUrl,
             headers: {
               'Authorization': 'Bearer $token',
               'Content-Type': 'application/json',
@@ -24,7 +25,7 @@ class AnimatedTextProvider {
 
       if (response.statusCode == 200) {
         final data = response.data;
-        log("----------> Received data: $data");
+        // log("----------> Received data: $data");
 
         // Parse the response into the MessageModel
         MessageModel message = MessageModel.fromJson(data['message']);

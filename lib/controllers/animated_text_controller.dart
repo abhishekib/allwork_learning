@@ -9,7 +9,7 @@ class AnimatedTextController extends GetxController {
       <String>[].obs; // Change to List<String> for cleaned text
 
   final AnimatedTextProvider _animatedTextProvider =
-      AnimatedTextProvider(ApiConstants.animatedTextToken);
+      AnimatedTextProvider(ApiConstants.dailyDuaToken);
 
   @override
   onInit() {

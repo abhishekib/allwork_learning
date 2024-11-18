@@ -1,6 +1,8 @@
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/menu_list_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
+import 'package:allwork/widgets/custom_drawer.dart';
+import 'package:allwork/widgets/daily_date_widget.dart';
 import 'package:allwork/widgets/marquee_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,28 +24,51 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     return BackgroundWrapper(
       child: Scaffold(
+        drawer: CustomDrawer(),
         backgroundColor: AppColors.backgroundBlue,
         body: Column(
           children: [
-            // Custom "AppBar" with Marquee
-            Obx(() {
-              if (animatedTextController.isLoading.value) {
-                return Container(
-                  color: AppColors.backgroundBlue,
-                  height: 50.0,
-                  alignment: Alignment.center,
-                  child: const CircularProgressIndicator(),
-                );
-              } else {
-                final marqueeTexts = animatedTextController.animatedTextList
-                    .map((text) => text)
-                    .toList();
-                return MarqueeTextWidget(
-                  marqueeTexts: marqueeTexts,
-                );
-              }
-            }),
+            // Custom "AppBar" with Marquee and Drawer Icon
+            Container(
+              color: AppColors.backgroundBlue,
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  Builder(
+                    builder: (context) {
+                      return IconButton(
+                        icon: const Icon(Icons.menu, color: Colors.white),
+                        onPressed: () {
+                          Scaffold.of(context).openDrawer(); // Open the drawer
+                        },
+                      );
+                    },
+                  ),
+                  Expanded(
+                    child: Obx(() {
+                      if (animatedTextController.isLoading.value) {
+                        return Container(
+                          height: 50.0,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        );
+                      } else {
+                        final marqueeTexts = animatedTextController
+                            .animatedTextList
+                            .map((text) => text)
+                            .toList();
+                        return MarqueeTextWidget(
+                          marqueeTexts: marqueeTexts,
+                        );
+                      }
+                    }),
+                  ),
+                ],
+              ),
+            ),
             const SizedBox(height: 10),
+
+            DailyDateWidget(),
             // Dropdown menu for language selection
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -52,6 +77,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                 children: [
                   Column(
                     children: [
+                      const SizedBox(height: 10),
                       Text(
                         selectedLanguage == 'English'
                             ? 'Language Selection : '

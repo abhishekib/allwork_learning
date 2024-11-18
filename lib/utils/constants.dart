@@ -1,11 +1,12 @@
 class ApiConstants {
   static const String baseUrl =
       'https://www.mafatihuljinan.org/wp-json/customapi/v1/';
-  static const String animatedText =
-      "https://mydua.online/wp-json/customapi/v1/themeoptions";
+
+  static const String myDuaBaseUrl =
+      "https://mydua.online/wp-json/customapi/v1/";
   static const String token =
       "MTAtMDctMjAyNCAwNTo1MjozOGNZUlNldVpVaG5vZDhGNVM=";
-  static const String animatedTextToken =
+  static const String dailyDuaToken =
       "MTAtMjAtMjAyMyAwOToyNDoyNkZ6VXI1MURKRGJZZ3dodVk=";
 
   static const String menuEndpoint = '/menuitems?lang=english';
@@ -30,4 +31,7 @@ class ApiConstants {
 
   static const String loginEndpoint = '/login';
   static const String favduaEndpoint = '/favdua';
+
+  static const String animatedText = 'themeoptions';
+  static const String dailyDateEndpoint = "showhijridate";
 }
