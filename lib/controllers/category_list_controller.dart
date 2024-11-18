@@ -2,6 +2,7 @@ import 'package:get/state_manager.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/category_provider.dart';
 import 'package:allwork/utils/constants.dart';
+import 'package:intl/intl.dart';
 import 'dart:developer';
 
 class CategoryListController extends GetxController {
@@ -11,14 +12,22 @@ class CategoryListController extends GetxController {
   final CategoryProvider _categoryProvider =
       CategoryProvider(ApiConstants.token);
 
-  // This method fetches data based on the selected menu item and its dynamic endpoint
   Future<void> fetchCategoryData(String menuItem) async {
     try {
       isLoading(true);
       final endpoint = _getEndpointForMenuItem(menuItem);
 
       if (endpoint.isNotEmpty) {
-        final response = await _categoryProvider.fetchCategoryData(endpoint);
+        String? dayOfWeek;
+
+        if (menuItem == "Daily Dua" || menuItem == "રોજની દોઆઓ") {
+          dayOfWeek = DateFormat('EEEE')
+              .format(DateTime.now())
+              .toLowerCase();
+        }
+
+        final response =
+            await _categoryProvider.fetchCategoryData(endpoint, dayOfWeek);
         categoryData.value = response.categories;
       } else {
         log("No endpoint found for $menuItem");

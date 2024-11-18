@@ -11,10 +11,17 @@ class CategoryProvider {
 
   CategoryProvider(this.token);
 
-  Future<CategoryResponse> fetchCategoryData(String endpoint) async {
+  Future<CategoryResponse> fetchCategoryData(String endpoint,
+      [String? day]) async {
     try {
+      // Construct the URL with query parameters
+      String url = '$baseurl$endpoint';
+      if (day != null) {
+        url = '$url&day=$day';
+      }
+
       final response = await _dio.post(
-        '$baseurl$endpoint',
+        url,
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
@@ -23,8 +30,7 @@ class CategoryProvider {
         ),
       );
 
-      // Log the full response to check its structure
-      // log("API Response: ${response.data}");
+      log("API Response: ${response.data}");
 
       if (response.statusCode == 200) {
         return CategoryResponse.fromJson(response.data['data']);
@@ -33,7 +39,7 @@ class CategoryProvider {
       }
     } catch (e) {
       log("Error: $e");
-      rethrow; // Propagate the error
+      rethrow;
     }
   }
 }
