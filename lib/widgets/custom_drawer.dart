@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:allwork/utils/colors.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final bool isLoggedIn; // This determines whether the user is logged in or not
+
+  const CustomDrawer({Key? key, required this.isLoggedIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,42 +23,145 @@ class CustomDrawer extends StatelessWidget {
               style: AppTextStyles.whiteBoldText,
             ),
           ),
+          if (!isLoggedIn) ...[
+            ListTile(
+              leading: const Icon(
+                Icons.person_add,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Signup',
+                style: AppTextStyles.whiteBoldText,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Implement signup navigation
+              },
+            ),
+          ],
+          if (isLoggedIn) ...[
+            ListTile(
+              leading: const Icon(
+                Icons.person,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Profile',
+                style: AppTextStyles.whiteBoldText,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Implement profile navigation
+              },
+            ),
+          ],
           ListTile(
             leading: const Icon(
-              Icons.home,
+              Icons.favorite,
               color: Colors.white,
             ),
             title: const Text(
-              'Home',
+              'Favourite',
               style: AppTextStyles.whiteBoldText,
             ),
             onTap: () {
               Navigator.pop(context);
-              // Implement navigation
+              // Implement favourite navigation
             },
           ),
           ListTile(
-            leading: const Icon(Icons.settings, color: Colors.white),
+            leading: const Icon(
+              Icons.radio,
+              color: Colors.white,
+            ),
             title: const Text(
-              'Settings',
+              'Our Radio',
               style: AppTextStyles.whiteBoldText,
             ),
             onTap: () {
               Navigator.pop(context);
-              // Implement navigation
+              // Implement our radio navigation
             },
           ),
           ListTile(
-            leading: const Icon(Icons.info, color: Colors.white),
+            leading: const Icon(
+              Icons.apps,
+              color: Colors.white,
+            ),
             title: const Text(
-              'About',
+              'Explore More Apps',
               style: AppTextStyles.whiteBoldText,
             ),
             onTap: () {
               Navigator.pop(context);
-              // Implement navigation
+              // Optional: Navigate to a list of apps or open a submenu
             },
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 40.0),
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(
+                    Icons.arrow_right,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'My Dua Online',
+                    style: AppTextStyles.whiteBoldText,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Implement My Dua Online navigation
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.arrow_right,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Azadar',
+                    style: AppTextStyles.whiteBoldText,
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    // Implement Azadar navigation
+                  },
+                ),
+              ],
+            ),
+          ),
+          if (isLoggedIn) ...[
+            ListTile(
+              leading: const Icon(
+                Icons.logout,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Logout',
+                style: AppTextStyles.whiteBoldText,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Implement logout function
+              },
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+              title: const Text(
+                'Delete Account',
+                style: AppTextStyles.whiteBoldText,
+              ),
+              onTap: () {
+                Navigator.pop(context);
+                // Implement account deletion
+              },
+            ),
+          ],
         ],
       ),
     );
