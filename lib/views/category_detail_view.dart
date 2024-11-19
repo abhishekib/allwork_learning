@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
@@ -21,6 +22,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String? currentAudioUrl;
+  final TextCleanerController _textCleanerController = TextCleanerController();
 
   @override
   void initState() {
@@ -86,7 +88,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     if (availableTypes.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(categoryDetails.title),
+          title: Text(_textCleanerController.cleanText(categoryDetails.title)),
         ),
         body: const Center(child: Text("No data available")),
       );
@@ -102,7 +104,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
             size: 30,
           ),
           title: Text(
-            categoryDetails.title,
+            _textCleanerController.cleanText(categoryDetails.title),
             style: AppTextStyles.whiteBoldTitleText,
           ),
         ),

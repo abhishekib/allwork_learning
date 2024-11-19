@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,6 +20,7 @@ class _LyricsTabState extends State<LyricsTab> {
   final ItemScrollController _itemScrollController = ItemScrollController();
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
+  final TextCleanerController _textCleanerController = TextCleanerController();
 
   int _currentHighlightedIndex = 0;
 
@@ -121,7 +123,7 @@ class _LyricsTabState extends State<LyricsTab> {
                   return Visibility(
                     visible: lyrics.arabic.isNotEmpty,
                     child: Text(
-                      lyrics.arabic,
+                      _textCleanerController.cleanText(lyrics.arabic),
                       textDirection: TextDirection.rtl,
                       textAlign: TextAlign.start,
                       style: TextStyle(
@@ -144,7 +146,7 @@ class _LyricsTabState extends State<LyricsTab> {
                   return Visibility(
                     visible: lyrics.translitration.isNotEmpty,
                     child: Text(
-                      lyrics.translitration,
+                      _textCleanerController.cleanText(lyrics.translitration),
                       style: TextStyle(
                         fontSize: isTransliterationHighlighted ? 20 : 16,
                         fontWeight: isTransliterationHighlighted
@@ -165,7 +167,7 @@ class _LyricsTabState extends State<LyricsTab> {
                   return Visibility(
                     visible: lyrics.translation.isNotEmpty,
                     child: Text(
-                      lyrics.translation,
+                      _textCleanerController.cleanText(lyrics.translation),
                       style: TextStyle(
                         fontSize: isTranslationHighlighted ? 20 : 16,
                         fontWeight: FontWeight.bold,

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
@@ -16,6 +17,7 @@ class CategoryListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextCleanerController textCleanerController = TextCleanerController();
     return BackgroundWrapper(
       child: Scaffold(
         backgroundColor: AppColors.backgroundBlue,
@@ -26,7 +28,7 @@ class CategoryListView extends StatelessWidget {
             size: 30,
           ),
           title: Text(
-            argument,
+            textCleanerController.cleanText(argument),
             style: AppTextStyles.whiteBoldTitleText,
           ), // Display the selected menu title here
         ),
@@ -36,7 +38,7 @@ class CategoryListView extends StatelessWidget {
             final item = categoryItems[index];
             return ListTile(
               title: Text(
-                item.title,
+                textCleanerController.cleanText(item.title),
                 style: AppTextStyles.whiteBoldText,
               ),
               onTap: () {
