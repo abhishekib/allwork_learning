@@ -140,6 +140,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
               Flexible(
                 fit: FlexFit.loose,
                 child: TabBarView(
+                  physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: availableTypes.map((type) {
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];

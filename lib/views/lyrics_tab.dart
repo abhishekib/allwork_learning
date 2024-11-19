@@ -113,7 +113,7 @@ class _LyricsTabState extends State<LyricsTab> {
               color: Colors.white,
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Obx(() {
                   final isArabicHighlighted =
@@ -123,6 +123,7 @@ class _LyricsTabState extends State<LyricsTab> {
                     child: Text(
                       lyrics.arabic,
                       textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: isArabicHighlighted ? 30 : 18,
                         fontWeight: isArabicHighlighted
