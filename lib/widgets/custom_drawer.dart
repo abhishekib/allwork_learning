@@ -14,15 +14,16 @@ class CustomDrawer extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: AppColors.backgroundBlue,
-            ),
-            child: const Text(
-              'Menu',
-              style: AppTextStyles.whiteBoldText,
-            ),
-          ),
+          // DrawerHeader(
+          //   decoration: BoxDecoration(
+          //     color: AppColors.backgroundBlue,
+          //   ),
+          //   child: const Text(
+          //     'Menu',
+          //     style: AppTextStyles.whiteBoldText,
+          //   ),
+          // ),
+          SizedBox(height: 20),
           if (!isLoggedIn) ...[
             ListTile(
               leading: const Icon(
