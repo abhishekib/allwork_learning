@@ -4,6 +4,7 @@ import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/custom_drawer.dart';
 import 'package:allwork/widgets/daily_date_widget.dart';
 import 'package:allwork/widgets/marquee_appbar.dart';
+import 'package:allwork/widgets/search_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/animated_text_controller.dart';
@@ -69,7 +70,8 @@ class _MainMenuViewState extends State<MainMenuView> {
               ),
             ),
             const SizedBox(height: 10),
-
+            SearchBarWidget(),
+            const SizedBox(height: 10),
             DailyDateWidget(),
             // Dropdown menu for language selection
             Padding(
