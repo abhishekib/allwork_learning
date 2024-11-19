@@ -56,23 +56,39 @@ class MenuDetailView extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final categoryName =
                       controller.categoryData.keys.elementAt(index);
-                  return ListTile(
-                    tileColor: AppColors.backgroundBlue,
-                    title: Center(
-                      child: Text(
-                        categoryName,
-                        style: AppTextStyles.whiteBoldText,
-                      ),
-                    ),
-                    onTap: () {
-                      log("menu detail view-------> $categoryName");
-                      Get.to(
-                        () => CategoryListView(
-                          categoryItems: controller.categoryData[categoryName]!,
-                          argument: categoryName, // Pass the selected menuItem
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(9.5),
+                          ),
+                          child: ListTile(
+                            tileColor: AppColors.backgroundBlue,
+                            title: Center(
+                              child: Text(
+                                categoryName,
+                                style: AppTextStyles.blueBoldText,
+                              ),
+                            ),
+                            onTap: () {
+                              log("menu detail view-------> $categoryName");
+                              Get.to(
+                                () => CategoryListView(
+                                  categoryItems:
+                                      controller.categoryData[categoryName]!,
+                                  argument:
+                                      categoryName, // Pass the selected menuItem
+                                ),
+                              );
+                            },
+                          ),
                         ),
-                      );
-                    },
+                      ),
+                      const SizedBox(height: 10)
+                    ],
                   );
                 },
               ),
