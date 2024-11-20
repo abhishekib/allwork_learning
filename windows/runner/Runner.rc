@@ -92,7 +92,7 @@ BEGIN
             VALUE "CompanyName", "com.example" "\0"
             VALUE "FileDescription", "allwork" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "allwork" "\0"
+            VALUE "InternalName", "com.mafatihuljinan" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2024 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "allwork.exe" "\0"
             VALUE "ProductName", "allwork" "\0"
