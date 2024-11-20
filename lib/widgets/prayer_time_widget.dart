@@ -1,7 +1,9 @@
+import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/prayer_time_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PrayerTime {
   final String timeName;
@@ -21,7 +23,7 @@ class PrayerTimeWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
+        return _buildShimmerLoader();
       } else if (controller.prayerTimeModel.value == null) {
         return const Center(child: Text("No prayer times available"));
       } else {
@@ -104,5 +106,53 @@ class PrayerTimeWidget extends StatelessWidget {
         );
       }
     });
+  }
+
+  // Method for Shimmer loading effect
+  Widget _buildShimmerLoader() {
+    return SizedBox(
+      height: 100,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: 5, // Placeholder count for the number of prayer times
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Shimmer.fromColors(
+              baseColor: AppColors.backgroundBlue,
+              highlightColor: Colors.grey[500]!,
+              child: Container(
+                width: 65,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 35,
+                      height: 35,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      width: 50,
+                      height: 16,
+                      color: Colors.grey,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      width: 40,
+                      height: 14,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
   }
 }
