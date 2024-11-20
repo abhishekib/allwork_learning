@@ -2,10 +2,12 @@ import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:keep_screen_on/keep_screen_on.dart';
 import 'views/category_detail_view.dart';
 
 void main() {
   runApp(const MyApp());
+  KeepScreenOn.turnOn();
 }
 
 class MyApp extends StatelessWidget {
