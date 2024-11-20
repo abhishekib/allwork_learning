@@ -47,7 +47,11 @@ class MenuDetailView extends StatelessWidget {
           if (controller.isLoading.value) {
             return const Center(child: CircularProgressIndicator());
           } else if (controller.categoryData.isEmpty) {
-            return const Center(child: Text("No categories available"));
+            return const Center(
+                child: Text(
+              "No categories available",
+              style: AppTextStyles.whiteBoldText,
+            ));
           } else {
             return RefreshIndicator(
               onRefresh: refreshCategoryData,

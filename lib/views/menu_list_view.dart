@@ -31,7 +31,11 @@ class MenuListView extends StatelessWidget {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (menuList.items.isEmpty) {
-          return const Center(child: Text("No menu items available"));
+          return const Center(
+              child: Text(
+            "No menu items available",
+            style: AppTextStyles.whiteBoldText,
+          ));
         } else {
           return RefreshIndicator(
             onRefresh: refreshMenuItems,
