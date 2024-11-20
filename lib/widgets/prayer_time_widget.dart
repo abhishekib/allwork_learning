@@ -63,42 +63,43 @@ class PrayerTimeWidget extends StatelessWidget {
           ),
         ];
 
-        return SizedBox(
-          height: 120, // Set the height as needed
-          child: ListView.builder(
+        return Center(
+          child: SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            itemCount: prayerTimes.length,
-            itemBuilder: (context, index) {
-              final prayerTime = prayerTimes[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 65,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        prayerTime.imagePath,
-                        width: 35,
-                        height: 35,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(prayerTime.timeName, style: AppTextStyles.whiteText),
-                      Text(
-                        prayerTime.time,
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 14,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: prayerTimes.map((prayerTime) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Container(
+                    width: 80,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          prayerTime.imagePath,
+                          width: 35,
+                          height: 35,
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        Text(prayerTime.timeName,
+                            style: AppTextStyles.whiteText),
+                        Text(
+                          prayerTime.time,
+                          style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              );
-            },
+                );
+              }).toList(),
+            ),
           ),
         );
       }
