@@ -7,6 +7,9 @@ import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
+import 'package:allwork/widgets/daily_date_widget.dart';
+import 'package:allwork/widgets/prayer_time_widget.dart';
+import 'package:intl/intl.dart';
 
 class MenuDetailView extends StatelessWidget {
   final String menuItem;
@@ -15,6 +18,8 @@ class MenuDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String dayOfWeek = DateFormat('EEEE').format(DateTime.now());
+
     final controller = Get.put(CategoryListController());
 
     // Fetch data if not already fetched for the selected menu item
@@ -55,46 +60,62 @@ class MenuDetailView extends StatelessWidget {
           } else {
             return RefreshIndicator(
               onRefresh: refreshCategoryData,
-              child: ListView.builder(
-                itemCount: controller.categoryData.length,
-                itemBuilder: (context, index) {
-                  final categoryName =
-                      controller.categoryData.keys.elementAt(index);
-                  return Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(9.5),
-                          ),
-                          child: ListTile(
-                            tileColor: AppColors.backgroundBlue,
-                            title: Center(
-                              child: Text(
-                                categoryName,
-                                style: AppTextStyles.blueBoldText,
-                              ),
+              child: ListView(
+                children: [
+                  if (menuItem == "Daily Dua" || menuItem == "રોજની દોઆઓ")
+                    Center(
+                      child: Text(
+                        "Day: $dayOfWeek",
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                    ),
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: DailyDateWidget()),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: PrayerTimeWidget(),
+                  ),
+                  ...List.generate(controller.categoryData.length, (index) {
+                    final categoryName =
+                        controller.categoryData.keys.elementAt(index);
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(9.5),
                             ),
-                            onTap: () {
-                              log("menu detail view-------> $categoryName");
-                              Get.to(
-                                () => CategoryListView(
-                                  categoryItems:
-                                      controller.categoryData[categoryName]!,
-                                  argument:
-                                      categoryName, // Pass the selected menuItem
+                            child: ListTile(
+                              tileColor: AppColors.backgroundBlue,
+                              title: Center(
+                                child: Text(
+                                  categoryName,
+                                  style: AppTextStyles.blueBoldText,
                                 ),
-                              );
-                            },
+                              ),
+                              onTap: () {
+                                log("menu detail view-------> $categoryName");
+                                Get.to(
+                                  () => CategoryListView(
+                                    categoryItems:
+                                        controller.categoryData[categoryName]!,
+                                    argument:
+                                        categoryName, // Pass the selected menuItem
+                                  ),
+                                );
+                              },
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 10)
-                    ],
-                  );
-                },
+                        const SizedBox(height: 10)
+                      ],
+                    );
+                  }),
+                ],
               ),
             );
           }
