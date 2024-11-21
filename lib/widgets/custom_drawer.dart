@@ -167,7 +167,7 @@ class CustomDrawer extends StatelessWidget {
                   style: AppTextStyles.whiteBoldText,
                 ),
                 onTap: () {
-                  loginController.isLoggedIn.value = false;
+                  loginController.logoutUser();
                   Navigator.pop(context);
                 },
               ),
