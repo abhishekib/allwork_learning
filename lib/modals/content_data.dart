@@ -34,11 +34,16 @@ class Lyrics {
   });
 
   factory Lyrics.fromJson(Map<String, dynamic> json) {
+    // Check if the keys are in English or Gujarati
+    bool isGujarati = json.containsKey('અરબી');
+
     return Lyrics(
       time: json['time'] ?? '',
-      arabic: json['arabic'] ?? '',
-      translitration: json['translitration'] ?? '',
-      translation: json['translation'] ?? '',
+      arabic: isGujarati ? json['અરબી'] ?? '' : json['arabic'] ?? '',
+      translitration:
+          isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
+      translation:
+          isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
     );
   }
 }

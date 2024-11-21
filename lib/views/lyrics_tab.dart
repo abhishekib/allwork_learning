@@ -18,10 +18,10 @@ class LyricsTab extends StatefulWidget {
 
 class _LyricsTabState extends State<LyricsTab> {
   final CategoryDetailController controller =
-  Get.find<CategoryDetailController>();
+      Get.find<CategoryDetailController>();
   final ItemScrollController _itemScrollController = ItemScrollController();
   final ItemPositionsListener _itemPositionsListener =
-  ItemPositionsListener.create();
+      ItemPositionsListener.create();
   final TextCleanerController _textCleanerController = TextCleanerController();
 
   int _currentHighlightedIndex = 0;
@@ -130,7 +130,8 @@ class _LyricsTabState extends State<LyricsTab> {
               children: [
                 Obx(() {
                   final isArabicHighlighted =
-                      controller.selectedType.value.toLowerCase() == "arabic";
+                      controller.selectedType.value.toLowerCase() == "arabic" ||
+                          controller.selectedType.value == "અરબી";
                   return Visibility(
                     visible: lyrics.arabic.isNotEmpty,
                     child: Text(
@@ -153,7 +154,8 @@ class _LyricsTabState extends State<LyricsTab> {
                 Obx(() {
                   final isTransliterationHighlighted =
                       controller.selectedType.value.toLowerCase() ==
-                          "transliteration";
+                              "transliteration" ||
+                          controller.selectedType.value == "તરજુમા";
                   return Visibility(
                     visible: lyrics.translitration.isNotEmpty,
                     child: Text(
@@ -174,7 +176,8 @@ class _LyricsTabState extends State<LyricsTab> {
                 Obx(() {
                   final isTranslationHighlighted =
                       controller.selectedType.value.toLowerCase() ==
-                          "translation";
+                              "translation" ||
+                          controller.selectedType.value == "ગુજરાતી";
                   return Visibility(
                     visible: lyrics.translation.isNotEmpty,
                     child: Text(
