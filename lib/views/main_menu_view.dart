@@ -26,9 +26,7 @@ class _MainMenuViewState extends State<MainMenuView> {
 
     return BackgroundWrapper(
       child: Scaffold(
-        drawer: CustomDrawer(
-          isLoggedIn: false,
-        ), // TODO: Hardcoded till user auth
+        drawer: CustomDrawer(),
         backgroundColor: AppColors.backgroundBlue,
         body: Column(
           children: [
