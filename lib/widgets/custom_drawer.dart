@@ -1,6 +1,8 @@
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/signup_or_login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:get/get.dart';
 
 class CustomDrawer extends StatelessWidget {
   final bool isLoggedIn; // This determines whether the user is logged in or not
@@ -35,7 +37,7 @@ class CustomDrawer extends StatelessWidget {
                 style: AppTextStyles.whiteBoldText,
               ),
               onTap: () {
-                Navigator.pop(context);
+                Get.to(SignUpOrLoginView());
                 // Implement signup navigation
               },
             ),

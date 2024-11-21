@@ -1,16 +1,19 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/registration_response.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 
 class RegistrationProvider {
   final Dio _dio;
-
-  RegistrationProvider()
+  final String token;
+  RegistrationProvider(this.token)
       : _dio = Dio(
           BaseOptions(
-            baseUrl: ApiConstants.myDuaBaseUrl,
+            baseUrl: ApiConstants.baseUrl,
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
             },
           ),
         );
@@ -30,6 +33,7 @@ class RegistrationProvider {
       );
 
       if (response.statusCode == 200) {
+        log("Register Provider--->$response");
         return RegistrationResponse.fromJson(response.data);
       } else {
         throw Exception('Failed to register user');
