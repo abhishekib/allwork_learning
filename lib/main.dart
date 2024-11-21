@@ -9,7 +9,7 @@ import 'views/category_detail_view.dart';
 
 void main() {
   runApp(const MyApp());
-  if(Platform.isAndroid && Platform.isIOS){
+  if (Platform.isAndroid || Platform.isIOS) {
     KeepScreenOn.turnOn();
   }
 }
