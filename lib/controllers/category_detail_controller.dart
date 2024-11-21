@@ -24,10 +24,17 @@ class CategoryDetailController extends GetxController {
     log("CategoryDetailController initialized");
   }
 
+  void onReset() {
+    currentTime = 0.0.obs;
+    totalTime = 0.0.obs;
+  }
+
   @override
   void onClose() {
     super.onClose();
     _audioPlayer.dispose();
+    currentTime.close();
+    totalTime.close();
     log("Audio player disposed");
   }
 
@@ -57,7 +64,7 @@ class CategoryDetailController extends GetxController {
 
       log("Audio successfully loaded");
 
-          _audioPlayer.onDurationChanged.listen((duration) {
+      _audioPlayer.onDurationChanged.listen((duration) {
         log("Audio duration changed: ${duration.inMilliseconds} ms");
         totalTime.value = duration.inSeconds.toDouble();
       });

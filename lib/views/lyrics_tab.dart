@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:flutter/material.dart';
@@ -16,10 +18,10 @@ class LyricsTab extends StatefulWidget {
 
 class _LyricsTabState extends State<LyricsTab> {
   final CategoryDetailController controller =
-      Get.find<CategoryDetailController>();
+  Get.find<CategoryDetailController>();
   final ItemScrollController _itemScrollController = ItemScrollController();
   final ItemPositionsListener _itemPositionsListener =
-      ItemPositionsListener.create();
+  ItemPositionsListener.create();
   final TextCleanerController _textCleanerController = TextCleanerController();
 
   int _currentHighlightedIndex = 0;
@@ -27,7 +29,7 @@ class _LyricsTabState extends State<LyricsTab> {
   @override
   void initState() {
     super.initState();
-
+    controller.onReset();
     debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
@@ -35,32 +37,41 @@ class _LyricsTabState extends State<LyricsTab> {
       int newIndex = _findLyricsIndex(currentTimeValue.toInt());
 
       if (newIndex != -1 && newIndex != _currentHighlightedIndex) {
-        setState(() {
-          _currentHighlightedIndex = newIndex;
-        });
+        if (mounted) {
+          setState(() {
+            _currentHighlightedIndex = newIndex;
+          });
+          _itemScrollController.scrollTo(
+            index: _currentHighlightedIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
 
         debugPrint('New highlighted lyrics index: $_currentHighlightedIndex');
 
         // Scroll to the new highlighted lyrics
-        _itemScrollController.scrollTo(
-          index: _currentHighlightedIndex,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
       }
     });
+  }
+
+  @override
+  void dispose() {
+    //controller.onClose();
+    super.dispose();
   }
 
   int _findLyricsIndex(int currentPosition) {
     for (int i = 0; i < widget.lyricsList.length; i++) {
       final lyrics = widget.lyricsList[i];
       final timeInMilliseconds = _parseTimestamp(lyrics.time);
+      /* log("MY DATA ${widget.lyricsList[i + 1].time} && ${widget.lyricsList[i + 1].time.isNum}"); */
       final nextTimeInMilliseconds = i < widget.lyricsList.length - 1
           ? _parseTimestamp(widget.lyricsList[i + 1].time)
-          : double.infinity.toInt();
+          : 9223372036854775807; // Use this instead of double.infinity.toInt ==> this causes NaN or Infitity parsing error
 
-      debugPrint(
-          'Lyrics index $i: currentTime=$currentPosition ms, startTime=$timeInMilliseconds ms, nextStartTime=$nextTimeInMilliseconds ms');
+      /* debugPrint(
+          'Lyrics index $i: currentTime=$currentPosition ms, startTime=$timeInMilliseconds ms, nextStartTime=$nextTimeInMilliseconds ms'); */
 
       if (currentPosition >= timeInMilliseconds &&
           currentPosition < nextTimeInMilliseconds) {
@@ -85,7 +96,7 @@ class _LyricsTabState extends State<LyricsTab> {
         final parsedTime =
             (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
 
-        debugPrint('Parsed timestamp "$time" to $parsedTime ms');
+        //debugPrint('Parsed timestamp "$time" to $parsedTime ms');
 
         return parsedTime;
       }
