@@ -1,5 +1,6 @@
 import 'package:allwork/modals/registration_response.dart';
 import 'package:allwork/providers/regestration_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class RegistrationController extends GetxController {
@@ -15,7 +16,9 @@ class RegistrationController extends GetxController {
           username, password, email, firstName, lastName);
       registrationResponse.value = response;
     } catch (e) {
-      print('Error registering user: $e');
+      if (kDebugMode) {
+        print('Error registering user: $e');
+      }
     } finally {
       isLoading(false);
     }

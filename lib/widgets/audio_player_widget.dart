@@ -1,4 +1,5 @@
 import 'package:allwork/utils/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
@@ -9,10 +10,10 @@ class AudioPlayerWidget extends StatefulWidget {
       onPositionChanged; // Callback for position changes
 
   const AudioPlayerWidget({
-    Key? key,
+    super.key,
     required this.audioUrl,
     required this.onPositionChanged, // Required callback
-  }) : super(key: key);
+  });
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
@@ -94,7 +95,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           hasError = true;
         });
       }
-      print("Error loading audio: $e");
+      if (kDebugMode) {
+        print("Error loading audio: $e");
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:allwork/providers/prayer_time_provider.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
@@ -26,7 +27,9 @@ class PrayerTimeController extends GetxController {
       );
       prayerTimeModel.value = response;
     } catch (e) {
-      print('Error fetching prayer times: $e');
+      if (kDebugMode) {
+        print('Error fetching prayer times: $e');
+      }
     } finally {
       isLoading(false);
     }

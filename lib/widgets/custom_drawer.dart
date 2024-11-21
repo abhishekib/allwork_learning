@@ -5,7 +5,7 @@ import 'package:allwork/utils/colors.dart';
 class CustomDrawer extends StatelessWidget {
   final bool isLoggedIn; // This determines whether the user is logged in or not
 
-  const CustomDrawer({Key? key, required this.isLoggedIn}) : super(key: key);
+  const CustomDrawer({super.key, required this.isLoggedIn});
 
   @override
   Widget build(BuildContext context) {

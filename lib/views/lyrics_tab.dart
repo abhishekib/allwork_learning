@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:flutter/material.dart';

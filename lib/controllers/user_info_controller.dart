@@ -1,4 +1,5 @@
 import 'package:allwork/modals/user_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:allwork/providers/user_info_provider.dart';
 
@@ -13,7 +14,9 @@ class UserInfoController extends GetxController {
       UserInfo fetchedInfo = await _userInfoProvider.fetchUserInfo(userId);
       userInfo.value = fetchedInfo;
     } catch (e) {
-      print('Error fetching user info: $e');
+      if (kDebugMode) {
+        print('Error fetching user info: $e');
+      }
     } finally {
       isLoading(false);
     }

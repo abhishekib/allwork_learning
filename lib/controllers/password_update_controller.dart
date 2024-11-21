@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:allwork/providers/password_update_provider.dart';
 
@@ -15,7 +16,9 @@ class PasswordUpdateController extends GetxController {
           userId, oldPassword, newPassword, confirmPassword);
       passwordUpdateMessage.value = message;
     } catch (e) {
-      print('Error updating password: $e');
+      if (kDebugMode) {
+        print('Error updating password: $e');
+      }
     } finally {
       isLoading(false);
     }

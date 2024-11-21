@@ -1,5 +1,6 @@
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/providers/dailydate_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../utils/constants.dart';
 
@@ -21,7 +22,9 @@ class DailyDateController extends GetxController {
       DailyDate fetchedDate = await _dailyDateProvider.fetchDailyDate();
       dailyDate.value = fetchedDate;
     } catch (e) {
-      print('Error fetching daily date: $e');
+      if (kDebugMode) {
+        print('Error fetching daily date: $e');
+      }
     } finally {
       isLoading(false);
     }

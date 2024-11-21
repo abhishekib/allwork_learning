@@ -6,8 +6,7 @@ import 'package:allwork/utils/styles.dart';
 class MarqueeTextWidget extends StatelessWidget {
   final List<String> marqueeTexts;
 
-  const MarqueeTextWidget({Key? key, required this.marqueeTexts})
-      : super(key: key);
+  const MarqueeTextWidget({super.key, required this.marqueeTexts});
 
   @override
   Widget build(BuildContext context) {
