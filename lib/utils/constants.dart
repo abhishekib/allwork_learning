@@ -12,12 +12,11 @@ class ApiConstants {
   static const String menuEndpoint = '/menuitems?lang=english';
   static const String gujaratiMenuEndpoint = '/menuitems?lang=gujarati';
 
-  static const String dailyDuaEndpoint = 'dailydua?lang=english&day=thursday';
-  static const String gujaratiDailyDuaEndpoint =
-      'dailydua?lang=gujarati&day=thursday';
+  static const String dailyDuaEndpoint = 'dailydua?lang=english';
+  static const String gujaratiDailyDuaEndpoint = 'dailydua?lang=gujarati';
 
-  static const String surahEndpoint = 'duas?lang=english';
-  static const String gujaratiSurahEndpoint = 'duas?lang=gujarati';
+  static const String surahEndpoint = 'surah?lang=english';
+  static const String gujaratiSurahEndpoint = 'surah?lang=gujarati';
 
   static const String duaEndpoint = 'duas?lang=english';
   static const String gujaratiDuaEndpoint = 'duas?lang=gujarati';
@@ -35,7 +34,7 @@ class ApiConstants {
   static const String animatedText = 'themeoptions';
   static const String dailyDateEndpoint = "showhijridate";
 
-  static const String register  = 'register';
+  static const String register = 'register';
   static const String userinfo = 'userinfo';
 
   static const String prayertime = 'prayertimes';
