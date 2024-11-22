@@ -28,6 +28,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Duration currentTime = Duration.zero;
   Duration totalTime = Duration.zero;
   double volume = 1.0;
+  double playbackSpeed = 1.0;
 
   @override
   void initState() {
@@ -240,12 +241,51 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         size: 40,
                       ),
                     ),
-                    IconButton(
-                      onPressed: () {},
+                    PopupMenuButton<double>(
                       icon: const Icon(
                         Icons.settings,
                         color: AppColors.backgroundBlue,
                       ),
+                      onSelected: (value) {
+                        setState(() {
+                          playbackSpeed = value;
+                        });
+                        _audioPlayer.setPlaybackRate(playbackSpeed);
+                      },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 0.25,
+                          child: Text('0.25x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 0.5,
+                          child: Text('0.5x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 0.75,
+                          child: Text('0.75x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 1.0,
+                          child: Text('1.0x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 1.25,
+                          child: Text('1.25x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 1.5,
+                          child: Text('1.5x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 1.75,
+                          child: Text('1.75x'),
+                        ),
+                        const PopupMenuItem(
+                          value: 2.0,
+                          child: Text('2.0x'),
+                        ),
+                      ],
                     ),
                   ],
                 ),
