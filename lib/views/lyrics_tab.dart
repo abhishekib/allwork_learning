@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
@@ -22,12 +23,18 @@ class _LyricsTabState extends State<LyricsTab> {
       ItemPositionsListener.create();
   final TextCleanerController _textCleanerController = TextCleanerController();
 
+  double arabicFontSize = 18.0;
+  double transliterationFontSize = 16.0;
+  double translationFontSize = 16.0;
+
   int _currentHighlightedIndex = 0;
 
   @override
   void initState() {
     super.initState();
     controller.onReset();
+    _loadFontSizes();
+
     debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
@@ -47,29 +54,129 @@ class _LyricsTabState extends State<LyricsTab> {
         }
 
         debugPrint('New highlighted lyrics index: $_currentHighlightedIndex');
-
-        // Scroll to the new highlighted lyrics
       }
     });
   }
 
+  // Load font sizes from SharedPreferences
+  Future<void> _loadFontSizes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      arabicFontSize = prefs.getDouble('arabicFontSize') ?? 18.0;
+      transliterationFontSize =
+          prefs.getDouble('transliterationFontSize') ?? 16.0;
+      translationFontSize = prefs.getDouble('translationFontSize') ?? 16.0;
+    });
+  }
+
   @override
-  void dispose() {
-    //controller.onClose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return ScrollablePositionedList.builder(
+      itemScrollController: _itemScrollController,
+      itemPositionsListener: _itemPositionsListener,
+      itemCount: widget.lyricsList.length,
+      itemBuilder: (context, index) {
+        final lyrics = widget.lyricsList[index];
+        final isCurrentHighlighted = index == _currentHighlightedIndex;
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: isCurrentHighlighted ? Colors.white : Colors.white,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Obx(() {
+                  final isArabicHighlighted =
+                      controller.selectedType.value.toLowerCase() == "arabic" ||
+                          controller.selectedType.value == "અરબી";
+                  return Visibility(
+                    visible: lyrics.arabic.isNotEmpty,
+                    child: Text(
+                      _textCleanerController.cleanText(lyrics.arabic),
+                      textDirection: TextDirection.rtl,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                        fontSize: isArabicHighlighted
+                            ? arabicFontSize + 6
+                            : arabicFontSize,
+                        fontWeight: isArabicHighlighted
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: isArabicHighlighted
+                            ? Colors.black87
+                            : Colors.black54,
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 8),
+                Obx(() {
+                  final isTransliterationHighlighted =
+                      controller.selectedType.value.toLowerCase() ==
+                              "transliteration" ||
+                          controller.selectedType.value == "તરજુમા";
+                  return Visibility(
+                    visible: lyrics.translitration.isNotEmpty,
+                    child: Text(
+                      _textCleanerController.cleanText(lyrics.translitration),
+                      style: TextStyle(
+                        fontSize: isTransliterationHighlighted
+                            ? transliterationFontSize + 4
+                            : transliterationFontSize,
+                        fontWeight: isTransliterationHighlighted
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: isTransliterationHighlighted
+                            ? Colors.black87
+                            : Colors.black54,
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 8),
+                Obx(() {
+                  final isTranslationHighlighted =
+                      controller.selectedType.value.toLowerCase() ==
+                              "translation" ||
+                          controller.selectedType.value == "ગુજરાતી";
+                  return Visibility(
+                    visible: lyrics.translation.isNotEmpty,
+                    child: Text(
+                      _textCleanerController.cleanText(lyrics.translation),
+                      style: TextStyle(
+                        fontSize: isTranslationHighlighted
+                            ? translationFontSize + 4
+                            : translationFontSize,
+                        fontWeight: isTranslationHighlighted
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                        color: isTranslationHighlighted
+                            ? Colors.black87
+                            : Colors.black54,
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   int _findLyricsIndex(int currentPosition) {
     for (int i = 0; i < widget.lyricsList.length; i++) {
       final lyrics = widget.lyricsList[i];
       final timeInMilliseconds = _parseTimestamp(lyrics.time);
-      /* log("MY DATA ${widget.lyricsList[i + 1].time} && ${widget.lyricsList[i + 1].time.isNum}"); */
       final nextTimeInMilliseconds = i < widget.lyricsList.length - 1
           ? _parseTimestamp(widget.lyricsList[i + 1].time)
-          : 9223372036854775807; // Use this instead of double.infinity.toInt ==> this causes NaN or Infitity parsing error
-
-      /* debugPrint(
-          'Lyrics index $i: currentTime=$currentPosition ms, startTime=$timeInMilliseconds ms, nextStartTime=$nextTimeInMilliseconds ms'); */
+          : 9223372036854775807;
 
       if (currentPosition >= timeInMilliseconds &&
           currentPosition < nextTimeInMilliseconds) {
@@ -94,110 +201,11 @@ class _LyricsTabState extends State<LyricsTab> {
         final parsedTime =
             (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
 
-        //debugPrint('Parsed timestamp "$time" to $parsedTime ms');
-
         return parsedTime;
       }
     } catch (e) {
       debugPrint('Error parsing timestamp: $e');
     }
     return 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScrollablePositionedList.builder(
-      itemScrollController: _itemScrollController,
-      itemPositionsListener: _itemPositionsListener,
-      itemCount: widget.lyricsList.length,
-      itemBuilder: (context, index) {
-        final lyrics = widget.lyricsList[index];
-        // final isHighlighted = index == _currentHighlightedIndex;
-        // log("lyrics time from api------->${lyrics.time}");
-
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Colors.white,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Obx(() {
-                  final isArabicHighlighted =
-                      controller.selectedType.value.toLowerCase() == "arabic" ||
-                          controller.selectedType.value == "અરબી";
-                  return Visibility(
-                    visible: lyrics.arabic.isNotEmpty,
-                    child: Text(
-                      _textCleanerController.cleanText(lyrics.arabic),
-                      textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: isArabicHighlighted ? 30 : 18,
-                        fontWeight: isArabicHighlighted
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: isArabicHighlighted
-                            ? Colors.black87
-                            : Colors.black54,
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 8),
-                Obx(() {
-                  final isTransliterationHighlighted =
-                      controller.selectedType.value.toLowerCase() ==
-                              "transliteration" ||
-                          controller.selectedType.value == "તરજુમા";
-                  return Visibility(
-                    visible: lyrics.translitration.isNotEmpty,
-                    child: Text(
-                      _textCleanerController.cleanText(lyrics.translitration),
-                      style: TextStyle(
-                        fontSize: isTransliterationHighlighted ? 20 : 16,
-                        fontWeight: isTransliterationHighlighted
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: isTransliterationHighlighted
-                            ? Colors.black87
-                            : Colors.black54,
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 8),
-                Obx(() {
-                  final isTranslationHighlighted =
-                      controller.selectedType.value.toLowerCase() ==
-                              "translation" ||
-                          controller.selectedType.value == "ગુજરાતી";
-                  return Visibility(
-                    visible: lyrics.translation.isNotEmpty,
-                    child: Text(
-                      _textCleanerController.cleanText(lyrics.translation),
-                      style: TextStyle(
-                        fontSize: isTranslationHighlighted ? 20 : 16,
-                        fontWeight: FontWeight.bold,
-                        color: isTranslationHighlighted
-                            ? Colors.black87
-                            : Colors.black54,
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(
-                  height: 10,
-                )
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 }
