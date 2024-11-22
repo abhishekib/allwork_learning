@@ -24,11 +24,11 @@ class LoginController extends GetxController {
       isLoading(true);
       errorMessage.value = '';
       LoginResponse response =
-          await _loginProvider.loginUser(username, password);
+      await _loginProvider.loginUser(username, password);
       if (response.type == 'success') {
         loginResponse.value = response;
         isLoggedIn.value = true;
-        _saveUserLoginState(response);
+        _saveUserLoginState(response, password); // Save password here
       } else {
         errorMessage.value = response.type; // Handle specific errors
       }
@@ -52,13 +52,16 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> _saveUserLoginState(LoginResponse response) async {
+  // Save user login data, including the password, into SharedPreferences
+  Future<void> _saveUserLoginState(LoginResponse response, String password) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', true);
     prefs.setString('userData', response.message.data.displayName);
     prefs.setString('userEmail', response.message.data.userEmail);
+    prefs.setString('userPass', password); // Save the original password (unencrypted)
   }
 
+  // Load user login data from SharedPreferences
   Future<void> _loadUserLoginState() async {
     final prefs = await SharedPreferences.getInstance();
     isLoggedIn.value = prefs.getBool('isLoggedIn') ?? false;
@@ -66,13 +69,14 @@ class LoginController extends GetxController {
       // Load saved user data
       final String? displayName = prefs.getString('userData');
       final String? userEmail = prefs.getString('userEmail');
-      if (displayName != null && userEmail != null) {
+      final String? userPass = prefs.getString('userPass'); // Retrieve the password here
+      if (displayName != null && userEmail != null && userPass != null) {
         loginResponse.value = LoginResponse(
           message: Message(
             data: Data(
               id: '',
               userLogin: '',
-              userPass: '',
+              userPass: userPass,  // Store the password
               userNicename: '',
               userEmail: userEmail,
               userUrl: '',
@@ -93,6 +97,7 @@ class LoginController extends GetxController {
     }
   }
 
+  // Logout user and clear the SharedPreferences
   Future<void> logoutUser() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();

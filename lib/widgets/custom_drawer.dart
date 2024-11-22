@@ -5,6 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:get/get.dart';
 
+import '../views/login_view.dart';
+import '../views/profile_view.dart';
+
 class CustomDrawer extends StatelessWidget {
   // Get the same LoginController instance using Get.put()
   final LoginController loginController = Get.put(LoginController());
@@ -22,36 +25,36 @@ class CustomDrawer extends StatelessWidget {
             const SizedBox(height: 20),
             // If logged in, display a header with the user's name
             if (loginController.isLoggedIn.value) ...[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundBlue,
-                ),
-                accountName: Text(
-                  loginController
-                          .loginResponse.value?.message.data.displayName ??
-                      '',
-                  style: AppTextStyles.whiteBoldText,
-                ),
-                accountEmail: Text(
-                  loginController.loginResponse.value?.message.data.userEmail ??
-                      '',
-                  style: const TextStyle(
-                    color: Colors.white70,
-                  ),
-                ),
-                currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Text(
-                    loginController
-                            .loginResponse.value?.message.data.displayName[0] ??
-                        '',
-                    style: TextStyle(
-                      fontSize: 30.0,
-                      color: AppColors.backgroundBlue,
-                    ),
-                  ),
-                ),
-              ),
+              // UserAccountsDrawerHeader(
+              //   decoration: BoxDecoration(
+              //     color: AppColors.backgroundBlue,
+              //   ),
+              //   accountName: Text(
+              //     loginController
+              //             .loginResponse.value?.message.data.displayName ??
+              //         '',
+              //     style: AppTextStyles.whiteBoldText,
+              //   ),
+              //   accountEmail: Text(
+              //     loginController.loginResponse.value?.message.data.userEmail ??
+              //         '',
+              //     style: const TextStyle(
+              //       color: Colors.white70,
+              //     ),
+              //   ),
+              //   currentAccountPicture: CircleAvatar(
+              //     backgroundColor: Colors.white,
+              //     child: Text(
+              //       loginController
+              //               .loginResponse.value?.message.data.displayName[0] ??
+              //           '',
+              //       style: TextStyle(
+              //         fontSize: 30.0,
+              //         color: AppColors.backgroundBlue,
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
             if (!loginController.isLoggedIn.value) ...[
               ListTile(
@@ -79,7 +82,7 @@ class CustomDrawer extends StatelessWidget {
                   style: AppTextStyles.whiteBoldText,
                 ),
                 onTap: () {
-                  Navigator.pop(context);
+                  Get.to(ProfileView());
                   // Implement profile navigation
                 },
               ),
