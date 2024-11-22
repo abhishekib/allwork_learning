@@ -24,13 +24,13 @@ class LoginController extends GetxController {
       isLoading(true);
       errorMessage.value = '';
       LoginResponse response =
-      await _loginProvider.loginUser(username, password);
+          await _loginProvider.loginUser(username, password);
       if (response.type == 'success') {
         loginResponse.value = response;
         isLoggedIn.value = true;
-        _saveUserLoginState(response, password); // Save password here
+        _saveUserLoginState(response);
       } else {
-        errorMessage.value = response.type; // Handle specific errors
+        errorMessage.value = response.type;
       }
     } catch (e) {
       if (kDebugMode) {
@@ -52,31 +52,31 @@ class LoginController extends GetxController {
     }
   }
 
-  // Save user login data, including the password, into SharedPreferences
-  Future<void> _saveUserLoginState(LoginResponse response, String password) async {
+
+  Future<void> _saveUserLoginState(LoginResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', true);
+    prefs.setString('userId', response.message.data.id);
     prefs.setString('userData', response.message.data.displayName);
     prefs.setString('userEmail', response.message.data.userEmail);
-    prefs.setString('userPass', password); // Save the original password (unencrypted)
   }
 
-  // Load user login data from SharedPreferences
   Future<void> _loadUserLoginState() async {
     final prefs = await SharedPreferences.getInstance();
     isLoggedIn.value = prefs.getBool('isLoggedIn') ?? false;
     if (isLoggedIn.value) {
-      // Load saved user data
+
+      final String? userId = prefs.getString('userId');
       final String? displayName = prefs.getString('userData');
       final String? userEmail = prefs.getString('userEmail');
-      final String? userPass = prefs.getString('userPass'); // Retrieve the password here
-      if (displayName != null && userEmail != null && userPass != null) {
+
+      if (userId != null && displayName != null && userEmail != null) {
         loginResponse.value = LoginResponse(
           message: Message(
             data: Data(
-              id: '',
+              id: userId,
               userLogin: '',
-              userPass: userPass,  // Store the password
+              userPass: '',
               userNicename: '',
               userEmail: userEmail,
               userUrl: '',
@@ -85,7 +85,7 @@ class LoginController extends GetxController {
               userStatus: '',
               displayName: displayName,
             ),
-            id: 0,
+            id: int.parse(userId),
             caps: {},
             capKey: '',
             roles: [],
@@ -97,7 +97,6 @@ class LoginController extends GetxController {
     }
   }
 
-  // Logout user and clear the SharedPreferences
   Future<void> logoutUser() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();

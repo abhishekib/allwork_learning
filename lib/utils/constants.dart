@@ -36,6 +36,7 @@ class ApiConstants {
 
   static const String register = 'register';
   static const String userinfo = 'userinfo';
+  static const String updatePassword = 'changepassword';
 
   static const String prayertime = 'prayertimes';
 }

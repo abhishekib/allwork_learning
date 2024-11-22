@@ -5,12 +5,9 @@ import 'package:allwork/views/signup_or_login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:get/get.dart';
-
-import '../views/login_view.dart';
 import '../views/profile_view.dart';
 
 class CustomDrawer extends StatelessWidget {
-  // Get the same LoginController instance using Get.put()
   final LoginController loginController = Get.put(LoginController());
 
   CustomDrawer({super.key});
@@ -84,7 +81,6 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 onTap: () {
                   Get.to(ProfileView());
-                  // Implement profile navigation
                 },
               ),
             ],

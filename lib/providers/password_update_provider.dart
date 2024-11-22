@@ -3,13 +3,15 @@ import 'package:dio/dio.dart';
 
 class PasswordUpdateProvider {
   final Dio _dio;
+  final String token;
 
-  PasswordUpdateProvider()
+  PasswordUpdateProvider(this.token)
       : _dio = Dio(
           BaseOptions(
-            baseUrl: ApiConstants.myDuaBaseUrl,
+            baseUrl: ApiConstants.baseUrl,
             headers: {
               'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
             },
           ),
         );
@@ -18,7 +20,7 @@ class PasswordUpdateProvider {
       String newPassword, String confirmPassword) async {
     try {
       final response = await _dio.post(
-        'changepassword',
+        ApiConstants.updatePassword,
         queryParameters: {
           'userid': userId,
           'oldpassword': oldPassword,
