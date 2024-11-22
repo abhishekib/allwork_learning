@@ -38,6 +38,7 @@ class LoginView extends StatelessWidget {
                   label: "Username or Email",
                   hintText: "Enter your username or email",
                   controller: usernameController,
+                  isNotEditable: false,
                 ),
                 const SizedBox(height: 20),
                 LabeledInputField(
@@ -45,6 +46,7 @@ class LoginView extends StatelessWidget {
                   hintText: "Enter your password",
                   controller: passwordController,
                   isPassword: true,
+                  isNotEditable: false,
                 ),
                 const SizedBox(height: 30),
                 Center(

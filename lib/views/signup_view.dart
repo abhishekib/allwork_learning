@@ -43,21 +43,25 @@ class SignUpView extends StatelessWidget {
                   label: "Enter Unique Username",
                   hintText: "Your unique username",
                   controller: userNameController,
+                  isNotEditable: false,
                 ),
                 LabeledInputField(
                   label: "What's your first name?",
                   hintText: "Your First Name",
                   controller: firstNameController,
+                  isNotEditable: false,
                 ),
                 LabeledInputField(
                   label: "What's your last name?",
                   hintText: "Your Last Name",
                   controller: lastNameController,
+                  isNotEditable: false,
                 ),
                 LabeledInputField(
                   label: "What's your email?",
                   hintText: "Your email",
                   controller: emailController,
+                  isNotEditable: false,
                 ),
                 const Text(
                   "You'll need to confirm this email later.",
@@ -69,6 +73,7 @@ class SignUpView extends StatelessWidget {
                   hintText: "Enter Your Password",
                   controller: passwordController,
                   isPassword: true,
+                  isNotEditable: false,
                 ),
                 const Text(
                   "Use a strong password for your account",
@@ -80,6 +85,7 @@ class SignUpView extends StatelessWidget {
                   hintText: "Confirm Your Password",
                   controller: confirmPasswordController,
                   isPassword: true,
+                  isNotEditable: false,
                 ),
                 const Text(
                   "Use a strong password for your account",

@@ -41,33 +41,33 @@ class ChangePassword extends StatelessWidget {
                         hintText: "Enter Current Password",
                         controller: currentPasswordController,
                         isPassword: true,
+                        isNotEditable: false,
                       ),
                       const SizedBox(height: 10),
-
                       LabeledInputField(
                         label: "New Password",
                         hintText: "Enter New Password",
                         controller: newPasswordController,
                         isPassword: true,
+                        isNotEditable: false,
                       ),
                       const Text(
                         "Use a strong password for your account",
                         style: TextStyle(color: Colors.white70),
                       ),
                       const SizedBox(height: 10),
-
                       LabeledInputField(
                         label: "Confirm New Password",
                         hintText: "Confirm New Password",
                         controller: confirmPasswordController,
                         isPassword: true,
+                        isNotEditable: false,
                       ),
                       const Text(
                         "Use a strong password for your account",
                         style: TextStyle(color: Colors.white70),
                       ),
                       const SizedBox(height: 30),
-
                       Center(
                         child: ElevatedButton(
                           onPressed: () {

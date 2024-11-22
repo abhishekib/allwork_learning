@@ -6,12 +6,14 @@ class LabeledInputField extends StatelessWidget {
   final String hintText;
   final TextEditingController controller;
   final bool isPassword;
+  final bool isNotEditable;
 
   const LabeledInputField({
     super.key,
     required this.label,
     required this.hintText,
     required this.controller,
+    required this.isNotEditable,
     this.isPassword = false,
   });
 
@@ -30,6 +32,7 @@ class LabeledInputField extends StatelessWidget {
           TextField(
             controller: controller,
             obscureText: isPassword,
+            readOnly: isNotEditable,
             decoration: InputDecoration(
               hintText: hintText,
               hintStyle: TextStyle(color: Colors.black38),
