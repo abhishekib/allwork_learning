@@ -3,16 +3,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'dart:math';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
-  final ValueChanged<Duration>
-      onPositionChanged; // Callback for position changes
+  final ValueChanged<Duration> onPositionChanged;
 
   const AudioPlayerWidget({
     super.key,
     required this.audioUrl,
-    required this.onPositionChanged, // Required callback
+    required this.onPositionChanged,
   });
 
   @override
@@ -29,12 +29,14 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Duration totalTime = Duration.zero;
   double volume = 1.0;
   double playbackSpeed = 1.0;
+  bool isCompactView = false;
 
   @override
   void initState() {
     super.initState();
     _audioPlayer = AudioPlayer();
     _setupAudio();
+    _loadViewPreference();
   }
 
   Future<void> _setupAudio() async {
@@ -70,7 +72,6 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
             );
           });
 
-          // Notify the lyrics widget about the current audio position
           widget.onPositionChanged(position);
         }
       });
@@ -102,6 +103,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     }
   }
 
+  Future<void> _loadViewPreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      isCompactView = prefs.getBool('isCompactView') ?? false;
+    });
+  }
+
   Future<void> _retryLoadingAudio() async {
     if (!mounted) return;
 
@@ -129,170 +137,279 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
-            )
-          else if (hasError)
-            Column(
-              children: [
-                const Text(
-                  "Failed to load audio. Please try again.",
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
-                const SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: _retryLoadingAudio,
-                  child: const Text("Retry"),
-                ),
-              ],
-            )
-          else
-            Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      _formatDuration(currentTime),
-                      style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    Expanded(
-                      child: Slider(
-                        value: currentTime.inSeconds.toDouble(),
-                        min: 0,
-                        max: totalTime.inSeconds.toDouble(),
-                        onChanged: (value) async {
-                          await _audioPlayer
-                              .seek(Duration(seconds: value.toInt()));
-                          if (value == 0) {
-                            if (mounted) {
-                              setState(() {
-                                isPlaying = false;
-                              });
-                            }
-                          }
-                        },
-                        activeColor: AppColors.backgroundBlue,
-                        inactiveColor: AppColors.backgroundBlue,
-                      ),
-                    ),
-                    Text(
-                      _formatDuration(totalTime),
-                      style: const TextStyle(
+      child: isCompactView ? _buildCompactView() : _buildNormalView(),
+    );
+  }
+
+  Widget _buildNormalView() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (isLoading)
+          const Center(
+            child: CircularProgressIndicator(),
+          )
+        else if (hasError)
+          Column(
+            children: [
+              const Text(
+                "Failed to load audio. Please try again.",
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              const SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: _retryLoadingAudio,
+                child: const Text("Retry"),
+              ),
+            ],
+          )
+        else
+          Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    _formatDuration(currentTime),
+                    style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                // Control Buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        setState(() {
-                          volume = volume == 0 ? 1.0 : 0.0;
-                          _audioPlayer.setVolume(volume);
-                        });
-                      },
-                      icon: Icon(
-                        volume == 0 ? Icons.volume_off : Icons.volume_up,
-                        color: AppColors.backgroundBlue,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: () async {
-                        if (isPlaying) {
-                          await _audioPlayer.pause();
+                        fontWeight: FontWeight.bold),
+                  ),
+                  Expanded(
+                    child: Slider(
+                      value: currentTime.inSeconds.toDouble(),
+                      min: 0,
+                      max: totalTime.inSeconds.toDouble(),
+                      onChanged: (value) async {
+                        await _audioPlayer
+                            .seek(Duration(seconds: value.toInt()));
+                        if (value == 0) {
                           if (mounted) {
                             setState(() {
                               isPlaying = false;
                             });
                           }
-                        } else {
-                          if (isCompleted) {
-                            await _audioPlayer.seek(Duration.zero);
-                            if (mounted) {
-                              setState(() {
-                                isCompleted = false;
-                              });
-                            }
-                          }
-                          await _audioPlayer.resume();
+                        }
+                      },
+                      activeColor: AppColors.backgroundBlue,
+                      inactiveColor: AppColors.backgroundBlue,
+                    ),
+                  ),
+                  Text(
+                    _formatDuration(totalTime),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Control Buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        volume = volume == 0 ? 1.0 : 0.0;
+                        _audioPlayer.setVolume(volume);
+                      });
+                    },
+                    icon: Icon(
+                      volume == 0 ? Icons.volume_off : Icons.volume_up,
+                      color: AppColors.backgroundBlue,
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () async {
+                      if (isPlaying) {
+                        await _audioPlayer.pause();
+                        if (mounted) {
+                          setState(() {
+                            isPlaying = false;
+                          });
+                        }
+                      } else {
+                        if (isCompleted) {
+                          await _audioPlayer.seek(Duration.zero);
                           if (mounted) {
                             setState(() {
-                              isPlaying = true;
+                              isCompleted = false;
                             });
                           }
                         }
-                      },
-                      icon: Icon(
-                        isPlaying ? Icons.pause : Icons.play_arrow,
-                        color: AppColors.backgroundBlue,
-                        size: 40,
-                      ),
+                        await _audioPlayer.resume();
+                        if (mounted) {
+                          setState(() {
+                            isPlaying = true;
+                          });
+                        }
+                      }
+                    },
+                    icon: Icon(
+                      isPlaying ? Icons.pause : Icons.play_arrow,
+                      color: AppColors.backgroundBlue,
+                      size: 40,
                     ),
-                    PopupMenuButton<double>(
-                      icon: const Icon(
-                        Icons.settings,
-                        color: AppColors.backgroundBlue,
-                      ),
-                      onSelected: (value) {
-                        setState(() {
-                          playbackSpeed = value;
-                        });
-                        _audioPlayer.setPlaybackRate(playbackSpeed);
-                      },
-                      itemBuilder: (context) => [
-                        const PopupMenuItem(
-                          value: 0.25,
-                          child: Text('0.25x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 0.5,
-                          child: Text('0.5x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 0.75,
-                          child: Text('0.75x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 1.0,
-                          child: Text('1.0x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 1.25,
-                          child: Text('1.25x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 1.5,
-                          child: Text('1.5x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 1.75,
-                          child: Text('1.75x'),
-                        ),
-                        const PopupMenuItem(
-                          value: 2.0,
-                          child: Text('2.0x'),
-                        ),
-                      ],
+                  ),
+                  PopupMenuButton<double>(
+                    icon: const Icon(
+                      Icons.settings,
+                      color: AppColors.backgroundBlue,
                     ),
-                  ],
-                ),
-              ],
+                    onSelected: (value) {
+                      setState(() {
+                        playbackSpeed = value;
+                      });
+                      _audioPlayer.setPlaybackRate(playbackSpeed);
+                    },
+                    itemBuilder: (context) => [
+                      const PopupMenuItem(
+                        value: 0.25,
+                        child: Text('0.25x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 0.5,
+                        child: Text('0.5x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 0.75,
+                        child: Text('0.75x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 1.0,
+                        child: Text('1.0x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 1.25,
+                        child: Text('1.25x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 1.5,
+                        child: Text('1.5x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 1.75,
+                        child: Text('1.75x'),
+                      ),
+                      const PopupMenuItem(
+                        value: 2.0,
+                        child: Text('2.0x'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCompactView() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Expanded(
+          child: Slider(
+            value: currentTime.inSeconds.toDouble(),
+            min: 0,
+            max: totalTime.inSeconds.toDouble(),
+            onChanged: (value) async {
+              await _audioPlayer.seek(Duration(seconds: value.toInt()));
+              if (value == 0) {
+                if (mounted) {
+                  setState(() {
+                    isPlaying = false;
+                  });
+                }
+              }
+            },
+            activeColor: AppColors.backgroundBlue,
+            inactiveColor: AppColors.backgroundBlue,
+          ),
+        ),
+        IconButton(
+          onPressed: () async {
+            if (isPlaying) {
+              await _audioPlayer.pause();
+              if (mounted) {
+                setState(() {
+                  isPlaying = false;
+                });
+              }
+            } else {
+              if (isCompleted) {
+                await _audioPlayer.seek(Duration.zero);
+                if (mounted) {
+                  setState(() {
+                    isCompleted = false;
+                  });
+                }
+              }
+              await _audioPlayer.resume();
+              if (mounted) {
+                setState(() {
+                  isPlaying = true;
+                });
+              }
+            }
+          },
+          icon: Icon(
+            isPlaying ? Icons.pause : Icons.play_arrow,
+            color: AppColors.backgroundBlue,
+            size: 30,
+          ),
+        ),
+        PopupMenuButton<double>(
+          icon: const Icon(
+            Icons.settings,
+            color: AppColors.backgroundBlue,
+          ),
+          onSelected: (value) {
+            setState(() {
+              playbackSpeed = value;
+            });
+            _audioPlayer.setPlaybackRate(playbackSpeed);
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 0.25,
+              child: Text('0.25x'),
             ),
-        ],
-      ),
+            const PopupMenuItem(
+              value: 0.5,
+              child: Text('0.5x'),
+            ),
+            const PopupMenuItem(
+              value: 0.75,
+              child: Text('0.75x'),
+            ),
+            const PopupMenuItem(
+              value: 1.0,
+              child: Text('1.0x'),
+            ),
+            const PopupMenuItem(
+              value: 1.25,
+              child: Text('1.25x'),
+            ),
+            const PopupMenuItem(
+              value: 1.5,
+              child: Text('1.5x'),
+            ),
+            const PopupMenuItem(
+              value: 1.75,
+              child: Text('1.75x'),
+            ),
+            const PopupMenuItem(
+              value: 2.0,
+              child: Text('2.0x'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

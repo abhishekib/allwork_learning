@@ -15,32 +15,34 @@ class _SettingsPageState extends State<SettingsPage> {
   double arabicFontSize = 18.0;
   double transliterationFontSize = 16.0;
   double translationFontSize = 16.0;
+  bool isCompactAudioView = false;
 
   @override
   void initState() {
     super.initState();
-    _loadFontSizes();
+    _loadSettings();
   }
 
-  // Load the saved font sizes from SharedPreferences
-  Future<void> _loadFontSizes() async {
+  Future<void> _loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       arabicFontSize = prefs.getDouble('arabicFontSize') ?? 18.0;
       transliterationFontSize =
           prefs.getDouble('transliterationFontSize') ?? 16.0;
       translationFontSize = prefs.getDouble('translationFontSize') ?? 16.0;
+      isCompactAudioView = prefs.getBool('isCompactView') ?? false;
     });
   }
 
-  // Save the font sizes to SharedPreferences
-  Future<void> _saveFontSizes() async {
+
+  Future<void> _saveSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('arabicFontSize', arabicFontSize);
     await prefs.setDouble('transliterationFontSize', transliterationFontSize);
     await prefs.setDouble('translationFontSize', translationFontSize);
+    await prefs.setBool('isCompactView', isCompactAudioView);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Font sizes saved successfully!')),
+      const SnackBar(content: Text('Settings saved successfully!')),
     );
   }
 
@@ -130,11 +132,31 @@ class _SettingsPageState extends State<SettingsPage> {
                   color: Colors.white,
                 ),
               ),
+              const SizedBox(height: 20),
+              const Text(
+                "Audio Player View",
+                style: AppTextStyles.whiteBoldText,
+              ),
+              SwitchListTile(
+                title: const Text(
+                  "Compact View",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                value: isCompactAudioView,
+                onChanged: (value) {
+                  setState(() {
+                    isCompactAudioView = value;
+                  });
+                },
+                activeColor: Colors.white,
+                inactiveThumbColor: Colors.grey,
+                inactiveTrackColor: Colors.grey,
+              ),
               const SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    _saveFontSizes();
+                    _saveSettings();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
