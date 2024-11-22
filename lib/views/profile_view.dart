@@ -1,5 +1,6 @@
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/profile_view_change_password.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/labeled_input_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -105,6 +106,12 @@ class _ProfileViewState extends State<ProfileView> {
                         controller: _userInfoController.emailController,
                         isNotEditable: true, // Email should not be editable
                       ),
+                      Center(
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Get.to(() => ChangePassword());
+                              },
+                              child: Text("Update Password"))),
                       const SizedBox(height: 30),
                       Center(
                         child: Row(
