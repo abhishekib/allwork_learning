@@ -35,7 +35,7 @@ class _LyricsTabState extends State<LyricsTab> {
     controller.onReset();
     _loadFontSizes();
 
-    debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
+    debugPrint("LyricsTab initialized with \${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
     ever(controller.currentTime, (currentTimeValue) {
@@ -53,7 +53,7 @@ class _LyricsTabState extends State<LyricsTab> {
           );
         }
 
-        debugPrint('New highlighted lyrics index: $_currentHighlightedIndex');
+        debugPrint('New highlighted lyrics index: \$_currentHighlightedIndex');
       }
     });
   }
@@ -88,85 +88,117 @@ class _LyricsTabState extends State<LyricsTab> {
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Obx(() {
-                  final isArabicHighlighted =
-                      controller.selectedType.value.toLowerCase() == "arabic" ||
-                          controller.selectedType.value == "અરબી";
-                  return Visibility(
-                    visible: lyrics.arabic.isNotEmpty,
-                    child: Text(
-                      _textCleanerController.cleanText(lyrics.arabic),
-                      textDirection: TextDirection.rtl,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: isArabicHighlighted
-                            ? arabicFontSize + 6
-                            : arabicFontSize,
-                        fontWeight: isArabicHighlighted
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: isArabicHighlighted
-                            ? Colors.black87
-                            : Colors.black54,
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 8),
-                Obx(() {
-                  final isTransliterationHighlighted =
-                      controller.selectedType.value.toLowerCase() ==
-                              "transliteration" ||
-                          controller.selectedType.value == "તરજુમા";
-                  return Visibility(
-                    visible: lyrics.translitration.isNotEmpty,
-                    child: Text(
-                      _textCleanerController.cleanText(lyrics.translitration),
-                      style: TextStyle(
-                        fontSize: isTransliterationHighlighted
-                            ? transliterationFontSize + 4
-                            : transliterationFontSize,
-                        fontWeight: isTransliterationHighlighted
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: isTransliterationHighlighted
-                            ? Colors.black87
-                            : Colors.black54,
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 8),
-                Obx(() {
-                  final isTranslationHighlighted =
-                      controller.selectedType.value.toLowerCase() ==
-                              "translation" ||
-                          controller.selectedType.value == "ગુજરાતી";
-                  return Visibility(
-                    visible: lyrics.translation.isNotEmpty,
-                    child: Text(
-                      _textCleanerController.cleanText(lyrics.translation),
-                      style: TextStyle(
-                        fontSize: isTranslationHighlighted
-                            ? translationFontSize + 4
-                            : translationFontSize,
-                        fontWeight: isTranslationHighlighted
-                            ? FontWeight.bold
-                            : FontWeight.normal,
-                        color: isTranslationHighlighted
-                            ? Colors.black87
-                            : Colors.black54,
-                      ),
-                    ),
-                  );
-                }),
-                const SizedBox(height: 10),
-              ],
+              children: _buildLyricsContent(lyrics),
             ),
           ),
         );
       },
+    );
+  }
+
+  List<Widget> _buildLyricsContent(Lyrics lyrics) {
+    List<Widget> contentWidgets = [];
+    switch (controller.selectedType.value.toLowerCase()) {
+      case "arabic":
+      case "અરબી":
+        contentWidgets.addAll([
+          _buildArabicText(lyrics),
+          const SizedBox(height: 8),
+          _buildTransliterationText(lyrics),
+          const SizedBox(height: 8),
+          _buildTranslationText(lyrics),
+        ]);
+        break;
+      case "transliteration":
+      case "તરજુમા":
+        contentWidgets.addAll([
+          _buildTransliterationText(lyrics),
+          const SizedBox(height: 8),
+          _buildArabicText(lyrics),
+          const SizedBox(height: 8),
+          _buildTranslationText(lyrics),
+        ]);
+        break;
+      case "translation":
+      case "ગુજરાતી":
+        contentWidgets.addAll([
+          _buildTranslationText(lyrics),
+          const SizedBox(height: 8),
+          _buildArabicText(lyrics),
+          const SizedBox(height: 8),
+          _buildTransliterationText(lyrics),
+        ]);
+        break;
+      default:
+        contentWidgets.addAll([
+          _buildArabicText(lyrics),
+          const SizedBox(height: 8),
+          _buildTransliterationText(lyrics),
+          const SizedBox(height: 8),
+          _buildTranslationText(lyrics),
+        ]);
+    }
+    contentWidgets.add(const SizedBox(height: 10));
+    return contentWidgets;
+  }
+
+  Widget _buildArabicText(Lyrics lyrics) {
+    final isArabicHighlighted =
+        controller.selectedType.value.toLowerCase() == "arabic" ||
+            controller.selectedType.value == "અરબી";
+    return Visibility(
+      visible: lyrics.arabic.isNotEmpty,
+      child: Text(
+        _textCleanerController.cleanText(lyrics.arabic),
+        textDirection: TextDirection.rtl,
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          fontSize: isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize,
+          fontWeight: isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
+          color: isArabicHighlighted ? Colors.black87 : Colors.black54,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransliterationText(Lyrics lyrics) {
+    final isTransliterationHighlighted =
+        controller.selectedType.value.toLowerCase() == "transliteration" ||
+            controller.selectedType.value == "તરજુમા";
+    return Visibility(
+      visible: lyrics.translitration.isNotEmpty,
+      child: Text(
+        _textCleanerController.cleanText(lyrics.translitration),
+        style: TextStyle(
+          fontSize: isTransliterationHighlighted
+              ? transliterationFontSize + 4
+              : transliterationFontSize,
+          fontWeight: isTransliterationHighlighted
+              ? FontWeight.bold
+              : FontWeight.normal,
+          color: isTransliterationHighlighted ? Colors.black87 : Colors.black54,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTranslationText(Lyrics lyrics) {
+    final isTranslationHighlighted =
+        controller.selectedType.value.toLowerCase() == "translation" ||
+            controller.selectedType.value == "ગુજરાતી";
+    return Visibility(
+      visible: lyrics.translation.isNotEmpty,
+      child: Text(
+        _textCleanerController.cleanText(lyrics.translation),
+        style: TextStyle(
+          fontSize: isTranslationHighlighted
+              ? translationFontSize + 4
+              : translationFontSize,
+          fontWeight:
+              isTranslationHighlighted ? FontWeight.bold : FontWeight.normal,
+          color: isTranslationHighlighted ? Colors.black87 : Colors.black54,
+        ),
+      ),
     );
   }
 
@@ -195,7 +227,7 @@ class _LyricsTabState extends State<LyricsTab> {
         final secondsAndMilliseconds = parts[1].split('.');
         final seconds = int.tryParse(secondsAndMilliseconds[0]) ?? 0;
         final milliseconds = secondsAndMilliseconds.length > 1
-            ? (double.parse('0.${secondsAndMilliseconds[1]}') * 1000).toInt()
+            ? (double.parse('0.\${secondsAndMilliseconds[1]}') * 1000).toInt()
             : 0;
 
         final parsedTime =
@@ -204,7 +236,7 @@ class _LyricsTabState extends State<LyricsTab> {
         return parsedTime;
       }
     } catch (e) {
-      debugPrint('Error parsing timestamp: $e');
+      debugPrint('Error parsing timestamp: \$e');
     }
     return 0;
   }
