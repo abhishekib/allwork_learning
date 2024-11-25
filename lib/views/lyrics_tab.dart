@@ -28,6 +28,7 @@ class _LyricsTabState extends State<LyricsTab> {
   double translationFontSize = 16.0;
 
   int _currentHighlightedIndex = 0;
+  bool _isUserInteraction = false;
 
   @override
   void initState() {
@@ -35,10 +36,16 @@ class _LyricsTabState extends State<LyricsTab> {
     controller.onReset();
     _loadFontSizes();
 
-    debugPrint("LyricsTab initialized with \${widget.lyricsList.length} items");
+    debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
     ever(controller.currentTime, (currentTimeValue) {
+      if (_isUserInteraction) {
+        // Skip the scrolling if it was caused by user interaction
+        _isUserInteraction = false;
+        return;
+      }
+
       int newIndex = _findLyricsIndex(currentTimeValue.toInt());
 
       if (newIndex != -1 && newIndex != _currentHighlightedIndex) {
@@ -53,7 +60,7 @@ class _LyricsTabState extends State<LyricsTab> {
           );
         }
 
-        debugPrint('New highlighted lyrics index: \$_currentHighlightedIndex');
+        debugPrint('New highlighted lyrics index: $_currentHighlightedIndex');
       }
     });
   }
@@ -227,7 +234,7 @@ class _LyricsTabState extends State<LyricsTab> {
         final secondsAndMilliseconds = parts[1].split('.');
         final seconds = int.tryParse(secondsAndMilliseconds[0]) ?? 0;
         final milliseconds = secondsAndMilliseconds.length > 1
-            ? (double.parse('0.\${secondsAndMilliseconds[1]}') * 1000).toInt()
+            ? (double.parse('0.${secondsAndMilliseconds[1]}') * 1000).toInt()
             : 0;
 
         final parsedTime =
@@ -236,7 +243,7 @@ class _LyricsTabState extends State<LyricsTab> {
         return parsedTime;
       }
     } catch (e) {
-      debugPrint('Error parsing timestamp: \$e');
+      debugPrint('Error parsing timestamp: $e');
     }
     return 0;
   }

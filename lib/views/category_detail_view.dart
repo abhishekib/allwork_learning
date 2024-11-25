@@ -53,9 +53,12 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
           ? cdata[selectedIndex].audiourl
           : null;
 
-      setState(() {
-        currentAudioUrl = newAudioUrl;
-      });
+      if (newAudioUrl != currentAudioUrl) {
+        setState(() {
+          currentAudioUrl = newAudioUrl;
+        });
+        Get.find<CategoryDetailController>().initializeAudio(newAudioUrl?? "");
+      }
     });
     log("---You are in CategoryDetailView---");
   }
@@ -127,7 +130,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.copy),
               onPressed: () {
-                
+                // Implement copy functionality
               },
             ),
             FloatingActionButton.small(
