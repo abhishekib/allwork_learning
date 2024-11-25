@@ -17,123 +17,52 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: AppColors.backgroundBlue,
       child: Obx(
-        () => ListView(
-          padding: EdgeInsets.zero,
+            () => Column(
           children: [
             const SizedBox(height: 20),
-            // If logged in, display a header with the user's name
-            if (loginController.isLoggedIn.value) ...[
-              // UserAccountsDrawerHeader(
-              //   decoration: BoxDecoration(
-              //     color: AppColors.backgroundBlue,
-              //   ),
-              //   accountName: Text(
-              //     loginController
-              //             .loginResponse.value?.message.data.displayName ??
-              //         '',
-              //     style: AppTextStyles.whiteBoldText,
-              //   ),
-              //   accountEmail: Text(
-              //     loginController.loginResponse.value?.message.data.userEmail ??
-              //         '',
-              //     style: const TextStyle(
-              //       color: Colors.white70,
-              //     ),
-              //   ),
-              //   currentAccountPicture: CircleAvatar(
-              //     backgroundColor: Colors.white,
-              //     child: Text(
-              //       loginController
-              //               .loginResponse.value?.message.data.displayName[0] ??
-              //           '',
-              //       style: TextStyle(
-              //         fontSize: 30.0,
-              //         color: AppColors.backgroundBlue,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-            ],
-            if (!loginController.isLoggedIn.value) ...[
-              ListTile(
-                leading: const Icon(
-                  Icons.person_add,
-                  color: Colors.white,
-                ),
-                title: const Text(
-                  'Signup',
-                  style: AppTextStyles.whiteBoldText,
-                ),
-                onTap: () {
-                  Get.to(SignUpOrLoginView());
-                },
-              ),
-            ],
-            if (loginController.isLoggedIn.value) ...[
-              ListTile(
-                leading: const Icon(
-                  Icons.person,
-                  color: Colors.white,
-                ),
-                title: const Text(
-                  'Profile',
-                  style: AppTextStyles.whiteBoldText,
-                ),
-                onTap: () {
-                  Get.to(ProfileView());
-                },
-              ),
-            ],
-            ListTile(
-              leading: const Icon(
-                Icons.favorite,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Favourite',
-                style: AppTextStyles.whiteBoldText,
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.radio,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Our Radio',
-                style: AppTextStyles.whiteBoldText,
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(
-                Icons.apps,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Explore More Apps',
-                style: AppTextStyles.whiteBoldText,
-              ),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 40.0),
-              child: Column(
+
+            // Main content of the drawer
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
                 children: [
+                  if (!loginController.isLoggedIn.value) ...[
+                    ListTile(
+                      leading: const Icon(
+                        Icons.person_add,
+                        color: Colors.white,
+                      ),
+                      title: const Text(
+                        'Signup',
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                      onTap: () {
+                        Get.to(SignUpOrLoginView());
+                      },
+                    ),
+                  ],
+                  if (loginController.isLoggedIn.value) ...[
+                    ListTile(
+                      leading: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      title: const Text(
+                        'Profile',
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                      onTap: () {
+                        Get.to(ProfileView());
+                      },
+                    ),
+                  ],
                   ListTile(
                     leading: const Icon(
-                      Icons.arrow_right,
+                      Icons.favorite,
                       color: Colors.white,
                     ),
                     title: const Text(
-                      'My Dua Online',
+                      'Favourite',
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
@@ -142,22 +71,99 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(
-                      Icons.arrow_right,
+                      Icons.radio,
                       color: Colors.white,
                     ),
                     title: const Text(
-                      'Azadar',
+                      'Our Radio',
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
                       Navigator.pop(context);
                     },
+                  ),
+                  if (loginController.isLoggedIn.value) ...[
+                    ListTile(
+                      leading: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      title: const Text(
+                        'Delete Account',
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                  ListTile(
+                    leading: const Icon(
+                      Icons.settings,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Settings',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.to(() => SettingsPage());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.apps,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Explore More Apps',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 40.0),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          leading: const Icon(
+                            Icons.arrow_right,
+                            color: Colors.white,
+                          ),
+                          title: const Text(
+                            'My Dua Online',
+                            style: AppTextStyles.whiteBoldText,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(
+                            Icons.arrow_right,
+                            color: Colors.white,
+                          ),
+                          title: const Text(
+                            'Azadar',
+                            style: AppTextStyles.whiteBoldText,
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-            if (loginController.isLoggedIn.value) ...[
-              ListTile(
+
+            // Logout at the bottom
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: ListTile(
                 leading: const Icon(
                   Icons.logout,
                   color: Colors.white,
@@ -171,32 +177,6 @@ class CustomDrawer extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
-              ListTile(
-                leading: const Icon(
-                  Icons.delete,
-                  color: Colors.white,
-                ),
-                title: const Text(
-                  'Delete Account',
-                  style: AppTextStyles.whiteBoldText,
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-            ListTile(
-              leading: const Icon(
-                Icons.settings,
-                color: Colors.white,
-              ),
-              title: const Text(
-                'Settings',
-                style: AppTextStyles.whiteBoldText,
-              ),
-              onTap: () {
-                Get.to(() => SettingsPage());
-              },
             ),
           ],
         ),
@@ -204,3 +184,4 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 }
+
