@@ -44,9 +44,6 @@ class LabeledInputField extends StatelessWidget {
               ),
             ),
           ),
-          Divider(
-            thickness: 1,
-          )
         ],
       ),
     );
