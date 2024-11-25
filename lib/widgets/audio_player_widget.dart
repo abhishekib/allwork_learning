@@ -29,7 +29,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Duration totalTime = Duration.zero;
   double volume = 1.0;
   double playbackSpeed = 1.0;
-  bool isCompactView = false;
+  bool isCompactView = true;
 
   @override
   void initState() {
@@ -106,7 +106,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   Future<void> _loadViewPreference() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      isCompactView = prefs.getBool('isCompactView') ?? false;
+      isCompactView = prefs.getBool('isCompactView') ?? true;
     });
   }
 

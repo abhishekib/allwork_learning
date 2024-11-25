@@ -15,7 +15,7 @@ class _SettingsPageState extends State<SettingsPage> {
   double arabicFontSize = 18.0;
   double transliterationFontSize = 16.0;
   double translationFontSize = 16.0;
-  bool isCompactAudioView = false;
+  bool isCompactAudioView = true;
 
   @override
   void initState() {
@@ -30,10 +30,9 @@ class _SettingsPageState extends State<SettingsPage> {
       transliterationFontSize =
           prefs.getDouble('transliterationFontSize') ?? 16.0;
       translationFontSize = prefs.getDouble('translationFontSize') ?? 16.0;
-      isCompactAudioView = prefs.getBool('isCompactView') ?? false;
+      isCompactAudioView = prefs.getBool('isCompactView') ?? true;
     });
   }
-
 
   Future<void> _saveSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
