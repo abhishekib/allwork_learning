@@ -7,6 +7,7 @@ import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
@@ -107,6 +108,36 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
             _textCleanerController.cleanText(categoryDetails.title),
             style: AppTextStyles.whiteBoldTitleText,
           ),
+        ),
+        floatingActionButtonLocation: ExpandableFab.location,
+        floatingActionButton: ExpandableFab(
+          overlayStyle: ExpandableFabOverlayStyle(
+            color: Colors.black.withOpacity(0.5),
+            blur: 5,
+          ),
+          children: [
+            FloatingActionButton.small(
+              heroTag: null,
+              child: const Icon(Icons.share),
+              onPressed: () {
+                // Implement share functionality
+              },
+            ),
+            FloatingActionButton.small(
+              heroTag: null,
+              child: const Icon(Icons.copy),
+              onPressed: () {
+                
+              },
+            ),
+            FloatingActionButton.small(
+              heroTag: null,
+              child: const Icon(Icons.favorite),
+              onPressed: () {
+                // Implement favorite functionality
+              },
+            ),
+          ],
         ),
         body: DefaultTabController(
           length: availableTypes.length,
