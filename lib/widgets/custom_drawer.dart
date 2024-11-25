@@ -161,23 +161,25 @@ class CustomDrawer extends StatelessWidget {
             ),
 
             // Logout at the bottom
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: ListTile(
-                leading: const Icon(
-                  Icons.logout,
-                  color: Colors.white,
+            if (loginController.isLoggedIn.value) ...[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
+                  title: const Text(
+                    'Logout',
+                    style: AppTextStyles.whiteBoldText,
+                  ),
+                  onTap: () {
+                    loginController.logoutUser();
+                    Navigator.pop(context);
+                  },
                 ),
-                title: const Text(
-                  'Logout',
-                  style: AppTextStyles.whiteBoldText,
-                ),
-                onTap: () {
-                  loginController.logoutUser();
-                  Navigator.pop(context);
-                },
               ),
-            ),
+            ],
           ],
         ),
       ),
