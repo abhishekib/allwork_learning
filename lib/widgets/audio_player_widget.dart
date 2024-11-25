@@ -363,6 +363,18 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
             size: 30,
           ),
         ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              volume = volume == 0 ? 1.0 : 0.0;
+              _audioPlayer.setVolume(volume);
+            });
+          },
+          icon: Icon(
+            volume == 0 ? Icons.volume_off : Icons.volume_up,
+            color: AppColors.backgroundBlue,
+          ),
+        ),
         PopupMenuButton<double>(
           icon: const Icon(
             Icons.settings,
