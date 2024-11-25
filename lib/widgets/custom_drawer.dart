@@ -17,7 +17,7 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       backgroundColor: AppColors.backgroundBlue,
       child: Obx(
-            () => Column(
+        () => Column(
           children: [
             const SizedBox(height: 20),
 
@@ -69,19 +69,19 @@ class CustomDrawer extends StatelessWidget {
                       Navigator.pop(context);
                     },
                   ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.radio,
-                      color: Colors.white,
-                    ),
-                    title: const Text(
-                      'Our Radio',
-                      style: AppTextStyles.whiteBoldText,
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
+                  // ListTile(
+                  //   leading: const Icon(
+                  //     Icons.radio,
+                  //     color: Colors.white,
+                  //   ),
+                  //   title: const Text(
+                  //     'Our Radio',
+                  //     style: AppTextStyles.whiteBoldText,
+                  //   ),
+                  //   onTap: () {
+                  //     Navigator.pop(context);
+                  //   },
+                  // ),
                   if (loginController.isLoggedIn.value) ...[
                     ListTile(
                       leading: const Icon(
@@ -186,4 +186,3 @@ class CustomDrawer extends StatelessWidget {
     );
   }
 }
-
