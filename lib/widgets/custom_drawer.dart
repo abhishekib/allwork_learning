@@ -93,10 +93,83 @@ class CustomDrawer extends StatelessWidget {
                         style: AppTextStyles.whiteBoldText,
                       ),
                       onTap: () {
-                        Navigator.pop(context);
+                        // Show a customized confirmation dialog before deleting account
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              backgroundColor: AppColors.backgroundBlue, // Custom background color
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15), // Rounded corners
+                              ),
+                              title: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.delete_forever,
+                                    color: Colors.white,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  const Text(
+                                    'Confirm Account Deletion',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              content: const Text(
+                                'Are you sure you want to delete your account?',
+                                style: TextStyle(
+                                  color: Colors.white70, // Subtle content text color
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop(); // Close the dialog
+                                  },
+                                  style: TextButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                    ),
+                                    foregroundColor: AppColors.backgroundBlue,
+                                    backgroundColor: Colors.white, // Button color
+                                  ),
+                                  child: const Text('Cancel',
+                            style: TextStyle(
+                            color: AppColors.backgroundBlue, // Subtle content text color
+                            ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  onPressed: () {
+                                   // loginController.deleteAccount(); // Call the delete account function
+                                    Navigator.of(context).pop(); // Close the dialog
+                                    Navigator.pop(context); // Optionally close the current screen
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.red, // Button color
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                    ),
+                                  ),
+                                  child: const Text(
+                                    'Delete',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
                       },
                     ),
                   ],
+
                   ListTile(
                     leading: const Icon(
                       Icons.settings,
@@ -243,7 +316,6 @@ class CustomDrawer extends StatelessWidget {
                   },
                 ),
               ),
-
             ]
 
           ],
