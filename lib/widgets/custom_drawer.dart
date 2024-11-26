@@ -1,5 +1,6 @@
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/about_us_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/views/signup_or_login_view.dart';
 import 'package:flutter/material.dart';
@@ -98,9 +99,11 @@ class CustomDrawer extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              backgroundColor: AppColors.backgroundBlue, // Custom background color
+                              backgroundColor: AppColors
+                                  .backgroundBlue, // Custom background color
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15), // Rounded corners
+                                borderRadius: BorderRadius.circular(
+                                    15), // Rounded corners
                               ),
                               title: Row(
                                 children: [
@@ -122,7 +125,8 @@ class CustomDrawer extends StatelessWidget {
                               content: const Text(
                                 'Are you sure you want to delete your account?',
                                 style: TextStyle(
-                                  color: Colors.white70, // Subtle content text color
+                                  color: Colors
+                                      .white70, // Subtle content text color
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -130,19 +134,24 @@ class CustomDrawer extends StatelessWidget {
                               actions: <Widget>[
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.of(context).pop(); // Close the dialog
+                                    Navigator.of(context)
+                                        .pop(); // Close the dialog
                                   },
                                   style: TextButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                      borderRadius: BorderRadius.circular(
+                                          20), // Rounded corners for the button
                                     ),
                                     foregroundColor: AppColors.backgroundBlue,
-                                    backgroundColor: Colors.white, // Button color
+                                    backgroundColor:
+                                        Colors.white, // Button color
                                   ),
-                                  child: const Text('Cancel',
-                            style: TextStyle(
-                            color: AppColors.backgroundBlue, // Subtle content text color
-                            ),
+                                  child: const Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                      color: AppColors
+                                          .backgroundBlue, // Subtle content text color
+                                    ),
                                   ),
                                 ),
                                 ElevatedButton(
@@ -155,7 +164,8 @@ class CustomDrawer extends StatelessWidget {
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red, // Button color
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                      borderRadius: BorderRadius.circular(
+                                          20), // Rounded corners for the button
                                     ),
                                   ),
                                   child: const Text(
@@ -182,6 +192,19 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     onTap: () {
                       Get.to(() => SettingsPage());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.info,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'About Us',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.to(() => AboutUsView());
                     },
                   ),
                   ListTile(
@@ -253,9 +276,11 @@ class CustomDrawer extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          backgroundColor: AppColors.backgroundBlue, // Custom background color
+                          backgroundColor: AppColors
+                              .backgroundBlue, // Custom background color
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15), // Rounded corners
+                            borderRadius:
+                                BorderRadius.circular(15), // Rounded corners
                           ),
                           title: Row(
                             children: [
@@ -277,10 +302,10 @@ class CustomDrawer extends StatelessWidget {
                           content: const Text(
                             'Are you sure you want to log out?',
                             style: TextStyle(
-                              color: Colors.white70, // Subtle content text color
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold
-                            ),
+                                color:
+                                    Colors.white70, // Subtle content text color
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold),
                           ),
                           actions: <Widget>[
                             TextButton(
@@ -289,26 +314,34 @@ class CustomDrawer extends StatelessWidget {
                               },
                               style: TextButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                    borderRadius: BorderRadius.circular(
+                                        20), // Rounded corners for the button
                                   ),
-                                foregroundColor: AppColors.backgroundBlue,
-                                backgroundColor: Colors.white// Text color for the button
-                              ),
+                                  foregroundColor: AppColors.backgroundBlue,
+                                  backgroundColor:
+                                      Colors.white // Text color for the button
+                                  ),
                               child: const Text('Cancel'),
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                loginController.logoutUser(); // Call the logout function
+                                loginController
+                                    .logoutUser(); // Call the logout function
                                 Navigator.of(context).pop(); // Close the dialog
-                                Navigator.pop(context); // Optionally close the current screen
+                                Navigator.pop(
+                                    context); // Optionally close the current screen
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red, // Button color
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                  borderRadius: BorderRadius.circular(
+                                      20), // Rounded corners for the button
                                 ),
                               ),
-                              child: const Text('Yes',style: TextStyle(color: Colors.white),),
+                              child: const Text(
+                                'Yes',
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                           ],
                         );
@@ -318,7 +351,6 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
             ]
-
           ],
         ),
       ),

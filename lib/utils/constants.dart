@@ -41,4 +41,6 @@ class ApiConstants {
   static const String deleteUser = 'deleteaccount';
 
   static const String prayertime = 'prayertimes';
+
+  static const String aboutusEndpoint = 'about';
 }
