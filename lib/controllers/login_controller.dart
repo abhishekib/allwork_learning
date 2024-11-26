@@ -52,6 +52,27 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<void> deleteAccount() async {
+    try {
+      isLoading(true);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String userId = prefs.getString('userId') ?? '';
+
+      if (userId.isEmpty) {
+        throw Exception("User ID not available. Please log in again.");
+      }
+
+      String message = await _loginProvider.deleteUserAccount(userId);
+      errorMessage.value = message;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error Deleting User Account: $e');
+      }
+    } finally {
+      isLoading(false);
+    }
+  }
 
   Future<void> _saveUserLoginState(LoginResponse response) async {
     final prefs = await SharedPreferences.getInstance();

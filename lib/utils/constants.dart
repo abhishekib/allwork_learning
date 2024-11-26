@@ -38,6 +38,7 @@ class ApiConstants {
   static const String userinfo = 'userinfo';
   static const String updateUserInfo = 'updateuserinfo';
   static const String updatePassword = 'changepassword';
+  static const String deleteUser = 'deleteaccount';
 
   static const String prayertime = 'prayertimes';
 }

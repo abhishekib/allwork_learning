@@ -36,4 +36,21 @@ class LoginProvider {
       throw Exception('Error logging in user: $e');
     }
   }
+
+  Future<String> deleteUserAccount(String userId) async {
+    try {
+      final response = await _dio.delete(
+        ApiConstants.deleteUser,
+        queryParameters: {'userid': userId},
+      );
+
+      if (response.statusCode == 200) {
+        return response.data['msg'] ?? 'Account Deleted Successfully';
+      } else {
+        throw Exception('Failed to update password');
+      }
+    } catch (e) {
+      throw Exception('Error updating password: $e');
+    }
+  }
 }

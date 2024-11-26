@@ -147,9 +147,10 @@ class CustomDrawer extends StatelessWidget {
                                 ),
                                 ElevatedButton(
                                   onPressed: () {
-                                   // loginController.deleteAccount(); // Call the delete account function
-                                    Navigator.of(context).pop(); // Close the dialog
-                                    Navigator.pop(context); // Optionally close the current screen
+                                    loginController.deleteAccount();
+                                    loginController.logoutUser();
+                                    Navigator.of(context).pop();
+                                    Navigator.pop(context);
                                   },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red, // Button color

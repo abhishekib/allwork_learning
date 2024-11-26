@@ -12,6 +12,20 @@ class LoginResponse {
   }
 }
 
+class DeleteResponse {
+  String message;
+  String type;
+
+  DeleteResponse({required this.message, required this.type});
+
+  factory DeleteResponse.fromJson(Map<String, dynamic> json) {
+    return DeleteResponse(
+      message: json['msg'] ?? '',
+      type: json['type'] ?? '',
+    );
+  }
+}
+
 class Message {
   final Data data;
   final int id;
