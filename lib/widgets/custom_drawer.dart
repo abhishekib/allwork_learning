@@ -174,12 +174,78 @@ class CustomDrawer extends StatelessWidget {
                     style: AppTextStyles.whiteBoldText,
                   ),
                   onTap: () {
-                    loginController.logoutUser();
-                    Navigator.pop(context);
+                    // Show a customized confirmation dialog before logging out
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          backgroundColor: AppColors.backgroundBlue, // Custom background color
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15), // Rounded corners
+                          ),
+                          title: Row(
+                            children: [
+                              const Icon(
+                                Icons.exit_to_app,
+                                color: Colors.white,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text(
+                                'Confirm Logout',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          content: const Text(
+                            'Are you sure you want to log out?',
+                            style: TextStyle(
+                              color: Colors.white70, // Subtle content text color
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              style: TextButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                  ),
+                                foregroundColor: AppColors.backgroundBlue,
+                                backgroundColor: Colors.white// Text color for the button
+                              ),
+                              child: const Text('Cancel'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                loginController.logoutUser(); // Call the logout function
+                                Navigator.of(context).pop(); // Close the dialog
+                                Navigator.pop(context); // Optionally close the current screen
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red, // Button color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20), // Rounded corners for the button
+                                ),
+                              ),
+                              child: const Text('Yes',style: TextStyle(color: Colors.white),),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ),
-            ],
+
+            ]
+
           ],
         ),
       ),
