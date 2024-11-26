@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class RegistrationController extends GetxController {
+  final onComplete = false.obs;
   final isLoading = false.obs;
   final errorMessage = ''.obs;
   final registrationResponse = Rx<RegistrationResponse?>(null);

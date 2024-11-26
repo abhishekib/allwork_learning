@@ -1,6 +1,7 @@
 import 'package:allwork/controllers/regestration_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/login_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/labeled_input_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -164,6 +165,8 @@ class SignUpView extends StatelessWidget {
         .then((_) {
       if (registrationController.errorMessage.isNotEmpty) {
         _showErrorAlert("Error", registrationController.errorMessage.value);
+      } else {
+        _showSuccessDialog();
       }
     });
   }
@@ -182,6 +185,26 @@ class SignUpView extends StatelessWidget {
       buttonColor: AppColors.backgroundBlue,
       onConfirm: () {
         Get.back(); // Close the dialog
+      },
+    );
+  }
+
+  void _showSuccessDialog() {
+    Get.defaultDialog(
+      title: "User Registration Successfully Completed",
+      titleStyle: const TextStyle(fontWeight: FontWeight.bold),
+      content: const Text(
+        "Welcome to the Mafatihuljinan",
+        style: TextStyle(fontSize: 16),
+      ),
+      textConfirm: "Go to Login Menu",
+      confirmTextColor: Colors.white,
+      buttonColor: AppColors.backgroundBlue,
+      onConfirm: () {
+        registrationController.onComplete.value = true;
+        Get.back();
+        Get.back();
+        Get.to(() => LoginView());
       },
     );
   }
