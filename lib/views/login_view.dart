@@ -5,7 +5,6 @@ import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/labeled_input_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:allwork/views/main_menu_view.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -133,12 +132,11 @@ class LoginView extends StatelessWidget {
       confirmTextColor: Colors.white,
       buttonColor: AppColors.backgroundBlue,
       onConfirm: () {
-        // Set isLoggedIn to true and navigate to MainMenuView
         loginController.isLoggedIn.value = true;
-
-        // Update the CustomDrawer with the logged-in state
-        Get.back(); // Close the dialog
-        Get.off(() => MainMenuView());
+        Get.back();
+        Get.back();
+        Get.back();
+        // Get.off(() => MainMenuView());
       },
     );
   }
