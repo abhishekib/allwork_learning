@@ -43,4 +43,5 @@ class ApiConstants {
   static const String prayertime = 'prayertimes';
 
   static const String aboutusEndpoint = 'about';
+  static const String eventPopupEndpoint = 'eventpopup';
 }
