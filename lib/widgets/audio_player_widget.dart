@@ -39,6 +39,16 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     _loadViewPreference();
   }
 
+  @override
+  void didUpdateWidget(covariant AudioPlayerWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    // Reinitialize the audio player when the audio URL changes
+    if (widget.audioUrl != oldWidget.audioUrl) {
+      _setupAudio(); // This will reinitialize the audio player with the new URL
+    }
+  }
+
   Future<void> _setupAudio() async {
     try {
       setState(() {

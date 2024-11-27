@@ -58,8 +58,10 @@ class CategoryDetailController extends GetxController {
   // Method to initialize and load the audio from URL
   Future<void> initializeAudio(String audioUrl) async {
     try {
-      log("Attempting to load audio from URL: $audioUrl");
+      if (audioUrl.isEmpty) return;
 
+      log("Attempting to load audio from URL: $audioUrl");
+      await _audioPlayer.stop();
       await _audioPlayer.setSource(UrlSource(audioUrl));
 
       log("Audio successfully loaded");

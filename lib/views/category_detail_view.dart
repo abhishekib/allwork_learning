@@ -57,7 +57,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
         setState(() {
           currentAudioUrl = newAudioUrl;
         });
-        Get.find<CategoryDetailController>().initializeAudio(newAudioUrl?? "");
+        Get.find<CategoryDetailController>().initializeAudio(newAudioUrl ?? "");
       }
     });
     log("---You are in CategoryDetailView---");
