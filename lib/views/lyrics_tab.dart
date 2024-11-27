@@ -217,16 +217,22 @@ class _LyricsTabState extends State<LyricsTab> {
           ? _parseTimestamp(widget.lyricsList[i + 1].time)
           : 9223372036854775807;
 
-      if (currentPosition >= timeInMilliseconds &&
-          currentPosition < nextTimeInMilliseconds) {
+      // Ensure time is valid before scrolling
+      if (timeInMilliseconds != null &&
+          currentPosition >= timeInMilliseconds &&
+          currentPosition < nextTimeInMilliseconds!) {
         return i;
       }
     }
     return -1;
   }
 
-  int _parseTimestamp(String time) {
+  int? _parseTimestamp(String time) {
     try {
+      if (!time.startsWith('[') || !time.endsWith(']')) {
+        return null;
+      }
+
       final cleanedTime = time.replaceAll('[', '').replaceAll(']', '');
       final parts = cleanedTime.split(':');
       if (parts.length == 2) {
@@ -239,7 +245,6 @@ class _LyricsTabState extends State<LyricsTab> {
 
         final parsedTime =
             (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
-
         return parsedTime;
       }
     } catch (e) {
