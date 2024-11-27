@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
 import 'package:allwork/utils/constants.dart';
@@ -18,19 +20,53 @@ class LoginController extends GetxController {
     super.onInit();
     _loadUserLoginState();
   }
+//<previous code>
+  // Future<void> loginUser(String username, String password) async {
+  //   try {
+  //     isLoading(true);
+  //     errorMessage.value = '';
+  //     LoginResponse response =
+  //         await _loginProvider.loginUser(username, password);
+  //     if (response.type == 'success') {
+  //       loginResponse.value = response;
+  //       isLoggedIn.value = true;
+  //       _saveUserLoginState(response);
+  //     } else {
+  //       errorMessage.value = response.type;
+  //     }
+  //   } catch (e) {
+  //     if (kDebugMode) {
+  //       print('Error logging in user: $e');
+  //     }
+  //     if (e is DioException && e.response?.data != null) {
+  //       final errorData = e.response!.data;
+  //       if (errorData is Map<String, dynamic> &&
+  //           errorData.containsKey('message')) {
+  //         errorMessage.value = errorData['message'];
+  //       } else {
+  //         errorMessage.value = 'Something went wrong. Please try again.';
+  //       }
+  //     } else {
+  //       errorMessage.value = 'Error logging in user: $e';
+  //     }
+  //   } finally {
+  //     isLoading(false);
+  //   }
+  // }
 
   Future<void> loginUser(String username, String password) async {
     try {
       isLoading(true);
       errorMessage.value = '';
-      LoginResponse response =
-          await _loginProvider.loginUser(username, password);
+      LoginResponse response = await _loginProvider.loginUser(username, password);
+
       if (response.type == 'success') {
         loginResponse.value = response;
         isLoggedIn.value = true;
         _saveUserLoginState(response);
       } else {
-        errorMessage.value = response.type;
+        // Display a friendly message for unsuccessful login attempts
+        errorMessage.value = 'Invalid username or password. Please try again.';
       }
     } catch (e) {
       if (kDebugMode) {
@@ -38,19 +74,30 @@ class LoginController extends GetxController {
       }
       if (e is DioException && e.response?.data != null) {
         final errorData = e.response!.data;
-        if (errorData is Map<String, dynamic> &&
+
+        // Handle type mismatch issues
+        if (errorData is String) {
+          errorMessage.value = 'Unexpected error: Invalid response format.';
+        } else if (errorData is Map<String, dynamic> &&
             errorData.containsKey('message')) {
           errorMessage.value = errorData['message'];
         } else {
           errorMessage.value = 'Something went wrong. Please try again.';
         }
+      } else if (e is TypeError) {
+        errorMessage.value =
+        'An internal error occurred. Please contact support if the issue persists.';
       } else {
-        errorMessage.value = 'Error logging in user: $e';
+        print("HERE -->"'Error logging in user: $e');
+        //errorMessage.value = 'Error logging in user: $e';
+        errorMessage.value=
+        "Invalid username or password. \nPlease try again.";
       }
     } finally {
       isLoading(false);
     }
   }
+
 
   Future<void> deleteAccount() async {
     try {

@@ -54,7 +54,16 @@ class _MainMenuViewState extends State<MainMenuView> {
                           alignment: Alignment.center,
                           child: const CircularProgressIndicator(),
                         );
-                      } else {
+                      }
+                      else if(animatedTextController.animatedTextList.isEmpty){
+                        return const Center(
+                          child: Text(
+                            'No Data available',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        );
+                      }
+                      else {
                         final marqueeTexts = animatedTextController
                             .animatedTextList
                             .map((text) => text)
