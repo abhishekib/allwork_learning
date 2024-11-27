@@ -27,10 +27,12 @@ class DailyDateWidget extends StatelessWidget {
       } else {
         final hijriDate =
             hijriDateController.dailyDate.value?.hijriDate ?? 'No Date';
-        return Text(
-          hijriDate.toString(),
-          style: AppTextStyles.whiteBoldText.copyWith(
-            fontSize: 20,
+        return Center(
+          child: Text(
+            hijriDate.toString(),
+            style: AppTextStyles.whiteBoldText.copyWith(
+              fontSize: 20,
+            ),
           ),
         );
       }
