@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:allwork/controllers/animated_text_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
 
@@ -26,6 +25,19 @@ class _MainMenuViewState extends State<MainMenuView> {
   Future<void> _saveLanguagePreference(String language) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('selectedLanguage', language);
+  }
+
+  Future<void> _loadLanguagePreference() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedLanguage = prefs.getString('selectedLanguage') ?? 'English';
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLanguagePreference();
   }
 
   @override
