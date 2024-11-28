@@ -1,6 +1,8 @@
 import 'dart:developer';
+import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/category_list_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +16,8 @@ class MenuListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MenuListController());
+    final CategoryListController categoryListController =
+        Get.put(CategoryListController()); // Use Get.put to persist controller
 
     Future<void> refreshMenuItems() async {
       // Call the controller method to fetch the menu list again
@@ -50,11 +54,24 @@ class MenuListView extends StatelessWidget {
                       style: AppTextStyles.whiteBoldText,
                     ),
                   ),
-                  onTap: () {
+                  onTap: () async {
                     log("selected ----> $menuItem");
-                    Get.to(() => MenuDetailView(
-                          menuItem: menuItem,
-                        ));
+
+                    if (menuItem == "Surah" || menuItem == "સુરાહ") {
+                      await categoryListController.fetchCategoryData(menuItem);
+
+                      Get.to(() => CategoryListView(
+                            categoryItems:
+                                categoryListController.categoryData[""] ??
+                                    [],
+                            argument: menuItem,
+                          ));
+                    } else {
+                      categoryListController.categoryData.clear();
+                      Get.to(() => MenuDetailView(
+                            menuItem: menuItem,
+                          ));
+                    }
                   },
                 );
               },
