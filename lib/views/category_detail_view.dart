@@ -134,6 +134,13 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
                 // Implement favorite functionality
               },
             ),
+            FloatingActionButton.small(
+              heroTag: null,
+              child: const Icon(Icons.access_alarm),
+              onPressed: () {
+                // Implement favorite functionality
+              },
+            ),
           ],
         ),
         body: DefaultTabController(
