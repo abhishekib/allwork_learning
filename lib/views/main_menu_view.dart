@@ -11,9 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/animated_text_controller.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../controllers/daily_date_controller.dart';
-import '../controllers/prayer_time_controller.dart'; // To check internet connection
+import '../controllers/prayer_time_controller.dart';
 
 class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
@@ -23,28 +24,31 @@ class MainMenuView extends StatefulWidget {
 }
 
 class _MainMenuViewState extends State<MainMenuView> {
-  String selectedLanguage = 'English'; // Default language selection
+  String selectedLanguage = 'English';
   final animatedTextController = Get.put(AnimatedTextController());
   final menuListController = Get.put(MenuListController());
-  final dailyDateController=Get.put(DailyDateController());
-  final prayerTimeController=Get.put(PrayerTimeController());
+  final dailyDateController = Get.put(DailyDateController());
+  final prayerTimeController = Get.put(PrayerTimeController());
 
-  // Function to refresh data when pull-to-refresh is triggered
   Future<void> _refreshData() async {
-    // Check internet connectivity before attempting to fetch data
     var connectivityResult = await Connectivity().checkConnectivity();
     if (connectivityResult == ConnectivityResult.none) {
-      // If there's no internet, show an error message or try offline actions
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No internet connection. Please check your network.")),
+        const SnackBar(
+            content:
+                Text("No internet connection. Please check your network.")),
       );
     } else {
-      // If connected, call the method to fetch new data
       await animatedTextController.fetchTextData();
       dailyDateController.fetchDailyDate();
       prayerTimeController.fetchPrayerTimes(52.569500, -0.240530);
-      menuListController.fetchMenuItems() ; // Assuming this method fetches new data
+      menuListController.fetchMenuItems();
     }
+  }
+
+  Future<void> _saveLanguagePreference(String language) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedLanguage', language);
   }
 
   @override
@@ -54,9 +58,9 @@ class _MainMenuViewState extends State<MainMenuView> {
         drawer: CustomDrawer(),
         backgroundColor: AppColors.backgroundBlue,
         body: RefreshIndicator(
-          onRefresh: _refreshData, // Pull-to-refresh triggers _refreshData
-          color: Colors.white, // Color of the refresh indicator
-          child: CustomScrollView( // Use CustomScrollView for better handling
+          onRefresh: _refreshData,
+          color: Colors.white,
+          child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Container(
@@ -69,7 +73,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                           return IconButton(
                             icon: const Icon(Icons.menu, color: Colors.white),
                             onPressed: () {
-                              Scaffold.of(context).openDrawer(); // Open the drawer
+                              Scaffold.of(context).openDrawer();
                             },
                           );
                         },
@@ -82,16 +86,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                               alignment: Alignment.center,
                               child: const CircularProgressIndicator(),
                             );
-                          }
-                          else if (animatedTextController.animatedTextList.isEmpty) {
+                          } else if (animatedTextController
+                              .animatedTextList.isEmpty) {
                             return const Center(
                               child: Text(
                                 'No Data available',
                                 style: TextStyle(color: Colors.white),
                               ),
                             );
-                          }
-                          else {
+                          } else {
                             final marqueeTexts = animatedTextController
                                 .animatedTextList
                                 .map((text) => text)
@@ -109,7 +112,6 @@ class _MainMenuViewState extends State<MainMenuView> {
               SliverToBoxAdapter(child: SearchBarWidget()),
               SliverToBoxAdapter(child: DailyDateWidget()),
               SliverToBoxAdapter(child: PrayerTimeWidget()),
-              // Dropdown menu for language selection
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -131,14 +133,16 @@ class _MainMenuViewState extends State<MainMenuView> {
                           ),
                           const Text(
                             'English & ગુજરાતી',
-                            style: TextStyle(fontSize: 18, color: Colors.white38),
+                            style:
+                                TextStyle(fontSize: 18, color: Colors.white38),
                           ),
                         ],
                       ),
                       DropdownButton<String>(
                         value: selectedLanguage,
                         dropdownColor: AppColors.backgroundBlue,
-                        items: <String>['English', 'Gujarati'].map((String value) {
+                        items:
+                            <String>['English', 'Gujarati'].map((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
                             child: Text(
@@ -154,6 +158,7 @@ class _MainMenuViewState extends State<MainMenuView> {
                         onChanged: (String? newValue) {
                           setState(() {
                             selectedLanguage = newValue!;
+                            _saveLanguagePreference(selectedLanguage);
                           });
                         },
                       ),
@@ -162,9 +167,15 @@ class _MainMenuViewState extends State<MainMenuView> {
                 ),
               ),
               const SliverToBoxAdapter(child: SizedBox(height: 10)),
-              SliverFillRemaining(
-                child: MenuListView(
-                  selectedLanguage: selectedLanguage,
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return SizedBox(
+                      height: MediaQuery.of(context).size.height,
+                      child: MenuListView(selectedLanguage: selectedLanguage),
+                    );
+                  },
+                  childCount: 1,
                 ),
               ),
             ],
