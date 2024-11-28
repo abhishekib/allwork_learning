@@ -7,6 +7,7 @@ import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
@@ -24,29 +25,36 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
   late TabController _tabController;
   String? currentAudioUrl;
   final TextCleanerController _textCleanerController = TextCleanerController();
+  late Category categoryDetails;
+  late List<String> availableTypes;
+  late Map<String, List<Lyrics>> availableLyrics;
 
   @override
   void initState() {
     super.initState();
-    final Category categoryDetails = Get.arguments as Category;
+    categoryDetails = Get.arguments as Category;
     final cdata = categoryDetails.cdata;
 
-    // Set up TabController based on the number of available types
-    final availableTypes = cdata
+    availableTypes = cdata
         .where((e) => e.lyrics.isNotEmpty)
         .map((e) => e.type)
         .toSet()
         .toList();
+
+    availableLyrics = {
+      for (var item in cdata)
+        if (item.lyrics.isNotEmpty) item.type: item.lyrics
+    };
+
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
     final String? initialAudioUrl =
-        cdata.isNotEmpty && cdata[0].audiourl.isNotEmpty
-            ? cdata[0].audiourl
-            : null;
+    cdata.isNotEmpty && cdata[0].audiourl.isNotEmpty
+        ? cdata[0].audiourl
+        : null;
 
     currentAudioUrl = initialAudioUrl;
 
-    // Listener to update audio URL based on the selected tab
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
       final String? newAudioUrl = cdata[selectedIndex].audiourl.isNotEmpty
@@ -72,22 +80,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
   @override
   Widget build(BuildContext context) {
     final CategoryDetailController controller =
-        Get.put(CategoryDetailController());
-    final Category categoryDetails = Get.arguments as Category;
-
-    final cdata = categoryDetails.cdata;
-
-    // Filter available types and lyrics based on the data provided
-    final availableTypes = cdata
-        .where((e) => e.lyrics.isNotEmpty)
-        .map((e) => e.type)
-        .toSet()
-        .toList();
-
-    final availableLyrics = {
-      for (var item in cdata)
-        if (item.lyrics.isNotEmpty) item.type: item.lyrics
-    };
+    Get.put(CategoryDetailController());
 
     if (availableTypes.isEmpty) {
       return Scaffold(
@@ -130,7 +123,8 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.copy),
               onPressed: () {
-                // Implement copy functionality
+                // Call the copy functionality from LyricsTab
+                _copyAllLyricsToClipboard(context, availableLyrics, categoryDetails.title);
               },
             ),
             FloatingActionButton.small(
@@ -146,7 +140,6 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
           length: availableTypes.length,
           child: Column(
             children: [
-              // Only show the AudioPlayerWidget if a valid audio URL is available
               if (currentAudioUrl != null && currentAudioUrl!.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -190,4 +183,38 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
       ),
     );
   }
+
+// Function to copy all lyrics
+  void _copyAllLyricsToClipboard(BuildContext context, Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+    // Flatten the lyrics data into a single list, but only once
+    final allLyrics = availableLyrics.values.expand((lyricsList) => lyricsList).toList();
+
+    // Use a Set to store unique Lyrics and remove duplicates
+    Set<Lyrics> uniqueLyricsSet = {};
+
+    // Add lyrics to the Set (duplicates will be ignored automatically)
+    for (var lyrics in allLyrics) {
+      uniqueLyricsSet.add(lyrics); // Adds unique lyrics based on equality (defined by `==` operator)
+    }
+
+    // Start building the combined string with the category title
+    String combinedLyrics = '${_textCleanerController.cleanText(categoryTitle)}\n\n';
+
+    // Iterate over the unique set of lyrics and format them for clipboard
+    for (var lyrics in uniqueLyricsSet) {
+      combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
+      combinedLyrics += '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
+      combinedLyrics += '${_textCleanerController.cleanText(lyrics.translation)}\n';
+      combinedLyrics += '\n'; // Extra space between different lyrics
+    }
+
+    // Copy the combined lyrics to clipboard
+    Clipboard.setData(ClipboardData(text: combinedLyrics));
+
+    // Show confirmation message to the user
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("All lyrics copied to clipboard!")),
+    );
+  }
+
 }

@@ -41,9 +41,24 @@ class Lyrics {
       time: json['time'] ?? '',
       arabic: isGujarati ? json['અરબી'] ?? '' : json['arabic'] ?? '',
       translitration:
-          isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
+      isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
       translation:
-          isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
+      isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
     );
   }
+
+  // Implement equality operator
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is Lyrics &&
+        other.arabic == arabic &&
+        other.translitration == translitration &&
+        other.translation == translation;
+  }
+
+  // Implement hashCode
+  @override
+  int get hashCode => arabic.hashCode ^ translitration.hashCode ^ translation.hashCode;
 }
