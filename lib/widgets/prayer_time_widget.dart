@@ -32,6 +32,8 @@ class PrayerTimeWidget extends StatelessWidget {
             timeName: 'Fajr',
             time: controller.prayerTimeModel.value!.fajr
                 .replaceAll('(GMT)', '')
+                .replaceAll('(PST)', '')
+                .replaceAll('(IST)', '')
                 .trim(),
             imagePath: 'assets/icons/Fajr.png',
           ),
@@ -39,6 +41,8 @@ class PrayerTimeWidget extends StatelessWidget {
             timeName: 'Sunrise',
             time: controller.prayerTimeModel.value!.sunrise
                 .replaceAll('(GMT)', '')
+                .replaceAll('(PST)', '')
+                .replaceAll('(IST)', '')
                 .trim(),
             imagePath: 'assets/icons/image_5.png',
           ),
@@ -46,6 +50,8 @@ class PrayerTimeWidget extends StatelessWidget {
             timeName: 'Dhuhr',
             time: controller.prayerTimeModel.value!.dhuhr
                 .replaceAll('(GMT)', '')
+                .replaceAll('(PST)', '')
+                .replaceAll('(IST)', '')
                 .trim(),
             imagePath: 'assets/icons/Dhuhr.png',
           ),
@@ -53,6 +59,8 @@ class PrayerTimeWidget extends StatelessWidget {
             timeName: 'Sunset',
             time: controller.prayerTimeModel.value!.sunset
                 .replaceAll('(GMT)', '')
+                .replaceAll('(PST)', '')
+                .replaceAll('(IST)', '')
                 .trim(),
             imagePath: 'assets/icons/Maghrib.png',
           ),
@@ -60,6 +68,8 @@ class PrayerTimeWidget extends StatelessWidget {
             timeName: 'Maghrib',
             time: controller.prayerTimeModel.value!.maghrib
                 .replaceAll('(GMT)', '')
+                .replaceAll('(PST)', '')
+                .replaceAll('(IST)', '')
                 .trim(),
             imagePath: 'assets/icons/image_7.png',
           ),
