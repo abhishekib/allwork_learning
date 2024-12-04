@@ -44,4 +44,12 @@ class ApiConstants {
 
   static const String aboutusEndpoint = 'about';
   static const String eventPopupEndpoint = 'eventpopup';
+
+  static const String listFavDailyDua = 'favdailydualist';
+  static const String listFavDua = 'favdualist';
+  static const String listFavZiyarat = 'favziyaratlist';
+  static const String listFavMunajat = 'favmunajatlist';
+  static const String listFavAmaalNamaaz = 'favamaalnamaazlist';
+  static const String listFavTravelZiyarat = 'favtravelziyaratlist';
+  static const String listFavSuraha = 'favsurahlist';
 }

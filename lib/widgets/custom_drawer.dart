@@ -1,6 +1,7 @@
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/about_us_view.dart';
+import 'package:allwork/views/fav_menu_list_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/views/signup_or_login_view.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +68,7 @@ class CustomDrawer extends StatelessWidget {
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Get.to(() => FavMenuListView());
                     },
                   ),
                   // ListTile(
