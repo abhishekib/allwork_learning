@@ -154,6 +154,11 @@ class _LyricsTabState extends State<LyricsTab> {
     final isArabicHighlighted =
         controller.selectedType.value.toLowerCase() == "arabic" ||
             controller.selectedType.value == "અરબી";
+
+    if (lyrics.arabic.isEmpty || lyrics.arabic == "&nbsp;") {
+      return Visibility(visible: false, child: SizedBox.shrink());
+    }
+
     return Visibility(
       visible: lyrics.arabic.isNotEmpty,
       child: Text(
@@ -173,6 +178,10 @@ class _LyricsTabState extends State<LyricsTab> {
     final isTransliterationHighlighted =
         controller.selectedType.value.toLowerCase() == "transliteration" ||
             controller.selectedType.value == "તરજુમા";
+    if (lyrics.translitration.isEmpty || lyrics.translitration == "&nbsp;") {
+      return Visibility(visible: false, child: SizedBox.shrink());
+    }
+
     return Visibility(
       visible: lyrics.translitration.isNotEmpty,
       child: Text(
@@ -194,6 +203,10 @@ class _LyricsTabState extends State<LyricsTab> {
     final isTranslationHighlighted =
         controller.selectedType.value.toLowerCase() == "translation" ||
             controller.selectedType.value == "ગુજરાતી";
+
+    if (lyrics.translation.isEmpty || lyrics.translation == "&nbsp;") {
+      return Visibility(visible: false, child: SizedBox.shrink());
+    }
     return Visibility(
       visible: lyrics.translation.isNotEmpty,
       child: Text(
