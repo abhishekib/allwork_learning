@@ -33,8 +33,8 @@ class EventPopupProvider {
       final response = await _dio.post(
         ApiConstants.eventPopupEndpoint,
         queryParameters: {
-          'date': 12,
-          'month': 10,
+          'date': date,
+          'month': month,
         },
       );
 

@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/event_popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/menu_list_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
@@ -21,6 +22,7 @@ class MainMenuView extends StatefulWidget {
 class _MainMenuViewState extends State<MainMenuView> {
   String selectedLanguage = 'English';
   final animatedTextController = Get.put(AnimatedTextController());
+  final eventController = Get.put(EventPopupController());
 
   Future<void> _saveLanguagePreference(String language) async {
     final prefs = await SharedPreferences.getInstance();
@@ -38,6 +40,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   void initState() {
     super.initState();
     _loadLanguagePreference();
+    eventController.fetchEventPopup();
   }
 
   @override

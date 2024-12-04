@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/event_popup_model.dart';
-import 'package:allwork/utils/constants.dart';
-import 'package:get/get.dart';
 import 'package:allwork/providers/event_popup_provider.dart';
+import 'package:allwork/utils/constants.dart';
+import 'package:allwork/views/event_popup_view.dart';
+import 'package:get/get.dart';
 
 class EventPopupController extends GetxController {
   final isVisible = false.obs;
@@ -10,27 +13,33 @@ class EventPopupController extends GetxController {
   final EventPopupProvider _eventPopupProvider =
       EventPopupProvider(ApiConstants.token);
 
-  @override
-  void onInit() {
-    super.onInit();
-    fetchEventPopup();
-  }
 
   Future<void> fetchEventPopup() async {
     try {
       final response = await _eventPopupProvider.getEventPopup();
-      if (response != null && response.imageUrl.isNotEmpty) {
-        eventPopupModel.value =
-            response; // Correctly assign the model type here
+      if (response != null && response.isEventAvailable) {
+        eventPopupModel.value = response;
         isVisible.value = true;
+        log("Event Popup Data: $response");
+
+        // Show the event popup dialog
+        if (response.imageUrl != null) {
+          Get.dialog(EventPopupView(), barrierDismissible: true);
+        }
+      } else {
+        eventPopupModel.value = null;
+        isVisible.value = false;
+        log("No valid event data found.");
       }
     } catch (e) {
+      eventPopupModel.value = null;
       isVisible.value = false;
-      print('Error fetching event popup: $e');
+      log('Error fetching event popup: $e');
     }
   }
 
   void closeBanner() {
     isVisible.value = false;
+    Get.back(); // Close the popup by popping the dialog
   }
 }
