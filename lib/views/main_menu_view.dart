@@ -23,6 +23,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   String selectedLanguage = 'English';
   final animatedTextController = Get.put(AnimatedTextController());
   final eventController = Get.put(EventPopupController());
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> _saveLanguagePreference(String language) async {
     final prefs = await SharedPreferences.getInstance();
@@ -47,6 +48,7 @@ class _MainMenuViewState extends State<MainMenuView> {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
+        key: _scaffoldKey,
         drawer: CustomDrawer(),
         backgroundColor: AppColors.backgroundBlue,
         body: SingleChildScrollView(
@@ -59,14 +61,11 @@ class _MainMenuViewState extends State<MainMenuView> {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Row(
                   children: [
-                    Builder(
-                      builder: (context) {
-                        return IconButton(
-                          icon: const Icon(Icons.menu, color: Colors.white),
-                          onPressed: () {
-                            Scaffold.of(context).openDrawer();
-                          },
-                        );
+                    IconButton(
+                      icon: const Icon(Icons.menu, color: Colors.white),
+                      onPressed: () {
+                        // Scaffold.of(context).openDrawer();
+                        _scaffoldKey.currentState?.openDrawer();
                       },
                     ),
                     Expanded(
