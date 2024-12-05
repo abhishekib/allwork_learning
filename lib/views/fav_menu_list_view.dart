@@ -1,7 +1,12 @@
+import 'dart:developer';
+
+import 'package:allwork/controllers/menu_list_controller.dart';
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/fav_category_list_view.dart';
+import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:allwork/controllers/favourite_controller.dart';
 
 class FavMenuListView extends StatefulWidget {
   const FavMenuListView({super.key});
@@ -11,45 +16,94 @@ class FavMenuListView extends StatefulWidget {
 }
 
 class _FavMenuListViewState extends State<FavMenuListView> {
-  final FavouriteController favouriteController =
-      Get.put(FavouriteController());
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Favourite List')),
-      body: Obx(() {
-        // Check if data is still loading
-        if (favouriteController.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        }
+    final controller = Get.put(MenuListController());
 
-        // If there's an error, show a message
-        if (favouriteController.hasError.value) {
-          return Center(child: Text('Error fetching favourite items.'));
-        }
+    return BackgroundWrapper(
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundBlue,
+          elevation: 1,
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Text(
+            'Favourite Menu',
+            style: AppTextStyles.whiteBoldTitleText,
+          ),
+        ),
+        backgroundColor: AppColors.backgroundBlue,
+        body: Obx(
+          () {
+            final menuList = controller.menuList.value;
 
-        // If no valid menu items, show an appropriate message
-        if (favouriteController.validMenuItems.isEmpty) {
-          return Center(child: Text('No favourite items available.'));
-        }
-
-        // Display the list of valid menu items that have data
-        return ListView.builder(
-          itemCount: favouriteController.validMenuItems.length,
-          itemBuilder: (context, index) {
-            final endpoint = favouriteController.validMenuItems[index];
-            return ListTile(
-              title: Text(endpoint), // Show endpoint name or any other title
-              subtitle: Text('Tap to view details'),
-              onTap: () {
-                // Navigate to category list view when an item is clicked
-                Get.to(() => FavCategoryListView(endpoint: endpoint));
-              },
-            );
+            if (controller.isLoading.value) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (menuList.items.isEmpty) {
+              return Center(
+                child: Column(
+                  children: [
+                    const Text(
+                      "No menu items available",
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: ListView.builder(
+                  itemCount: menuList.items.length,
+                  itemBuilder: (context, index) {
+                    final menuItem = menuList.items[index];
+                    return Column(
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(9.5),
+                          ),
+                          child: ListTile(
+                            textColor: AppColors.backgroundBlue,
+                            title: Center(
+                              child: Text(
+                                menuItem,
+                                style: AppTextStyles.blueBoldText,
+                              ),
+                            ),
+                            onTap: () async {
+                              log("selected ----> $menuItem");
+                              Get.to(
+                                () => FavCategoryListView(
+                                  menuItem: menuItem,
+                                ),
+                              );
+                            },
+                            trailing: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundBlue,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10)
+                      ],
+                    );
+                  },
+                ),
+              );
+            }
           },
-        );
-      }),
+        ),
+      ),
     );
   }
 }

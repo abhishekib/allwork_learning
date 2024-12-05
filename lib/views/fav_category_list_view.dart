@@ -1,58 +1,103 @@
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_detail_view.dart';
+import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
 
 class FavCategoryListView extends StatelessWidget {
-  final String endpoint;
-  final FavouriteController favouriteController =
-      Get.find<FavouriteController>();
-
-  FavCategoryListView({required this.endpoint});
+  final String menuItem;
+  const FavCategoryListView({super.key, required this.menuItem});
 
   @override
   Widget build(BuildContext context) {
-    // Fetch the data for the selected endpoint
-    favouriteController.fetchFavouriteItems(endpoint);
+    final FavouriteController favouriteController =
+        Get.put(FavouriteController());
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Favourite Categories'),
-      ),
-      body: Obx(() {
-        // Check if data is still loading
-        if (favouriteController.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
-        }
+    favouriteController.fetchFavouriteItems(menuItem);
 
-        // If there's an error, show a message
-        if (favouriteController.hasError.value) {
-          return Center(child: Text('Error fetching category data.'));
-        }
+    return BackgroundWrapper(
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundBlue,
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundBlue,
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Text(
+            "Favourite " + menuItem,
+            style: AppTextStyles.whiteBoldTitleText,
+          ),
+        ),
+        body: Obx(() {
+          if (favouriteController.isLoading.value) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-        // If no items in the selected endpoint, show a message
-        if (favouriteController.favouriteItems.isEmpty) {
-          return Center(child: Text('No favourite categories available.'));
-        }
+          if (favouriteController.hasError.value) {
+            return Center(
+                child: Text(
+              'Error fetching favourite data.',
+              style: AppTextStyles.whiteBoldText,
+            ));
+          }
 
-        // Filter the items to display only the category titles
-        return ListView.builder(
-          itemCount: favouriteController.favouriteItems.length,
-          itemBuilder: (context, index) {
-            final favouriteItem = favouriteController.favouriteItems[index];
+          if (favouriteController.favouriteItems.isEmpty) {
+            return Center(
+                child: Text(
+              'No favourite categories available.',
+              style: AppTextStyles.whiteBoldText,
+            ));
+          }
 
-            // You can adjust the logic to handle how categories are displayed in the item
-            return ListTile(
-              title: Text(favouriteItem.title), // Display the category title
-              subtitle: Text('Tap to view details'),
-              onTap: () {
-                // Navigate to the category detail view when tapped
-                Get.to(() => CategoryDetailView());
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ListView.builder(
+              itemCount: favouriteController.favouriteItems.length,
+              itemBuilder: (context, index) {
+                final favouriteItem = favouriteController.favouriteItems[index];
+
+                return Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(9.5),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          favouriteItem.title,
+                          style: AppTextStyles.blueBoldText,
+                        ),
+                        // subtitle: Text('Tap to view details'),
+                        onTap: () {
+                          Get.to(() => CategoryDetailView(),
+                              arguments: favouriteItem);
+                        },
+                        trailing: Container(
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundBlue,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: Icon(
+                              Icons.arrow_forward_ios_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    )
+                  ],
+                );
               },
-            );
-          },
-        );
-      }),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

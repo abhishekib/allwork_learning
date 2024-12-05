@@ -57,20 +57,20 @@ class CustomDrawer extends StatelessWidget {
                         Get.to(ProfileView());
                       },
                     ),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.favorite,
+                        color: Colors.white,
+                      ),
+                      title: const Text(
+                        'Favourite',
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                      onTap: () {
+                        Get.to(() => FavMenuListView());
+                      },
+                    ),
                   ],
-                  ListTile(
-                    leading: const Icon(
-                      Icons.favorite,
-                      color: Colors.white,
-                    ),
-                    title: const Text(
-                      'Favourite',
-                      style: AppTextStyles.whiteBoldText,
-                    ),
-                    onTap: () {
-                      Get.to(() => FavMenuListView());
-                    },
-                  ),
                   // ListTile(
                   //   leading: const Icon(
                   //     Icons.radio,

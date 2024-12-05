@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
+import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/settings_page_view.dart';
@@ -33,7 +34,27 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
   @override
   void initState() {
     super.initState();
-    categoryDetails = Get.arguments as Category;
+    final dynamic data = Get.arguments;
+    if (data is Category) {
+      categoryDetails = data;
+    } else if (data is FavouriteModel) {
+      categoryDetails = Category(
+        category: "",
+        id: 0,
+        title: data.title,
+        isFav: "",
+        cdata: data.cdata,
+      );
+    } else {
+      categoryDetails = Category(
+        category: '',
+        id: 0,
+        title: 'No data',
+        isFav: 'No',
+        cdata: [],
+      );
+    }
+
     final cdata = categoryDetails.cdata;
 
     availableTypes = cdata
@@ -201,37 +222,33 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     );
   }
 
-// Function to copy all lyrics
-  void _copyAllLyricsToClipboard(BuildContext context, Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
-    // Flatten the lyrics data into a single list, but only once
-    final allLyrics = availableLyrics.values.expand((lyricsList) => lyricsList).toList();
+  void _copyAllLyricsToClipboard(BuildContext context,
+      Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+    final allLyrics =
+        availableLyrics.values.expand((lyricsList) => lyricsList).toList();
 
-    // Use a Set to store unique Lyrics and remove duplicates
     Set<Lyrics> uniqueLyricsSet = {};
 
-    // Add lyrics to the Set (duplicates will be ignored automatically)
     for (var lyrics in allLyrics) {
-      uniqueLyricsSet.add(lyrics); // Adds unique lyrics based on equality (defined by `==` operator)
+      uniqueLyricsSet.add(
+          lyrics);
     }
 
-    // Start building the combined string with the category title
-    String combinedLyrics = '${_textCleanerController.cleanText(categoryTitle)}\n\n';
+    String combinedLyrics =
+        '${_textCleanerController.cleanText(categoryTitle)}\n\n';
 
-    // Iterate over the unique set of lyrics and format them for clipboard
     for (var lyrics in uniqueLyricsSet) {
       combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
-      combinedLyrics += '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
-      combinedLyrics += '${_textCleanerController.cleanText(lyrics.translation)}\n';
-      combinedLyrics += '\n'; // Extra space between different lyrics
+      combinedLyrics +=
+          '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
+      combinedLyrics +=
+          '${_textCleanerController.cleanText(lyrics.translation)}\n';
     }
 
-    // Copy the combined lyrics to clipboard
     Clipboard.setData(ClipboardData(text: combinedLyrics));
 
-    // Show confirmation message to the user
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("All lyrics copied to clipboard!")),
     );
   }
-
 }
