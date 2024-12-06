@@ -9,8 +9,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
+  final String selectedLanguage;
 
-  const LyricsTab({super.key, required this.lyricsList});
+  const LyricsTab(
+      {super.key, required this.lyricsList, required this.selectedLanguage});
 
   @override
   _LyricsTabState createState() => _LyricsTabState();
@@ -31,12 +33,15 @@ class _LyricsTabState extends State<LyricsTab> {
   int _currentHighlightedIndex = 0;
   bool _isUserInteraction = false;
 
+  late String fontFamily;
+
   @override
   void initState() {
     super.initState();
     controller.onReset();
     _loadFontSizes();
 
+    fontFamily = widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
@@ -187,14 +192,15 @@ class _LyricsTabState extends State<LyricsTab> {
       child: Text(
         _textCleanerController.cleanText(lyrics.translitration),
         style: TextStyle(
-          fontSize: isTransliterationHighlighted
-              ? transliterationFontSize + 4
-              : transliterationFontSize,
-          fontWeight: isTransliterationHighlighted
-              ? FontWeight.bold
-              : FontWeight.normal,
-          color: isTransliterationHighlighted ? Colors.black87 : Colors.black54,
-        ),
+            fontSize: isTransliterationHighlighted
+                ? transliterationFontSize + 4
+                : transliterationFontSize,
+            fontWeight: isTransliterationHighlighted
+                ? FontWeight.bold
+                : FontWeight.normal,
+            color:
+                isTransliterationHighlighted ? Colors.black87 : Colors.black54,
+            fontFamily: fontFamily),
       ),
     );
   }
@@ -212,13 +218,13 @@ class _LyricsTabState extends State<LyricsTab> {
       child: Text(
         _textCleanerController.cleanText(lyrics.translation),
         style: TextStyle(
-          fontSize: isTranslationHighlighted
-              ? translationFontSize + 4
-              : translationFontSize,
-          fontWeight:
-              isTranslationHighlighted ? FontWeight.bold : FontWeight.normal,
-          color: isTranslationHighlighted ? Colors.black87 : Colors.black54,
-        ),
+            fontSize: isTranslationHighlighted
+                ? translationFontSize + 4
+                : translationFontSize,
+            fontWeight:
+                isTranslationHighlighted ? FontWeight.bold : FontWeight.normal,
+            color: isTranslationHighlighted ? Colors.black87 : Colors.black54,
+            fontFamily: fontFamily),
       ),
     );
   }

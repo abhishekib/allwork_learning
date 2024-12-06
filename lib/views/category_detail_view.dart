@@ -30,13 +30,15 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
   late Category categoryDetails;
   late List<String> availableTypes;
   late Map<String, List<Lyrics>> availableLyrics;
+  String selectedLanguage = 'English';
 
   @override
   void initState() {
     super.initState();
     final dynamic data = Get.arguments;
-    if (data is Category) {
-      categoryDetails = data;
+    if (data is Map<String, dynamic>) {
+      categoryDetails = data['category'] as Category;
+      selectedLanguage = data['language'] as String;
     } else if (data is FavouriteModel) {
       categoryDetails = Category(
         category: "",
@@ -71,9 +73,9 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
     final String? initialAudioUrl =
-    cdata.isNotEmpty && cdata[0].audiourl.isNotEmpty
-        ? cdata[0].audiourl
-        : null;
+        cdata.isNotEmpty && cdata[0].audiourl.isNotEmpty
+            ? cdata[0].audiourl
+            : null;
 
     currentAudioUrl = initialAudioUrl;
 
@@ -101,8 +103,10 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
 
   @override
   Widget build(BuildContext context) {
+    final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
+
     final CategoryDetailController controller =
-    Get.put(CategoryDetailController());
+        Get.put(CategoryDetailController());
 
     if (availableTypes.isEmpty) {
       return Scaffold(
@@ -124,7 +128,12 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
           ),
           title: Text(
             _textCleanerController.cleanText(categoryDetails.title),
-            style: AppTextStyles.whiteBoldTitleText,
+            style: AppTextStyles.customStyle(
+              fontFamily: fontFamily,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
         ),
         floatingActionButtonLocation: ExpandableFab.location,
@@ -211,7 +220,9 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
                   controller: _tabController,
                   children: availableTypes.map((type) {
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
-                    return LyricsTab(lyricsList: lyricsList);
+                    return LyricsTab(
+                        lyricsList: lyricsList,
+                        selectedLanguage: selectedLanguage);
                   }).toList(),
                 ),
               ),
@@ -230,8 +241,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     Set<Lyrics> uniqueLyricsSet = {};
 
     for (var lyrics in allLyrics) {
-      uniqueLyricsSet.add(
-          lyrics);
+      uniqueLyricsSet.add(lyrics);
     }
 
     String combinedLyrics =

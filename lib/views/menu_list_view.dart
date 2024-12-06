@@ -56,6 +56,9 @@ class _MenuListViewState extends State<MenuListView> {
             ? controller.menuList.value
             : controller.gujaratiMenuList.value;
 
+        final fontFamily =
+            widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
+
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else if (menuList.items.isEmpty) {
@@ -87,7 +90,12 @@ class _MenuListViewState extends State<MenuListView> {
                   title: Center(
                     child: Text(
                       menuItem,
-                      style: AppTextStyles.whiteBoldText,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: fontFamily,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
                     ),
                   ),
                   onTap: () async {
@@ -97,15 +105,15 @@ class _MenuListViewState extends State<MenuListView> {
                       await categoryListController.fetchCategoryData(menuItem);
 
                       Get.to(() => CategoryListView(
-                            categoryItems:
-                                categoryListController.categoryData[""] ?? [],
-                            argument: menuItem,
-                          ));
+                          categoryItems:
+                              categoryListController.categoryData[""] ?? [],
+                          argument: menuItem,
+                          selectedLanguage: widget.selectedLanguage));
                     } else {
                       categoryListController.categoryData.clear();
                       Get.to(() => MenuDetailView(
-                            menuItem: menuItem,
-                          ));
+                          menuItem: menuItem,
+                          selectedLanguage: widget.selectedLanguage));
                     }
                   },
                 );

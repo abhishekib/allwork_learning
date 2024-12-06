@@ -1,8 +1,21 @@
-import 'package:allwork/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:allwork/utils/colors.dart';
 
-// Define a reusable TextStyle for white bold text
 class AppTextStyles {
+  static TextStyle customStyle({
+    required String fontFamily,
+    required double fontSize,
+    required FontWeight fontWeight,
+    required Color color,
+  }) {
+    return TextStyle(
+      fontFamily: fontFamily,
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      color: color,
+    );
+  }
+
   static const TextStyle whiteBoldText = TextStyle(
     color: Colors.white,
     fontWeight: FontWeight.bold,

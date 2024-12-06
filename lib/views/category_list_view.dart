@@ -14,12 +14,18 @@ class CategoryListView extends StatelessWidget {
   final String argument; // This field will store the menuItem value
   final CategoryListController categoryListController =
       CategoryListController();
+  final String selectedLanguage;
 
-  CategoryListView(
-      {super.key, required this.categoryItems, required this.argument});
+  CategoryListView({
+    super.key,
+    required this.categoryItems,
+    required this.argument,
+    required this.selectedLanguage,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     TextCleanerController textCleanerController = TextCleanerController();
     return BackgroundWrapper(
       child: categoryListController.isLoading.value
@@ -33,7 +39,12 @@ class CategoryListView extends StatelessWidget {
                 ),
                 title: Text(
                   textCleanerController.cleanText(argument),
-                  style: AppTextStyles.whiteBoldTitleText,
+                  style: AppTextStyles.customStyle(
+                    fontFamily: fontFamily,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               body: Padding(
@@ -55,13 +66,21 @@ class CategoryListView extends StatelessWidget {
                               textCleanerController.cleanText(item.title),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
-                              style: AppTextStyles.blueBoldText,
+                              style: AppTextStyles.customStyle(
+                                fontFamily: fontFamily,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.backgroundBlue,
+                              ),
                             ),
                             onTap: () {
                               log("Category List View------>${item.title}");
                               Get.toNamed(
                                 '/category-detail',
-                                arguments: item,
+                                arguments: {
+                                  'category': item,
+                                  'language': selectedLanguage
+                                },
                               );
                             },
                             trailing: Container(

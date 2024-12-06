@@ -13,12 +13,18 @@ import 'package:intl/intl.dart';
 
 class MenuDetailView extends StatelessWidget {
   final String menuItem;
+  final String selectedLanguage;
 
-  const MenuDetailView({super.key, required this.menuItem});
+  const MenuDetailView({
+    super.key,
+    required this.menuItem,
+    required this.selectedLanguage,
+  });
 
   @override
   Widget build(BuildContext context) {
     String dayOfWeek = DateFormat('EEEE').format(DateTime.now());
+    final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
     final controller = Get.put(CategoryListController());
 
@@ -41,7 +47,12 @@ class MenuDetailView extends StatelessWidget {
           centerTitle: true,
           title: Text(
             menuItem,
-            style: AppTextStyles.whiteBoldTitleText,
+            style: AppTextStyles.customStyle(
+              fontFamily: fontFamily,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
           ),
           iconTheme: const IconThemeData(
             color: Colors.white,
@@ -94,18 +105,22 @@ class MenuDetailView extends StatelessWidget {
                               title: Center(
                                 child: Text(
                                   categoryName,
-                                  style: AppTextStyles.blueBoldText,
+                                  style: AppTextStyles.customStyle(
+                                    fontFamily: fontFamily,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.backgroundBlue,
+                                  ),
                                 ),
                               ),
                               onTap: () {
                                 log("menu detail view-------> $categoryName");
                                 Get.to(
                                   () => CategoryListView(
-                                    categoryItems:
-                                        controller.categoryData[categoryName]!,
-                                    argument:
-                                        categoryName, // Pass the selected menuItem
-                                  ),
+                                      categoryItems: controller
+                                          .categoryData[categoryName]!,
+                                      argument: categoryName,
+                                      selectedLanguage: selectedLanguage),
                                 );
                               },
                             ),
