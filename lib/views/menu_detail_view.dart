@@ -117,10 +117,12 @@ class MenuDetailView extends StatelessWidget {
                                 log("menu detail view-------> $categoryName");
                                 Get.to(
                                   () => CategoryListView(
-                                      categoryItems: controller
-                                          .categoryData[categoryName]!,
-                                      argument: categoryName,
-                                      selectedLanguage: selectedLanguage),
+                                    categoryItems:
+                                        controller.categoryData[categoryName]!,
+                                    argument: categoryName,
+                                    selectedLanguage: selectedLanguage,
+                                    menuItem: menuItem,
+                                  ),
                                 );
                               },
                             ),

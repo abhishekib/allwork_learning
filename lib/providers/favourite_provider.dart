@@ -39,4 +39,29 @@ class FavouriteProvider {
       throw Exception('Error fetching favourite list: $e');
     }
   }
+
+  Future addToFavourite(String endpoint, String userId, int itemId) async {
+    try {
+      log("Item Id from provider: $itemId");
+
+      final response = await _dio.post(
+        endpoint,
+        queryParameters: {
+          'userid': userId,
+          'postid': itemId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        log("Item added to favourites successfully");
+        return true;
+      } else {
+        log('Failed to add to favourites: ${response.statusCode}');
+        throw Exception('Failed to add to favourites: ${response.statusCode}');
+      }
+    } catch (e) {
+      log("Error adding to favourite: $e");
+      throw Exception('Error adding to favourite: $e');
+    }
+  }
 }

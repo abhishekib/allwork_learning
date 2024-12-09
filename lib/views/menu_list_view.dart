@@ -105,10 +105,12 @@ class _MenuListViewState extends State<MenuListView> {
                       await categoryListController.fetchCategoryData(menuItem);
 
                       Get.to(() => CategoryListView(
-                          categoryItems:
-                              categoryListController.categoryData[""] ?? [],
-                          argument: menuItem,
-                          selectedLanguage: widget.selectedLanguage));
+                            categoryItems:
+                                categoryListController.categoryData[""] ?? [],
+                            argument: menuItem,
+                            selectedLanguage: widget.selectedLanguage,
+                            menuItem: menuItem,
+                          ));
                     } else {
                       categoryListController.categoryData.clear();
                       Get.to(() => MenuDetailView(

@@ -14,6 +14,7 @@ import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
+import 'package:allwork/controllers/favourite_controller.dart';
 
 class CategoryDetailView extends StatefulWidget {
   const CategoryDetailView({super.key});
@@ -31,14 +32,17 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
   late List<String> availableTypes;
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
+  late String menuItem;
 
   @override
   void initState() {
     super.initState();
+    Get.put(FavouriteController());
     final dynamic data = Get.arguments;
     if (data is Map<String, dynamic>) {
       categoryDetails = data['category'] as Category;
       selectedLanguage = data['language'] as String;
+      menuItem = data['menuItem'] as String;
     } else if (data is FavouriteModel) {
       categoryDetails = Category(
         category: "",
@@ -93,6 +97,26 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
       }
     });
     log("---You are in CategoryDetailView---");
+  }
+
+  void addToFavourite() async {
+    try {
+      final favouriteController = Get.find<FavouriteController>();
+
+      int itemId = categoryDetails.id;
+      log("$itemId");
+
+      await favouriteController.addToFavourite(menuItem, itemId);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Added to favorites!")),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error adding to favorites: $e")),
+      );
+      log("$e");
+    }
   }
 
   @override
@@ -164,7 +188,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.favorite),
               onPressed: () {
-                // Implement favorite functionality
+                addToFavourite();
               },
             ),
             FloatingActionButton.small(

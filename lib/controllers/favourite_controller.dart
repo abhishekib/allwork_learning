@@ -13,25 +13,37 @@ class FavouriteController extends GetxController {
   final FavouriteProvider _favouriteProvider =
       FavouriteProvider(ApiConstants.token);
 
-  String _getEndpointForMenuItem(String menuItem) {
-    switch (menuItem) {
-      case "Daily Dua":
-        return ApiConstants.listFavDailyDua;
-      case "Surah":
-        return ApiConstants.listFavSuraha;
-      case "Dua":
-        return ApiConstants.listFavDua;
-      case "Ziyarat":
-        return ApiConstants.listFavZiyarat;
-      case "Amaal":
-        return ApiConstants.listFavAmaalNamaaz;
-      case "Munajat":
-        return ApiConstants.listFavMunajat;
-      case "Travel Ziyarat":
-        return ApiConstants.listFavTravelZiyarat;
-      default:
-        return ApiConstants.baseUrl;
+  String _getEndpoint(String menuItem, {bool isFetching = true}) {
+    final Map<String, String> fetchEndpoints = {
+      "Daily Dua": ApiConstants.listFavDailyDua,
+      "Surah": ApiConstants.listFavSuraha,
+      "Dua": ApiConstants.listFavDua,
+      "Ziyarat": ApiConstants.listFavZiyarat,
+      "Amaal": ApiConstants.listFavAmaalNamaaz,
+      "Munajat": ApiConstants.listFavMunajat,
+      "Travel Ziyarat": ApiConstants.listFavTravelZiyarat,
+    };
+
+    final Map<String, String> addEndpoints = {
+      "Daily Dua": ApiConstants.addFavdailydua,
+      "Surah": ApiConstants.addFavSurah,
+      "Dua": ApiConstants.addFavdua,
+      "Ziyarat": ApiConstants.addFavziyarat,
+      "Munajat": ApiConstants.addFavmunajat,
+    };
+
+    if (isFetching) {
+      return fetchEndpoints[menuItem] ?? ApiConstants.baseUrl;
+    } else {
+      return addEndpoints[menuItem] ?? ApiConstants.baseUrl;
     }
+  }
+
+  Future<String> _getUserId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userId = prefs.getString('userId') ?? '';
+    log("Fetched userId: $userId");
+    return userId;
   }
 
   Future<void> fetchFavouriteItems(String menuItem) async {
@@ -39,11 +51,9 @@ class FavouriteController extends GetxController {
       isLoading.value = true;
       hasError.value = false;
 
-      final endpoint = _getEndpointForMenuItem(menuItem);
+      final endpoint = _getEndpoint(menuItem);
 
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String userId = prefs.getString('userId') ?? '';
-      log("Fetched userId: $userId");
+      String userId = await _getUserId();
 
       if (userId.isEmpty) {
         throw Exception("User ID is empty");
@@ -51,7 +61,6 @@ class FavouriteController extends GetxController {
 
       var fetchedItems =
           await _favouriteProvider.fetchFavouriteList(endpoint, userId);
-
       favouriteItems.value = fetchedItems;
 
       log("Mapped Favourite Items: ${favouriteItems.length}");
@@ -60,6 +69,29 @@ class FavouriteController extends GetxController {
       hasError.value = true;
     } finally {
       isLoading.value = false;
+    }
+  }
+
+  Future<void> addToFavourite(String menuItem, int itemId) async {
+    try {
+      String userId = await _getUserId();
+
+      if (userId.isEmpty) {
+        throw Exception('User is not logged in');
+      }
+
+      String endpoint = _getEndpoint(menuItem, isFetching: false);
+
+      bool success =
+          await _favouriteProvider.addToFavourite(endpoint, userId, itemId);
+
+      if (success) {
+        log('Item added to favourites successfully!');
+      } else {
+        log('Failed to add item to favourites.');
+      }
+    } catch (e) {
+      log('Error adding to favourites: $e');
     }
   }
 

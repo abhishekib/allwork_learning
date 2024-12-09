@@ -15,12 +15,14 @@ class CategoryListView extends StatelessWidget {
   final CategoryListController categoryListController =
       CategoryListController();
   final String selectedLanguage;
+  final String menuItem;
 
   CategoryListView({
     super.key,
     required this.categoryItems,
     required this.argument,
     required this.selectedLanguage,
+    required this.menuItem,
   });
 
   @override
@@ -79,7 +81,8 @@ class CategoryListView extends StatelessWidget {
                                 '/category-detail',
                                 arguments: {
                                   'category': item,
-                                  'language': selectedLanguage
+                                  'language': selectedLanguage,
+                                  'menuItem': menuItem
                                 },
                               );
                             },
