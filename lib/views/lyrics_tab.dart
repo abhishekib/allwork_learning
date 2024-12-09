@@ -171,10 +171,11 @@ class _LyricsTabState extends State<LyricsTab> {
         textDirection: TextDirection.rtl,
         textAlign: TextAlign.start,
         style: TextStyle(
-          fontSize: isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize,
-          fontWeight: isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
-          color: isArabicHighlighted ? Colors.black87 : Colors.black54,
-        ),
+            fontSize: isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize,
+            fontWeight:
+                isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
+            color: isArabicHighlighted ? Colors.black87 : Colors.black54,
+            fontFamily: "MUHAMMADI"),
       ),
     );
   }

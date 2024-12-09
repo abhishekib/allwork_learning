@@ -113,6 +113,10 @@ flutter:
         - asset: assets/font/GopikaThreeBold_0.otf
           weight: 700
 
+    - family: MUHAMMADI
+      fonts:
+        - asset: assets/font/MUHAMMADI_QURANIC.ttf
+
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
