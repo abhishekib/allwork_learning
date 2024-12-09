@@ -79,10 +79,11 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
               Text(
-                "Arabic Font Size: ${arabicFontSize.toStringAsFixed(1)}",
+                "حجم الخط العربي: ${arabicFontSize.toStringAsFixed(1)}",
                 style: TextStyle(
                   fontSize: arabicFontSize,
                   color: Colors.white,
+                  fontFamily: "MUHAMMADI",
                 ),
               ),
               const SizedBox(height: 20),
