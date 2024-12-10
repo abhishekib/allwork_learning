@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
@@ -88,7 +87,9 @@ class LoginController extends GetxController {
         errorMessage.value =
         'An internal error occurred. Please contact support if the issue persists.';
       } else {
-        print("HERE -->"'Error logging in user: $e');
+        if (kDebugMode) {
+          print("HERE -->"'Error logging in user: $e');
+        }
         //errorMessage.value = 'Error logging in user: $e';
         errorMessage.value=
         "Invalid username or password. \nPlease try again.";

@@ -24,7 +24,7 @@ class FavCategoryListView extends StatelessWidget {
           backgroundColor: AppColors.backgroundBlue,
           iconTheme: IconThemeData(color: Colors.white),
           title: Text(
-            "Favourite " + menuItem,
+            "Favourite $menuItem",
             style: AppTextStyles.whiteBoldTitleText,
           ),
         ),

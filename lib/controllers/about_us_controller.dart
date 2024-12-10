@@ -1,5 +1,6 @@
 import 'package:allwork/modals/about_us_response.dart';
 import 'package:allwork/providers/about_us_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:allwork/utils/constants.dart';
 
@@ -24,7 +25,9 @@ class AboutUsController extends GetxController {
 
       aboutUsText.value = cleanedText;
     } catch (e) {
-      print('Error fetching About Us data: $e');
+      if (kDebugMode) {
+        print('Error fetching About Us data: $e');
+      }
     } finally {
       isLoading(false);
     }
