@@ -1,6 +1,7 @@
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/forgot_password_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/labeled_input_field_widget.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +48,19 @@ class LoginView extends StatelessWidget {
                   isPassword: true,
                   isNotEditable: false,
                 ),
+                TextButton(
+                    onPressed: () {
+                      Get.to(ForgotPasswordView());
+                    },
+                    child: Text(
+                      'Forgot Password ?',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        decoration: TextDecoration.underline,
+                        decorationColor: Colors.white,
+                      ),
+                    )),
                 const SizedBox(height: 30),
                 Center(
                   child: Obx(() {
