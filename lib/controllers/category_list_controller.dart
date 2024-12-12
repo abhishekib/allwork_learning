@@ -21,9 +21,7 @@ class CategoryListController extends GetxController {
         String? dayOfWeek;
 
         if (menuItem == "Daily Dua" || menuItem == "રોજની દોઆઓ") {
-          dayOfWeek = DateFormat('EEEE')
-              .format(DateTime.now())
-              .toLowerCase();
+          dayOfWeek = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
         }
 
         final response =
@@ -62,7 +60,7 @@ class CategoryListController extends GetxController {
         return ApiConstants.gujaratiSurahEndpoint;
       case "દોઆઓ":
         return ApiConstants.gujaratiDuaEndpoint;
-      case "ઝિયારાત":
+      case "ઝિયરાત":
         return ApiConstants.gujaratiZiyaratEndpoint;
       // case "અમલ":
       // return ApiConstants.amaalEndpoint;
