@@ -171,7 +171,17 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
           distance: 50,
           overlayStyle: ExpandableFabOverlayStyle(
             color: Colors.black.withOpacity(0.5),
-            blur: 5,
+            blur: 1,
+          ),
+          openButtonBuilder: RotateFloatingActionButtonBuilder(
+            child: const Icon(Icons.menu),
+            fabSize: ExpandableFabSize.small,
+            shape: const CircleBorder(),
+          ),
+          closeButtonBuilder: DefaultFloatingActionButtonBuilder(
+            child: const Icon(Icons.close),
+            fabSize: ExpandableFabSize.small,
+            shape: const CircleBorder(),
           ),
           children: [
             FloatingActionButton.small(
