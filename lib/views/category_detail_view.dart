@@ -135,7 +135,12 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     if (availableTypes.isEmpty) {
       return Scaffold(
         appBar: AppBar(
-          title: Text(_textCleanerController.cleanText(categoryDetails.title)),
+          title: Text(
+            _textCleanerController.cleanText(categoryDetails.title),
+            style: TextStyle(
+              fontFamily: fontFamily,
+            ),
+          ),
         ),
         body: const Center(child: Text("No data available")),
       );
@@ -181,7 +186,8 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
               child: const Icon(Icons.copy),
               onPressed: () {
                 // Call the copy functionality from LyricsTab
-                _copyAllLyricsToClipboard(context, availableLyrics, categoryDetails.title);
+                _copyAllLyricsToClipboard(
+                    context, availableLyrics, categoryDetails.title);
               },
             ),
             FloatingActionButton.small(
