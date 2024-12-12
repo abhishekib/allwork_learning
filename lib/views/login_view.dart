@@ -1,11 +1,11 @@
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
-import 'package:allwork/views/forgot_password_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/labeled_input_field_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginView extends StatelessWidget {
   LoginView({super.key});
@@ -49,9 +49,7 @@ class LoginView extends StatelessWidget {
                   isNotEditable: false,
                 ),
                 TextButton(
-                    onPressed: () {
-                      Get.to(ForgotPasswordView());
-                    },
+                    onPressed: _launchUrl,
                     child: Text(
                       'Forgot Password ?',
                       style: TextStyle(
@@ -153,5 +151,12 @@ class LoginView extends StatelessWidget {
         // Get.off(() => MainMenuView());
       },
     );
+  }
+
+  Future<void> _launchUrl() async {
+    final Uri _url = Uri.parse('https://mafatihuljinan.org/forgot-password/');
+    if (!await launchUrl(_url)) {
+      throw Exception('Could not launch $_url');
+    }
   }
 }
