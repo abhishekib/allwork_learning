@@ -30,6 +30,11 @@ class FavouriteController extends GetxController {
       "Dua": ApiConstants.addFavdua,
       "Ziyarat": ApiConstants.addFavziyarat,
       "Munajat": ApiConstants.addFavmunajat,
+      "રોજની દોઆઓ": ApiConstants.addFavdailydua,
+      "સુરાહ": ApiConstants.addFavSurah,
+      "દોઆઓ": ApiConstants.addFavdua,
+      "ઝિયરાત": ApiConstants.addFavziyarat,
+      "મુનાજાત": ApiConstants.addFavmunajat,
     };
 
     if (isFetching) {
@@ -75,6 +80,7 @@ class FavouriteController extends GetxController {
   Future<void> addToFavourite(String menuItem, int itemId) async {
     try {
       String userId = await _getUserId();
+      log("postId--[provider]-------->$itemId");
 
       if (userId.isEmpty) {
         throw Exception('User is not logged in');

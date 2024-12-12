@@ -30,7 +30,7 @@ class CategoryProvider {
         ),
       );
 
-      log("API Response: ${response.data}");
+      // log("API Response: ${response.data}");
 
       if (response.statusCode == 200) {
         return CategoryResponse.fromJson(response.data['data']);
