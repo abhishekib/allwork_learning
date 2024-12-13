@@ -121,35 +121,19 @@ class _LyricsTabState extends State<LyricsTab> {
           _buildTranslationText(lyrics),
         ]);
         break;
-      case "translation":
-        contentWidgets.addAll([
-          _buildTranslationText(lyrics),
-          const SizedBox(height: 8),
-          _buildArabicText(lyrics),
-          const SizedBox(height: 8),
-          _buildTransliterationText(lyrics),
-        ]);
-        break;
-      case "ગુજરાતી":
-        contentWidgets.addAll([
-          _buildTransliterationText(lyrics),
-          const SizedBox(height: 8),
-          _buildArabicText(lyrics),
-          const SizedBox(height: 8),
-          _buildTranslationText(lyrics),
-        ]);
-        break;
       case "transliteration":
-        contentWidgets.addAll([
-          _buildTransliterationText(lyrics),
-          const SizedBox(height: 8),
-          _buildArabicText(lyrics),
-          const SizedBox(height: 8),
-          _buildTranslationText(lyrics),
-        ]);
-        break;
       case "તરજુમા":
         contentWidgets.addAll([
+          _buildTransliterationText(lyrics),
+          const SizedBox(height: 8),
+          _buildArabicText(lyrics),
+          const SizedBox(height: 8),
+          _buildTranslationText(lyrics),
+        ]);
+        break;
+      case "translation":
+      case "ગુજરાતી":
+        contentWidgets.addAll([
           _buildTranslationText(lyrics),
           const SizedBox(height: 8),
           _buildArabicText(lyrics),
@@ -157,7 +141,6 @@ class _LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics),
         ]);
         break;
-
       default:
         contentWidgets.addAll([
           _buildArabicText(lyrics),
@@ -187,11 +170,11 @@ class _LyricsTabState extends State<LyricsTab> {
         textDirection: TextDirection.rtl,
         textAlign: TextAlign.start,
         style: TextStyle(
-          fontSize: isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize,
-          fontWeight: isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
-          color: isArabicHighlighted ? Colors.black87 : Colors.black54,
-          fontFamily: "MUHAMMADI",
-        ),
+            fontSize: isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize,
+            fontWeight:
+                isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
+            color: isArabicHighlighted ? Colors.black87 : Colors.black54,
+            fontFamily: "MUHAMMADI"),
       ),
     );
   }
@@ -199,7 +182,7 @@ class _LyricsTabState extends State<LyricsTab> {
   Widget _buildTransliterationText(Lyrics lyrics) {
     final isTransliterationHighlighted =
         controller.selectedType.value.toLowerCase() == "transliteration" ||
-            controller.selectedType.value == "ગુજરાતી";
+            controller.selectedType.value == "તરજુમા";
     if (lyrics.translitration.isEmpty || lyrics.translitration == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
@@ -225,7 +208,7 @@ class _LyricsTabState extends State<LyricsTab> {
   Widget _buildTranslationText(Lyrics lyrics) {
     final isTranslationHighlighted =
         controller.selectedType.value.toLowerCase() == "translation" ||
-            controller.selectedType.value == "તરજુમા";
+            controller.selectedType.value == "ગુજરાતી";
 
     if (lyrics.translation.isEmpty || lyrics.translation == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
