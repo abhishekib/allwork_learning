@@ -11,7 +11,7 @@ import 'package:allwork/widgets/daily_date_widget.dart';
 import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:intl/intl.dart';
 
-class MenuDetailView extends StatelessWidget {
+class MenuDetailView extends StatefulWidget {
   final String menuItem;
   final String selectedLanguage;
 
@@ -22,20 +22,37 @@ class MenuDetailView extends StatelessWidget {
   });
 
   @override
+  State<MenuDetailView> createState() => _MenuDetailViewState();
+}
+
+class _MenuDetailViewState extends State<MenuDetailView> {
+  final controller = Get.put(CategoryListController());
+  @override
+  void initState() {
+    super.initState();
+    controller.fetchCategoryData(widget.menuItem);
+  }
+
+  @override
   Widget build(BuildContext context) {
     String dayOfWeek = DateFormat('EEEE').format(DateTime.now());
-    final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
-
-    final controller = Get.put(CategoryListController());
+    final fontFamily =
+        widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
     // Fetch data if not already fetched for the selected menu item
     if (controller.categoryData.isEmpty) {
-      controller.fetchCategoryData(menuItem);
+      if (!controller.isLoading.value) {
+        if (controller.isItemSingle.value) {
+          log("I will navigate to CategoryListView MLV");
+        } else {
+          log("I will navigate to MenuDetailView MLV");
+        }
+      }
     }
 
     Future<void> refreshCategoryData() async {
       // Fetch the latest category data
-      await controller.fetchCategoryData(menuItem);
+      await controller.fetchCategoryData(widget.menuItem);
     }
 
     return BackgroundWrapper(
@@ -46,7 +63,7 @@ class MenuDetailView extends StatelessWidget {
           backgroundColor: AppColors.backgroundBlue,
           centerTitle: true,
           title: Text(
-            menuItem,
+            widget.menuItem,
             style: AppTextStyles.customStyle(
               fontFamily: fontFamily,
               fontSize: 30,
@@ -69,11 +86,26 @@ class MenuDetailView extends StatelessWidget {
               style: AppTextStyles.whiteBoldText,
             ));
           } else {
+            if (controller.isItemSingle.value) {
+              log("I will navigate to CategoryListView MLV");
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                log("I will navigate to CategoryListView MLV");
+                Get.off(() => CategoryListView(
+                      categoryItems: controller.categoryData[""] ?? [],
+                      argument: widget.menuItem,
+                      selectedLanguage: widget.selectedLanguage,
+                      menuItem: widget.menuItem,
+                    ));
+              });
+            } else {
+              log("I will navigate to MenuDetailView MLV");
+            }
             return RefreshIndicator(
               onRefresh: refreshCategoryData,
               child: ListView(
                 children: [
-                  if (menuItem == "Daily Dua" || menuItem == "રોજની દોઆઓ")
+                  if (widget.menuItem == "Daily Dua" ||
+                      widget.menuItem == "રોજની દોઆઓ")
                     Center(
                       child: Text(
                         "Day: $dayOfWeek",
@@ -120,8 +152,8 @@ class MenuDetailView extends StatelessWidget {
                                     categoryItems:
                                         controller.categoryData[categoryName]!,
                                     argument: categoryName,
-                                    selectedLanguage: selectedLanguage,
-                                    menuItem: menuItem,
+                                    selectedLanguage: widget.selectedLanguage,
+                                    menuItem: widget.menuItem,
                                   ),
                                 );
                               },

@@ -8,6 +8,7 @@ import 'dart:developer';
 class CategoryListController extends GetxController {
   var categoryData = <String, List<Category>>{}.obs;
   var isLoading = true.obs;
+  var isItemSingle = false.obs;
 
   final CategoryProvider _categoryProvider =
       CategoryProvider(ApiConstants.token);
@@ -27,6 +28,7 @@ class CategoryListController extends GetxController {
         final response =
             await _categoryProvider.fetchCategoryData(endpoint, dayOfWeek);
         categoryData.value = response.categories;
+        isItemSingle.value = categoryData.keys.firstOrNull == '';
       } else {
         log("No endpoint found for $menuItem");
       }

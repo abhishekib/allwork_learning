@@ -100,8 +100,15 @@ class _MenuListViewState extends State<MenuListView> {
                   ),
                   onTap: () async {
                     log("selected ----> $menuItem");
-
-                    if (menuItem == "Surah" || menuItem == "સુરાહ") {
+                    /* await categoryListController.fetchCategoryData(menuItem);
+                    final x = categoryListController.categoryData.keys.firstOrNull;
+                    if(x!.isEmpty){
+                      log("I will navigate to CategoryListView");
+                    }else{
+                      log("I will navigate to MenuDetailView");
+                    }
+                    log("RAW DATA : $x"); */
+                    /* if (menuItem == "Surah" || menuItem == "સુરાહ") {
                       await categoryListController.fetchCategoryData(menuItem);
 
                       Get.to(() => CategoryListView(
@@ -111,12 +118,12 @@ class _MenuListViewState extends State<MenuListView> {
                             selectedLanguage: widget.selectedLanguage,
                             menuItem: menuItem,
                           ));
-                    } else {
-                      categoryListController.categoryData.clear();
-                      Get.to(() => MenuDetailView(
-                          menuItem: menuItem,
-                          selectedLanguage: widget.selectedLanguage));
-                    }
+                    } else { */
+                    categoryListController.categoryData.clear();
+                    Get.to(() => MenuDetailView(
+                        menuItem: menuItem,
+                        selectedLanguage: widget.selectedLanguage));
+                    //}
                   },
                 );
               },
