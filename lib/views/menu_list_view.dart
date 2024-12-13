@@ -5,7 +5,6 @@ import 'package:allwork/controllers/daily_date_controller.dart';
 import 'package:allwork/controllers/prayer_time_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
-import 'package:allwork/views/category_list_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -100,25 +99,6 @@ class _MenuListViewState extends State<MenuListView> {
                   ),
                   onTap: () async {
                     log("selected ----> $menuItem");
-                    /* await categoryListController.fetchCategoryData(menuItem);
-                    final x = categoryListController.categoryData.keys.firstOrNull;
-                    if(x!.isEmpty){
-                      log("I will navigate to CategoryListView");
-                    }else{
-                      log("I will navigate to MenuDetailView");
-                    }
-                    log("RAW DATA : $x"); */
-                    /* if (menuItem == "Surah" || menuItem == "સુરાહ") {
-                      await categoryListController.fetchCategoryData(menuItem);
-
-                      Get.to(() => CategoryListView(
-                            categoryItems:
-                                categoryListController.categoryData[""] ?? [],
-                            argument: menuItem,
-                            selectedLanguage: widget.selectedLanguage,
-                            menuItem: menuItem,
-                          ));
-                    } else { */
                     categoryListController.categoryData.clear();
                     Get.to(() => MenuDetailView(
                         menuItem: menuItem,
