@@ -11,10 +11,10 @@ class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
 
   @override
-  _ProfileViewState createState() => _ProfileViewState();
+  ProfileViewState createState() => ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class ProfileViewState extends State<ProfileView> {
   final UserInfoController _userInfoController = Get.put(UserInfoController());
 
   bool isNotEditable = true; // Default to be non-editable

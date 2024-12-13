@@ -16,10 +16,10 @@ class AudioPlayerWidget extends StatefulWidget {
   });
 
   @override
-  _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
+  AudioPlayerWidgetState createState() => AudioPlayerWidgetState();
 }
 
-class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
   bool isPlaying = false;
   bool isCompleted = false;

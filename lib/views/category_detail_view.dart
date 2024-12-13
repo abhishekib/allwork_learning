@@ -20,10 +20,10 @@ class CategoryDetailView extends StatefulWidget {
   const CategoryDetailView({super.key});
 
   @override
-  _CategoryDetailViewState createState() => _CategoryDetailViewState();
+  CategoryDetailViewState createState() => CategoryDetailViewState();
 }
 
-class _CategoryDetailViewState extends State<CategoryDetailView>
+class CategoryDetailViewState extends State<CategoryDetailView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String? currentAudioUrl;
@@ -108,13 +108,17 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
 
       await favouriteController.addToFavourite(menuItem, itemId);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Added to favorites!")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Added to favorites!")),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error adding to favorites: $e")),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error adding to favorites: $e")),
+        );
+      }
       log("$e");
     }
   }

@@ -14,10 +14,10 @@ class LyricsTab extends StatefulWidget {
       {super.key, required this.lyricsList, required this.selectedLanguage});
 
   @override
-  _LyricsTabState createState() => _LyricsTabState();
+  LyricsTabState createState() => LyricsTabState();
 }
 
-class _LyricsTabState extends State<LyricsTab> {
+class LyricsTabState extends State<LyricsTab> {
   final CategoryDetailController controller =
       Get.find<CategoryDetailController>();
   final ItemScrollController _itemScrollController = ItemScrollController();

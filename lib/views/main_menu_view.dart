@@ -16,10 +16,10 @@ class MainMenuView extends StatefulWidget {
   const MainMenuView({super.key});
 
   @override
-  _MainMenuViewState createState() => _MainMenuViewState();
+  MainMenuViewState createState() => MainMenuViewState();
 }
 
-class _MainMenuViewState extends State<MainMenuView> {
+class MainMenuViewState extends State<MainMenuView> {
   String selectedLanguage = 'English';
   final animatedTextController = Get.put(AnimatedTextController());
   final eventController = Get.put(EventPopupController());
