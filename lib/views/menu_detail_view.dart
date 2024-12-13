@@ -47,18 +47,56 @@ class _MenuDetailViewState extends State<MenuDetailView> {
     return BackgroundWrapper(
       child: Obx(() {
         if (controller.isLoading.value) {
-          return const Scaffold(
+          return Scaffold(
             backgroundColor: AppColors.backgroundBlue,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundBlue,
+              title: Text(
+                widget.menuItem,
+                style: AppTextStyles.customStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
             body: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
             ),
           );
         } else if (controller.categoryData.isEmpty) {
-          return const Center(
-              child: Text(
-            "No categories available",
-            style: AppTextStyles.whiteBoldText,
-          ));
+          return Scaffold(
+            backgroundColor: AppColors.backgroundBlue,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundBlue,
+              centerTitle: true,
+              title: Text(
+                widget.menuItem,
+                style: AppTextStyles.customStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            body: const Center(
+                child: Text(
+              "No categories available",
+              style: AppTextStyles.whiteBoldText,
+            )),
+          );
         } else if (controller.isItemSingle.value) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             log("I will navigate to CategoryListView MLV");
