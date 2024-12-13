@@ -39,68 +39,64 @@ class _MenuDetailViewState extends State<MenuDetailView> {
     final fontFamily =
         widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
-    // Fetch data if not already fetched for the selected menu item
-    if (controller.categoryData.isEmpty) {
-      if (!controller.isLoading.value) {
-        if (controller.isItemSingle.value) {
-          log("I will navigate to CategoryListView MLV");
-        } else {
-          log("I will navigate to MenuDetailView MLV");
-        }
-      }
-    }
-
     Future<void> refreshCategoryData() async {
       // Fetch the latest category data
       await controller.fetchCategoryData(widget.menuItem);
     }
 
     return BackgroundWrapper(
-      child: Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.backgroundBlue,
-        appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
-          centerTitle: true,
-          title: Text(
-            widget.menuItem,
-            style: AppTextStyles.customStyle(
-              fontFamily: fontFamily,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+      child: Obx(() {
+        if (controller.isLoading.value) {
+          return const Scaffold(
+            backgroundColor: AppColors.backgroundBlue,
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-            size: 30,
-          ),
-        ),
-        body: Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (controller.categoryData.isEmpty) {
-            return const Center(
-                child: Text(
-              "No categories available",
-              style: AppTextStyles.whiteBoldText,
-            ));
-          } else {
-            if (controller.isItemSingle.value) {
-              log("I will navigate to CategoryListView MLV");
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                log("I will navigate to CategoryListView MLV");
-                Get.off(() => CategoryListView(
-                      categoryItems: controller.categoryData[""] ?? [],
-                      argument: widget.menuItem,
-                      selectedLanguage: widget.selectedLanguage,
-                      menuItem: widget.menuItem,
-                    ));
-              });
-            } else {
-              log("I will navigate to MenuDetailView MLV");
-            }
-            return RefreshIndicator(
+          );
+        } else if (controller.categoryData.isEmpty) {
+          return const Center(
+              child: Text(
+            "No categories available",
+            style: AppTextStyles.whiteBoldText,
+          ));
+        } else if (controller.isItemSingle.value) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            log("I will navigate to CategoryListView MLV");
+            Get.off(() => CategoryListView(
+                  categoryItems: controller.categoryData[""] ?? [],
+                  argument: widget.menuItem,
+                  selectedLanguage: widget.selectedLanguage,
+                  menuItem: widget.menuItem,
+                ));
+          });
+          return Scaffold(
+            backgroundColor: AppColors.backgroundBlue,
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else {
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: AppColors.backgroundBlue,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundBlue,
+              centerTitle: true,
+              title: Text(
+                widget.menuItem,
+                style: AppTextStyles.customStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            body: RefreshIndicator(
               onRefresh: refreshCategoryData,
               child: ListView(
                 children: [
@@ -166,10 +162,10 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                   }),
                 ],
               ),
-            );
-          }
-        }),
-      ),
+            ),
+          );
+        }
+      }),
     );
   }
 }
