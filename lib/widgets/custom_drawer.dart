@@ -35,7 +35,7 @@ class CustomDrawer extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: const Text(
-                        'Signup',
+                        'Sign-Up | Sign-In',
                         style: AppTextStyles.whiteBoldText,
                       ),
                       onTap: () {
