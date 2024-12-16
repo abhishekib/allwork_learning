@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:allwork/entities/animated_text_entities.dart';
 import 'package:allwork/entities/daily_date_entity.dart';
+import 'package:allwork/entities/menu_list_entity.dart';
+import 'package:allwork/entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/daily_date.dart';
+import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
 
 //class for helper methods
@@ -76,4 +79,27 @@ class Helpers {
         sunset: prayerTimeEntity.sunset,
         maghrib: prayerTimeEntity.maghrib);
   }
+
+  // method to convert api response MenuListModel to MenuListEntity to save in DB
+  static MenuListEntity convertToMenuListEntity(
+      MenuList menuList) {
+    return MenuListEntity(items: menuList.items);
+  }
+
+  static MenuListGujratiEntity convertToMenuListGujratiEntity(
+      MenuList menuList) {
+    return MenuListGujratiEntity(items: menuList.items);
+  }
+
+  // method to convert MenuListEntity to MenuList for controllers
+  static MenuList convertToMenuList(
+      MenuListEntity menuListEntity) {
+    return MenuList(items: menuListEntity.items);
+  }
+
+  static MenuList convertToMenuListGujrati(
+      MenuListGujratiEntity menuListGujratiEntity) {
+    return MenuList(items: menuListGujratiEntity.items);
+  }
+
 }

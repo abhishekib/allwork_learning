@@ -49,7 +49,7 @@ class _MenuListViewState extends State<MenuListView> {
         await animatedTextController.fetchTextDataFromApi();
         dailyDateController.fetchDailyDateFromAPI();
         prayerTimeController.fetchPrayerTimesFromAPI(52.569500, -0.240530);
-        controller.fetchMenuItems();
+        controller.fetchMenuItemsFromAPI();
       }
     }
 

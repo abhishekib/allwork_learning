@@ -1,3 +1,4 @@
+import 'package:allwork/services/db_services.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/modals/menu_list.dart';
 import '../utils/constants.dart';
@@ -22,7 +23,11 @@ class MenuService {
     final response = await _dio.get(ApiConstants.menuEndpoint);
 
     if (response.statusCode == 200) {
-      return MenuList.fromJson(response.data);
+      MenuList menuList = MenuList.fromJson(response.data);
+
+      DbServices.instance.writeMenuList(menuList);
+
+      return menuList;
     } else {
       throw Exception('Failed to fetch menu list');
     }
@@ -32,7 +37,11 @@ class MenuService {
     final response = await _dio.get(ApiConstants.gujaratiMenuEndpoint);
 
     if (response.statusCode == 200) {
-      return MenuList.fromJson(response.data);
+      MenuList menuList = MenuList.fromJson(response.data);
+
+      DbServices.instance.writeGujratiMenuList(menuList);
+
+      return menuList;
     } else {
       throw Exception('Failed to fetch menu list');
     }
