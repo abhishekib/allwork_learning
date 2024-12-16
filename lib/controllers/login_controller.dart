@@ -182,6 +182,18 @@ class LoginController extends GetxController {
 
   Future<void> logoutUser() async {
     final prefs = await SharedPreferences.getInstance();
+
+    try {
+      await _model.signOutFromGoogle();
+      if (kDebugMode) {
+        print('Google Sign-Out successful');
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error signing out from Google: $e');
+      }
+    }
+
     await prefs.clear();
     isLoggedIn.value = false;
   }

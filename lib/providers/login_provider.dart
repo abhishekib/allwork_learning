@@ -58,7 +58,10 @@ class LoginProvider {
     try {
       final response = await _dio.post(
         ApiConstants.googleLoginEndpoint,
-        data: {'idToken': idToken},
+        data: {
+          'provider': 'google',
+          'idToken': idToken,
+        },
       );
 
       if (response.statusCode == 200) {
