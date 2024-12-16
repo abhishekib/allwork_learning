@@ -58,124 +58,126 @@ class SettingsPageState extends State<SettingsPage> {
           ),
           iconTheme: IconThemeData(color: Colors.white),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Adjust Arabic Font Size",
-                style: AppTextStyles.whiteBoldText,
-              ),
-              Slider(
-                min: 18.0,
-                max: 30.0,
-                divisions: 16,
-                value: arabicFontSize,
-                onChanged: (value) {
-                  setState(() {
-                    arabicFontSize = value;
-                  });
-                },
-              ),
-              Text(
-                "حجم الخط العربي: ${arabicFontSize.toStringAsFixed(1)}",
-                style: TextStyle(
-                  fontSize: arabicFontSize,
-                  color: Colors.white,
-                  fontFamily: "MUHAMMADI",
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Adjust Arabic Font Size",
+                  style: AppTextStyles.whiteBoldText,
                 ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Adjust Transliteration Font Size",
-                style: AppTextStyles.whiteBoldText,
-              ),
-              Slider(
-                min: 16.0,
-                max: 30.0,
-                divisions: 16,
-                value: transliterationFontSize,
-                onChanged: (value) {
-                  setState(() {
-                    transliterationFontSize = value;
-                  });
-                },
-              ),
-              Text(
-                "Transliteration Font Size: ${transliterationFontSize.toStringAsFixed(1)}",
-                style: TextStyle(
-                  fontSize: transliterationFontSize,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Adjust Translation Font Size",
-                style: AppTextStyles.whiteBoldText,
-              ),
-              Slider(
-                min: 16.0,
-                max: 30.0,
-                divisions: 16,
-                value: translationFontSize,
-                onChanged: (value) {
-                  setState(() {
-                    translationFontSize = value;
-                  });
-                },
-              ),
-              Text(
-                "Translation Font Size: ${translationFontSize.toStringAsFixed(1)}",
-                style: TextStyle(
-                  fontSize: translationFontSize,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Audio Player View",
-                style: AppTextStyles.whiteBoldText,
-              ),
-              SwitchListTile(
-                title: const Text(
-                  "Compact View",
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                ),
-                value: isCompactAudioView,
-                onChanged: (value) {
-                  setState(() {
-                    isCompactAudioView = value;
-                  });
-                },
-                activeColor: Colors.white,
-                inactiveThumbColor: Colors.grey,
-                inactiveTrackColor: Colors.grey,
-              ),
-              const SizedBox(height: 30),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    _saveSettings();
+                Slider(
+                  min: 18.0,
+                  max: 30.0,
+                  divisions: 16,
+                  value: arabicFontSize,
+                  onChanged: (value) {
+                    setState(() {
+                      arabicFontSize = value;
+                    });
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 50, vertical: 15),
+                ),
+                Text(
+                  "حجم الخط العربي: ${arabicFontSize.toStringAsFixed(1)}",
+                  style: TextStyle(
+                    fontSize: arabicFontSize,
+                    color: Colors.white,
+                    fontFamily: "MUHAMMADI",
                   ),
-                  child: const Text(
-                    "Save",
-                    style: TextStyle(
-                      color: AppColors.backgroundBlue,
-                      fontWeight: FontWeight.bold,
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Adjust Transliteration Font Size",
+                  style: AppTextStyles.whiteBoldText,
+                ),
+                Slider(
+                  min: 16.0,
+                  max: 30.0,
+                  divisions: 16,
+                  value: transliterationFontSize,
+                  onChanged: (value) {
+                    setState(() {
+                      transliterationFontSize = value;
+                    });
+                  },
+                ),
+                Text(
+                  "Transliteration Font Size: ${transliterationFontSize.toStringAsFixed(1)}",
+                  style: TextStyle(
+                    fontSize: transliterationFontSize,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Adjust Translation Font Size",
+                  style: AppTextStyles.whiteBoldText,
+                ),
+                Slider(
+                  min: 16.0,
+                  max: 30.0,
+                  divisions: 16,
+                  value: translationFontSize,
+                  onChanged: (value) {
+                    setState(() {
+                      translationFontSize = value;
+                    });
+                  },
+                ),
+                Text(
+                  "Translation Font Size: ${translationFontSize.toStringAsFixed(1)}",
+                  style: TextStyle(
+                    fontSize: translationFontSize,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  "Audio Player View",
+                  style: AppTextStyles.whiteBoldText,
+                ),
+                SwitchListTile(
+                  title: const Text(
+                    "Compact View",
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                  value: isCompactAudioView,
+                  onChanged: (value) {
+                    setState(() {
+                      isCompactAudioView = value;
+                    });
+                  },
+                  activeColor: Colors.white,
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: Colors.black38,
+                ),
+                const SizedBox(height: 30),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      _saveSettings();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 15),
+                    ),
+                    child: const Text(
+                      "Save",
+                      style: TextStyle(
+                        color: AppColors.backgroundBlue,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
