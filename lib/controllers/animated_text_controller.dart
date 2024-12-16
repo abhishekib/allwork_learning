@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:get/get.dart';
 import 'package:allwork/utils/constants.dart';
@@ -18,16 +19,16 @@ class AnimatedTextController extends GetxController {
   onInit() async {
     super.onInit();
     bool hasInternet = await Helpers.hasActiveInternetConnection();
-  if (hasInternet) {
-    fetchTextData();
-    log('Internet connection is active');
-  } else {
-    log('No internet connection');
+    if (hasInternet) {
+      fetchTextDataFromApi();
+      log('Internet connection is active');
+    } else {
+      fetchTextDataFromDB();
+      log('No internet connection');
+    }
   }
 
-  }
-
-  Future<void> fetchTextData() async {
+  Future<void> fetchTextDataFromApi() async {
     try {
       isLoading(true);
       List<AnimatedText> fetchedList =
@@ -45,15 +46,27 @@ class AnimatedTextController extends GetxController {
     }
   }
 
+  Future<void> fetchTextDataFromDB() async {
+    try {
+      isLoading(true);
+      List<AnimatedText> fetchedList =
+          DbServices.instance.getAnimatedMessageText();
+
+      List<String> cleanedTextList = fetchedList
+          .map((animatedText) => removeHtmlTags(animatedText.heading))
+          .toList();
+
+      animatedTextList.value = cleanedTextList;
+    } catch (_) {
+    } finally {
+      isLoading(false);
+    }
+  }
+
   // Function to remove HTML tags
   String removeHtmlTags(String htmlText) {
     final RegExp exp =
         RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
     return htmlText.replaceAll(exp, '');
   }
-
- Future<void> saveToDb() async{
-  
- }
-
 }

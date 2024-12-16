@@ -32,7 +32,7 @@ class AnimatedTextProvider {
         MessageModel message = MessageModel.fromJson(data['message']);
 
         //Save the message model to database for handling offline situations
-        DbServices.instance.writeAnimatedMessageText(message);
+        DbServices.instance.writeMessageModel(message);
 
         return message.animatedText; // Return the animated text list
       } else {

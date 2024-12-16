@@ -18,10 +18,18 @@ class DbServices {
     realm = Realm(config);
   }
 
-  Future<void> writeAnimatedMessageText(MessageModel messageModel) async {
+//save the message model in db
+  Future<void> writeMessageModel(MessageModel messageModel) async {
     realm.write(() {
+      // Delete all existing `MessageModelEntity` objects
+      realm.deleteAll<MessageModelEntity>();
+      // Add the new object
       return realm.add(Helpers.convertToMessageModelEntity(messageModel));
     });
     log("written in db");
+  }
+
+  List<AnimatedText> getAnimatedMessageText() {
+    return Helpers.convertToMessageModel(realm.all<MessageModelEntity>().first).animatedText;
   }
 }
