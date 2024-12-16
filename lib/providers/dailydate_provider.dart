@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:allwork/services/db_services.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/modals/daily_date.dart';
 import '../utils/constants.dart';
@@ -37,7 +38,11 @@ class DailyDateProvider {
         log("Daily Date ---->$data");
 
         // Parse the JSON response into a DailyDate object
-        return DailyDate.fromJson(data);
+        DailyDate dailyDate = DailyDate.fromJson(data);
+
+        DbServices.instance.writeDailyDate(dailyDate);
+
+        return dailyDate;
       } else {
         throw Exception('Failed to fetch daily date');
       }

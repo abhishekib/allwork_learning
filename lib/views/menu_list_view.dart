@@ -45,7 +45,7 @@ class _MenuListViewState extends State<MenuListView> {
       } else {
         log("Internet connection avialable");
         await animatedTextController.fetchTextDataFromApi();
-        dailyDateController.fetchDailyDate();
+        dailyDateController.fetchDailyDateFromAPI();
         prayerTimeController.fetchPrayerTimes(52.569500, -0.240530);
         controller.fetchMenuItems();
       }

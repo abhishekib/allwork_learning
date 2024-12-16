@@ -12,4 +12,5 @@ class DailyDate {
       eventColor: json['event_color'],
     );
   }
+  
 }

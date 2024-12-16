@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:allwork/entities/animated_text_entities.dart';
+import 'package:allwork/entities/daily_date_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/daily_date.dart';
 
 class Helpers {
   static Future<bool> hasActiveInternetConnection() async {
@@ -17,7 +19,6 @@ class Helpers {
     return false;
   }
 
-
 //method to convert api response coming from server as MessageModel to MessageModelEntity for DB
   static MessageModelEntity convertToMessageModelEntity(
       MessageModel messageModel) {
@@ -29,7 +30,6 @@ class Helpers {
     return MessageModelEntity(animatedText: animatedTextEntries);
   }
 
-
 //method to convert MessageModelEntity from DB to MessageModel for Controllers
   static MessageModel convertToMessageModel(
       MessageModelEntity messageModelEntity) {
@@ -40,5 +40,19 @@ class Helpers {
         .toList();
 
     return MessageModel(animatedText: animatedTexts);
+  }
+
+  //method to convert api response coming from server as DailyDate to DailyDateEntity for DB
+  static DailyDateEntity convertToDailyDateEntity(DailyDate dailyDate) {
+    return DailyDateEntity(dailyDate.hijriDate!, dailyDate.event ?? '',
+        dailyDate.eventColor ?? '');
+  }
+
+  //method to convert DailyDateEntity from DB to DailyDate for Controllers
+  static DailyDate convertToDailyDate(DailyDateEntity dailyDateEntity) {
+    return DailyDate(
+        hijriDate: dailyDateEntity.hijriDate,
+        event: dailyDateEntity.event,
+        eventColor: dailyDateEntity.eventColor);
   }
 }

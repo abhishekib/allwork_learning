@@ -1,7 +1,9 @@
 import 'dart:developer';
 
 import 'package:allwork/entities/animated_text_entities.dart';
+import 'package:allwork/entities/daily_date_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:realm/realm.dart';
 
@@ -14,7 +16,7 @@ class DbServices {
 
   DbServices._internal() {
     final config = Configuration.local(
-        [AnimatedTextEntity.schema, MessageModelEntity.schema]);
+        [AnimatedTextEntity.schema, MessageModelEntity.schema, DailyDateEntity.schema]);
     realm = Realm(config);
   }
 
@@ -26,10 +28,28 @@ class DbServices {
       // Add the new object
       return realm.add(Helpers.convertToMessageModelEntity(messageModel));
     });
-    log("written in db");
+    log("written marquee text in db");
   }
 
+//get the message model in db
   List<AnimatedText> getAnimatedMessageText() {
     return Helpers.convertToMessageModel(realm.all<MessageModelEntity>().first).animatedText;
   }
+
+//save the DailyDate model in db
+  Future<void> writeDailyDate(DailyDate dailyDate) async {
+    realm.write(() {
+      // Delete all existing `MessageModelEntity` objects
+      realm.deleteAll<DailyDateEntity>();
+      // Add the new object
+      return realm.add(Helpers.convertToDailyDateEntity(dailyDate));
+    });
+    log("written daily date in db");
+  }
+
+  //get the daily date in db
+  DailyDate getDailyDate() {
+    return Helpers.convertToDailyDate(realm.all<DailyDateEntity>().first);
+  }
+
 }
