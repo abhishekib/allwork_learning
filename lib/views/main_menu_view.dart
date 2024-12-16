@@ -51,117 +51,118 @@ class MainMenuViewState extends State<MainMenuView> {
         key: _scaffoldKey,
         drawer: CustomDrawer(),
         backgroundColor: AppColors.backgroundBlue,
-        body: SingleChildScrollView(
-          physics: NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              // Static content that should not scroll
-              Container(
-                color: AppColors.backgroundBlue,
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white),
-                      onPressed: () {
-                        // Scaffold.of(context).openDrawer();
-                        _scaffoldKey.currentState?.openDrawer();
-                      },
-                    ),
-                    Expanded(
-                      child: Obx(() {
-                        if (animatedTextController.isLoading.value) {
-                          return Container(
-                            height: 50.0,
-                            alignment: Alignment.center,
-                            child: const CircularProgressIndicator(),
-                          );
-                        } else if (animatedTextController
-                            .animatedTextList.isEmpty) {
-                          return const Center(
-                            child: Text(
-                              'No Data available',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          );
-                        } else {
-                          final marqueeTexts = animatedTextController
-                              .animatedTextList
-                              .map((text) => text)
-                              .toList();
-                          return MarqueeTextWidget(marqueeTexts: marqueeTexts);
-                        }
-                      }),
-                    ),
-                  ],
-                ),
-              ),
-              SearchBarWidget(),
-              DailyDateWidget(),
-              PrayerTimeWidget(),
-
-              // Language selection dropdown
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(
-                          selectedLanguage == 'English'
-                              ? 'Language Selection : '
-                              : 'ભાષા પસંદગી : ',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+        body: Column(
+          children: [
+            // Static content that should not scroll
+            Container(
+              color: AppColors.backgroundBlue,
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.menu, color: Colors.white),
+                    onPressed: () {
+                      // Scaffold.of(context).openDrawer();
+                      _scaffoldKey.currentState?.openDrawer();
+                    },
+                  ),
+                  Expanded(
+                    child: Obx(() {
+                      if (animatedTextController.isLoading.value) {
+                        return Container(
+                          height: 50.0,
+                          alignment: Alignment.center,
+                          child: const CircularProgressIndicator(),
+                        );
+                      } else if (animatedTextController
+                          .animatedTextList.isEmpty) {
+                        return const Center(
+                          child: Text(
+                            'No Data available',
+                            style: TextStyle(color: Colors.white),
                           ),
+                        );
+                      } else {
+                        final marqueeTexts = animatedTextController
+                            .animatedTextList
+                            .map((text) => text)
+                            .toList();
+                        return MarqueeTextWidget(marqueeTexts: marqueeTexts);
+                      }
+                    }),
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  SearchBarWidget(),
+                  DailyDateWidget(),
+                  PrayerTimeWidget(),
+
+                  // Language selection dropdown
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Column(
+                          children: [
+                            const SizedBox(height: 10),
+                            Text(
+                              selectedLanguage == 'English'
+                                  ? 'Language Selection : '
+                                  : 'ભાષા પસંદગી : ',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              'English & ગુજરાતી',
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.white38),
+                            ),
+                          ],
                         ),
-                        const Text(
-                          'English & ગુજરાતી',
-                          style: TextStyle(fontSize: 18, color: Colors.white38),
+                        DropdownButton<String>(
+                          value: selectedLanguage,
+                          dropdownColor: AppColors.backgroundBlue,
+                          items: <String>['English', 'Gujarati']
+                              .map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedLanguage = newValue!;
+                              _saveLanguagePreference(selectedLanguage);
+                            });
+                          },
                         ),
                       ],
                     ),
-                    DropdownButton<String>(
-                      value: selectedLanguage,
-                      dropdownColor: AppColors.backgroundBlue,
-                      items:
-                          <String>['English', 'Gujarati'].map((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(
-                            value,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedLanguage = newValue!;
-                          _saveLanguagePreference(selectedLanguage);
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                  ),
 
-              const SizedBox(height: 10),
+                  const SizedBox(height: 10),
 
-              // Menu List View
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: MenuListView(selectedLanguage: selectedLanguage),
+                  MenuListView(selectedLanguage: selectedLanguage),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

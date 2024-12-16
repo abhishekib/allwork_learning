@@ -47,43 +47,42 @@ class _MenuListViewState extends State<MenuListView> {
       }
     }
 
-    return Scaffold(
-      backgroundColor: AppColors.backgroundBlue,
-      body: Obx(() {
-        // Use the selected language to choose the appropriate list
-        final menuList = widget.selectedLanguage == 'English'
-            ? controller.menuList.value
-            : controller.gujaratiMenuList.value;
+    return Obx(() {
+      // Use the selected language to choose the appropriate list
+      final menuList = widget.selectedLanguage == 'English'
+          ? controller.menuList.value
+          : controller.gujaratiMenuList.value;
 
-        final fontFamily =
-            widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
+      final fontFamily =
+          widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (menuList.items.isEmpty) {
-          return Center(
-              child: Column(
-            children: [
-              const Text(
-                "No menu items available",
-                style: AppTextStyles.whiteBoldText,
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      } else if (menuList.items.isEmpty) {
+        return Center(
+            child: Column(
+          children: [
+            const Text(
+              "No menu items available",
+              style: AppTextStyles.whiteBoldText,
+            ),
+            ElevatedButton(
+              onPressed: refreshMenuItems,
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
               ),
-              ElevatedButton(
-                onPressed: refreshMenuItems,
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-                child: const Text("Refresh"),
-              )
-            ],
-          ));
-        } else {
-          return RefreshIndicator(
-            onRefresh: refreshMenuItems,
-            child: ListView.builder(
-              itemCount: menuList.items.length,
-              itemBuilder: (context, index) {
+              child: const Text("Refresh"),
+            )
+          ],
+        ));
+      } else {
+        return RefreshIndicator(
+          onRefresh: refreshMenuItems,
+          child: Column(
+            children: List.generate(
+              menuList.items.length,
+              (index) {
                 final menuItem = menuList.items[index];
                 return ListTile(
                   title: Center(
@@ -108,9 +107,9 @@ class _MenuListViewState extends State<MenuListView> {
                 );
               },
             ),
-          );
-        }
-      }),
-    );
+          ),
+        );
+      }
+    });
   }
 }
