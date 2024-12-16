@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:allwork/services/db_services.dart';
+import 'package:allwork/utils/helpers.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart'; // Import Geolocator package
@@ -12,10 +16,17 @@ class PrayerTimeController extends GetxController {
   late final PrayerTimeProvider _prayerTimeProvider;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
-    _prayerTimeProvider = PrayerTimeProvider(ApiConstants.dailyDuaToken);
-    getUserLocation();
+    bool hasInternet = await Helpers.hasActiveInternetConnection();
+    if (hasInternet) {
+      _prayerTimeProvider = PrayerTimeProvider(ApiConstants.dailyDuaToken);
+      getUserLocation();
+      log('Internet connection is active');
+    } else {
+      fetchPrayerTimesFromDB();
+      log('No internet connection');
+    }
   }
 
   Future<void> getUserLocation() async {
@@ -52,10 +63,11 @@ class PrayerTimeController extends GetxController {
       locationSettings: locationSettings,
     );
 
-    fetchPrayerTimes(position.latitude, position.longitude);
+    fetchPrayerTimesFromAPI(position.latitude, position.longitude);
   }
 
-  Future<void> fetchPrayerTimes(double latitude, double longitude) async {
+  Future<void> fetchPrayerTimesFromAPI(
+      double latitude, double longitude) async {
     try {
       isLoading(true);
       final response = await _prayerTimeProvider.fetchPrayerTimes(
@@ -63,6 +75,19 @@ class PrayerTimeController extends GetxController {
         longitude: longitude,
       );
       prayerTimeModel.value = response;
+    } catch (e) {
+      if (kDebugMode) {
+        print('Error fetching prayer times: $e');
+      }
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> fetchPrayerTimesFromDB() async {
+    try {
+      isLoading(true);
+      prayerTimeModel.value = DbServices.instance.getPrayerTimeModel();
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching prayer times: $e');

@@ -22,4 +22,9 @@ class PrayerTimeModel {
       maghrib: json['Maghrib'] ?? '',
     );
   }
+
+  @override
+  String toString() {
+    return "fajr : $fajr, sunrise: $sunrise ,dhuhr : $dhuhr, sunset : $sunset, maghrib :$maghrib";
+  }
 }

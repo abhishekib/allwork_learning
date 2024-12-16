@@ -2,9 +2,12 @@ import 'dart:developer';
 
 import 'package:allwork/entities/animated_text_entities.dart';
 import 'package:allwork/entities/daily_date_entity.dart';
+import 'package:allwork/entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/daily_date.dart';
+import 'package:allwork/modals/prayer_time_model.dart';
 import 'package:allwork/utils/helpers.dart';
+import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:realm/realm.dart';
 
 class DbServices {
@@ -15,8 +18,11 @@ class DbServices {
   late Realm realm;
 
   DbServices._internal() {
-    final config = Configuration.local(
-        [AnimatedTextEntity.schema, MessageModelEntity.schema, DailyDateEntity.schema]);
+    final config = Configuration.local([
+      AnimatedTextEntity.schema,
+      MessageModelEntity.schema,
+      DailyDateEntity.schema, PrayerTimeEntity.schema
+    ]);
     realm = Realm(config);
   }
 
@@ -33,7 +39,8 @@ class DbServices {
 
 //get the message model in db
   List<AnimatedText> getAnimatedMessageText() {
-    return Helpers.convertToMessageModel(realm.all<MessageModelEntity>().first).animatedText;
+    return Helpers.convertToMessageModel(realm.all<MessageModelEntity>().first)
+        .animatedText;
   }
 
 //save the DailyDate model in db
@@ -52,4 +59,19 @@ class DbServices {
     return Helpers.convertToDailyDate(realm.all<DailyDateEntity>().first);
   }
 
+//save the PrayerTime model in db
+  Future<void> writePrayerTimeModel(PrayerTimeModel prayerTimeModel) async {
+    realm.write(() {
+      // Delete all existing `PrayerTimeEntity` objects
+      realm.deleteAll<PrayerTimeEntity>();
+      // Add the new object
+      return realm.add(Helpers.convertToPrayerTimeEntity(prayerTimeModel));
+    });
+    log("written daily date in db");
+  }
+
+  PrayerTimeModel getPrayerTimeModel() {
+    return Helpers.convertToPrayerTimeModel(
+        realm.all<PrayerTimeEntity>().first);
+  }
 }

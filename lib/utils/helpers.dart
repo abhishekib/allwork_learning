@@ -2,9 +2,12 @@ import 'dart:io';
 
 import 'package:allwork/entities/animated_text_entities.dart';
 import 'package:allwork/entities/daily_date_entity.dart';
+import 'package:allwork/entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/daily_date.dart';
+import 'package:allwork/modals/prayer_time_model.dart';
 
+//class for helper methods
 class Helpers {
   static Future<bool> hasActiveInternetConnection() async {
     try {
@@ -19,7 +22,7 @@ class Helpers {
     return false;
   }
 
-//method to convert api response coming from server as MessageModel to MessageModelEntity for DB
+//method to convert api response as MessageModel to MessageModelEntity for DB
   static MessageModelEntity convertToMessageModelEntity(
       MessageModel messageModel) {
 //convert the List<AnimatedText>  inside MessageModel to List<AnimatedTextEntity>
@@ -30,7 +33,7 @@ class Helpers {
     return MessageModelEntity(animatedText: animatedTextEntries);
   }
 
-//method to convert MessageModelEntity from DB to MessageModel for Controllers
+//method to convert MessageModelEntity from DB to MessageModel for controllers
   static MessageModel convertToMessageModel(
       MessageModelEntity messageModelEntity) {
     //convert the List<AnimatedTextEntity>  inside MessageModelEntity to List<AnimatedText>
@@ -42,17 +45,35 @@ class Helpers {
     return MessageModel(animatedText: animatedTexts);
   }
 
-  //method to convert api response coming from server as DailyDate to DailyDateEntity for DB
+  //method to convert api response as DailyDate to DailyDateEntity for DB
   static DailyDateEntity convertToDailyDateEntity(DailyDate dailyDate) {
     return DailyDateEntity(dailyDate.hijriDate!, dailyDate.event ?? '',
         dailyDate.eventColor ?? '');
   }
 
-  //method to convert DailyDateEntity from DB to DailyDate for Controllers
+  //method to convert DailyDateEntity from DB to DailyDate for controllers
   static DailyDate convertToDailyDate(DailyDateEntity dailyDateEntity) {
     return DailyDate(
         hijriDate: dailyDateEntity.hijriDate,
         event: dailyDateEntity.event,
         eventColor: dailyDateEntity.eventColor);
+  }
+
+//method to convert api response PrayerTimeModel to PrayerTimeEntity to save in DB
+  static PrayerTimeEntity convertToPrayerTimeEntity(
+      PrayerTimeModel prayerTimeModel) {
+    return PrayerTimeEntity(prayerTimeModel.fajr, prayerTimeModel.sunrise,
+        prayerTimeModel.dhuhr, prayerTimeModel.sunset, prayerTimeModel.maghrib);
+  }
+
+//method to convert PrayerTimeEntity to PrayerTimeModel for controllers
+  static PrayerTimeModel convertToPrayerTimeModel(
+      PrayerTimeEntity prayerTimeEntity) {
+    return PrayerTimeModel(
+        fajr: prayerTimeEntity.fajr,
+        sunrise: prayerTimeEntity.sunrise,
+        dhuhr: prayerTimeEntity.dhuhr,
+        sunset: prayerTimeEntity.sunset,
+        maghrib: prayerTimeEntity.maghrib);
   }
 }
