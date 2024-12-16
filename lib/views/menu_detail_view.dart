@@ -91,9 +91,11 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                 size: 30,
               ),
             ),
-            body: const Center(
+            body: Center(
                 child: Text(
-              "No categories available",
+              widget.selectedLanguage == 'English'
+                  ? "No categories available"
+                  : "કોઈ શ્રેણીઓ ઉપલબ્ધ નથી",
               style: AppTextStyles.whiteBoldText,
             )),
           );
