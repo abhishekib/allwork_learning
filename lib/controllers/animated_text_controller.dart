@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/utils/helpers.dart';
 import 'package:get/get.dart';
 import 'package:allwork/utils/constants.dart';
 import '../providers/animated_text_provider.dart';
@@ -12,9 +15,16 @@ class AnimatedTextController extends GetxController {
       AnimatedTextProvider(ApiConstants.dailyDuaToken);
 
   @override
-  onInit() {
+  onInit() async {
     super.onInit();
+    bool hasInternet = await Helpers.hasActiveInternetConnection();
+  if (hasInternet) {
     fetchTextData();
+    log('Internet connection is active');
+  } else {
+    log('No internet connection');
+  }
+
   }
 
   Future<void> fetchTextData() async {
@@ -41,4 +51,9 @@ class AnimatedTextController extends GetxController {
         RegExp(r'<[^>]*>', multiLine: true, caseSensitive: false);
     return htmlText.replaceAll(exp, '');
   }
+
+ Future<void> saveToDb() async{
+  
+ }
+
 }

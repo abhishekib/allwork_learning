@@ -53,7 +53,7 @@ class _MainMenuViewState extends State<MainMenuView> {
           physics: NeverScrollableScrollPhysics(),
           child: Column(
             children: [
-              // Static content that should not scroll
+              // Static content that should not scroll at the top 
               Container(
                 color: AppColors.backgroundBlue,
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -97,6 +97,8 @@ class _MainMenuViewState extends State<MainMenuView> {
                   ],
                 ),
               ),
+              
+              
               SearchBarWidget(),
               DailyDateWidget(),
               PrayerTimeWidget(),

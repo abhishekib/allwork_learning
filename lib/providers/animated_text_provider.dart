@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:dio/dio.dart';
 import '../utils/constants.dart';
 
@@ -29,6 +30,10 @@ class AnimatedTextProvider {
 
         // Parse the response into the MessageModel
         MessageModel message = MessageModel.fromJson(data['message']);
+
+        //Save the message model to database for handling offline situations
+        DbServices.instance.writeAnimatedMessageText(message);
+
         return message.animatedText; // Return the animated text list
       } else {
         log('Failed to fetch text data, status code: ${response.statusCode}');
