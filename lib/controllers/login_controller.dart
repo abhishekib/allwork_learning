@@ -1,4 +1,4 @@
-
+import 'package:allwork/modals/google_sign_in_model.dart';
 import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
 import 'package:allwork/utils/constants.dart';
@@ -13,51 +13,20 @@ class LoginController extends GetxController {
   final errorMessage = ''.obs;
   final loginResponse = Rx<LoginResponse?>(null);
   final LoginProvider _loginProvider = LoginProvider(ApiConstants.token);
+  final GoogleSignInModel _model = GoogleSignInModel();
 
   @override
   void onInit() {
     super.onInit();
     _loadUserLoginState();
   }
-//<previous code>
-  // Future<void> loginUser(String username, String password) async {
-  //   try {
-  //     isLoading(true);
-  //     errorMessage.value = '';
-  //     LoginResponse response =
-  //         await _loginProvider.loginUser(username, password);
-  //     if (response.type == 'success') {
-  //       loginResponse.value = response;
-  //       isLoggedIn.value = true;
-  //       _saveUserLoginState(response);
-  //     } else {
-  //       errorMessage.value = response.type;
-  //     }
-  //   } catch (e) {
-  //     if (kDebugMode) {
-  //       print('Error logging in user: $e');
-  //     }
-  //     if (e is DioException && e.response?.data != null) {
-  //       final errorData = e.response!.data;
-  //       if (errorData is Map<String, dynamic> &&
-  //           errorData.containsKey('message')) {
-  //         errorMessage.value = errorData['message'];
-  //       } else {
-  //         errorMessage.value = 'Something went wrong. Please try again.';
-  //       }
-  //     } else {
-  //       errorMessage.value = 'Error logging in user: $e';
-  //     }
-  //   } finally {
-  //     isLoading(false);
-  //   }
-  // }
 
   Future<void> loginUser(String username, String password) async {
     try {
       isLoading(true);
       errorMessage.value = '';
-      LoginResponse response = await _loginProvider.loginUser(username, password);
+      LoginResponse response =
+          await _loginProvider.loginUser(username, password);
 
       if (response.type == 'success') {
         loginResponse.value = response;
@@ -85,20 +54,19 @@ class LoginController extends GetxController {
         }
       } else if (e is TypeError) {
         errorMessage.value =
-        'An internal error occurred. Please contact support if the issue persists.';
+            'An internal error occurred. Please contact support if the issue persists.';
       } else {
         if (kDebugMode) {
-          print("HERE -->"'Error logging in user: $e');
+          print("HERE -->" 'Error logging in user: $e');
         }
         //errorMessage.value = 'Error logging in user: $e';
-        errorMessage.value=
-        "Invalid username or password. \nPlease try again.";
+        errorMessage.value =
+            "Invalid username or password. \nPlease try again.";
       }
     } finally {
       isLoading(false);
     }
   }
-
 
   Future<void> deleteAccount() async {
     try {
@@ -134,7 +102,6 @@ class LoginController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     isLoggedIn.value = prefs.getBool('isLoggedIn') ?? false;
     if (isLoggedIn.value) {
-
       final String? userId = prefs.getString('userId');
       final String? displayName = prefs.getString('userData');
       final String? userEmail = prefs.getString('userEmail');
@@ -163,6 +130,53 @@ class LoginController extends GetxController {
           type: 'success',
         );
       }
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    try {
+      isLoading(true);
+      errorMessage.value = '';
+
+      final userData = await _model.signInWithGoogle();
+
+      if (userData != null) {
+        loginResponse.value = LoginResponse(
+          type: 'success',
+          message: Message(
+            data: Data(
+              id: '', // Use a unique identifier from your backend if required
+              userLogin: '',
+              userPass: '',
+              userNicename: userData['displayName'] ?? '',
+              userEmail: userData['email'] ?? '',
+              userUrl: '',
+              userRegistered: '',
+              userActivationKey: '',
+              userStatus: '',
+              displayName: userData['displayName'] ?? '',
+            ),
+            id: 0,
+            caps: {},
+            capKey: '',
+            roles: [],
+            allcaps: {},
+          ),
+        );
+        isLoggedIn.value = true;
+
+        // Save user data to shared preferences
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setBool('isLoggedIn', true);
+        prefs.setString('userEmail', userData['email']);
+        prefs.setString('displayName', userData['displayName']);
+      } else {
+        errorMessage.value = 'Google login failed. Please try again.';
+      }
+    } catch (e) {
+      errorMessage.value = 'An error occurred while logging in with Google: $e';
+    } finally {
+      isLoading(false);
     }
   }
 

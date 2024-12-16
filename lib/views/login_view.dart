@@ -61,32 +61,62 @@ class LoginView extends StatelessWidget {
                     )),
                 const SizedBox(height: 30),
                 Center(
-                  child: Obx(() {
-                    if (loginController.isLoading.value) {
-                      return const CircularProgressIndicator();
-                    } else {
-                      return ElevatedButton(
-                        onPressed: () {
-                          _onLogin();
-                        },
+                  child: Column(
+                    children: [
+                      Obx(() {
+                        if (loginController.isLoading.value) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          return ElevatedButton(
+                            onPressed: () {
+                              _onLogin();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 15),
+                            ),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(
+                                color: AppColors.backgroundBlue,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        }
+                      }),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () => _onGoogleLogin(),
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
+                          backgroundColor: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(20),
                           ),
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
+                              horizontal: 20, vertical: 15),
                         ),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            color: AppColors.backgroundBlue,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(Icons.login, color: Colors.white),
+                            const SizedBox(width: 10),
+                            Text(
+                              "Login with Google",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    }
-                  }),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -151,6 +181,16 @@ class LoginView extends StatelessWidget {
         // Get.off(() => MainMenuView());
       },
     );
+  }
+
+  void _onGoogleLogin() {
+    loginController.loginWithGoogle().then((_) {
+      if (loginController.errorMessage.isNotEmpty) {
+        _showErrorAlert("Error", loginController.errorMessage.value);
+      } else {
+        _showSuccessDialog();
+      }
+    });
   }
 
   Future<void> _launchUrl() async {

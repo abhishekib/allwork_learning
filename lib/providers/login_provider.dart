@@ -53,4 +53,21 @@ class LoginProvider {
       throw Exception('Error updating password: $e');
     }
   }
+
+  Future<LoginResponse> loginWithGoogle(String idToken) async {
+    try {
+      final response = await _dio.post(
+        ApiConstants.googleLoginEndpoint,
+        data: {'idToken': idToken},
+      );
+
+      if (response.statusCode == 200) {
+        return LoginResponse.fromJson(response.data);
+      } else {
+        throw Exception('Google login failed');
+      }
+    } catch (e) {
+      throw Exception('Error logging in with Google: $e');
+    }
+  }
 }
