@@ -90,31 +90,6 @@ class LoginView extends StatelessWidget {
                         }
                       }),
                       const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: () => _onGoogleLogin(),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 15),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Icon(Icons.login, color: Colors.white),
-                            const SizedBox(width: 10),
-                            Text(
-                              "Login with Google",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
                     ],
                   ),
                 ),
@@ -167,10 +142,10 @@ class LoginView extends StatelessWidget {
       title: "Logged In Successfully",
       titleStyle: const TextStyle(fontWeight: FontWeight.bold),
       content: const Text(
-        "Welcome to the main menu",
+        "Welcome to the Mafatihuljinan",
         style: TextStyle(fontSize: 16),
       ),
-      textConfirm: "Go to Main Menu",
+      textConfirm: "OK",
       confirmTextColor: Colors.white,
       buttonColor: AppColors.backgroundBlue,
       onConfirm: () {
@@ -181,16 +156,6 @@ class LoginView extends StatelessWidget {
         // Get.off(() => MainMenuView());
       },
     );
-  }
-
-  void _onGoogleLogin() {
-    loginController.loginWithGoogle().then((_) {
-      if (loginController.errorMessage.isNotEmpty) {
-        _showErrorAlert("Error", loginController.errorMessage.value);
-      } else {
-        _showSuccessDialog();
-      }
-    });
   }
 
   Future<void> _launchUrl() async {

@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/signup_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
@@ -7,7 +8,44 @@ import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 
 class SignUpOrLoginView extends StatelessWidget {
-  const SignUpOrLoginView({super.key});
+  SignUpOrLoginView({super.key});
+
+  final LoginController loginController = Get.put(LoginController());
+
+  void _onGoogleLogin() {
+    loginController.loginWithGoogle().then((_) {
+      if (loginController.errorMessage.isNotEmpty) {
+        _showErrorAlert("Error", loginController.errorMessage.value);
+      } else {
+        _showSuccessDialog();
+      }
+    });
+  }
+
+  void _showErrorAlert(String title, String message) {
+    Get.snackbar(
+      title,
+      message,
+      snackPosition: SnackPosition.BOTTOM,
+      backgroundColor: Colors.redAccent,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 3),
+    );
+  }
+
+  // Function to show success dialog
+  void _showSuccessDialog() {
+    Get.defaultDialog(
+      title: "Success",
+      middleText: "You have successfully logged in!",
+      textConfirm: "OK",
+      confirmTextColor: Colors.white,
+      buttonColor: AppColors.backgroundBlue,
+      onConfirm: () {
+        Get.back(); // Close the dialog
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +161,28 @@ class SignUpOrLoginView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     minimumSize: const Size(double.infinity, 50),
+                  ),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => _onGoogleLogin(),
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    backgroundColor: Colors.white,
+                    elevation: 20,
+                  ),
+                  child: Container(
+                    width: 50,
+                    height: 50,
+                    margin: EdgeInsets.all(5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        image: AssetImage('assets/icons/google_login.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                 ),
               ],
