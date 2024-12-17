@@ -13,7 +13,6 @@ import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
-import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:realm/realm.dart';
 
 class DbServices {
@@ -123,7 +122,7 @@ class DbServices {
         realm.all<MenuListGujratiEntity>().first);
   }
 
-
+//write the CategoryResponse model in db
   Future<void> writeCategoryResponse(
       String endpoint, CategoryResponse categoryResponse) async {
     // Convert CategoryResponse to MenuDetailEntity before the transaction
@@ -171,7 +170,13 @@ class DbServices {
     log("Written $endpoint model in DB");
   }
 
-  // CategoryResponse getCategoryResponse(String endpoint){
+//get the CategoryResponse model from db
+  CategoryResponse? getCategoryResponse(String endpoint) {
+    var existingMenuDetail = realm.find<MenuDetailEntity>(endpoint);
 
-  // }
+    if (existingMenuDetail != null) {
+      return MenuDetailsHelpers.toCategoryResponse(existingMenuDetail);
+    }
+    return null;
+  }
 }
