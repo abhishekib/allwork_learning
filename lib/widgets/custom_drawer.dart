@@ -2,8 +2,10 @@ import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/about_us_view.dart';
 import 'package:allwork/views/fav_menu_list_view.dart';
+import 'package:allwork/views/more_app_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/views/signup_or_login_view.dart';
+import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:get/get.dart';
@@ -218,41 +220,8 @@ class CustomDrawer extends StatelessWidget {
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
-                      Navigator.pop(context);
+                      Get.to(() => BackgroundWrapper(child: MoreAppsView()));
                     },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 40.0),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: const Icon(
-                            Icons.arrow_right,
-                            color: Colors.white,
-                          ),
-                          title: const Text(
-                            'My Dua Online',
-                            style: AppTextStyles.whiteBoldText,
-                          ),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        ListTile(
-                          leading: const Icon(
-                            Icons.arrow_right,
-                            color: Colors.white,
-                          ),
-                          title: const Text(
-                            'Azadar',
-                            style: AppTextStyles.whiteBoldText,
-                          ),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
-                    ),
                   ),
                 ],
               ),
