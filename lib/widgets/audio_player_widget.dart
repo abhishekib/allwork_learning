@@ -141,7 +141,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
@@ -319,119 +319,119 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   }
 
   Widget _buildCompactView() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(
-          child: Slider(
-            value: currentTime.inSeconds.toDouble(),
-            min: 0,
-            max: totalTime.inSeconds.toDouble(),
-            onChanged: (value) async {
-              await _audioPlayer.seek(Duration(seconds: value.toInt()));
-              if (value == 0) {
-                if (mounted) {
+    return Container(
+      // padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(
+        children: [
+          Text(
+            _formatDuration(currentTime),
+            style: const TextStyle(color: Colors.black, fontSize: 12),
+          ),
+          Expanded(
+            child: Slider(
+              value: currentTime.inSeconds.toDouble(),
+              min: 0,
+              max: totalTime.inSeconds.toDouble(),
+              onChanged: (value) async {
+                await _audioPlayer.seek(Duration(seconds: value.toInt()));
+                if (value == 0) {
                   setState(() {
                     isPlaying = false;
                   });
                 }
-              }
-            },
-            activeColor: AppColors.backgroundBlue,
-            inactiveColor: AppColors.backgroundBlue,
+              },
+              activeColor: AppColors.backgroundBlue,
+              inactiveColor: Colors.grey,
+            ),
+            // Start and End Time Below Slider
           ),
-        ),
-        IconButton(
-          onPressed: () async {
-            if (isPlaying) {
-              await _audioPlayer.pause();
-              if (mounted) {
+          Text(
+            _formatDuration(totalTime),
+            style: const TextStyle(color: Colors.black, fontSize: 12),
+          ),
+          // Play/Pause Button
+          IconButton(
+            onPressed: () async {
+              if (isPlaying) {
+                await _audioPlayer.pause();
                 setState(() {
                   isPlaying = false;
                 });
-              }
-            } else {
-              if (isCompleted) {
-                await _audioPlayer.seek(Duration.zero);
-                if (mounted) {
-                  setState(() {
-                    isCompleted = false;
-                  });
-                }
-              }
-              await _audioPlayer.resume();
-              if (mounted) {
+              } else {
+                await _audioPlayer.resume();
                 setState(() {
                   isPlaying = true;
                 });
               }
-            }
-          },
-          icon: Icon(
-            isPlaying ? Icons.pause : Icons.play_arrow,
-            color: AppColors.backgroundBlue,
-            size: 30,
+            },
+            icon: Icon(
+              isPlaying ? Icons.pause : Icons.play_arrow,
+              color: AppColors.backgroundBlue,
+              size: 30,
+            ),
           ),
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              volume = volume == 0 ? 1.0 : 0.0;
-              _audioPlayer.setVolume(volume);
-            });
-          },
-          icon: Icon(
-            volume == 0 ? Icons.volume_off : Icons.volume_up,
-            color: AppColors.backgroundBlue,
+          // Volume Button
+          IconButton(
+            onPressed: () {
+              setState(() {
+                volume = volume == 0 ? 1.0 : 0.0;
+                _audioPlayer.setVolume(volume);
+              });
+            },
+            icon: Icon(
+              volume == 0 ? Icons.volume_off : Icons.volume_up,
+              color: AppColors.backgroundBlue,
+            ),
           ),
-        ),
-        PopupMenuButton<double>(
-          icon: const Icon(
-            Icons.settings,
-            color: AppColors.backgroundBlue,
+          // Settings Button
+          PopupMenuButton<double>(
+            icon: const Icon(
+              Icons.settings,
+              color: AppColors.backgroundBlue,
+            ),
+            onSelected: (value) {
+              setState(() {
+                playbackSpeed = value;
+              });
+              _audioPlayer.setPlaybackRate(playbackSpeed);
+            },
+            itemBuilder: (context) => [
+              const PopupMenuItem(
+                value: 0.25,
+                child: Text('0.25x'),
+              ),
+              const PopupMenuItem(
+                value: 0.5,
+                child: Text('0.5x'),
+              ),
+              const PopupMenuItem(
+                value: 0.75,
+                child: Text('0.75x'),
+              ),
+              const PopupMenuItem(
+                value: 1.0,
+                child: Text('1.0x'),
+              ),
+              const PopupMenuItem(
+                value: 1.25,
+                child: Text('1.25x'),
+              ),
+              const PopupMenuItem(
+                value: 1.5,
+                child: Text('1.5x'),
+              ),
+              const PopupMenuItem(
+                value: 1.75,
+                child: Text('1.75x'),
+              ),
+              const PopupMenuItem(
+                value: 2.0,
+                child: Text('2.0x'),
+              ),
+            ],
           ),
-          onSelected: (value) {
-            setState(() {
-              playbackSpeed = value;
-            });
-            _audioPlayer.setPlaybackRate(playbackSpeed);
-          },
-          itemBuilder: (context) => [
-            const PopupMenuItem(
-              value: 0.25,
-              child: Text('0.25x'),
-            ),
-            const PopupMenuItem(
-              value: 0.5,
-              child: Text('0.5x'),
-            ),
-            const PopupMenuItem(
-              value: 0.75,
-              child: Text('0.75x'),
-            ),
-            const PopupMenuItem(
-              value: 1.0,
-              child: Text('1.0x'),
-            ),
-            const PopupMenuItem(
-              value: 1.25,
-              child: Text('1.25x'),
-            ),
-            const PopupMenuItem(
-              value: 1.5,
-              child: Text('1.5x'),
-            ),
-            const PopupMenuItem(
-              value: 1.75,
-              child: Text('1.75x'),
-            ),
-            const PopupMenuItem(
-              value: 2.0,
-              child: Text('2.0x'),
-            ),
-          ],
-        ),
-      ],
+        ],
+      ),
     );
   }
 
