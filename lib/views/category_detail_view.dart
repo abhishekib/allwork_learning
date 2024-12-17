@@ -15,6 +15,7 @@ import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CategoryDetailView extends StatefulWidget {
   const CategoryDetailView({super.key});
@@ -171,8 +172,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ExpandableFab(
-          type: ExpandableFabType.up,
-          distance: 50,
+          type: ExpandableFabType.fan,
+          distance: 180,
           overlayStyle: ExpandableFabOverlayStyle(
             color: Colors.black.withOpacity(0.5),
             blur: 1,
@@ -192,7 +193,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.share),
               onPressed: () {
-                // Implement share functionality
+                _shareAllLyrics(
+                    context, availableLyrics, categoryDetails.title);
               },
             ),
             FloatingActionButton.small(
@@ -303,6 +305,35 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("All lyrics copied to clipboard!")),
+    );
+  }
+
+  void _shareAllLyrics(BuildContext context,
+      Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+    final allLyrics =
+        availableLyrics.values.expand((lyricsList) => lyricsList).toList();
+
+    Set<Lyrics> uniqueLyricsSet = {};
+
+    for (var lyrics in allLyrics) {
+      uniqueLyricsSet.add(lyrics);
+    }
+
+    String combinedLyrics =
+        '${_textCleanerController.cleanText(categoryTitle)}\n\n';
+
+    for (var lyrics in uniqueLyricsSet) {
+      combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
+      combinedLyrics +=
+          '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
+      combinedLyrics +=
+          '${_textCleanerController.cleanText(lyrics.translation)}\n\n';
+    }
+
+    Share.share(combinedLyrics, subject: categoryTitle);
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Sharing lyrics...")),
     );
   }
 }
