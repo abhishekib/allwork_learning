@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/animated_text_entities.dart';
-import 'package:allwork/entities/daily_date_entity.dart';
-import 'package:allwork/entities/menu_list_entity.dart';
-import 'package:allwork/entities/menu_list_gujrati_entity.dart';
-import 'package:allwork/entities/prayer_time_entity.dart';
+import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
+import 'package:allwork/entities/menu_entities/daily_date_entity.dart';
+import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
+import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
+import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
