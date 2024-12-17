@@ -37,7 +37,8 @@ class CategoryProvider {
         CategoryResponse categoryResponse =
             CategoryResponse.fromJson(response.data['data']);
 
-        DbServices.instance.writeCategoryResponse(url, categoryResponse);
+        log("data getting written with endpoint $endpoint");
+        DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);
 
         return categoryResponse;
       } else {
