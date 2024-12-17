@@ -1,14 +1,17 @@
 import 'dart:developer';
 
+import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
 import 'package:allwork/entities/menu_entities/daily_date_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
+import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:realm/realm.dart';
@@ -27,7 +30,12 @@ class DbServices {
       DailyDateEntity.schema,
       PrayerTimeEntity.schema,
       MenuListEntity.schema,
-      MenuListGujratiEntity.schema
+      MenuListGujratiEntity.schema,
+      MenuDetailEntity.schema,
+      CategoryGroupEntity.schema,
+      CategoryEntity.schema,
+      ContentDataEntity.schema,
+      LyricsEntity.schema
     ]);
     realm = Realm(config);
   }
@@ -99,7 +107,7 @@ class DbServices {
   }
 
 //save the Gujrati MenuList model in db
-Future<void> writeGujratiMenuList(MenuList menuList) async {
+  Future<void> writeGujratiMenuList(MenuList menuList) async {
     realm.write(() {
       // Delete all existing `PrayerTimeEntity` objects
       realm.deleteAll<MenuListGujratiEntity>();
@@ -111,8 +119,59 @@ Future<void> writeGujratiMenuList(MenuList menuList) async {
 
 //get the Gujrati MenuList model from db
   MenuList getGujratiMenuList() {
-    return Helpers.convertToMenuListGujrati(realm.all<MenuListGujratiEntity>().first);
+    return Helpers.convertToMenuListGujrati(
+        realm.all<MenuListGujratiEntity>().first);
   }
 
 
+  Future<void> writeCategoryResponse(
+      String endpoint, CategoryResponse categoryResponse) async {
+    // Convert CategoryResponse to MenuDetailEntity before the transaction
+    MenuDetailEntity newMenuDetailEntity =
+        MenuDetailsHelpers.toMenuDetailEntity(endpoint, categoryResponse);
+
+    realm.write(() {
+      // Find the existing MenuDetailEntity
+      var existingMenuDetail = realm.find<MenuDetailEntity>(endpoint);
+
+      if (existingMenuDetail == null) {
+        // Add the new document if it does not exist
+        log("addinge the endpoint as it does not exist : $endpoint");
+        realm.add(newMenuDetailEntity);
+      } else {
+        // Collect all objects for deletion safely
+        log("updating the endpoint as it exists : $endpoint");
+        final categoryGroupsToDelete =
+            existingMenuDetail.categoryGroups.toList();
+        final categoryEntitiesToDelete = categoryGroupsToDelete
+            .expand((group) => group.categoryEntities)
+            .toList();
+        final contentDataToDelete = categoryEntitiesToDelete
+            .expand((category) => category.cdataEntities)
+            .toList();
+        final lyricsToDelete = contentDataToDelete
+            .expand((contentData) => contentData.lyricsEntities)
+            .toList();
+
+        // Delete in bulk without iterating over the managed lists
+        realm.deleteMany(lyricsToDelete);
+        realm.deleteMany(contentDataToDelete);
+        realm.deleteMany(categoryEntitiesToDelete);
+        realm.deleteMany(categoryGroupsToDelete);
+
+        // Clear the existing categoryGroups list
+        existingMenuDetail.categoryGroups.clear();
+
+        // Add new data
+        existingMenuDetail.categoryGroups
+            .addAll(newMenuDetailEntity.categoryGroups);
+      }
+    });
+
+    log("Written $endpoint model in DB");
+  }
+
+  // CategoryResponse getCategoryResponse(String endpoint){
+
+  // }
 }

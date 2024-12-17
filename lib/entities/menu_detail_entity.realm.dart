@@ -152,7 +152,7 @@ class CategoryGroupEntity extends _CategoryGroupEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, CategoryGroupEntity, 'CategoryGroupEntity', [
-      SchemaProperty('groupName', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('groupName', RealmPropertyType.string),
       SchemaProperty('categoryEntities', RealmPropertyType.object,
           linkTarget: 'CategoryEntity',
           collectionType: RealmCollectionType.list),
@@ -258,7 +258,7 @@ class CategoryEntity extends _CategoryEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, CategoryEntity, 'CategoryEntity', [
-      SchemaProperty('id', RealmPropertyType.int, primaryKey: true),
+      SchemaProperty('id', RealmPropertyType.int),
       SchemaProperty('category', RealmPropertyType.string),
       SchemaProperty('title', RealmPropertyType.string),
       SchemaProperty('isFav', RealmPropertyType.string, optional: true),

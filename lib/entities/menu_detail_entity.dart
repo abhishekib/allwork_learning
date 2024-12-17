@@ -10,14 +10,14 @@ class _MenuDetailEntity {
 
 @RealmModel()
 class _CategoryGroupEntity {
-  @PrimaryKey()
+  //@PrimaryKey()
   late String groupName; // Each group has a unique name
   late List<_CategoryEntity> categoryEntities; // List of categories under this group
 }
 
 @RealmModel()
 class _CategoryEntity {
-  @PrimaryKey()
+  //@PrimaryKey()
   late int id; // Unique ID for the category
   late String category;
   late String title;
@@ -36,6 +36,6 @@ class _ContentDataEntity {
 class _LyricsEntity {
   late String time;
   late String arabic;
-  late String transliteration; // Corrected typo
+  late String transliteration;
   late String translation;
 }

@@ -7,67 +7,6 @@ part of 'animated_text_entities.dart';
 // **************************************************************************
 
 // ignore_for_file: type=lint
-class AnimatedTextEntity extends _AnimatedTextEntity
-    with RealmEntity, RealmObjectBase, RealmObject {
-  AnimatedTextEntity(
-    String heading,
-  ) {
-    RealmObjectBase.set(this, 'heading', heading);
-  }
-
-  AnimatedTextEntity._();
-
-  @override
-  String get heading => RealmObjectBase.get<String>(this, 'heading') as String;
-  @override
-  set heading(String value) => RealmObjectBase.set(this, 'heading', value);
-
-  @override
-  Stream<RealmObjectChanges<AnimatedTextEntity>> get changes =>
-      RealmObjectBase.getChanges<AnimatedTextEntity>(this);
-
-  @override
-  Stream<RealmObjectChanges<AnimatedTextEntity>> changesFor(
-          [List<String>? keyPaths]) =>
-      RealmObjectBase.getChangesFor<AnimatedTextEntity>(this, keyPaths);
-
-  @override
-  AnimatedTextEntity freeze() =>
-      RealmObjectBase.freezeObject<AnimatedTextEntity>(this);
-
-  EJsonValue toEJson() {
-    return <String, dynamic>{
-      'heading': heading.toEJson(),
-    };
-  }
-
-  static EJsonValue _toEJson(AnimatedTextEntity value) => value.toEJson();
-  static AnimatedTextEntity _fromEJson(EJsonValue ejson) {
-    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
-    return switch (ejson) {
-      {
-        'heading': EJsonValue heading,
-      } =>
-        AnimatedTextEntity(
-          fromEJson(heading),
-        ),
-      _ => raiseInvalidEJson(ejson),
-    };
-  }
-
-  static final schema = () {
-    RealmObjectBase.registerFactory(AnimatedTextEntity._);
-    register(_toEJson, _fromEJson);
-    return const SchemaObject(
-        ObjectType.realmObject, AnimatedTextEntity, 'AnimatedTextEntity', [
-      SchemaProperty('heading', RealmPropertyType.string),
-    ]);
-  }();
-
-  @override
-  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
-}
-
 class MessageModelEntity extends _MessageModelEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   MessageModelEntity({
@@ -122,6 +61,67 @@ class MessageModelEntity extends _MessageModelEntity
       SchemaProperty('animatedText', RealmPropertyType.object,
           linkTarget: 'AnimatedTextEntity',
           collectionType: RealmCollectionType.list),
+    ]);
+  }();
+
+  @override
+  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
+}
+
+class AnimatedTextEntity extends _AnimatedTextEntity
+    with RealmEntity, RealmObjectBase, RealmObject {
+  AnimatedTextEntity(
+    String heading,
+  ) {
+    RealmObjectBase.set(this, 'heading', heading);
+  }
+
+  AnimatedTextEntity._();
+
+  @override
+  String get heading => RealmObjectBase.get<String>(this, 'heading') as String;
+  @override
+  set heading(String value) => RealmObjectBase.set(this, 'heading', value);
+
+  @override
+  Stream<RealmObjectChanges<AnimatedTextEntity>> get changes =>
+      RealmObjectBase.getChanges<AnimatedTextEntity>(this);
+
+  @override
+  Stream<RealmObjectChanges<AnimatedTextEntity>> changesFor(
+          [List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<AnimatedTextEntity>(this, keyPaths);
+
+  @override
+  AnimatedTextEntity freeze() =>
+      RealmObjectBase.freezeObject<AnimatedTextEntity>(this);
+
+  EJsonValue toEJson() {
+    return <String, dynamic>{
+      'heading': heading.toEJson(),
+    };
+  }
+
+  static EJsonValue _toEJson(AnimatedTextEntity value) => value.toEJson();
+  static AnimatedTextEntity _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
+    return switch (ejson) {
+      {
+        'heading': EJsonValue heading,
+      } =>
+        AnimatedTextEntity(
+          fromEJson(heading),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
+  }
+
+  static final schema = () {
+    RealmObjectBase.registerFactory(AnimatedTextEntity._);
+    register(_toEJson, _fromEJson);
+    return const SchemaObject(
+        ObjectType.realmObject, AnimatedTextEntity, 'AnimatedTextEntity', [
+      SchemaProperty('heading', RealmPropertyType.string),
     ]);
   }();
 
