@@ -2,7 +2,7 @@ import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/providers/menu_provider.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
-import 'package:allwork/utils/helpers.dart';
+import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/state_manager.dart';
 import 'dart:developer';
 

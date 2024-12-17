@@ -9,7 +9,7 @@ import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
-import 'package:allwork/utils/helpers.dart';
+import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:realm/realm.dart';
 
