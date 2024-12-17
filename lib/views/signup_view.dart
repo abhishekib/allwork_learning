@@ -47,13 +47,13 @@ class SignUpView extends StatelessWidget {
                   isNotEditable: false,
                 ),
                 LabeledInputField(
-                  label: "What's your first name?",
+                  label: "Enter your First name",
                   hintText: "Your First Name",
                   controller: firstNameController,
                   isNotEditable: false,
                 ),
                 LabeledInputField(
-                  label: "What's your last name?",
+                  label: "Enter your Last name",
                   hintText: "Your Last Name",
                   controller: lastNameController,
                   isNotEditable: false,
@@ -64,10 +64,6 @@ class SignUpView extends StatelessWidget {
                   controller: emailController,
                   isNotEditable: false,
                 ),
-                const Text(
-                  "You'll need to confirm this email later.",
-                  style: TextStyle(color: Colors.white70),
-                ),
                 const SizedBox(height: 10),
                 LabeledInputField(
                   label: "Create a password",
@@ -75,10 +71,6 @@ class SignUpView extends StatelessWidget {
                   controller: passwordController,
                   isPassword: true,
                   isNotEditable: false,
-                ),
-                const Text(
-                  "Use a strong password for your account",
-                  style: TextStyle(color: Colors.white70),
                 ),
                 const SizedBox(height: 10),
                 LabeledInputField(
