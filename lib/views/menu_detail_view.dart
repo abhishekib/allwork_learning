@@ -174,7 +174,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                                 child: Text(
                                   categoryName,
                                   style: AppTextStyles.customStyle(
-                                    fontFamily: fontFamily,
+                                    fontFamily: 'Roboto',
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.backgroundBlue,

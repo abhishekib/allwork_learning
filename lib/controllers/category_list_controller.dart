@@ -68,16 +68,20 @@ class CategoryListController extends GetxController {
       // case "Travel Ziyarat":
       // return ApiConstants.travelZiyaratEndpoint;
       case "રોજની દોઆઓ":
+      case "રોન ોઆઓ":
         return ApiConstants.gujaratiDailyDuaEndpoint;
       case "સુરાહ":
         return ApiConstants.gujaratiSurahEndpoint;
       case "દોઆઓ":
+      case "ોઆઓ":
         return ApiConstants.gujaratiDuaEndpoint;
       case "ઝિયરાત":
+      case "ઝિયાત":
         return ApiConstants.gujaratiZiyaratEndpoint;
       // case "અમલ":
       // return ApiConstants.amaalEndpoint;
       case "મુનાજાત":
+      case "ુનાજાત":
         return ApiConstants.gujaratiMunajatEndpoint;
       // case "Travel Ziyarat":
       // return ApiConstants.travelZiyaratEndpoint;
