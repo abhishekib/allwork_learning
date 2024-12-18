@@ -1,7 +1,10 @@
+
 ---
+
 # Flutter Dynamic Content App
 
 This Flutter app dynamically fetches and displays structured content from APIs. It follows a modular architecture that emphasizes separation of concerns, with well-defined components for data management, business logic, and UI rendering.
+
 ---
 
 ## Features
@@ -11,6 +14,7 @@ This Flutter app dynamically fetches and displays structured content from APIs. 
 - **Category Item View**: Lists items within a category. Each item includes audio and lyrics.
 - **Audio and Lyrics View**: Plays audio and displays synchronized lyrics in three tabs: Arabic, Transliteration, and Translation.
 - **User Features**: Includes user login, profile management, and password updates.
+- **Offline Support**: Includes caching and local storage for offline functionality.
 
 ---
 
@@ -102,28 +106,25 @@ lib
 ## App Flow
 
 1. **Main Menu**:
-
    - Displays a dynamic list of menu items fetched from an API.
    - Each item navigates to a category view with content fetched dynamically.
 
 2. **Category View**:
-
    - Lists categories associated with the selected menu item.
    - Clicking a category navigates to the category item view.
 
 3. **Category Item View**:
-
    - Displays titles under the selected category.
    - Clicking a title opens the lyrics and audio view.
 
 4. **Audio and Lyrics View**:
-
    - Plays audio synchronized with the lyrics.
    - Lyrics are displayed across three tabs: Arabic, Transliteration, and Translation.
 
 5. **User Features**:
    - Login and user registration via dedicated controllers and views.
    - Profile management and password updates.
+   - Caching and offline support for user preferences and data.
 
 ---
 
@@ -135,20 +136,58 @@ The following dependencies are used in this project:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.8 # Cupertino Icons for iOS style
-  dio: ^5.7.0 # HTTP requests
-  get: ^4.6.6 # State management with GetX
-  audioplayers: ^6.1.0 # Audio playback
-  scrollable_positioned_list: ^0.3.8 # Scrollable list widget
-  marquee: ^2.3.0 # Marquee Text
-  intl: ^0.19.0 # Internationalization
-  keep_screen_on: ^3.0.0 # Prevent screen from turning off
-  shimmer: ^3.0.0 # Shimmer effect for loading states
-  shared_preferences: ^2.3.3 # Storing simple data locally
-  flutter_launcher_icons: ^0.14.1 # For custom app icons
-  flutter_expandable_fab: ^2.3.0 # Floating action button with expandable options
-  connectivity_plus: ^6.1.0 # Check network connectivity
-  geolocator: ^13.0.2 # Location services
+
+  cupertino_icons: ^1.0.8
+  dio: ^5.7.0
+  get: ^4.6.6
+  audioplayers: ^6.1.0
+  scrollable_positioned_list: ^0.3.8
+  marquee: ^2.3.0
+  intl: ^0.19.0
+  keep_screen_on: ^3.0.0
+  shimmer: ^3.0.0
+  shared_preferences: ^2.3.3
+  flutter_launcher_icons: ^0.14.1
+  flutter_expandable_fab: ^2.3.0
+  connectivity_plus: ^6.1.0
+  realm: 20.0.0
+  geolocator: ^13.0.2
+  url_launcher: ^6.3.1
+  google_sign_in: ^6.2.2
+  linkable: ^3.0.2
+  share_plus: ^10.1.3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/bg_phone.png
+    - assets/images/bg_tab.png
+    - assets/images/bg_desktop.png
+    - assets/icons/Dhuhr.png
+    - assets/icons/Fajr.png
+    - assets/icons/image_5.png
+    - assets/icons/image_7.png
+    - assets/icons/Maghrib.png
+    - assets/app_icon.png
+    - assets/icons/google_login.png
+
+  fonts:
+    - family: Gopika
+      fonts:
+        - asset: assets/font/GopikaThreeBold_0.otf
+          weight: 700
+
+    - family: MUHAMMADI
+      fonts:
+        - asset: assets/font/MUHAMMADI_QURANIC.ttf
 ```
 
 ---
