@@ -1,8 +1,11 @@
+import 'dart:developer';
+import 'dart:math' as math;
+import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
@@ -30,6 +33,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   double volume = 1.0;
   double playbackSpeed = 1.0;
   bool isCompactView = true;
+  bool downloaded = false;
+
+  final AudioProvider audioProvider = AudioProvider(ApiConstants.token);
 
   @override
   void initState() {
@@ -78,7 +84,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         if (mounted) {
           setState(() {
             currentTime = Duration(
-              seconds: min(position.inSeconds, totalTime.inSeconds),
+              seconds: math.min(position.inSeconds, totalTime.inSeconds),
             );
           });
 
@@ -253,6 +259,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         await _audioPlayer.resume();
                         if (mounted) {
                           setState(() {
+                            log("resume hit normal view");
+                            if (!downloaded) {
+                              log("Let us download the audio");
+                              downloaded = true;
+                            } else {
+                              log("audio is already downloaded");
+                            }
                             isPlaying = true;
                           });
                         }
@@ -361,6 +374,15 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               }
               await _audioPlayer.resume();
               if (mounted) {
+                log("resume hit compact view");
+                if (!downloaded) {
+                  log("Let us download the audio");
+                  audioProvider
+                      .downloadAudio(widget.audioUrl)
+                      .then((_) => downloaded = true);
+                } else {
+                  log("audio is already downloaded");
+                }
                 setState(() {
                   isPlaying = true;
                 });

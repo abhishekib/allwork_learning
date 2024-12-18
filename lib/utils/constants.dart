@@ -1,7 +1,7 @@
 class ApiConstants {
   static const String baseUrl =
       'https://www.mafatihuljinan.org/wp-json/customapi/v1/';
-
+  static const String audioBaseUrl = 'https://mafatihuljinan.org/';
   static const String myDuaBaseUrl =
       "https://mydua.online/wp-json/customapi/v1/";
   static const String token =
