@@ -39,11 +39,16 @@ class _MenuListViewState extends State<MenuListView> {
               content:
                   Text("No internet connection. Please check your network.")),
         );
+        animatedTextController.fetchTextDataFromDB();
+        dailyDateController.fetchDailyDateFromDB();
+        prayerTimeController.fetchPrayerTimesFromDB();
+        //log("No internet connection");
       } else {
-        await animatedTextController.fetchTextData();
-        dailyDateController.fetchDailyDate();
-        prayerTimeController.fetchPrayerTimes(52.569500, -0.240530);
-        controller.fetchMenuItems();
+        log("Internet connection avialable");
+        await animatedTextController.fetchTextDataFromApi();
+        dailyDateController.fetchDailyDateFromAPI();
+        prayerTimeController.fetchPrayerTimesFromAPI(52.569500, -0.240530);
+        controller.fetchMenuItemsFromAPI();
       }
     }
 

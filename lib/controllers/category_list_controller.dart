@@ -1,3 +1,6 @@
+import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/services/db_services.dart';
+import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/state_manager.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/category_provider.dart';
@@ -25,8 +28,16 @@ class CategoryListController extends GetxController {
           dayOfWeek = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
         }
 
-        final response =
-            await _categoryProvider.fetchCategoryData(endpoint, dayOfWeek);
+        CategoryResponse response;
+        if (await Helpers.hasActiveInternetConnection()) {
+          log("Active internet connection present");
+          response =
+              await _categoryProvider.fetchCategoryData(endpoint, dayOfWeek);
+        } else {
+          log("Active internet connection not present");
+          log("$endpoint");
+          response = DbServices.instance.getCategoryResponse(endpoint)!;
+        }
         categoryData.value = response.categories;
         isItemSingle.value = categoryData.keys.firstOrNull == '';
       } else {

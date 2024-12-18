@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/modals/category_response.dart';
@@ -33,7 +34,13 @@ class CategoryProvider {
       // log("API Response: ${response.data}");
 
       if (response.statusCode == 200) {
-        return CategoryResponse.fromJson(response.data['data']);
+        CategoryResponse categoryResponse =
+            CategoryResponse.fromJson(response.data['data']);
+
+        log("data getting written with endpoint $endpoint");
+        DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);
+
+        return categoryResponse;
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }

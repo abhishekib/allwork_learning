@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:allwork/services/db_services.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
@@ -34,7 +35,17 @@ class PrayerTimeProvider {
       log("API Response: ${response.data}");
 
       if (response.statusCode == 200) {
-        return PrayerTimeModel.fromJson(response.data);
+        PrayerTimeModel prayerTimeModel =
+            PrayerTimeModel.fromJson(response.data);
+
+        log(prayerTimeModel.toString());
+
+//save the prayer time model in db for offline use
+        DbServices.instance
+            .writePrayerTimeModel(prayerTimeModel)
+            .then((_) => log("prayer times successfully written in db"));
+
+        return prayerTimeModel;
       } else {
         throw Exception('Failed to fetch prayer times');
       }
