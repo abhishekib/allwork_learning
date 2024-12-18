@@ -94,8 +94,8 @@ class _MenuDetailViewState extends State<MenuDetailView> {
             body: Center(
                 child: Text(
               widget.selectedLanguage == 'English'
-                  ? "No categories available"
-                  : "કોઈ શ્રેણીઓ ઉપલબ્ધ નથી",
+                  ? "No record found"
+                  : "કોઈ રેકોર્ડ મળ્યો નથી",
               style: AppTextStyles.whiteBoldText,
             )),
           );

@@ -49,7 +49,11 @@ class ProfileViewState extends State<ProfileView> {
             } else {
               final userInfo = _userInfoController.userInfo.value;
               if (userInfo == null) {
-                return const Center(child: Text("No user info available"));
+                return Center(
+                    child: Text(
+                  "No user info available",
+                  style: AppTextStyles.whiteBoldText,
+                ));
               } else {
                 return SingleChildScrollView(
                   padding: const EdgeInsets.all(16.0),
