@@ -6,6 +6,8 @@ list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
   connectivity_plus
   geolocator_windows
+  realm
+  share_plus
   url_launcher_windows
 )
 
