@@ -40,7 +40,8 @@ class CategoryProvider {
         log("data getting written with endpoint $endpoint");
         DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);
 
-        return categoryResponse;
+        return DbServices.instance.getCategoryResponse(endpoint)!;
+        //return categoryResponse;
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }

@@ -11,11 +11,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AudioPlayerWidget extends StatefulWidget {
   final String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
+  final int cDataId;
 
   const AudioPlayerWidget({
     super.key,
     required this.audioUrl,
     required this.onPositionChanged,
+    required this.cDataId
   });
 
   @override
@@ -316,15 +318,18 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       ),
                     ],
                   ),
-                  IconButton(onPressed: (){
-                if (!downloaded) {
-                  log("Let us download the audio");
-                  audioProvider
-                      .downloadAudio(widget.audioUrl)
-                      .then((_) => downloaded = true);
-                } else {
-                  log("audio is already downloaded");
-                }}, icon: Icon(Icons.download))
+                  IconButton(
+                      onPressed: () {
+                        if (!downloaded) {
+                          log("Let us download the audio");
+                          audioProvider
+                              .downloadAudio(widget.audioUrl, widget.cDataId)
+                              .then((_) => downloaded = true);
+                        } else {
+                          log("audio is already downloaded");
+                        }
+                      },
+                      icon: Icon(Icons.download))
                 ],
               ),
             ],
@@ -446,15 +451,18 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
             ),
           ],
         ),
-      IconButton(onPressed: (){
-                if (!downloaded) {
-                  log("Let us download the audio");
-                  audioProvider
-                      .downloadAudio(widget.audioUrl)
-                      .then((_) => downloaded = true);
-                } else {
-                  log("audio is already downloaded");
-                }}, icon: Icon(Icons.download))
+        IconButton(
+            onPressed: () {
+              if (!downloaded) {
+                log("Let us download the audio");
+                audioProvider
+                    .downloadAudio(widget.audioUrl, widget.cDataId)
+                    .then((_) => downloaded = true);
+              } else {
+                log("audio is already downloaded");
+              }
+            },
+            icon: Icon(Icons.download))
       ],
     );
   }

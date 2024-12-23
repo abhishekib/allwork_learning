@@ -1,11 +1,15 @@
 class ContentData {
+  final int? id;
   final String type;
   final String audiourl;
+  final String? offlineAudioPath;
   final List<Lyrics> lyrics;
 
   ContentData({
+    this.id,
     required this.type,
     required this.audiourl,
+    this.offlineAudioPath,
     required this.lyrics,
   });
 
@@ -41,9 +45,9 @@ class Lyrics {
       time: json['time'] ?? '',
       arabic: isGujarati ? json['અરબી'] ?? '' : json['arabic'] ?? '',
       translitration:
-      isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
+          isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
       translation:
-      isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
+          isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
     );
   }
 
@@ -60,5 +64,6 @@ class Lyrics {
 
   // Implement hashCode
   @override
-  int get hashCode => arabic.hashCode ^ translitration.hashCode ^ translation.hashCode;
+  int get hashCode =>
+      arabic.hashCode ^ translitration.hashCode ^ translation.hashCode;
 }

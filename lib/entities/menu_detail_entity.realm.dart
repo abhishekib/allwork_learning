@@ -275,11 +275,13 @@ class CategoryEntity extends _CategoryEntity
 class ContentDataEntity extends _ContentDataEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   ContentDataEntity(
+    int id,
     String type,
     String audiourl, {
     String? offlineAudioUrl,
     Iterable<LyricsEntity> lyricsEntities = const [],
   }) {
+    RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'audiourl', audiourl);
     RealmObjectBase.set(this, 'offlineAudioUrl', offlineAudioUrl);
@@ -288,6 +290,11 @@ class ContentDataEntity extends _ContentDataEntity
   }
 
   ContentDataEntity._();
+
+  @override
+  int get id => RealmObjectBase.get<int>(this, 'id') as int;
+  @override
+  set id(int value) => RealmObjectBase.set(this, 'id', value);
 
   @override
   String get type => RealmObjectBase.get<String>(this, 'type') as String;
@@ -330,6 +337,7 @@ class ContentDataEntity extends _ContentDataEntity
 
   EJsonValue toEJson() {
     return <String, dynamic>{
+      'id': id.toEJson(),
       'type': type.toEJson(),
       'audiourl': audiourl.toEJson(),
       'offlineAudioUrl': offlineAudioUrl.toEJson(),
@@ -342,10 +350,12 @@ class ContentDataEntity extends _ContentDataEntity
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
     return switch (ejson) {
       {
+        'id': EJsonValue id,
         'type': EJsonValue type,
         'audiourl': EJsonValue audiourl,
       } =>
         ContentDataEntity(
+          fromEJson(id),
           fromEJson(type),
           fromEJson(audiourl),
           offlineAudioUrl: fromEJson(ejson['offlineAudioUrl']),
@@ -360,6 +370,7 @@ class ContentDataEntity extends _ContentDataEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, ContentDataEntity, 'ContentDataEntity', [
+      SchemaProperty('id', RealmPropertyType.int, primaryKey: true),
       SchemaProperty('type', RealmPropertyType.string),
       SchemaProperty('audiourl', RealmPropertyType.string),
       SchemaProperty('offlineAudioUrl', RealmPropertyType.string,

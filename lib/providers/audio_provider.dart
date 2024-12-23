@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -10,7 +11,7 @@ class AudioProvider {
 
   AudioProvider(this.token);
 
-  Future<String?> downloadAudio(String url) async {
+  Future<String?> downloadAudio(String url, int contentDataId) async {
     try {
       final directory = await getTemporaryDirectory();
       final filePath = Uri.parse(url).path;
@@ -23,7 +24,8 @@ class AudioProvider {
         }
       });
 
-        
+      DbServices.instance.saveOfflineCategoryDataAudio(savePath, contentDataId);
+
       return savePath;
     } catch (e) {
       log(e.toString());

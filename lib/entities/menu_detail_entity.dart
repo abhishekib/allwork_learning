@@ -29,6 +29,8 @@ class _CategoryEntity {
 
 @RealmModel()
 class _ContentDataEntity {
+  @PrimaryKey()
+  late int id;
   late String type;
   late String audiourl;
   late String? offlineAudioUrl;
