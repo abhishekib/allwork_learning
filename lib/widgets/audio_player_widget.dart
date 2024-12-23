@@ -259,13 +259,6 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         await _audioPlayer.resume();
                         if (mounted) {
                           setState(() {
-                            log("resume hit normal view");
-                            if (!downloaded) {
-                              log("Let us download the audio");
-                              downloaded = true;
-                            } else {
-                              log("audio is already downloaded");
-                            }
                             isPlaying = true;
                           });
                         }
@@ -323,6 +316,15 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       ),
                     ],
                   ),
+                  IconButton(onPressed: (){
+                if (!downloaded) {
+                  log("Let us download the audio");
+                  audioProvider
+                      .downloadAudio(widget.audioUrl)
+                      .then((_) => downloaded = true);
+                } else {
+                  log("audio is already downloaded");
+                }}, icon: Icon(Icons.download))
                 ],
               ),
             ],
@@ -374,15 +376,6 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               }
               await _audioPlayer.resume();
               if (mounted) {
-                log("resume hit compact view");
-                if (!downloaded) {
-                  log("Let us download the audio");
-                  audioProvider
-                      .downloadAudio(widget.audioUrl)
-                      .then((_) => downloaded = true);
-                } else {
-                  log("audio is already downloaded");
-                }
                 setState(() {
                   isPlaying = true;
                 });
@@ -453,6 +446,15 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
             ),
           ],
         ),
+      IconButton(onPressed: (){
+                if (!downloaded) {
+                  log("Let us download the audio");
+                  audioProvider
+                      .downloadAudio(widget.audioUrl)
+                      .then((_) => downloaded = true);
+                } else {
+                  log("audio is already downloaded");
+                }}, icon: Icon(Icons.download))
       ],
     );
   }

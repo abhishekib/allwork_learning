@@ -152,7 +152,7 @@ class CategoryGroupEntity extends _CategoryGroupEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, CategoryGroupEntity, 'CategoryGroupEntity', [
-      SchemaProperty('groupName', RealmPropertyType.string),
+      SchemaProperty('groupName', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('categoryEntities', RealmPropertyType.object,
           linkTarget: 'CategoryEntity',
           collectionType: RealmCollectionType.list),
@@ -277,10 +277,12 @@ class ContentDataEntity extends _ContentDataEntity
   ContentDataEntity(
     String type,
     String audiourl, {
+    String? offlineAudioUrl,
     Iterable<LyricsEntity> lyricsEntities = const [],
   }) {
     RealmObjectBase.set(this, 'type', type);
     RealmObjectBase.set(this, 'audiourl', audiourl);
+    RealmObjectBase.set(this, 'offlineAudioUrl', offlineAudioUrl);
     RealmObjectBase.set<RealmList<LyricsEntity>>(
         this, 'lyricsEntities', RealmList<LyricsEntity>(lyricsEntities));
   }
@@ -297,6 +299,13 @@ class ContentDataEntity extends _ContentDataEntity
       RealmObjectBase.get<String>(this, 'audiourl') as String;
   @override
   set audiourl(String value) => RealmObjectBase.set(this, 'audiourl', value);
+
+  @override
+  String? get offlineAudioUrl =>
+      RealmObjectBase.get<String>(this, 'offlineAudioUrl') as String?;
+  @override
+  set offlineAudioUrl(String? value) =>
+      RealmObjectBase.set(this, 'offlineAudioUrl', value);
 
   @override
   RealmList<LyricsEntity> get lyricsEntities =>
@@ -323,6 +332,7 @@ class ContentDataEntity extends _ContentDataEntity
     return <String, dynamic>{
       'type': type.toEJson(),
       'audiourl': audiourl.toEJson(),
+      'offlineAudioUrl': offlineAudioUrl.toEJson(),
       'lyricsEntities': lyricsEntities.toEJson(),
     };
   }
@@ -338,6 +348,7 @@ class ContentDataEntity extends _ContentDataEntity
         ContentDataEntity(
           fromEJson(type),
           fromEJson(audiourl),
+          offlineAudioUrl: fromEJson(ejson['offlineAudioUrl']),
           lyricsEntities: fromEJson(ejson['lyricsEntities']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -351,6 +362,8 @@ class ContentDataEntity extends _ContentDataEntity
         ObjectType.realmObject, ContentDataEntity, 'ContentDataEntity', [
       SchemaProperty('type', RealmPropertyType.string),
       SchemaProperty('audiourl', RealmPropertyType.string),
+      SchemaProperty('offlineAudioUrl', RealmPropertyType.string,
+          optional: true),
       SchemaProperty('lyricsEntities', RealmPropertyType.object,
           linkTarget: 'LyricsEntity', collectionType: RealmCollectionType.list),
     ]);
