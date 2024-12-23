@@ -22,6 +22,11 @@ class ContentData {
           .toList(),
     );
   }
+
+  @override
+  String toString() {
+    return "id $id, type $type, audiourl $audiourl, offlineAudioPath $offlineAudioPath, lyrics $lyrics";
+  }
 }
 
 class Lyrics {
@@ -60,6 +65,11 @@ class Lyrics {
         other.arabic == arabic &&
         other.translitration == translitration &&
         other.translation == translation;
+  }
+
+  @override
+  String toString() {
+    return "time: $time, arabic $arabic, transliteration $translitration, translation $translation";
   }
 
   // Implement hashCode

@@ -61,6 +61,8 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
 
     currentAudioUrl = initialAudioUrl;
 
+    log("initial Audio Url $currentAudioUrl");
+
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
       final String? newAudioUrl = cdata[0].offlineAudioPath != null
