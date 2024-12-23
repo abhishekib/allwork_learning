@@ -9,12 +9,14 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  final String audioUrl;
+  final bool downloaded;
+  String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
   final int cDataId;
 
-  const AudioPlayerWidget(
+   AudioPlayerWidget(
       {super.key,
+      required this.downloaded,
       required this.audioUrl,
       required this.onPositionChanged,
       required this.cDataId});
@@ -42,6 +44,9 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   void initState() {
     super.initState();
+    if (widget.downloaded) {
+      downloaded = true;
+    }
     _audioPlayer = AudioPlayer();
     _setupAudio();
     _loadViewPreference();
@@ -319,7 +324,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ],
                   ),
                   downloaded
-                      ? SizedBox.shrink() // If the audio is already downloaded, show the "no encryption" icon
+                      ? SizedBox
+                          .shrink() // If the audio is already downloaded, show the "no encryption" icon
                       : isDownloading
                           ? CircularProgressIndicator() // If it's currently downloading, show a loading spinner
                           : IconButton(
@@ -336,12 +342,13 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                                   audioProvider
                                       .downloadAudio(
                                           widget.audioUrl, widget.cDataId)
-                                      .then((_) {
+                                      .then((savedPath) {
                                     setState(() {
                                       downloaded =
                                           true; // Mark the audio as downloaded
                                       isDownloading =
                                           false; // Set downloading state to false
+                                        widget.audioUrl = savedPath!;
                                     });
                                     log("Download complete");
                                   }).catchError((error) {
@@ -480,7 +487,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ],
         ),
         downloaded
-            ? SizedBox.shrink() // If the audio is already downloaded, show the "no encryption" icon
+            ? SizedBox
+                .shrink() // If the audio is already downloaded, show the "no encryption" icon
             : isDownloading
                 ? CircularProgressIndicator() // If it's currently downloading, show a loading spinner
                 : IconButton(
@@ -495,11 +503,12 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         // Simulate downloading the audio
                         audioProvider
                             .downloadAudio(widget.audioUrl, widget.cDataId)
-                            .then((_) {
+                            .then((savedPath) {
                           setState(() {
                             downloaded = true; // Mark the audio as downloaded
                             isDownloading =
                                 false; // Set downloading state to false
+                            widget.audioUrl = savedPath!;
                           });
                           log("Download complete");
                         }).catchError((error) {

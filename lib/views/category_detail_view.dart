@@ -25,6 +25,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String? currentAudioUrl;
+  bool isAudioDownloaded = false;
   final TextCleanerController _textCleanerController = TextCleanerController();
   late Category categoryDetails;
   late List<String> availableTypes;
@@ -50,8 +51,13 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
+    if(cdata.isNotEmpty && cdata[0].offlineAudioPath!=null)
+    {
+      isAudioDownloaded=true;
+    }
+
     final String? initialAudioUrl =
-        cdata.isNotEmpty && cdata[0].offlineAudioPath != null
+        isAudioDownloaded
             ? cdata[0].offlineAudioPath!
             : cdata[0].audiourl.isNotEmpty
                 ? cdata[0].audiourl
@@ -65,7 +71,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
-      final String? newAudioUrl = cdata[0].offlineAudioPath != null
+      final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
           ? cdata[selectedIndex].offlineAudioPath!
           : cdata[selectedIndex].audiourl.isNotEmpty
               ? cdata[selectedIndex].audiourl
@@ -171,6 +177,7 @@ class _CategoryDetailViewState extends State<CategoryDetailView>
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
+                    downloaded: isAudioDownloaded,
                     audioUrl: currentAudioUrl!,
                     cDataId: currentContentDataId,
                     onPositionChanged: (currentPosition) {
