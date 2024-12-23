@@ -13,12 +13,11 @@ class AudioPlayerWidget extends StatefulWidget {
   final ValueChanged<Duration> onPositionChanged;
   final int cDataId;
 
-  const AudioPlayerWidget({
-    super.key,
-    required this.audioUrl,
-    required this.onPositionChanged,
-    required this.cDataId
-  });
+  const AudioPlayerWidget(
+      {super.key,
+      required this.audioUrl,
+      required this.onPositionChanged,
+      required this.cDataId});
 
   @override
   _AudioPlayerWidgetState createState() => _AudioPlayerWidgetState();
@@ -28,6 +27,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
   bool isPlaying = false;
   bool isCompleted = false;
+  bool isDownloading = false;
   bool hasError = false;
   bool isLoading = true;
   Duration currentTime = Duration.zero;
@@ -318,18 +318,46 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       ),
                     ],
                   ),
-                  IconButton(
-                      onPressed: () {
-                        if (!downloaded) {
-                          log("Let us download the audio");
-                          audioProvider
-                              .downloadAudio(widget.audioUrl, widget.cDataId)
-                              .then((_) => downloaded = true);
-                        } else {
-                          log("audio is already downloaded");
-                        }
-                      },
-                      icon: Icon(Icons.download))
+                  downloaded
+                      ? SizedBox.shrink() // If the audio is already downloaded, show the "no encryption" icon
+                      : isDownloading
+                          ? CircularProgressIndicator() // If it's currently downloading, show a loading spinner
+                          : IconButton(
+                              onPressed: () {
+                                if (!downloaded) {
+                                  setState(() {
+                                    log("Changing the state: Starting download");
+                                    isDownloading =
+                                        true; // Set downloading state to true
+                                  });
+                                  log("Let us download the audio");
+
+                                  // Simulate downloading the audio
+                                  audioProvider
+                                      .downloadAudio(
+                                          widget.audioUrl, widget.cDataId)
+                                      .then((_) {
+                                    setState(() {
+                                      downloaded =
+                                          true; // Mark the audio as downloaded
+                                      isDownloading =
+                                          false; // Set downloading state to false
+                                    });
+                                    log("Download complete");
+                                  }).catchError((error) {
+                                    setState(() {
+                                      isDownloading =
+                                          false; // Ensure downloading state is reset if an error occurs
+                                    });
+                                    log("Download failed: $error");
+                                  });
+                                } else {
+                                  log("Audio is already downloaded");
+                                }
+                              },
+                              icon: Icon(Icons
+                                  .download), // Show the download icon if the audio isn't downloaded yet
+                            ),
                 ],
               ),
             ],
@@ -451,18 +479,43 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
             ),
           ],
         ),
-        IconButton(
-            onPressed: () {
-              if (!downloaded) {
-                log("Let us download the audio");
-                audioProvider
-                    .downloadAudio(widget.audioUrl, widget.cDataId)
-                    .then((_) => downloaded = true);
-              } else {
-                log("audio is already downloaded");
-              }
-            },
-            icon: Icon(Icons.download))
+        downloaded
+            ? SizedBox.shrink() // If the audio is already downloaded, show the "no encryption" icon
+            : isDownloading
+                ? CircularProgressIndicator() // If it's currently downloading, show a loading spinner
+                : IconButton(
+                    onPressed: () {
+                      if (!downloaded) {
+                        setState(() {
+                          log("Changing the state: Starting download");
+                          isDownloading = true; // Set downloading state to true
+                        });
+                        log("Let us download the audio");
+
+                        // Simulate downloading the audio
+                        audioProvider
+                            .downloadAudio(widget.audioUrl, widget.cDataId)
+                            .then((_) {
+                          setState(() {
+                            downloaded = true; // Mark the audio as downloaded
+                            isDownloading =
+                                false; // Set downloading state to false
+                          });
+                          log("Download complete");
+                        }).catchError((error) {
+                          setState(() {
+                            isDownloading =
+                                false; // Ensure downloading state is reset if an error occurs
+                          });
+                          log("Download failed: $error");
+                        });
+                      } else {
+                        log("Audio is already downloaded");
+                      }
+                    },
+                    icon: Icon(Icons
+                        .download), // Show the download icon if the audio isn't downloaded yet
+                  ),
       ],
     );
   }
