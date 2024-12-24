@@ -1,6 +1,7 @@
 import 'package:realm/realm.dart';
 
-    part 'menu_detail_entity.realm.dart';
+part 'menu_detail_entity.realm.dart';
+
 @RealmModel()
 class _MenuDetailEntity {
   @PrimaryKey()
@@ -10,9 +11,10 @@ class _MenuDetailEntity {
 
 @RealmModel()
 class _CategoryGroupEntity {
-  //@PrimaryKey()
+  @PrimaryKey()
   late String groupName; // Each group has a unique name
-  late List<_CategoryEntity> categoryEntities; // List of categories under this group
+  late List<_CategoryEntity>
+      categoryEntities; // List of categories under this group
 }
 
 @RealmModel()
@@ -27,8 +29,11 @@ class _CategoryEntity {
 
 @RealmModel()
 class _ContentDataEntity {
+  @PrimaryKey()
+  late int id;
   late String type;
   late String audiourl;
+  late String? offlineAudioUrl;
   late List<_LyricsEntity> lyricsEntities;
 }
 

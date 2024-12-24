@@ -25,4 +25,9 @@ class CategoryResponse {
       categories: tempCategories,
     );
   }
+
+  @override
+  String toString() {
+    return categories.toString();
+  }
 }

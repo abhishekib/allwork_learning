@@ -30,11 +30,13 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String? currentAudioUrl;
+  bool isAudioDownloaded = false;
   final TextCleanerController _textCleanerController = TextCleanerController();
   final LoginController _loginController = Get.put(LoginController());
 
   late Category categoryDetails;
   late List<String> availableTypes;
+  late int currentContentDataId;
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
   late String menuItem;
@@ -81,18 +83,31 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
+    if(cdata.isNotEmpty && cdata[0].offlineAudioPath!=null)
+    {
+      isAudioDownloaded=true;
+    }
+
     final String? initialAudioUrl =
-        cdata.isNotEmpty && cdata[0].audiourl.isNotEmpty
-            ? cdata[0].audiourl
-            : null;
+        isAudioDownloaded
+            ? cdata[0].offlineAudioPath!
+            : cdata[0].audiourl.isNotEmpty
+                ? cdata[0].audiourl
+                : null;
+
+    currentContentDataId = cdata[0].id!;
 
     currentAudioUrl = initialAudioUrl;
 
+    log("initial Audio Url $currentAudioUrl");
+
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
-      final String? newAudioUrl = cdata[selectedIndex].audiourl.isNotEmpty
-          ? cdata[selectedIndex].audiourl
-          : null;
+      final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
+          ? cdata[selectedIndex].offlineAudioPath!
+          : cdata[selectedIndex].audiourl.isNotEmpty
+              ? cdata[selectedIndex].audiourl
+              : null;
 
       if (newAudioUrl != currentAudioUrl) {
         setState(() {
@@ -174,7 +189,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
     final CategoryDetailController controller =
-        Get.put(CategoryDetailController());
+            Get.put(CategoryDetailController());
 
     if (availableTypes.isEmpty) {
       return Scaffold(
@@ -242,6 +257,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               onPressed: () {
                 // Call the copy functionality from LyricsTab
                 _copyAllLyricsToClipboard(
+                    
                     context, availableLyrics, categoryDetails.title);
               },
             ),
@@ -274,7 +290,9 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
+                    downloaded: isAudioDownloaded,
                     audioUrl: currentAudioUrl!,
+                    cDataId: currentContentDataId,
                     onPositionChanged: (currentPosition) {
                       controller.currentTime.value =
                           currentPosition.inMilliseconds.toDouble();
@@ -317,24 +335,30 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   }
 
   void _copyAllLyricsToClipboard(BuildContext context,
+     
       Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
     final allLyrics =
+       
         availableLyrics.values.expand((lyricsList) => lyricsList).toList();
 
     Set<Lyrics> uniqueLyricsSet = {};
 
     for (var lyrics in allLyrics) {
-      uniqueLyricsSet.add(lyrics);
+      uniqueLyricsSet.add(
+          lyrics);
     }
 
     String combinedLyrics =
+       
         '${_textCleanerController.cleanText(categoryTitle)}\n\n';
 
     for (var lyrics in uniqueLyricsSet) {
       combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
       combinedLyrics +=
+         
           '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
       combinedLyrics +=
+         
           '${_textCleanerController.cleanText(lyrics.translation)}\n';
     }
 
@@ -344,7 +368,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       const SnackBar(content: Text("All lyrics copied to clipboard!")),
     );
   }
-
   void _shareAllLyrics(BuildContext context,
       Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
     final allLyrics =

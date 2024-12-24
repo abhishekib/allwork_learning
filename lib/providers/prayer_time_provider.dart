@@ -32,7 +32,7 @@ class PrayerTimeProvider {
         },
       );
 
-      log("API Response: ${response.data}");
+      //log("API Response: ${response.data}");
 
       if (response.statusCode == 200) {
         PrayerTimeModel prayerTimeModel =

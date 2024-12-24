@@ -27,7 +27,7 @@ class MenuService {
 
       DbServices.instance.writeMenuList(menuList);
 
-      return menuList;
+      return DbServices.instance.getMenuList();
     } else {
       throw Exception('Failed to fetch menu list');
     }
@@ -41,7 +41,7 @@ class MenuService {
 
       DbServices.instance.writeGujratiMenuList(menuList);
 
-      return menuList;
+      return DbServices.instance.getGujratiMenuList();
     } else {
       throw Exception('Failed to fetch menu list');
     }

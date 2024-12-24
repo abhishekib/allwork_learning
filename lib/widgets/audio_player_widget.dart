@@ -1,18 +1,25 @@
+import 'dart:developer';
+import 'dart:math' as math;
+import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'dart:math';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  final String audioUrl;
+  final bool downloaded;
+  String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
+  final int cDataId;
 
-  const AudioPlayerWidget({
+  AudioPlayerWidget({
     super.key,
+    required this.downloaded,
     required this.audioUrl,
     required this.onPositionChanged,
+    required this.cDataId,
   });
 
   @override
@@ -23,6 +30,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
   bool isPlaying = false;
   bool isCompleted = false;
+  bool isDownloading = false;
   bool hasError = false;
   bool isLoading = true;
   Duration currentTime = Duration.zero;
@@ -30,10 +38,16 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   double volume = 1.0;
   double playbackSpeed = 1.0;
   bool isCompactView = true;
+  bool downloaded = false;
+
+  final AudioProvider audioProvider = AudioProvider(ApiConstants.token);
 
   @override
   void initState() {
     super.initState();
+    if (widget.downloaded) {
+      downloaded = true;
+    }
     _audioPlayer = AudioPlayer();
     _setupAudio();
     _loadViewPreference();
@@ -42,10 +56,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   void didUpdateWidget(covariant AudioPlayerWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-
-    // Reinitialize the audio player when the audio URL changes
     if (widget.audioUrl != oldWidget.audioUrl) {
-      _setupAudio(); // This will reinitialize the audio player with the new URL
+      _setupAudio();
     }
   }
 
@@ -78,7 +90,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         if (mounted) {
           setState(() {
             currentTime = Duration(
-              seconds: min(position.inSeconds, totalTime.inSeconds),
+              seconds: math.min(position.inSeconds, totalTime.inSeconds),
             );
           });
 
@@ -216,7 +228,6 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                 ],
               ),
               const SizedBox(height: 16),
-              // Control Buttons
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -310,6 +321,41 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       ),
                     ],
                   ),
+                  downloaded
+                      ? const SizedBox.shrink()
+                      : isDownloading
+                          ? const CircularProgressIndicator()
+                          : IconButton(
+                              onPressed: () {
+                                if (!downloaded) {
+                                  setState(() {
+                                    log("Changing the state: Starting download");
+                                    isDownloading = true;
+                                  });
+                                  log("Let us download the audio");
+
+                                  audioProvider
+                                      .downloadAudio(
+                                          widget.audioUrl, widget.cDataId)
+                                      .then((savedPath) {
+                                    setState(() {
+                                      downloaded = true;
+                                      isDownloading = false;
+                                      widget.audioUrl = savedPath!;
+                                    });
+                                    log("Download complete");
+                                  }).catchError((error) {
+                                    setState(() {
+                                      isDownloading = false;
+                                    });
+                                    log("Download failed: $error");
+                                  });
+                                } else {
+                                  log("Audio is already downloaded");
+                                }
+                              },
+                              icon: const Icon(Icons.download),
+                            ),
                 ],
               ),
             ],
@@ -319,119 +365,146 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   }
 
   Widget _buildCompactView() {
-    return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(
-        children: [
-          Text(
-            _formatDuration(currentTime),
-            style: const TextStyle(color: Colors.black, fontSize: 12),
-          ),
-          Expanded(
-            child: Slider(
-              value: currentTime.inSeconds.toDouble(),
-              min: 0,
-              max: totalTime.inSeconds.toDouble(),
-              onChanged: (value) async {
-                await _audioPlayer.seek(Duration(seconds: value.toInt()));
-                if (value == 0) {
-                  setState(() {
-                    isPlaying = false;
-                  });
-                }
-              },
-              activeColor: AppColors.backgroundBlue,
-              inactiveColor: Colors.grey,
-            ),
-            // Start and End Time Below Slider
-          ),
-          Text(
-            _formatDuration(totalTime),
-            style: const TextStyle(color: Colors.black, fontSize: 12),
-          ),
-          // Play/Pause Button
-          IconButton(
-            onPressed: () async {
-              if (isPlaying) {
-                await _audioPlayer.pause();
+    return Row(
+      children: [
+        Text(
+          _formatDuration(currentTime),
+          style: const TextStyle(color: Colors.black, fontSize: 12),
+        ),
+        Expanded(
+          child: Slider(
+            value: currentTime.inSeconds.toDouble(),
+            min: 0,
+            max: totalTime.inSeconds.toDouble(),
+            onChanged: (value) async {
+              await _audioPlayer.seek(Duration(seconds: value.toInt()));
+              if (value == 0) {
                 setState(() {
                   isPlaying = false;
                 });
-              } else {
-                await _audioPlayer.resume();
-                setState(() {
-                  isPlaying = true;
-                });
               }
             },
-            icon: Icon(
-              isPlaying ? Icons.pause : Icons.play_arrow,
-              color: AppColors.backgroundBlue,
-              size: 30,
-            ),
+            activeColor: AppColors.backgroundBlue,
+            inactiveColor: Colors.grey,
           ),
-          // Volume Button
-          IconButton(
-            onPressed: () {
+        ),
+        Text(
+          _formatDuration(totalTime),
+          style: const TextStyle(color: Colors.black, fontSize: 12),
+        ),
+        IconButton(
+          onPressed: () async {
+            if (isPlaying) {
+              await _audioPlayer.pause();
               setState(() {
-                volume = volume == 0 ? 1.0 : 0.0;
-                _audioPlayer.setVolume(volume);
+                isPlaying = false;
               });
-            },
-            icon: Icon(
-              volume == 0 ? Icons.volume_off : Icons.volume_up,
-              color: AppColors.backgroundBlue,
-            ),
-          ),
-          // Settings Button
-          PopupMenuButton<double>(
-            icon: const Icon(
-              Icons.settings,
-              color: AppColors.backgroundBlue,
-            ),
-            onSelected: (value) {
+            } else {
+              await _audioPlayer.resume();
               setState(() {
-                playbackSpeed = value;
+                isPlaying = true;
               });
-              _audioPlayer.setPlaybackRate(playbackSpeed);
-            },
-            itemBuilder: (context) => [
-              const PopupMenuItem(
-                value: 0.25,
-                child: Text('0.25x'),
-              ),
-              const PopupMenuItem(
-                value: 0.5,
-                child: Text('0.5x'),
-              ),
-              const PopupMenuItem(
-                value: 0.75,
-                child: Text('0.75x'),
-              ),
-              const PopupMenuItem(
-                value: 1.0,
-                child: Text('1.0x'),
-              ),
-              const PopupMenuItem(
-                value: 1.25,
-                child: Text('1.25x'),
-              ),
-              const PopupMenuItem(
-                value: 1.5,
-                child: Text('1.5x'),
-              ),
-              const PopupMenuItem(
-                value: 1.75,
-                child: Text('1.75x'),
-              ),
-              const PopupMenuItem(
-                value: 2.0,
-                child: Text('2.0x'),
-              ),
-            ],
+            }
+          },
+          icon: Icon(
+            isPlaying ? Icons.pause : Icons.play_arrow,
+            color: AppColors.backgroundBlue,
+            size: 30,
           ),
-        ],
-      ),
+        ),
+        IconButton(
+          onPressed: () {
+            setState(() {
+              volume = volume == 0 ? 1.0 : 0.0;
+              _audioPlayer.setVolume(volume);
+            });
+          },
+          icon: Icon(
+            volume == 0 ? Icons.volume_off : Icons.volume_up,
+            color: AppColors.backgroundBlue,
+          ),
+        ),
+        PopupMenuButton<double>(
+          icon: const Icon(
+            Icons.settings,
+            color: AppColors.backgroundBlue,
+          ),
+          onSelected: (value) {
+            setState(() {
+              playbackSpeed = value;
+            });
+            _audioPlayer.setPlaybackRate(playbackSpeed);
+          },
+          itemBuilder: (context) => [
+            const PopupMenuItem(
+              value: 0.25,
+              child: Text('0.25x'),
+            ),
+            const PopupMenuItem(
+              value: 0.5,
+              child: Text('0.5x'),
+            ),
+            const PopupMenuItem(
+              value: 0.75,
+              child: Text('0.75x'),
+            ),
+            const PopupMenuItem(
+              value: 1.0,
+              child: Text('1.0x'),
+            ),
+            const PopupMenuItem(
+              value: 1.25,
+              child: Text('1.25x'),
+            ),
+            const PopupMenuItem(
+              value: 1.5,
+              child: Text('1.5x'),
+            ),
+            const PopupMenuItem(
+              value: 1.75,
+              child: Text('1.75x'),
+            ),
+            const PopupMenuItem(
+              value: 2.0,
+              child: Text('2.0x'),
+            ),
+          ],
+        ),
+        downloaded
+            ? const SizedBox.shrink()
+            : isDownloading
+                ? const CircularProgressIndicator()
+                : IconButton(
+                    onPressed: () {
+                      if (!downloaded) {
+                        setState(() {
+                          log("Changing the state: Starting download");
+                          isDownloading = true;
+                        });
+                        log("Let us download the audio");
+
+                        audioProvider
+                            .downloadAudio(widget.audioUrl, widget.cDataId)
+                            .then((savedPath) {
+                          setState(() {
+                            downloaded = true;
+                            isDownloading = false;
+                            widget.audioUrl = savedPath!;
+                          });
+                          log("Download complete");
+                        }).catchError((error) {
+                          setState(() {
+                            isDownloading = false;
+                          });
+                          log("Download failed: $error");
+                        });
+                      } else {
+                        log("Audio is already downloaded");
+                      }
+                    },
+                    icon: const Icon(Icons.download),
+                  ),
+      ],
     );
   }
 
