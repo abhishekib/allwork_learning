@@ -1,4 +1,6 @@
+import 'package:allwork/modals/amaal_model.dart';
 import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/providers/amaal_provider.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/state_manager.dart';
@@ -15,6 +17,16 @@ class CategoryListController extends GetxController {
 
   final CategoryProvider _categoryProvider =
       CategoryProvider(ApiConstants.token);
+
+  final AmaalProvider _amaalProvider = AmaalProvider(ApiConstants.token);
+
+  final amaal = AmaalModel().obs;
+
+  @override
+  void onInit() {
+    _amaalProvider.fetchAmaalData();
+    super.onInit();
+  }
 
   Future<void> fetchCategoryData(String menuItem) async {
     try {
@@ -61,7 +73,7 @@ class CategoryListController extends GetxController {
         return ApiConstants.duaEndpoint;
       case "Ziyarat":
         return ApiConstants.ziyaratEndpoint;
-      case "Amaal":
+      // case "Amaal":
       // return ApiConstants.amaalEndpoint;
       case "Munajat":
         return ApiConstants.munajatEndpoint;
