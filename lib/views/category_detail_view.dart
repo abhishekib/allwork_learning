@@ -1,10 +1,12 @@
 import 'dart:developer';
+import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
@@ -29,6 +31,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late TabController _tabController;
   String? currentAudioUrl;
   final TextCleanerController _textCleanerController = TextCleanerController();
+  final LoginController _loginController = Get.put(LoginController());
+
   late Category categoryDetails;
   late List<String> availableTypes;
   late Map<String, List<Lyrics>> availableLyrics;
@@ -124,6 +128,41 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     }
   }
 
+  void _handleAddToFavourite() {
+    if (_loginController.isLoggedIn.value) {
+      addToFavourite();
+    } else {
+      _showLoginPrompt();
+    }
+  }
+
+  void _showLoginPrompt() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Login Required"),
+          content: const Text("Please log in to add this item to favorites."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Get.to(() => LoginView()); // Navigate to login screen
+              },
+              child: const Text("Login"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _tabController.dispose();
@@ -209,9 +248,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.favorite),
-              onPressed: () {
-                addToFavourite();
-              },
+              onPressed: _handleAddToFavourite,
             ),
             FloatingActionButton.small(
               heroTag: null,
