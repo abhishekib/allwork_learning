@@ -61,4 +61,5 @@ class ApiConstants {
   static const String addFavmunajat = 'favmunajat';
   static const String addFavdailydua = 'favdailydua';
   // static const String addFavSuraha = 'favsurahlist';
+  static const String addFavTravelZiyarat = 'favtravelziyarat';
 }
