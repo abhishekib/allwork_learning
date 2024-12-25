@@ -3,7 +3,7 @@ name: Flutter CI
 on:
   push:
     tags:
-      - 'v*.*.*'  # Matches version tags like v1.0.0
+      - "v*.*.*" # Matches version tags like v1.0.0
   pull_request:
     branches:
       - main
@@ -14,31 +14,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
 
+      # Step 2: Set up Java
       - name: Set up Java
         uses: actions/setup-java@v4.6.0
         with:
-          distribution: 'zulu'
-          java-version: '17'
+          distribution: "zulu"
+          java-version: "17"
 
+      # Step 3: Set up Flutter
       - name: Set up Flutter
         uses: subosito/flutter-action@v2.18.0
         with:
-          flutter-version: '3.27.0' # Specify your desired Flutter version
+          flutter-version: "3.27.0"
 
+      # Step 4: Validate Flutter installation
+      - name: Validate Flutter setup
+        run: flutter doctor -v
+
+      # Step 5: Cache Flutter dependencies
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.pub-cache
+          key: ${{ runner.os }}-pub-cache-${{ hashFiles('**/pubspec.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pub-cache
+
+      # Step 6: Install dependencies
       - name: Install dependencies
         run: flutter pub get
 
+      # Step 7: Run Flutter tests (for PRs)
+      - name: Run Flutter Tests
+        if: ${{ github.event_name == 'pull_request' }}
+        run: flutter test
+
+      # Step 8: Build APK
       - name: Build APK
         run: flutter build apk --release
 
+      # Step 9: Extract Tag Name (for release builds)
       - name: Extract Tag Name
         if: startsWith(github.ref, 'refs/tags/')
         id: extract_tag
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
+      # Step 10: Create GitHub Release (for tagged commits)
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/')
         id: create_release
@@ -49,10 +74,11 @@ jobs:
           body: |
             Automated release for version ${{ env.TAG_NAME }}.
           draft: false
-          prerelease: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Step 11: Upload APK to Release (for tagged commits)
       - name: Upload APK to Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1.0.2
