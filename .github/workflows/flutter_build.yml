@@ -2,6 +2,8 @@ name: Flutter CI
 
 on:
   push:
+    tags:
+      - 'v1.0.0'
     branches:
       - main
   pull_request:
@@ -9,33 +11,47 @@ on:
       - main
 
 jobs:
-  build:
-    name: Build APK
+  build-and-release:
+    name: Build and Release APK
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.2.2
 
       - name: Set up Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4.6.0
         with:
           distribution: 'zulu'
           java-version: '17'
 
       - name: Set up Flutter
-        uses: subosito/flutter-action@v2
+        uses: subosito/flutter-action@v2.18.0
         with:
           flutter-version: '3.27.0' # Specify your desired Flutter version
 
       - name: Install dependencies
         run: flutter pub get
-        
+
       - name: Build APK
         run: flutter build apk --release
 
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2.2.0
+        with:
+          tag_name: ${{ github.ref }}
+          name: Release ${{ github.ref }}
+          body: |
+            Automated release for version ${{ github.ref }}.
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Upload APK
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4.5.0
         with:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
