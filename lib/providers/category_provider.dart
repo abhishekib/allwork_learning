@@ -32,11 +32,11 @@ class CategoryProvider {
         ),
       );
 
-      // log("API Response: ${response.data}");
-
       if (response.statusCode == 200) {
         CategoryResponse categoryResponse =
             CategoryResponse.fromJson(response.data['data']);
+            
+
         final Map<String, dynamic> test = response.data['data'];
         test.entries.forEach((item) {
           log("1st CAT: ${item.key}");

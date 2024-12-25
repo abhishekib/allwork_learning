@@ -18,6 +18,11 @@ class ContentData {
           .toList(),
     );
   }
+
+  @override
+  String toString() {
+    return "type $type, audiourl $audiourl, lyrics $lyrics";
+  }
 }
 
 class Lyrics {
@@ -41,9 +46,9 @@ class Lyrics {
       time: json['time'] ?? '',
       arabic: isGujarati ? json['અરબી'] ?? '' : json['arabic'] ?? '',
       translitration:
-      isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
+          isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
       translation:
-      isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
+          isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
     );
   }
 
@@ -58,7 +63,13 @@ class Lyrics {
         other.translation == translation;
   }
 
+  @override
+  String toString() {
+    return "time: $time, arabic $arabic, transliteration $translitration, translation $translation";
+  }
+
   // Implement hashCode
   @override
-  int get hashCode => arabic.hashCode ^ translitration.hashCode ^ translation.hashCode;
+  int get hashCode =>
+      arabic.hashCode ^ translitration.hashCode ^ translation.hashCode;
 }

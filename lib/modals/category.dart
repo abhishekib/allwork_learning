@@ -28,4 +28,10 @@ class Category {
           : [], // Return an empty list if "cdata" is null
     );
   }
+
+@override
+  String toString() {
+    return "cat: $category, id $id, title $title, isFav $isFav, cData $cdata";
+  }
+
 }
