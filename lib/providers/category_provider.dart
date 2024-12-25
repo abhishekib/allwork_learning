@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/modals/category.dart';
+import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
@@ -35,7 +36,9 @@ class CategoryProvider {
       if (response.statusCode == 200) {
         CategoryResponse categoryResponse =
             CategoryResponse.fromJson(response.data['data']);
-            
+
+        CategoryResponse2 categoryResponse2 =
+            CategoryResponse2.fromJson(response.data['data']);
 
         final Map<String, dynamic> test = response.data['data'];
         test.entries.forEach((item) {

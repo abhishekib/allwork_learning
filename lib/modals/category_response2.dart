@@ -2,29 +2,36 @@ import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
 
 class CategoryResponse2 {
-  Map<String, CategoryResponse> subMenuDetails;
+  Map<String, CategoryResponse> ziyarat14Masoomeen;
+  CategoryResponse otherZiyarats;
 
 //Map<String, Map<String, List<Category>>>
 
-  CategoryResponse2({required this.subMenuDetails});
+  CategoryResponse2(
+      {required this.ziyarat14Masoomeen, required this.otherZiyarats});
 
 // Factory method for parsing JSON data
   factory CategoryResponse2.fromJson(Map<String, dynamic> json) {
     // Create a temporary Map to store the SubMenuDetails parsed from JSON
-    Map<String, CategoryResponse> tempSubMenuDetails = {};
-
+    Map<String, CategoryResponse> tempZiyarat14Masoomeen = {};
+    late CategoryResponse tempOtherZiyarats;
     // Loop through each entry in the JSON object
     json.forEach((key, value) {
       if (value is Map) {
-        tempSubMenuDetails[key] = CategoryResponse.fromJsonDynamic(value);
+        tempZiyarat14Masoomeen[key] = CategoryResponse.fromJsonDynamic(value);
+      }
+      if (value is List) {
+        Map<String, dynamic> entry= {};
+        entry['Other Ziyarats'] = value;
+        tempOtherZiyarats = CategoryResponse.fromJson(entry);
       }
     });
 
-    return CategoryResponse2(subMenuDetails: tempSubMenuDetails);
+    return CategoryResponse2(ziyarat14Masoomeen: tempZiyarat14Masoomeen, otherZiyarats: tempOtherZiyarats);
   }
 
   @override
   String toString() {
-    return subMenuDetails.toString();
+    return ziyarat14Masoomeen.toString();
   }
 }
