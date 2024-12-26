@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:allwork/modals/amaal_model.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/utils/constants.dart';
@@ -22,7 +20,7 @@ class AmaalProvider {
   Future<AmaalModel> fetchAmaalData() async {
     try {
       final response = await _dio.post(ApiConstants.amaalEndpoint);
-      log("amal------->${response.data.toString()}");
+      // log("amal------->${response.data.toString()}");
       if (response.statusCode == 200) {
         return AmaalModel.fromJson(response.data);
       } else {
