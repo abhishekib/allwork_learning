@@ -5,7 +5,7 @@ import 'package:allwork/controllers/daily_date_controller.dart';
 import 'package:allwork/controllers/prayer_time_controller.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/menu_detail_view.dart';
-import 'package:allwork/views/navigation_page.dart';
+import 'package:allwork/views/amaal_categories_screen.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,11 @@ class _MenuListViewState extends State<MenuListView> {
                     log("selected ----> $menuItem");
                     if (menuItem == 'Amaal') {
                       // Navigate to the Amaal dynamic pages
-                      Get.to(() => BackgroundWrapper(child: NavigationPage(menuItem: menuItem,)));
+                      Get.to(
+                        () => AmaalCategoriesScreen(
+                          menuItem: menuItem,
+                        ),
+                      );
                     } else {
                       // Normal navigation for other items
                       categoryListController.categoryData.clear();

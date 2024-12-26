@@ -1,43 +1,35 @@
-import 'package:allwork/utils/constants.dart';
-import 'package:get/get.dart';
 import 'package:allwork/modals/amaal_model.dart';
 import 'package:allwork/providers/amaal_provider.dart';
+import 'package:allwork/utils/constants.dart';
+import 'package:get/get.dart';
 
 class AmaalController extends GetxController {
-  // Reactive variables
-  var isLoading = true.obs;
-  var amaalModel = AmaalModel().obs;
-  var errorMessage = ''.obs;
-
   final AmaalProvider amaalProvider = AmaalProvider(ApiConstants.token);
+
+  final isLoading = false.obs;
+  final amaalData = Rxn<AmaalData>();
+  final categories = <Category>[].obs;
 
   @override
   void onInit() {
-    fetchAmaalData();
     super.onInit();
+    fetchAmaal();
   }
 
-  // Fetch Amaal data
-  Future<void> fetchAmaalData() async {
+  void fetchAmaal() async {
+    isLoading.value = true;
     try {
-      isLoading.value = true;
-      errorMessage.value = '';
-
       final data = await amaalProvider.fetchAmaalData();
-      amaalModel.value = data;
+      amaalData.value = data;
+
+      // Process categories
+      categories.value = amaalData.value!.data.entries.map((entry) {
+        return Category.fromJson(entry.key, entry.value);
+      }).toList();
     } catch (e) {
-      errorMessage.value = 'Error: $e';
+      Get.snackbar('Error', e.toString());
     } finally {
       isLoading.value = false;
     }
-  }
-
-  // Helper to get nested items
-  List<dynamic> getItems(String category, String subCategory) {
-    final data = amaalModel.value.data;
-    if (data?[category] is Map<String, dynamic>) {
-      return data?[category][subCategory] ?? [];
-    }
-    return [];
   }
 }

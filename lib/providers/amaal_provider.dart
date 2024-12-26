@@ -1,6 +1,7 @@
+import 'dart:developer';
 import 'package:allwork/modals/amaal_model.dart';
-import 'package:dio/dio.dart';
 import 'package:allwork/utils/constants.dart';
+import 'package:dio/dio.dart';
 
 class AmaalProvider {
   final Dio _dio;
@@ -17,16 +18,18 @@ class AmaalProvider {
           ),
         );
 
-  Future<AmaalModel> fetchAmaalData() async {
+  Future<AmaalData> fetchAmaalData() async {
     try {
       final response = await _dio.post(ApiConstants.amaalEndpoint);
-      // log("amal------->${response.data.toString()}");
+      log(response.data.toString());
       if (response.statusCode == 200) {
-        return AmaalModel.fromJson(response.data);
+        return AmaalData.fromJson(response.data);
       } else {
+        log('Failed to fetch Amaal data', error: response.data);
         throw Exception('Failed to fetch Amaal data');
       }
     } catch (e) {
+      log('Error fetching Amaal data: $e');
       throw Exception('Error fetching Amaal data: $e');
     }
   }
