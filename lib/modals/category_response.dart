@@ -48,8 +48,4 @@ class CategoryResponse {
   String toString() {
     return categories.toString();
   }
-
-  Map<String, List<Category>> toMap() {
-    return categories;
-  }
 }

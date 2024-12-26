@@ -37,6 +37,9 @@ class CategoryProvider {
         CategoryResponse categoryResponse =
             CategoryResponse.fromJson(response.data['data']);
 
+        CategoryResponse2 categoryResponse2 =
+            CategoryResponse2.fromJson(response.data['data']);
+
         final Map<String, dynamic> test = response.data['data'];
         test.entries.forEach((item) {
           log("1st CAT: ${item.key}");
@@ -66,42 +69,6 @@ class CategoryProvider {
         DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);
 
         return categoryResponse;
-      } else {
-        throw Exception('Failed to fetch data from $endpoint');
-      }
-    } catch (e) {
-      log("Error: $e");
-      rethrow;
-    }
-  }
-
-  Future<CategoryResponse2> fetchCategoryData2(String endpoint,
-      [String? day]) async {
-    try {
-      // Construct the URL with query parameters
-      String url = '$baseurl$endpoint';
-      if (day != null) {
-        url = '$url&day=$day';
-      }
-
-      final response = await _dio.post(
-        url,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'application/json',
-          },
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        CategoryResponse2 categoryResponse2 =
-            CategoryResponse2.fromJson(response.data['data']);
-
-        log("data getting written with endpoint $endpoint");
-        log(categoryResponse2.toString());
-
-        return categoryResponse2;
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }

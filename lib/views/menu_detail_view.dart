@@ -71,7 +71,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
               ),
             ),
           );
-        } else if (controller.categoryData.isEmpty && controller.categoryData2.isEmpty) {
+        } else if (controller.categoryData.isEmpty) {
           return Scaffold(
             backgroundColor: AppColors.backgroundBlue,
             appBar: AppBar(
@@ -114,10 +114,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
             body: Center(
               child: CircularProgressIndicator(),
             ),
-          );
-        } else if (controller.isItemNested.value) {
-          return Scaffold(
-            body: Center(child: Text("Ziyarat value recieved")),
           );
         } else {
           return Scaffold(
