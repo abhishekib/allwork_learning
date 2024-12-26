@@ -21,17 +21,27 @@ class CategoryResponse2 {
         tempZiyarat14Masoomeen[key] = CategoryResponse.fromJsonDynamic(value);
       }
       if (value is List) {
-        Map<String, dynamic> entry= {};
+        Map<String, dynamic> entry = {};
         entry['Other Ziyarats'] = value;
         tempOtherZiyarats = CategoryResponse.fromJson(entry);
       }
     });
 
-    return CategoryResponse2(ziyarat14Masoomeen: tempZiyarat14Masoomeen, otherZiyarats: tempOtherZiyarats);
+    return CategoryResponse2(
+        ziyarat14Masoomeen: tempZiyarat14Masoomeen,
+        otherZiyarats: tempOtherZiyarats);
+  }
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {};
+    map["Ziyarat 14 Masoomeen"] = ziyarat14Masoomeen;
+    map["Other Ziyarats"] = otherZiyarats;
+    return map;
   }
 
   @override
   String toString() {
-    return ziyarat14Masoomeen.toString();
+    return toMap().toString();
   }
+
 }

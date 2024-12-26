@@ -71,7 +71,8 @@ class _MenuDetailViewState extends State<MenuDetailView> {
               ),
             ),
           );
-        } else if (controller.categoryData.isEmpty) {
+        } else if (controller.categoryData.isEmpty &&
+            controller.categoryData2.isEmpty) {
           return Scaffold(
             backgroundColor: AppColors.backgroundBlue,
             appBar: AppBar(
@@ -113,6 +114,87 @@ class _MenuDetailViewState extends State<MenuDetailView> {
             backgroundColor: AppColors.backgroundBlue,
             body: Center(
               child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (controller.isNestedData.value) {
+          return Scaffold(
+            extendBodyBehindAppBar: true,
+            backgroundColor: AppColors.backgroundBlue,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundBlue,
+              centerTitle: true,
+              title: Text(
+                widget.menuItem,
+                style: AppTextStyles.customStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            body: RefreshIndicator(
+              onRefresh: refreshCategoryData,
+              child: ListView(
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: DailyDateWidget()),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: PrayerTimeWidget(),
+                  ),
+                  ...List.generate(controller.categoryData2.length, (index) {
+                    final categoryName =
+                        controller.categoryData2.keys.elementAt(index);
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(9.5),
+                            ),
+                            child: ListTile(
+                              tileColor: AppColors.backgroundBlue,
+                              title: Center(
+                                child: Text(
+                                  categoryName,
+                                  style: AppTextStyles.customStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.backgroundBlue,
+                                  ),
+                                ),
+                              ),
+                              onTap: () {
+                                log("menu detail view-------> $categoryName");
+                                // Get.to(
+                                //   () => CategoryListView(
+                                //     categoryItems:
+                                //         controller.categoryData[categoryName]!,
+                                //     argument: categoryName,
+                                //     selectedLanguage: widget.selectedLanguage,
+                                //     menuItem: widget.menuItem,
+                                //   ),
+                                // );
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10)
+                      ],
+                    );
+                  }),
+                ],
+              ),
             ),
           );
         } else {

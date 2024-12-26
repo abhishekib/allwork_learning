@@ -1,4 +1,5 @@
 import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/state_manager.dart';
@@ -13,38 +14,74 @@ class CategoryListController extends GetxController {
   var isLoading = true.obs;
   var isItemSingle = false.obs;
 
+  var categoryData2 = <String, dynamic>{}.obs;
+
+  var isNestedData = false.obs;
+
   final CategoryProvider _categoryProvider =
       CategoryProvider(ApiConstants.token);
 
   Future<void> fetchCategoryData(String menuItem) async {
-    try {
-      isLoading(true);
-      final endpoint = _getEndpointForMenuItem(menuItem);
-
-      if (endpoint.isNotEmpty) {
-        String? dayOfWeek;
-
-        if (menuItem == "Daily Dua" || menuItem == "રોજની દોઆઓ") {
-          dayOfWeek = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
-        }
-
-        CategoryResponse response;
-        if (await Helpers.hasActiveInternetConnection()) {
-          log("Active internet connection present");
-          response =
-              await _categoryProvider.fetchCategoryData(endpoint, dayOfWeek);
-        } else {
-          log("Active internet connection not present");
-          log("$endpoint");
-          response = DbServices.instance.getCategoryResponse(endpoint)!;
-        }
-        categoryData.value = response.categories;
-        isItemSingle.value = categoryData.keys.firstOrNull == '';
+    isLoading(true);
+    final endpoint = _getEndpointForMenuItem(menuItem);
+    if (endpoint.isNotEmpty) {
+      if (endpoint == ApiConstants.ziyaratEndpoint) {
+        fetchCategoryDataZiyarat(endpoint);
       } else {
-        log("No endpoint found for $menuItem");
+        fetchCategoryDataNormal(endpoint);
       }
+    } else {
+      log("No endpoint found for $menuItem");
+    }
+  }
+
+  Future<void> fetchCategoryDataNormal(String endpoint) async {
+    try {
+      String? dayOfWeek;
+
+      if (endpoint == ApiConstants.dailyDuaEndpoint ||
+          endpoint == ApiConstants.gujaratiDailyDuaEndpoint) {
+        dayOfWeek = DateFormat('EEEE').format(DateTime.now()).toLowerCase();
+        log("dayOfWeek $dayOfWeek");
+      }
+
+      CategoryResponse response;
+      if (await Helpers.hasActiveInternetConnection()) {
+        log("Active internet connection present");
+        response =
+            await _categoryProvider.fetchCategoryData(endpoint, dayOfWeek);
+      } else {
+        log("Active internet connection not present");
+        log(endpoint);
+        response = DbServices.instance.getCategoryResponse(endpoint)!;
+      }
+      categoryData.value = response.categories;
+      isItemSingle.value = categoryData.keys.firstOrNull == '';
     } catch (e) {
-      log("Error fetching category data for $menuItem: $e");
+      log("Error fetching category data for $endpoint: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
+
+  Future<void> fetchCategoryDataZiyarat(String endpoint) async {
+    try {
+      CategoryResponse2 response2;
+      if (await Helpers.hasActiveInternetConnection()) {
+        log("Active internet connection present");
+        response2 = await _categoryProvider.fetchCategoryData2(endpoint);
+        log(response2.toString());
+        isNestedData(true);
+        categoryData2(response2.toMap());
+      } else {
+        log("Active internet connection not present");
+        log(endpoint);
+        //response2 = DbServices.instance.getCategoryResponse(endpoint)!;
+      }
+      //categoryData.value = response.categories;
+      //isItemSingle.value = categoryData.keys.firstOrNull == '';
+    } catch (e) {
+      log("Error fetching category data for $endpoint: $e");
     } finally {
       isLoading(false);
     }
