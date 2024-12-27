@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/modals/content_data.dart';
 
 class MenuDetailsHelpers {
@@ -35,8 +38,9 @@ class MenuDetailsHelpers {
   static CategoryEntity _toCategoryEntity(Category category) {
     return CategoryEntity(category.id, category.category, category.title,
         isFav: category.isFav,
-        cdataEntities:
-            category.cdata.map((cdata) => _toContentDataEntity(cdata)).toList());
+        cdataEntities: category.cdata
+            .map((cdata) => _toContentDataEntity(cdata))
+            .toList());
   }
 
   static Category _toCategory(CategoryEntity categoryEntity) {
@@ -75,6 +79,28 @@ class MenuDetailsHelpers {
         .toList();
     return MenuDetailEntity(endpoint, categoryGroups: categoryGroups);
   }
+
+  static MenuDetailEntityNested toMenuDetailEntityNested(
+      String endpoint, CategoryResponse2 categoryResponse2) {
+    List<MenuDetailEntity> menuDetailEntities = [];
+
+    menuDetailEntities.add(toMenuDetailEntity(
+        categoryResponse2.ziyarat14Masoomeen.keys.elementAt(0),
+        categoryResponse2.ziyarat14Masoomeen[
+            categoryResponse2.ziyarat14Masoomeen.keys.elementAt(0)]!));
+
+    log("Lets check what others contains : ${categoryResponse2.otherZiyarats.toString()}");
+
+    MenuDetailEntity others =
+        toMenuDetailEntity(endpoint, categoryResponse2.otherZiyarats);
+
+    //log(others.toString());
+    return MenuDetailEntityNested(endpoint,
+        menuDetailEntity: menuDetailEntities, others: others);
+  }
+
+  // static CategoryResponse2 toCategoryResponse2()
+  // {}
 
   static CategoryResponse toCategoryResponse(
       MenuDetailEntity menuDetailEntity) {

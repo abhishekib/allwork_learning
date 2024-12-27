@@ -7,6 +7,98 @@ part of 'menu_detail_entity.dart';
 // **************************************************************************
 
 // ignore_for_file: type=lint
+class MenuDetailEntityNested extends _MenuDetailEntityNested
+    with RealmEntity, RealmObjectBase, RealmObject {
+  MenuDetailEntityNested(
+    String endpoint, {
+    Iterable<MenuDetailEntity> menuDetailEntity = const [],
+    MenuDetailEntity? others,
+  }) {
+    RealmObjectBase.set(this, 'endpoint', endpoint);
+    RealmObjectBase.set<RealmList<MenuDetailEntity>>(this, 'menuDetailEntity',
+        RealmList<MenuDetailEntity>(menuDetailEntity));
+    RealmObjectBase.set(this, 'others', others);
+  }
+
+  MenuDetailEntityNested._();
+
+  @override
+  String get endpoint =>
+      RealmObjectBase.get<String>(this, 'endpoint') as String;
+  @override
+  set endpoint(String value) => RealmObjectBase.set(this, 'endpoint', value);
+
+  @override
+  RealmList<MenuDetailEntity> get menuDetailEntity =>
+      RealmObjectBase.get<MenuDetailEntity>(this, 'menuDetailEntity')
+          as RealmList<MenuDetailEntity>;
+  @override
+  set menuDetailEntity(covariant RealmList<MenuDetailEntity> value) =>
+      throw RealmUnsupportedSetError();
+
+  @override
+  MenuDetailEntity? get others =>
+      RealmObjectBase.get<MenuDetailEntity>(this, 'others')
+          as MenuDetailEntity?;
+  @override
+  set others(covariant MenuDetailEntity? value) =>
+      RealmObjectBase.set(this, 'others', value);
+
+  @override
+  Stream<RealmObjectChanges<MenuDetailEntityNested>> get changes =>
+      RealmObjectBase.getChanges<MenuDetailEntityNested>(this);
+
+  @override
+  Stream<RealmObjectChanges<MenuDetailEntityNested>> changesFor(
+          [List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<MenuDetailEntityNested>(this, keyPaths);
+
+  @override
+  MenuDetailEntityNested freeze() =>
+      RealmObjectBase.freezeObject<MenuDetailEntityNested>(this);
+
+  EJsonValue toEJson() {
+    return <String, dynamic>{
+      'endpoint': endpoint.toEJson(),
+      'menuDetailEntity': menuDetailEntity.toEJson(),
+      'others': others.toEJson(),
+    };
+  }
+
+  static EJsonValue _toEJson(MenuDetailEntityNested value) => value.toEJson();
+  static MenuDetailEntityNested _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
+    return switch (ejson) {
+      {
+        'endpoint': EJsonValue endpoint,
+      } =>
+        MenuDetailEntityNested(
+          fromEJson(endpoint),
+          menuDetailEntity: fromEJson(ejson['menuDetailEntity']),
+          others: fromEJson(ejson['others']),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
+  }
+
+  static final schema = () {
+    RealmObjectBase.registerFactory(MenuDetailEntityNested._);
+    register(_toEJson, _fromEJson);
+    return const SchemaObject(ObjectType.realmObject, MenuDetailEntityNested,
+        'MenuDetailEntityNested', [
+      SchemaProperty('endpoint', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('menuDetailEntity', RealmPropertyType.object,
+          linkTarget: 'MenuDetailEntity',
+          collectionType: RealmCollectionType.list),
+      SchemaProperty('others', RealmPropertyType.object,
+          optional: true, linkTarget: 'MenuDetailEntity'),
+    ]);
+  }();
+
+  @override
+  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
+}
+
 class MenuDetailEntity extends _MenuDetailEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   MenuDetailEntity(

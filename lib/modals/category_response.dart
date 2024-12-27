@@ -44,8 +44,8 @@ class CategoryResponse {
     );
   }
 
-  // @override
-  // String toString() {
-  //   return categories.toString();
-  // }
+  @override
+  String toString() {
+    return categories.toString();
+  }
 }

@@ -102,7 +102,7 @@ class CategoryProvider {
         // });
 
         //log("data not getting written with endpoint $endpoint");
-        //DbServices.instance.writeCategoryResponse(endpoint, categoryResponse2);
+        DbServices.instance.writeCategoryResponse2(endpoint, categoryResponse2);
 
         return categoryResponse2;
       } else {

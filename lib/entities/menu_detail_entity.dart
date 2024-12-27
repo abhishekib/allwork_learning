@@ -1,6 +1,15 @@
 import 'package:realm/realm.dart';
 
-    part 'menu_detail_entity.realm.dart';
+part 'menu_detail_entity.realm.dart';
+
+@RealmModel()
+class _MenuDetailEntityNested {
+  @PrimaryKey()
+  late String endpoint;
+  late List<_MenuDetailEntity> menuDetailEntity; //for ziyarat 14 masoomeen
+  late _MenuDetailEntity? others; //for other ziyarat
+}
+
 @RealmModel()
 class _MenuDetailEntity {
   @PrimaryKey()
@@ -12,7 +21,8 @@ class _MenuDetailEntity {
 class _CategoryGroupEntity {
   //@PrimaryKey()
   late String groupName; // Each group has a unique name
-  late List<_CategoryEntity> categoryEntities; // List of categories under this group
+  late List<_CategoryEntity>
+      categoryEntities; // List of categories under this group
 }
 
 @RealmModel()

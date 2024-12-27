@@ -40,8 +40,8 @@ class CategoryResponse2 {
     return map;
   }
 
-  @override
-  String toString() {
-    return toMap().toString();
-  }
+  // @override
+  // String toString() {
+  //   return toMap().toString();
+  // }
 }
