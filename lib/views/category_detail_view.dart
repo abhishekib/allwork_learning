@@ -95,7 +95,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 ? cdata[0].audiourl
                 : null;
 
-    currentContentDataId = cdata[0].id!;
+    currentContentDataId = cdata[0].id ?? 0;
 
     currentAudioUrl = initialAudioUrl;
 
