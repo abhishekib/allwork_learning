@@ -217,6 +217,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
               ),
             );
           } else if (controller.isNestedData.value) {
+            controller.isNestedData(false);
             return Scaffold(
               extendBodyBehindAppBar: true,
               backgroundColor: AppColors.backgroundBlue,
