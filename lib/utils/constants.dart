@@ -28,6 +28,8 @@ class ApiConstants {
   static const String munajatEndpoint = 'munajat?lang=english';
   static const String gujaratiMunajatEndpoint = 'munajat?lang=gujarati';
 
+  static const String amaalEndpoint = 'amaal?lang=english';
+
   static const String loginEndpoint = '/login';
   static const String googleLoginEndpoint = 'social-login';
 

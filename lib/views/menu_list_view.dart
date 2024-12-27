@@ -3,9 +3,9 @@ import 'package:allwork/controllers/animated_text_controller.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/daily_date_controller.dart';
 import 'package:allwork/controllers/prayer_time_controller.dart';
-import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/menu_detail_view.dart';
+import 'package:allwork/views/amaal/amaal_categories_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -103,11 +103,20 @@ class _MenuListViewState extends State<MenuListView> {
                   ),
                   onTap: () async {
                     log("selected ----> $menuItem");
-                    categoryListController.categoryData.clear();
-                    Get.to(() => MenuDetailView(
-                        menuItem: menuItem,
-                        selectedLanguage: widget.selectedLanguage));
-                    //}
+                    if (menuItem == 'Amaal') {
+                      // Navigate to the Amaal dynamic pages
+                      Get.to(
+                        () => AmaalCategoriesScreen(
+                          menuItem: menuItem,
+                        ),
+                      );
+                    } else {
+                      // Normal navigation for other items
+                      categoryListController.categoryData.clear();
+                      Get.to(() => MenuDetailView(
+                          menuItem: menuItem,
+                          selectedLanguage: widget.selectedLanguage));
+                    }
                   },
                 );
               },
