@@ -1,7 +1,7 @@
 import 'package:allwork/controllers/amaal_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
-import 'package:allwork/views/amaal_subcategories_screen.dart';
+import 'package:allwork/views/amaal/amaal_subcategories_screen.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
