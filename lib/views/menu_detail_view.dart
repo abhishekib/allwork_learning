@@ -54,14 +54,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
 
 //if the menu detail view is called with screen repetation then load only nested response
     if (widget.repeated ?? false) {
-      /*return Scaffold(
-        body: Center(child: Text("Screen repetation called")),
-      );*/
-
-      print("===============================");
-      print(widget.nestedResponse);
-      print("===============================");
-
       return BackgroundWrapper(
         child: Scaffold(
           extendBodyBehindAppBar: true,
@@ -289,6 +281,13 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                                 ),
                                 onTap: () {
                                   log("menu detail view-------> $categoryName");
+// Retrieve the map from categoryResponse2 once to avoid redundant calls
+                                  final categoryMap =
+                                      controller.categoryResponse2.toMap();
+
+// Get the key at the current index
+                                  final currentKey =
+                                      categoryMap.keys.elementAt(index);
 
                                   if (controller.categoryResponse2
                                       .toMap()
@@ -298,14 +297,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                                     log("Data going to the menu detail screen ${controller.categoryResponse2.toMap()["Ziyarat 14 Masoomeen"]}");
                                     Navigator.push(context,
                                         MaterialPageRoute(builder: (context) {
-// Retrieve the map from categoryResponse2 once to avoid redundant calls
-                                      final categoryMap =
-                                          controller.categoryResponse2.toMap();
-
-// Get the key at the current index
-                                      final currentKey =
-                                          categoryMap.keys.elementAt(index);
-
 // Access the value corresponding to the current key
                                       final value = categoryMap[currentKey];
 
@@ -326,18 +317,15 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                                         .values
                                         .toList()[1]
                                         .toString());
-                                    Get.to(
-                                      () => CategoryListView(
-                                        categoryItems: controller
-                                            .categoryResponse2
-                                            .toMap()[controller
-                                                .categoryResponse2
-                                                .toMap()
-                                                .keys
-                                                .elementAt(index)]
+
+                                    final firstCategoryValue =
+                                        categoryMap[currentKey]
                                             .categories
                                             .values
-                                            .first,
+                                            .first;
+                                    Get.to(
+                                      () => CategoryListView(
+                                        categoryItems: firstCategoryValue,
                                         argument: categoryName,
                                         selectedLanguage:
                                             widget.selectedLanguage,
