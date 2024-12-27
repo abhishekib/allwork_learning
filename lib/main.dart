@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/', page: () => const MainMenuView()),
         GetPage(
             name: '/menu-detail',
-            page: () => const MenuDetailView(
+            page: () => MenuDetailView(
                   menuItem: '',
                   selectedLanguage: '',
                 )),

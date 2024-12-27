@@ -23,10 +23,10 @@ class ContentData {
     );
   }
 
-  @override
-  String toString() {
-    return "id $id, type $type, audiourl $audiourl, offlineAudioPath $offlineAudioPath, lyrics $lyrics";
-  }
+  // @override
+  // String toString() {
+  //   return "type $type, audiourl $audiourl, lyrics $lyrics";
+  // }
 }
 
 class Lyrics {
@@ -67,10 +67,10 @@ class Lyrics {
         other.translation == translation;
   }
 
-  @override
-  String toString() {
-    return "time: $time, arabic $arabic, transliteration $translitration, translation $translation";
-  }
+  // @override
+  // String toString() {
+  //   return "time: $time, arabic $arabic, transliteration $translitration, translation $translation";
+  // }
 
   // Implement hashCode
   @override

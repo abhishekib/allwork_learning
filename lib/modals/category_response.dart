@@ -26,8 +26,26 @@ class CategoryResponse {
     );
   }
 
-  @override
-  String toString() {
-    return categories.toString();
+  factory CategoryResponse.fromJsonDynamic(Map<dynamic, dynamic> json) {
+    // Create a temporary Map to store the categories parsed from JSON
+    Map<String, List<Category>> tempCategories = {};
+
+    // Loop through each entry in the JSON object
+    json.forEach((key, value) {
+      if (value is List) {
+        // Convert each list item to a Category object using Category.fromJson
+        tempCategories[key] =
+            value.map((item) => Category.fromJson(item)).toList();
+      }
+    });
+
+    return CategoryResponse(
+      categories: tempCategories,
+    );
   }
+
+  // @override
+  // String toString() {
+  //   return categories.toString();
+  // }
 }
