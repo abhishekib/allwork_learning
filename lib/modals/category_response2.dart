@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
 
@@ -15,7 +17,7 @@ class CategoryResponse2 {
     // Create a temporary Map to store the SubMenuDetails parsed from JSON
     Map<String, CategoryResponse> tempZiyarat14Masoomeen = {};
     late CategoryResponse tempOtherZiyarats;
-    // Loop through each entry in the JSON object
+    // Loop through each entry in the ziyaratMasoomeen JSON object
     json.forEach((key, value) {
       if (value is Map) {
         tempZiyarat14Masoomeen[key] = CategoryResponse.fromJsonDynamic(value);
@@ -26,7 +28,6 @@ class CategoryResponse2 {
         tempOtherZiyarats = CategoryResponse.fromJson(entry);
       }
     });
-
     return CategoryResponse2(
         ziyarat14Masoomeen: tempZiyarat14Masoomeen,
         otherZiyarats: tempOtherZiyarats);
@@ -43,5 +44,4 @@ class CategoryResponse2 {
   String toString() {
     return toMap().toString();
   }
-
 }

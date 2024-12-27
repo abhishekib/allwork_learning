@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
@@ -53,90 +54,103 @@ class _MenuDetailViewState extends State<MenuDetailView> {
 
 //if the menu detail view is called with screen repetation then load only nested response
     if (widget.repeated ?? false) {
-      return Scaffold(
-        body: Center(child: Text("Screen repetation called")),
-      );
       /*return Scaffold(
-        extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.backgroundBlue,
-        appBar: AppBar(
+        body: Center(child: Text("Screen repetation called")),
+      );*/
+
+      print("===============================");
+      print(widget.nestedResponse);
+      print("===============================");
+
+      return BackgroundWrapper(
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
           backgroundColor: AppColors.backgroundBlue,
-          centerTitle: true,
-          title: Text(
-            widget.menuItem,
-            style: AppTextStyles.customStyle(
-              fontFamily: fontFamily,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+          appBar: AppBar(
+            backgroundColor: AppColors.backgroundBlue,
+            centerTitle: true,
+            title: Text(
+              widget.menuItem,
+              style: AppTextStyles.customStyle(
+                fontFamily: fontFamily,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            iconTheme: const IconThemeData(
               color: Colors.white,
+              size: 30,
             ),
           ),
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-            size: 30,
-          ),
-        ),
-        body: RefreshIndicator(
-          onRefresh: refreshCategoryData,
-          child: ListView(
-            children: [
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Center(child: DailyDateWidget()),
-              ),
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: PrayerTimeWidget(),
-              ),
-              ...List.generate(controller.categoryData2.length, (index) {
-                final categoryName =
-                    controller.categoryData2.keys.elementAt(index);
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(9.5),
-                        ),
-                        child: ListTile(
-                          tileColor: AppColors.backgroundBlue,
-                          title: Center(
-                            child: Text(
-                              categoryName,
-                              style: AppTextStyles.customStyle(
-                                fontFamily: 'Roboto',
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.backgroundBlue,
+          body: RefreshIndicator(
+            onRefresh: refreshCategoryData,
+            child: ListView(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: DailyDateWidget()),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: PrayerTimeWidget(),
+                ),
+                ...List.generate(
+                    widget.nestedResponse!.values.first.categories.length,
+                    (index) {
+                  final categoryName = widget
+                      .nestedResponse!.values.first.categories.keys
+                      .elementAt(index);
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(9.5),
+                          ),
+                          child: ListTile(
+                            tileColor: AppColors.backgroundBlue,
+                            title: Center(
+                              child: Text(
+                                categoryName,
+                                //categoryName,
+                                style: AppTextStyles.customStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.backgroundBlue,
+                                ),
                               ),
                             ),
+                            onTap: () {
+                              log("menu detail view-------> $categoryName");
+                              final category = widget.nestedResponse!.values
+                                  .first.categories.values
+                                  .elementAt(index);
+                              log("Tapped on $category");
+                              Get.to(
+                                () => CategoryListView(
+                                  categoryItems: category,
+                                  argument: categoryName,
+                                  selectedLanguage: widget.selectedLanguage,
+                                  menuItem: widget.menuItem,
+                                ),
+                              );
+                            },
                           ),
-                          onTap: () {
-                            log("menu detail view-------> $categoryName");
-                            // Get.to(
-                            //   () => CategoryListView(
-                            //     categoryItems:
-                            //         controller.categoryData[categoryName]!,
-                            //     argument: categoryName,
-                            //     selectedLanguage: widget.selectedLanguage,
-                            //     menuItem: widget.menuItem,
-                            //   ),
-                            // );
-                          },
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 10)
-                  ],
-                );
-              }),
-            ],
+                      const SizedBox(height: 10)
+                    ],
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       );
-    */
     } else {
       return BackgroundWrapper(
         child: Obx(() {
@@ -166,7 +180,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
               ),
             );
           } else if (controller.categoryData.isEmpty &&
-              controller.categoryData2.isEmpty) {
+              controller.categoryResponse2 == null) {
             return Scaffold(
               backgroundColor: AppColors.backgroundBlue,
               appBar: AppBar(
@@ -243,9 +257,13 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                       padding: EdgeInsets.all(8.0),
                       child: PrayerTimeWidget(),
                     ),
-                    ...List.generate(controller.categoryData2.length, (index) {
-                      final categoryName =
-                          controller.categoryData2.keys.elementAt(index);
+                    ...List.generate(
+                        controller.categoryResponse2.toMap().keys.length,
+                        (index) {
+                      final categoryName = controller.categoryResponse2
+                          .toMap()
+                          .keys
+                          .elementAt(index);
                       return Column(
                         children: [
                           Padding(
@@ -271,25 +289,62 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                                 ),
                                 onTap: () {
                                   log("menu detail view-------> $categoryName");
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => MenuDetailView(
-                                              menuItem: widget.menuItem,
-                                              selectedLanguage:
-                                                  widget.selectedLanguage,
-                                              repeated: true,
-                                              nestedResponse: controller
-                                                  .categoryData2.values
-                                                  .elementAt(index))));
-                                  // Get.to(() {
-                                  //   log("called for repetation");
-                                  //   return MenuDetailView(
-                                  //     menuItem: widget.menuItem,
-                                  //     selectedLanguage: widget.selectedLanguage,
-                                  //     repeated: true,
-                                  //   );
-                                  // });
+
+                                  if (controller.categoryResponse2
+                                      .toMap()
+                                      .values
+                                      .elementAt(index) is Map) {
+                                    log("Tapped on Ziyarat 14 Masoomeen");
+                                    log("Data going to the menu detail screen ${controller.categoryResponse2.toMap()["Ziyarat 14 Masoomeen"]}");
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+// Retrieve the map from categoryResponse2 once to avoid redundant calls
+                                      final categoryMap =
+                                          controller.categoryResponse2.toMap();
+
+// Get the key at the current index
+                                      final currentKey =
+                                          categoryMap.keys.elementAt(index);
+
+// Access the value corresponding to the current key
+                                      final value = categoryMap[currentKey];
+
+                                      return MenuDetailView(
+                                          menuItem: widget.menuItem,
+                                          selectedLanguage:
+                                              widget.selectedLanguage,
+                                          repeated: true,
+                                          nestedResponse: value);
+                                    }
+                                            //["Ziyarat 14 Masoomeen"]
+
+                                            ));
+                                  } else {
+                                    log("Tapped on other ziyarats");
+                                    log(controller.categoryResponse2
+                                        .toMap()
+                                        .values
+                                        .toList()[1]
+                                        .toString());
+                                    Get.to(
+                                      () => CategoryListView(
+                                        categoryItems: controller
+                                            .categoryResponse2
+                                            .toMap()[controller
+                                                .categoryResponse2
+                                                .toMap()
+                                                .keys
+                                                .elementAt(index)]
+                                            .categories
+                                            .values
+                                            .first,
+                                        argument: categoryName,
+                                        selectedLanguage:
+                                            widget.selectedLanguage,
+                                        menuItem: widget.menuItem,
+                                      ),
+                                    );
+                                  }
                                 },
                               ),
                             ),

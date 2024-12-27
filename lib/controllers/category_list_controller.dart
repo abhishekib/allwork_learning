@@ -14,7 +14,7 @@ class CategoryListController extends GetxController {
   var isLoading = true.obs;
   var isItemSingle = false.obs;
 
-  var categoryData2 = <String, dynamic>{}.obs;
+  late CategoryResponse2 categoryResponse2;
 
   var isNestedData = false.obs;
 
@@ -66,13 +66,12 @@ class CategoryListController extends GetxController {
 
   Future<void> fetchCategoryDataZiyarat(String endpoint) async {
     try {
-      CategoryResponse2 response2;
       if (await Helpers.hasActiveInternetConnection()) {
         log("Active internet connection present");
-        response2 = await _categoryProvider.fetchCategoryData2(endpoint);
-        log(response2.toString());
+        categoryResponse2 =
+            await _categoryProvider.fetchCategoryData2(endpoint);
+        //log(response2.toString());
         isNestedData(true);
-        categoryData2(response2.toMap());
       } else {
         log("Active internet connection not present");
         log(endpoint);
