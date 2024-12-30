@@ -30,6 +30,14 @@ class MoreAppsView extends StatelessWidget {
       'url': 'https://wwbz.media/app',
       'text': 'Check out this app: Zawwar\nhttps://wwbz.media/app'
     },
+    {
+      'name': 'Share Mafatihuljinan.online',
+      'imagePath':
+          'https://play-lh.googleusercontent.com/jozURWe1UvmFiGFlazdCPlKS0dqE-ddMz8eXrRy_5QoHFAeHHEetFJeIMdXeENFtZUG-=s48-rw',
+      'url': 'https://mafatihuljinan.org/app',
+      'text': 'Check out this app: Mafatihuljinan\nhttps://mafatihuljinan.org/app'
+    },
+    
   ];
 
   @override
