@@ -3,6 +3,8 @@ import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/amaal/amaal_subcategories_screen.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
+import 'package:allwork/widgets/daily_date_widget.dart';
+import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -36,21 +38,45 @@ class AmaalCategoriesScreen extends StatelessWidget {
             return Center(child: Text('No Categories Found'));
           }
 
-          return ListView.builder(
-            itemCount: categories.length,
-            itemBuilder: (context, index) {
+          return ListView(children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Center(child: DailyDateWidget()),
+            ),
+            Padding(
+              padding: EdgeInsets.all(8.0),
+              child: PrayerTimeWidget(),
+            ),
+            ...List.generate(categories.length, (index) {
               final category = categories[index];
-              return ListTile(
-                title: Text(
-                  category.name,
-                  style: AppTextStyles.whiteBoldText,
-                ),
-                onTap: () {
-                  Get.to(() => AmaalSubcategoriesScreen(category: category));
-                },
+              return Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(9.5),
+                    ),
+                    child: ListTile(
+                      title: Center(
+                        child: Text(category.name,
+                            style: AppTextStyles.customStyle(
+                              fontFamily: 'Roberto',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.backgroundBlue,
+                            )),
+                      ),
+                      onTap: () {
+                        Get.to(
+                            () => AmaalSubcategoriesScreen(category: category));
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 10)
+                ],
               );
-            },
-          );
+            }),
+          ]);
         }),
       ),
     );

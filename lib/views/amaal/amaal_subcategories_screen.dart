@@ -32,14 +32,44 @@ class AmaalSubcategoriesScreen extends StatelessWidget {
                       category.subcategories!.keys.elementAt(index);
                   final subcategoryItems =
                       category.subcategories![subcategoryName]!;
-                  return ListTile(
-                    title: Text(
-                      subcategoryName,
-                      style: AppTextStyles.whiteBoldText,
-                    ),
-                    onTap: () {
-                      Get.to(() => AmaalDetailsScreen(items: subcategoryItems));
-                    },
+                  return Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(9.5),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            subcategoryName,
+                            style: AppTextStyles.customStyle(
+                              fontFamily: 'Roberto',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.backgroundBlue,
+                            ),
+                          ),
+                          onTap: () {
+                            Get.to(() =>
+                                AmaalDetailsScreen(items: subcategoryItems));
+                          },
+                          trailing: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.backgroundBlue,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Icon(
+                                Icons.arrow_forward_ios_rounded,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10)
+                    ],
                   );
                 },
               )
@@ -47,14 +77,41 @@ class AmaalSubcategoriesScreen extends StatelessWidget {
                 itemCount: category.items?.length ?? 0,
                 itemBuilder: (context, index) {
                   final item = category.items![index];
-                  return ListTile(
-                    title: Text(
-                      item.title,
-                      style: AppTextStyles.whiteBoldText,
-                    ),
-                    onTap: () {
-                      Get.to(() => AmaalDetailsScreen(items: [item]));
-                    },
+                  return Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(9.5),
+                        ),
+                        child: ListTile(
+                            title: Text(
+                              item.title,
+                              style: AppTextStyles.customStyle(
+                              fontFamily: 'Roberto',
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.backgroundBlue,
+                            ),
+                            ),
+                            onTap: () {
+                              Get.to(() => AmaalDetailsScreen(items: [item]));
+                            },
+                            trailing: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.backgroundBlue,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(3.0),
+                                child: Icon(
+                                  Icons.arrow_forward_ios_rounded,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )),
+                      ),
+                    ],
                   );
                 },
               ),
