@@ -24,7 +24,7 @@ class CategoryResponse2 {
       }
       if (value is List) {
         Map<String, dynamic> entry = {};
-        entry['Other Ziyarats'] = value;
+        entry[key] = value;
         tempOtherZiyarats = CategoryResponse.fromJson(entry);
       }
     });
@@ -35,13 +35,13 @@ class CategoryResponse2 {
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {};
-    map["Ziyarat 14 Masoomeen"] = ziyarat14Masoomeen;
-    map["Other Ziyarats"] = otherZiyarats;
+    map[ziyarat14Masoomeen.keys.elementAt(0)] = ziyarat14Masoomeen;
+    map[otherZiyarats.categories.keys.first] = otherZiyarats;
     return map;
   }
 
-  // @override
-  // String toString() {
-  //   return toMap().toString();
-  // }
+  @override
+  String toString() {
+    return toMap().toString();
+  }
 }
