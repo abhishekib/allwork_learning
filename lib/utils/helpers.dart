@@ -113,7 +113,7 @@ class MenuDetailsHelpers {
     MenuDetailEntityNested result = MenuDetailEntityNested(endpoint,
         menuDetailEntity: menuDetailEntities, others: others);
 
-    log("Data saved is: $result");
+    developer.log("Data saved is: $result");
 
     return result;
   }

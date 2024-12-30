@@ -207,4 +207,16 @@ class DbServices {
     return MenuDetailsHelpers.toCategoryResponse2(
         realm.all<MenuDetailEntityNested>().first);
   }
+  
+  void saveOfflineCategoryDataAudio(String savePath, int contentDataId) {
+    final contentData = realm.find<ContentDataEntity>(contentDataId);
+
+    if (contentData != null) {
+      realm.write(() {
+        contentData.offlineAudioUrl ??= savePath;
+      });
+    } else {
+      log("Cannot write the audio path because no such content exists");
+    }
+  }
 }
