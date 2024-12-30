@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
@@ -94,6 +97,51 @@ class MenuDetailsHelpers {
         .toList();
     return MenuDetailEntity(endpoint, categoryGroups: categoryGroups);
   }
+
+  static MenuDetailEntityNested toMenuDetailEntityNested(
+      String endpoint, CategoryResponse2 categoryResponse2) {
+    List<MenuDetailEntity> menuDetailEntities = [];
+
+    menuDetailEntities.add(toMenuDetailEntity(
+        categoryResponse2.ziyarat14Masoomeen.keys.elementAt(0),
+        categoryResponse2.ziyarat14Masoomeen[
+            categoryResponse2.ziyarat14Masoomeen.keys.elementAt(0)]!));
+
+    MenuDetailEntity others =
+        toMenuDetailEntity(endpoint, categoryResponse2.otherZiyarats);
+
+    MenuDetailEntityNested result = MenuDetailEntityNested(endpoint,
+        menuDetailEntity: menuDetailEntities, others: others);
+
+    log("Data saved is: $result");
+
+    return result;
+  }
+
+ static CategoryResponse2 toCategoryResponse2(MenuDetailEntityNested menuDetailEntityNested) {
+    // Map to store the ziyarat14Masoomeen using the MenuDetailEntity list
+    Map<String, CategoryResponse> ziyarat14Masoomeen = {};
+
+    // Assuming that there is only one key in the MenuDetailEntity corresponding to ziyarat14Masoomeen
+    String keyFor14Masoomeen = menuDetailEntityNested.menuDetailEntity.first.endpoint;
+
+    CategoryResponse responseFor14Masoomeen = toCategoryResponse(menuDetailEntityNested.menuDetailEntity.first);
+
+    ziyarat14Masoomeen[keyFor14Masoomeen] = responseFor14Masoomeen;
+
+    // Convert the 'others' MenuDetailEntity to a CategoryResponse
+    CategoryResponse otherZiyaratsResponse = toCategoryResponse(menuDetailEntityNested.others!);
+
+    // Create a CategoryResponse2 object with the constructed maps
+    CategoryResponse2 categoryResponse2 = CategoryResponse2(
+      ziyarat14Masoomeen: ziyarat14Masoomeen,
+      otherZiyarats: otherZiyaratsResponse
+    );
+
+    //log("Converted to CategoryResponse2: $categoryResponse2");
+    return categoryResponse2;
+  }
+
 
   static CategoryResponse toCategoryResponse(
       MenuDetailEntity menuDetailEntity) {

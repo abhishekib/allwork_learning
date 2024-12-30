@@ -32,9 +32,13 @@ class CategoryListController extends GetxController {
 
   Future<void> fetchCategoryData(String menuItem) async {
     isLoading(true);
+    log("menu item =$menuItem");
     final endpoint = _getEndpointForMenuItem(menuItem);
+    log("endpoint=$endpoint");
     if (endpoint.isNotEmpty) {
-      if (endpoint == ApiConstants.ziyaratEndpoint) {
+      if (endpoint == ApiConstants.ziyaratEndpoint ||
+          endpoint == ApiConstants.gujaratiZiyaratEndpoint) {
+        log("endpoint called $endpoint");
         fetchCategoryDataZiyarat(endpoint);
       } else {
         fetchCategoryDataNormal(endpoint);
@@ -84,7 +88,9 @@ class CategoryListController extends GetxController {
       } else {
         log("Active internet connection not present");
         log(endpoint);
-        //response2 = DbServices.instance.getCategoryResponse(endpoint)!;
+        //categoryResponse2 = DbServices.instance.getCategoryResponse2();
+        //log("Saved data coming ${categoryResponse2.toString()}");
+        //isNestedData(true);
       }
       //categoryData.value = response.categories;
       //isItemSingle.value = categoryData.keys.firstOrNull == '';
@@ -120,7 +126,7 @@ class CategoryListController extends GetxController {
       case "દોઆઓ":
       case "ોઆઓ":
         return ApiConstants.gujaratiDuaEndpoint;
-      case "ઝિયરાત":
+      case "ઝિયારાત":
       case "ઝિયાત":
         return ApiConstants.gujaratiZiyaratEndpoint;
       // case "અમલ":

@@ -7,7 +7,9 @@ import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
@@ -31,6 +33,7 @@ class DbServices {
       MenuListEntity.schema,
       MenuListGujratiEntity.schema,
       MenuDetailEntity.schema,
+      MenuDetailEntityNested.schema,
       CategoryGroupEntity.schema,
       CategoryEntity.schema,
       ContentDataEntity.schema,
@@ -180,15 +183,28 @@ class DbServices {
     return null;
   }
 
-  void saveOfflineCategoryDataAudio(String savePath, int contentDataId) {
-    final contentData = realm.find<ContentDataEntity>(contentDataId);
+  Future<void> writeCategoryResponse2(
+      String endpoint, CategoryResponse2 categoryResponse2) async {
+    MenuDetailEntityNested newMenuDetailEntityNested =
+        MenuDetailsHelpers.toMenuDetailEntityNested(
+            endpoint, categoryResponse2);
 
-    if (contentData != null) {
-      realm.write(() {
-        contentData.offlineAudioUrl ??= savePath;
-      });
-    } else {
-      log("Cannot write the audio path because no such content exists");
-    }
+    realm.write(() {
+      // Find the existing MenuDetailEntityNested
+      var existingMenuDetailNested =
+          realm.find<MenuDetailEntityNested>(endpoint);
+      if (existingMenuDetailNested == null) {
+        // Add the new document if it does not exist
+        log("addinge the endpoint as it does not exist : $endpoint");
+        realm.add(newMenuDetailEntityNested);
+      } else {
+        log("Ziyarat already exists");
+      }
+    });
+  }
+
+  CategoryResponse2 getCategoryResponse2() {
+    return MenuDetailsHelpers.toCategoryResponse2(
+        realm.all<MenuDetailEntityNested>().first);
   }
 }
