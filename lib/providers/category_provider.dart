@@ -77,8 +77,9 @@ class CategoryProvider {
         log(categoryResponse2.toString());
 
         DbServices.instance.writeCategoryResponse2(endpoint, categoryResponse2);
-        return DbServices.instance.getCategoryResponse2();
-        
+
+        return categoryResponse2;
+        //return DbServices.instance.getCategoryResponse2();
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }

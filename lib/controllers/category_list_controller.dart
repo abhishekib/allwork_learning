@@ -79,9 +79,9 @@ class CategoryListController extends GetxController {
       } else {
         log("Active internet connection not present");
         log(endpoint);
-        categoryResponse2 = DbServices.instance.getCategoryResponse2();
-        log("Saved data coming ${categoryResponse2.toString()}");
-        isNestedData(true);
+        //categoryResponse2 = DbServices.instance.getCategoryResponse2();
+        //log("Saved data coming ${categoryResponse2.toString()}");
+        //isNestedData(true);
       }
       //categoryData.value = response.categories;
       //isItemSingle.value = categoryData.keys.firstOrNull == '';
