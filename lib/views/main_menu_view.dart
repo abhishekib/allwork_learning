@@ -72,7 +72,7 @@ class MainMenuViewState extends State<MainMenuView> {
                         return Container(
                           height: 50.0,
                           alignment: Alignment.center,
-                          child: const CircularProgressIndicator(),
+                          child: const CircularProgressIndicator(color: Colors.white,),
                         );
                       } else if (animatedTextController
                           .animatedTextList.isEmpty) {
