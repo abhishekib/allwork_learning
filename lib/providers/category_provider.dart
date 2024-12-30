@@ -75,10 +75,10 @@ class CategoryProvider {
             CategoryResponse2.fromJson(response.data['data']);
 
         log(categoryResponse2.toString());
-        
-        DbServices.instance.writeCategoryResponse2(endpoint, categoryResponse2);
 
-        return categoryResponse2;
+        DbServices.instance.writeCategoryResponse2(endpoint, categoryResponse2);
+        return DbServices.instance.getCategoryResponse2();
+        
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }

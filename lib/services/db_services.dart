@@ -7,6 +7,7 @@ import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/modals/daily_date.dart';
@@ -200,5 +201,10 @@ class DbServices {
         log("Ziyarat already exists");
       }
     });
+  }
+
+  CategoryResponse2 getCategoryResponse2() {
+    return MenuDetailsHelpers.toCategoryResponse2(
+        realm.all<MenuDetailEntityNested>().first);
   }
 }
