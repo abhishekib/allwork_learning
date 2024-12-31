@@ -244,7 +244,7 @@ class CategoryGroupEntity extends _CategoryGroupEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, CategoryGroupEntity, 'CategoryGroupEntity', [
-      SchemaProperty('groupName', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('groupName', RealmPropertyType.string),
       SchemaProperty('categoryEntities', RealmPropertyType.object,
           linkTarget: 'CategoryEntity',
           collectionType: RealmCollectionType.list),

@@ -19,7 +19,7 @@ class _MenuDetailEntity {
 
 @RealmModel()
 class _CategoryGroupEntity {
-  @PrimaryKey()
+  //@PrimaryKey()
   late String groupName; // Each group has a unique name
   late List<_CategoryEntity>
       categoryEntities; // List of categories under this group

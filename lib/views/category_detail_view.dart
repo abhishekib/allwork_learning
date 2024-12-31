@@ -83,17 +83,18 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
-    if(cdata.isNotEmpty && cdata[0].offlineAudioPath!=null)
-    {
-      isAudioDownloaded=true;
+    log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
+
+    if (cdata.isNotEmpty && cdata[0].offlineAudioPath != null) {
+      isAudioDownloaded = true;
+      log("Audio is already downloaded");
     }
 
-    final String? initialAudioUrl =
-        isAudioDownloaded
-            ? cdata[0].offlineAudioPath!
-            : cdata[0].audiourl.isNotEmpty
-                ? cdata[0].audiourl
-                : null;
+    final String? initialAudioUrl = isAudioDownloaded
+        ? cdata[0].offlineAudioPath!
+        : cdata[0].audiourl.isNotEmpty
+            ? cdata[0].audiourl
+            : null;
 
     currentContentDataId = cdata[0].id ?? 0;
 
@@ -189,7 +190,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
     final CategoryDetailController controller =
-            Get.put(CategoryDetailController());
+        Get.put(CategoryDetailController());
 
     if (availableTypes.isEmpty) {
       return Scaffold(
@@ -257,7 +258,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               onPressed: () {
                 // Call the copy functionality from LyricsTab
                 _copyAllLyricsToClipboard(
-                    
                     context, availableLyrics, categoryDetails.title);
               },
             ),
@@ -335,30 +335,24 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   }
 
   void _copyAllLyricsToClipboard(BuildContext context,
-     
       Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
     final allLyrics =
-       
         availableLyrics.values.expand((lyricsList) => lyricsList).toList();
 
     Set<Lyrics> uniqueLyricsSet = {};
 
     for (var lyrics in allLyrics) {
-      uniqueLyricsSet.add(
-          lyrics);
+      uniqueLyricsSet.add(lyrics);
     }
 
     String combinedLyrics =
-       
         '${_textCleanerController.cleanText(categoryTitle)}\n\n';
 
     for (var lyrics in uniqueLyricsSet) {
       combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
       combinedLyrics +=
-         
           '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
       combinedLyrics +=
-         
           '${_textCleanerController.cleanText(lyrics.translation)}\n';
     }
 
@@ -368,6 +362,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       const SnackBar(content: Text("All lyrics copied to clipboard!")),
     );
   }
+
   void _shareAllLyrics(BuildContext context,
       Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
     final allLyrics =
