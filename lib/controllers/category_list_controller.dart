@@ -48,6 +48,9 @@ class CategoryListController extends GetxController {
           log("Active internet connection present");
           response =
               await _categoryProvider.fetchApiResponse(endpoint, dayOfWeek);
+          if (response.data.length == 1) {
+            isItemSingle(true);
+          }
           //log("Api Response Handler successfully converted \n ${response.toString()}");
           categoryData(response);
           log("Response getting successfully saved in controller");

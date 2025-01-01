@@ -117,108 +117,118 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           cities.addAll(cityData);
         });
 
-        return BackgroundWrapper(
-          child: Scaffold(
-              extendBodyBehindAppBar: true,
+        if (controller.isItemSingle.value) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            log("I will navigate to CategoryListView MLV");
+            final key = cities.keys.elementAt(0);
+            final value = cities[key];
+            Get.off(() => CategoryListView(
+                  categoryItems: value,
+                  argument: widget.menuItem,
+                  selectedLanguage: widget.selectedLanguage,
+                  menuItem: widget.menuItem,
+                ));
+          });
+          return Scaffold(
               backgroundColor: AppColors.backgroundBlue,
-              appBar: AppBar(
-                  backgroundColor: AppColors.backgroundBlue,
-                  centerTitle: true,
-                  title: Text(widget.menuItem,
-                      style: AppTextStyles.customStyle(
-                        fontFamily: fontFamily,
-                        fontSize: 30,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      )),
-                  iconTheme: const IconThemeData(
-                    color: Colors.white,
-                    size: 30,
-                  )),
-              body: RefreshIndicator(
-                onRefresh: refreshCategoryData,
-                child: ListView(children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Center(child: DailyDateWidget()),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: PrayerTimeWidget(),
-                  ),
-                  ...List.generate(cities.keys.length, (index) {
-                    final key = cities.keys.elementAt(index);
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+        } else {
+          return BackgroundWrapper(
+            child: Scaffold(
+                extendBodyBehindAppBar: true,
+                backgroundColor: AppColors.backgroundBlue,
+                appBar: AppBar(
+                    backgroundColor: AppColors.backgroundBlue,
+                    centerTitle: true,
+                    title: Text(widget.menuItem,
+                        style: AppTextStyles.customStyle(
+                          fontFamily: fontFamily,
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        )),
+                    iconTheme: const IconThemeData(
+                      color: Colors.white,
+                      size: 30,
+                    )),
+                body: RefreshIndicator(
+                  onRefresh: refreshCategoryData,
+                  child: ListView(children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(child: DailyDateWidget()),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: PrayerTimeWidget(),
+                    ),
+                    ...List.generate(cities.keys.length, (index) {
+                      final key = cities.keys.elementAt(index);
 
-                    final value = cities[key];
-                    return Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(9.5),
-                              ),
-                              child: ListTile(
-                                tileColor: AppColors.backgroundBlue,
-                                title: Center(
-                                    child: Text(
-                                  key,
-                                  style: AppTextStyles.customStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.backgroundBlue,
-                                  ),
+                      final value = cities[key];
+                      return Column(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(9.5),
+                                ),
+                                child: ListTile(
+                                  tileColor: AppColors.backgroundBlue,
+                                  title: Center(
+                                      child: Text(
+                                    key,
+                                    style: AppTextStyles.customStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.backgroundBlue,
+                                    ),
+                                  )),
+                                  onTap: () {
+                                    log("Screen Tapped $key");
+                                    if (value is Map<String, dynamic>) {
+                                      // If the next level is a map, navigate to the same screen
+                                      log("first level map");
+                                      Get.to(
+                                          preventDuplicates: false,
+                                          () => DynamicScreen(
+                                                title: key,
+                                                data: value,
+                                                menuItem: widget.menuItem,
+                                                selectedLanguage:
+                                                    widget.selectedLanguage,
+                                              ));
+                                    } else if (value is List<dynamic>) {
+                                      log("first level list");
+                                      // If it's a list, navigate to a content-specific screen
+                                      Get.to(
+                                        () => CategoryListView(
+                                          categoryItems: value,
+                                          argument: key,
+                                          selectedLanguage:
+                                              widget.selectedLanguage,
+                                          menuItem: widget.menuItem,
+                                        ),
+                                      );
+                                    }
+                                  },
                                 )),
-                                onTap: () {
-                                  log("Screen Tapped $key");
-                                  if (value is Map<String, dynamic>) {
-                                    // If the next level is a map, navigate to the same screen
-                                    log("first level map");
-                                    Get.to(
-                                        preventDuplicates: false,
-                                        () => DynamicScreen(
-                                              title: key,
-                                              data: value,
-                                              menuItem: widget.menuItem,
-                                              selectedLanguage:
-                                                  widget.selectedLanguage,
-                                            ));
-
-                                    // Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //         builder: (context) => DynamicScreen(
-                                    //               title: key,
-                                    //               data: value,
-                                    //               menuItem: widget.menuItem,
-                                    //               selectedLanguage:
-                                    //                   widget.selectedLanguage,
-                                    //             )));
-                                  } else if (value is List<dynamic>) {
-                                    log("first level list");
-                                    // If it's a list, navigate to a content-specific screen
-                                    Get.to(
-                                      () => CategoryListView(
-                                        categoryItems: value,
-                                        argument: key,
-                                        selectedLanguage:
-                                            widget.selectedLanguage,
-                                        menuItem: widget.menuItem,
-                                      ),
-                                    );
-                                  }
-                                },
-                              )),
-                        ),
-                        const SizedBox(height: 10)
-                      ],
-                    );
-                  })
-                ]),
-              )),
-        );
+                          ),
+                          const SizedBox(height: 10)
+                        ],
+                      );
+                    })
+                  ]),
+                )),
+          );
+        }
       },
     );
   }

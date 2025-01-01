@@ -31,7 +31,7 @@ class DynamicScreen extends StatelessWidget {
         appBar: AppBar(
             backgroundColor: AppColors.backgroundBlue,
             centerTitle: true,
-            title: Text(menuItem,
+            title: Text(title,
                 style: AppTextStyles.customStyle(
                   fontFamily: fontFamily,
                   fontSize: 30,
