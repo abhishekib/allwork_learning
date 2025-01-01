@@ -129,12 +129,13 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                   menuItem: widget.menuItem,
                 ));
           });
+          controller.isItemSingle(false);
           return Scaffold(
-              backgroundColor: AppColors.backgroundBlue,
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
+            backgroundColor: AppColors.backgroundBlue,
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
         } else {
           return BackgroundWrapper(
             child: Scaffold(
