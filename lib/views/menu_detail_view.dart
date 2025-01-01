@@ -16,14 +16,12 @@ import 'package:intl/intl.dart';
 class MenuDetailView extends StatefulWidget {
   final String menuItem;
   final String selectedLanguage;
-  Map<String, CategoryResponse>? nestedResponse;
   bool? repeated;
 
   MenuDetailView(
       {super.key,
       required this.menuItem,
       required this.selectedLanguage,
-      this.nestedResponse,
       this.repeated});
 
   @override
@@ -36,9 +34,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
   void initState() {
     super.initState();
     //if the menu detail view is called with screen repetation then no need to fetch the data again
-    if (!(widget.repeated ?? false)) {
-      controller.fetchCategoryData(widget.menuItem);
-    } else {}
+    controller.fetchCategoryData(widget.menuItem);
   }
 
   @override
@@ -52,6 +48,291 @@ class _MenuDetailViewState extends State<MenuDetailView> {
       await controller.fetchCategoryData(widget.menuItem);
     }
 
+    return Obx(
+      () {
+        if (controller.isLoading.value) {
+          return BackgroundWrapper(
+            child: Scaffold(
+              backgroundColor: AppColors.backgroundBlue,
+              appBar: AppBar(
+                backgroundColor: AppColors.backgroundBlue,
+                title: Text(
+                  widget.menuItem,
+                  style: AppTextStyles.customStyle(
+                    fontFamily: fontFamily,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                iconTheme: const IconThemeData(
+                  color: Colors.white,
+                  size: 30,
+                ),
+              ),
+              body: Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          );
+        }
+
+        final data = controller.categoryData.value.data;
+
+        if (data.isEmpty) {
+          return Scaffold(
+            backgroundColor: AppColors.backgroundBlue,
+            appBar: AppBar(
+              backgroundColor: AppColors.backgroundBlue,
+              centerTitle: true,
+              title: Text(
+                widget.menuItem,
+                style: AppTextStyles.customStyle(
+                  fontFamily: fontFamily,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
+            body: Center(
+                child: Text(
+              widget.selectedLanguage == 'English'
+                  ? "No record found"
+                  : "કોઈ રેકોર્ડ મળ્યો નથી",
+              style: AppTextStyles.whiteBoldText,
+            )),
+          );
+        }
+
+        // Combine cities from all countries into a single map
+        final Map<String, dynamic> cities = {};
+        data.forEach((country, cityData) {
+          cities.addAll(cityData);
+        });
+
+        
+        return BackgroundWrapper(
+          child: Scaffold(
+              extendBodyBehindAppBar: true,
+              backgroundColor: AppColors.backgroundBlue,
+              appBar: AppBar(
+                  backgroundColor: AppColors.backgroundBlue,
+                  centerTitle: true,
+                  title: Text(widget.menuItem,
+                      style: AppTextStyles.customStyle(
+                        fontFamily: fontFamily,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      )),
+                  iconTheme: const IconThemeData(
+                    color: Colors.white,
+                    size: 30,
+                  )),
+              body: RefreshIndicator(
+                onRefresh: refreshCategoryData,
+                child: ListView(children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Center(child: DailyDateWidget()),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: PrayerTimeWidget(),
+                  ),
+                  ...List.generate(cities.keys.length, (index) {
+                    final key = cities.keys.elementAt(index);
+
+                    final value = cities[key];
+                    return Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(9.5),
+                              ),
+                              child: ListTile(
+                                tileColor: AppColors.backgroundBlue,
+                                title: Center(
+                                    child: Text(
+                                  key,
+                                  style: AppTextStyles.customStyle(
+                                    fontFamily: 'Roboto',
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.backgroundBlue,
+                                  ),                                  
+                                )),
+                              onTap: () {
+                                log("Screen Tapped $key");
+                             if (value is Map<String, dynamic>) {
+                               // If the next level is a map, navigate to the same screen
+                               log("first level map");
+                              //  Get.to(
+                              //      preventDuplicates: false,
+                              //      () => DynamicScreen(title: key, data: value));
+                              
+                              
+                              //  Navigator.push(context,MaterialPageRoute(
+                              //      builder: (context) =>
+                              //          DynamicScreen(title: key, data: value)));
+                              
+                             } else if (value is List<dynamic>) {
+                               log("first level list");
+                               // If it's a list, navigate to a content-specific screen
+                               // Get.to(() =>
+                               //     ContentScreen(title: key, categories: value));
+                             
+                             Get.to(
+                                () => CategoryListView(
+                                  categoryItems: value,
+                                  argument: key,
+                                  selectedLanguage: widget.selectedLanguage,
+                                  menuItem: widget.menuItem,
+                                ),
+                              );
+                             
+                             }
+                              },)),
+                        ),
+                        const SizedBox(height: 10)
+                      ],
+                    );
+                  })
+                ]),
+                // child: ListView.builder(
+                //     itemCount: cities.keys.length,
+                //     itemBuilder: (context, index) {
+                //       final key = cities.keys.elementAt(index);
+
+                //       final value = cities[key];
+
+                //       return ListTile(
+                //           title: Text(
+                //             key,
+                //           ),
+                //           trailing: Icon(Icons.arrow_forward),
+                //           onTap: () {
+                //             log("Screen Tapped $key");
+                //             if (value is Map<String, dynamic>) {
+                //               // If the next level is a map, navigate to the same screen
+                //               log("first level map");
+                //               // Get.to(
+                //               //     preventDuplicates: false,
+                //               //     () => DynamicScreen(title: key, data: value));
+                //               // Navigator.push(context,MaterialPageRoute(
+                //               //     builder: (context) =>
+                //               //         DynamicScreen(title: key, data: value)));
+                //             } else if (value is List<dynamic>) {
+                //               log("first level list");
+                //               // If it's a list, navigate to a content-specific screen
+                //               // Get.to(() =>
+                //               //     ContentScreen(title: key, categories: value));
+                //             }
+                //           });
+                //     }),
+              )),
+        );
+      },
+    );
+
+    /*return BackgroundWrapper(
+        child: Scaffold(
+          extendBodyBehindAppBar: true,
+          backgroundColor: AppColors.backgroundBlue,
+          appBar: AppBar(
+            backgroundColor: AppColors.backgroundBlue,
+            centerTitle: true,
+            title: Text(
+              widget.menuItem,
+              style: AppTextStyles.customStyle(
+                fontFamily: fontFamily,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+              size: 30,
+            ),
+          ),
+          body: RefreshIndicator(
+            onRefresh: refreshCategoryData,
+            child: ListView(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Center(child: DailyDateWidget()),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: PrayerTimeWidget(),
+                ),
+                ...List.generate(cities.length, (index) {
+                  final categoryName = cities.keys.elementAt(index);
+                  final value = cities[categoryName];
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(9.5),
+                          ),
+                          child: ListTile(
+                            tileColor: AppColors.backgroundBlue,
+                            title: Center(
+                              child: Text(
+                                categoryName,
+                                //categoryName,
+                                style: AppTextStyles.customStyle(
+                                  fontFamily: 'Roboto',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.backgroundBlue,
+                                ),
+                              ),
+                            ),
+                            onTap: () {
+                              log("menu detail view-------> $categoryName");
+                              final category = value;
+                              log("Tapped on $category");
+                              Get.to(
+                                () => CategoryListView(
+                                  categoryItems: category,
+                                  argument: categoryName,
+                                  selectedLanguage: widget.selectedLanguage,
+                                  menuItem: widget.menuItem,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10)
+                    ],
+                  );
+                }),
+              ],
+            ),
+          ),
+        ),
+      );
+    
+    });
+*/
+/*
 //if the menu detail view is called with screen repetation then load only nested response
     if (widget.repeated ?? false) {
       return BackgroundWrapper(
@@ -440,5 +721,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
         }),
       );
     }
+  }
+  */
   }
 }

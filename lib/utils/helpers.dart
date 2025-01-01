@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
-import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
@@ -89,6 +88,7 @@ class MenuDetailsHelpers {
             .toList());
   }
 
+/*
   static MenuDetailEntity toMenuDetailEntity(
       String endpoint, CategoryResponse categoryResponse) {
     List<CategoryGroupEntity> categoryGroups = categoryResponse
@@ -150,4 +150,5 @@ class MenuDetailsHelpers {
         .map((categoryGroupEntity) => _toMapEntry(categoryGroupEntity)));
     return CategoryResponse(categories: categories);
   }
+*/
 }

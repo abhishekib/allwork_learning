@@ -9,7 +9,6 @@ import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
-import 'package:allwork/modals/category_response2.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
@@ -126,6 +125,7 @@ class DbServices {
   }
 
 //write the CategoryResponse model in db
+  /*
   Future<void> writeCategoryResponse(
       String endpoint, CategoryResponse categoryResponse) async {
     // Convert CategoryResponse to MenuDetailEntity before the transaction
@@ -172,8 +172,9 @@ class DbServices {
 
     log("Written $endpoint model in DB");
   }
-
+*/
 //get the CategoryResponse model from db
+/*
   CategoryResponse? getCategoryResponse(String endpoint) {
     var existingMenuDetail = realm.find<MenuDetailEntity>(endpoint);
 
@@ -182,31 +183,31 @@ class DbServices {
     }
     return null;
   }
+*/
+  // Future<void> writeCategoryResponse2(
+  //     String endpoint, CategoryResponse2 categoryResponse2) async {
+  //   MenuDetailEntityNested newMenuDetailEntityNested =
+  //       MenuDetailsHelpers.toMenuDetailEntityNested(
+  //           endpoint, categoryResponse2);
 
-  Future<void> writeCategoryResponse2(
-      String endpoint, CategoryResponse2 categoryResponse2) async {
-    MenuDetailEntityNested newMenuDetailEntityNested =
-        MenuDetailsHelpers.toMenuDetailEntityNested(
-            endpoint, categoryResponse2);
+  //   realm.write(() {
+  //     // Find the existing MenuDetailEntityNested
+  //     var existingMenuDetailNested =
+  //         realm.find<MenuDetailEntityNested>(endpoint);
+  //     if (existingMenuDetailNested == null) {
+  //       // Add the new document if it does not exist
+  //       log("addinge the endpoint as it does not exist : $endpoint");
+  //       realm.add(newMenuDetailEntityNested);
+  //     } else {
+  //       log("Ziyarat already exists");
+  //     }
+  //   });
+  // }
 
-    realm.write(() {
-      // Find the existing MenuDetailEntityNested
-      var existingMenuDetailNested =
-          realm.find<MenuDetailEntityNested>(endpoint);
-      if (existingMenuDetailNested == null) {
-        // Add the new document if it does not exist
-        log("addinge the endpoint as it does not exist : $endpoint");
-        realm.add(newMenuDetailEntityNested);
-      } else {
-        log("Ziyarat already exists");
-      }
-    });
-  }
-
-  CategoryResponse2 getCategoryResponse2() {
-    return MenuDetailsHelpers.toCategoryResponse2(
-        realm.all<MenuDetailEntityNested>().first);
-  }
+  // CategoryResponse2 getCategoryResponse2() {
+  //   return MenuDetailsHelpers.toCategoryResponse2(
+  //       realm.all<MenuDetailEntityNested>().first);
+  // }
   
   void saveOfflineCategoryDataAudio(String savePath, int contentDataId) {
     final contentData = realm.find<ContentDataEntity>(contentDataId);

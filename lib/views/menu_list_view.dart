@@ -112,7 +112,7 @@ class _MenuListViewState extends State<MenuListView> {
                       );
                     } else {
                       // Normal navigation for other items
-                      categoryListController.categoryData.clear();
+                      categoryListController.categoryData;
                       Get.to(() => MenuDetailView(
                           menuItem: menuItem,
                           selectedLanguage: widget.selectedLanguage));

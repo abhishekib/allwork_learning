@@ -10,7 +10,7 @@ import 'package:get/get.dart';
 import 'package:allwork/modals/category.dart';
 
 class CategoryListView extends StatelessWidget {
-  final List<Category> categoryItems;
+  final List<dynamic> categoryItems;
   final String argument; // This field will store the menuItem value
   final CategoryListController categoryListController =
       CategoryListController();
@@ -29,6 +29,8 @@ class CategoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     TextCleanerController textCleanerController = TextCleanerController();
+    //log(categoryItems.toString());
+
     return BackgroundWrapper(
       child: categoryListController.isLoading.value
           ? Scaffold(
@@ -65,7 +67,7 @@ class CategoryListView extends StatelessWidget {
                           child: ListTile(
                             focusColor: Colors.purple,
                             title: Text(
-                              textCleanerController.cleanText(item.title),
+                              textCleanerController.cleanText(item['title']),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.customStyle(
@@ -76,11 +78,14 @@ class CategoryListView extends StatelessWidget {
                               ),
                             ),
                             onTap: () {
-                              log("Category List View------>${item.title}");
+                              log("Category List View------>${item['title']}");
+
+                              final category = Category.fromJson(item);
+
                               Get.toNamed(
                                 '/category-detail',
                                 arguments: {
-                                  'category': item,
+                                  'category': category,
                                   'language': selectedLanguage,
                                   'menuItem': menuItem
                                 },

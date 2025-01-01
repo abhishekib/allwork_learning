@@ -1,51 +1,38 @@
-import 'category.dart'; // Assuming this is the file where the Category model is defined.
+import 'package:allwork/modals/category.dart';
 
 class CategoryResponse {
-  Map<String, List<Category>> categories;
+  final String country;
+  final Map<String, List<Category>>? cityCategories;
+  final List<Category>? standaloneCategories;
 
   CategoryResponse({
-    required this.categories,
+    required this.country,
+    this.cityCategories,
+    this.standaloneCategories,
   });
 
-  // Factory method for parsing JSON data
-  factory CategoryResponse.fromJson(Map<String, dynamic> json) {
-    // Create a temporary Map to store the categories parsed from JSON
-    Map<String, List<Category>> tempCategories = {};
-
-    // Loop through each entry in the JSON object
-    json.forEach((key, value) {
-      if (value is List) {
-        // Convert each list item to a Category object using Category.fromJson
-        tempCategories[key] =
-            value.map((item) => Category.fromJson(item)).toList();
-      }
-    });
-
-    return CategoryResponse(
-      categories: tempCategories,
-    );
+  factory CategoryResponse.fromJson(String country, dynamic json) {
+    if (json is Map<String, dynamic>) {
+      final cityCategories = json.map((key, value) {
+        return MapEntry(
+          key,
+          (value as List<dynamic>? ?? [])
+              .map((item) => Category.fromJson(item))
+              .toList(),
+        );
+      });
+      return CategoryResponse(country: country, cityCategories: cityCategories);
+    } else if (json is List<dynamic>) {
+      final categories = json.map((item) => Category.fromJson(item)).toList();
+      return CategoryResponse(
+          country: country, standaloneCategories: categories);
+    } else {
+      throw Exception('Unexpected data format');
+    }
   }
 
-  factory CategoryResponse.fromJsonDynamic(Map<dynamic, dynamic> json) {
-    // Create a temporary Map to store the categories parsed from JSON
-    Map<String, List<Category>> tempCategories = {};
-
-    // Loop through each entry in the JSON object
-    json.forEach((key, value) {
-      if (value is List) {
-        // Convert each list item to a Category object using Category.fromJson
-        tempCategories[key] =
-            value.map((item) => Category.fromJson(item)).toList();
-      }
-    });
-
-    return CategoryResponse(
-      categories: tempCategories,
-    );
-  }
-
-  @override
-  String toString() {
-    return categories.toString();
-  }
+  // @override
+  // String toString() {
+  //   return "Country : $country,/n City Categories $cityCategories,/n Stand Alone Categories $standaloneCategories";
+  // }
 }

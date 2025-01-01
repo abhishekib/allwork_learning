@@ -29,9 +29,9 @@ class Category {
     );
   }
 
-@override
-  String toString() {
-    return "cat: $category, id $id, title $title, isFav $isFav, cData $cdata";
-  }
+// @override
+//   String toString() {
+//     return "cat: $category, id $id, title $title, isFav $isFav, cData $cdata";
+//   }
 
 }
