@@ -5,6 +5,7 @@ import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_list_view.dart';
+import 'package:allwork/views/dynamic_screen.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,13 +17,14 @@ import 'package:intl/intl.dart';
 class MenuDetailView extends StatefulWidget {
   final String menuItem;
   final String selectedLanguage;
-  bool? repeated;
 
-  MenuDetailView(
-      {super.key,
-      required this.menuItem,
-      required this.selectedLanguage,
-      this.repeated});
+  
+
+  MenuDetailView({
+    super.key,
+    required this.menuItem,
+    required this.selectedLanguage,
+  });
 
   @override
   State<MenuDetailView> createState() => _MenuDetailViewState();
@@ -117,7 +119,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           cities.addAll(cityData);
         });
 
-        
         return BackgroundWrapper(
           child: Scaffold(
               extendBodyBehindAppBar: true,
@@ -170,39 +171,48 @@ class _MenuDetailViewState extends State<MenuDetailView> {
                                     fontSize: 20,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.backgroundBlue,
-                                  ),                                  
+                                  ),
                                 )),
-                              onTap: () {
-                                log("Screen Tapped $key");
-                             if (value is Map<String, dynamic>) {
-                               // If the next level is a map, navigate to the same screen
-                               log("first level map");
-                              //  Get.to(
-                              //      preventDuplicates: false,
-                              //      () => DynamicScreen(title: key, data: value));
-                              
-                              
-                              //  Navigator.push(context,MaterialPageRoute(
-                              //      builder: (context) =>
-                              //          DynamicScreen(title: key, data: value)));
-                              
-                             } else if (value is List<dynamic>) {
-                               log("first level list");
-                               // If it's a list, navigate to a content-specific screen
-                               // Get.to(() =>
-                               //     ContentScreen(title: key, categories: value));
-                             
-                             Get.to(
-                                () => CategoryListView(
-                                  categoryItems: value,
-                                  argument: key,
-                                  selectedLanguage: widget.selectedLanguage,
-                                  menuItem: widget.menuItem,
-                                ),
-                              );
-                             
-                             }
-                              },)),
+                                onTap: () {
+                                  log("Screen Tapped $key");
+                                  if (value is Map<String, dynamic>) {
+                                    // If the next level is a map, navigate to the same screen
+                                    log("first level map");
+                                    Get.to(
+                                        preventDuplicates: false,
+                                        () => DynamicScreen(
+                                              title: key,
+                                              data: value,
+                                              menuItem: widget.menuItem,
+                                              selectedLanguage:
+                                                  widget.selectedLanguage,
+                                            ));
+
+                                    // Navigator.push(
+                                    //     context,
+                                    //     MaterialPageRoute(
+                                    //         builder: (context) => DynamicScreen(
+                                    //               title: key,
+                                    //               data: value,
+                                    //               menuItem: widget.menuItem,
+                                    //               selectedLanguage:
+                                    //                   widget.selectedLanguage,
+                                    //             )));
+                                  } else if (value is List<dynamic>) {
+                                    log("first level list");
+                                    // If it's a list, navigate to a content-specific screen
+                                    Get.to(
+                                      () => CategoryListView(
+                                        categoryItems: value,
+                                        argument: key,
+                                        selectedLanguage:
+                                            widget.selectedLanguage,
+                                        menuItem: widget.menuItem,
+                                      ),
+                                    );
+                                  }
+                                },
+                              )),
                         ),
                         const SizedBox(height: 10)
                       ],
