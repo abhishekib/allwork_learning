@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/controllers/daily_date_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,11 +29,35 @@ class DailyDateWidget extends StatelessWidget {
       } else {
         final hijriDate =
             hijriDateController.dailyDate.value?.hijriDate ?? 'No Date';
+        final hijriText = hijriDateController.dailyDate.value?.event ?? '';
+        final hijriColor =
+            hijriDateController.dailyDate.value?.eventColor ?? '';
+        log("-------------------------->$hijriColor");
         return Center(
-          child: Text(
-            hijriDate.toString(),
-            style: AppTextStyles.whiteBoldText.copyWith(
-              fontSize: 20,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  hijriDate.toString(),
+                  style: AppTextStyles.whiteBoldText.copyWith(
+                    fontSize: 20,
+                    color:
+                        Color(int.parse(hijriColor.replaceFirst('#', '0xFF'))),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  hijriText.toString(),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.whiteBoldText.copyWith(
+                    fontSize: 18,
+                    color:
+                        Color(int.parse(hijriColor.replaceFirst('#', '0xFF'))),
+                  ),
+                ),
+              ],
             ),
           ),
         );

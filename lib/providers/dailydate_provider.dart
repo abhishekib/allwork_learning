@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
+// import 'dart:developer';
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/utils/helpers.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/modals/daily_date.dart';
 import '../utils/constants.dart';
@@ -20,8 +21,10 @@ class DailyDateProvider {
         );
 
   Future<DailyDate> fetchDailyDate() async {
+    final userTimeZone = await getUserTimeZone();
+
     final body = json.encode({
-      'tz': 'Asia/Kolkata',
+      'tz': userTimeZone,
       'dd': -1,
     });
 
@@ -31,11 +34,11 @@ class DailyDateProvider {
         ApiConstants.dailyDateEndpoint,
         data: body,
       );
-      log("message----------->$response");
+      // log("message----------->$response");
 
       if (response.statusCode == 200) {
         final data = response.data;
-        log("Daily Date ---->$data");
+        // log("Daily Date ---->$data");
 
         // Parse the JSON response into a DailyDate object
         DailyDate dailyDate = DailyDate.fromJson(data);

@@ -1,11 +1,26 @@
-import 'dart:developer';
-
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/category.dart';
-import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'dart:math';
 import 'dart:developer' as developer;
+
+Future<String> getUserTimeZone() async {
+  try {
+    final now = DateTime.now();
+    final timeZoneOffset = now.timeZoneOffset;
+    final hours = timeZoneOffset.inHours.abs().toString().padLeft(2, '0');
+    final minutes =
+        (timeZoneOffset.inMinutes % 60).abs().toString().padLeft(2, '0');
+    final sign = timeZoneOffset.isNegative ? '-' : '+';
+    final formattedTimeZone = 'UTC$sign$hours:$minutes';
+
+    final timeZoneName = now.timeZoneName;
+
+    return timeZoneName;
+  } catch (e) {
+    throw Exception('Error fetching user timezone: $e');
+  }
+}
 
 class MenuDetailsHelpers {
   static final List<int> _ran = [];
