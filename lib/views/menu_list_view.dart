@@ -103,7 +103,7 @@ class _MenuListViewState extends State<MenuListView> {
                   ),
                   onTap: () async {
                     log("selected ----> $menuItem");
-                    if (menuItem == 'Amaal' || menuItem=='અમ') {
+                    /*if (menuItem == 'Amaal' || menuItem=='અમ') {
                       // Navigate to the Amaal dynamic pages
                       Get.to(
                         () => AmaalCategoriesScreen(
@@ -111,12 +111,13 @@ class _MenuListViewState extends State<MenuListView> {
                         ),
                       );
                     } else {
-                      // Normal navigation for other items
-                      categoryListController.categoryData;
-                      Get.to(() => MenuDetailView(
-                          menuItem: menuItem,
-                          selectedLanguage: widget.selectedLanguage));
-                    }
+                      */
+                    // Normal navigation for other items
+                    categoryListController.categoryData;
+                    Get.to(() => MenuDetailView(
+                        menuItem: menuItem,
+                        selectedLanguage: widget.selectedLanguage));
+                    //}
                   },
                 );
               },

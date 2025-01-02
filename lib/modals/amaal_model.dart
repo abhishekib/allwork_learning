@@ -1,3 +1,4 @@
+/*
 class AmaalData {
   final Map<String, dynamic> data;
 
@@ -36,7 +37,7 @@ class Category {
     }
   }
 }
-
+*/
 class AmaalItem {
   final String category;
   final int id;

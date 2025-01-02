@@ -1,3 +1,4 @@
+/*
 import 'package:allwork/controllers/amaal_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
@@ -82,3 +83,4 @@ class AmaalCategoriesScreen extends StatelessWidget {
     );
   }
 }
+*/

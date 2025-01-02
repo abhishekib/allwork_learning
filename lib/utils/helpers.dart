@@ -55,7 +55,7 @@ class MenuDetailsHelpers {
   static CategoryEntity _toCategoryEntity(Category category) {
     return CategoryEntity(category.id, category.category, category.title,
         isFav: category.isFav,
-        cdataEntities: category.cdata
+        cdataEntities: category.cdata!
             .map((cdata) => _toContentDataEntity(cdata))
             .toList());
   }

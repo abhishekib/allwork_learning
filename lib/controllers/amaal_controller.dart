@@ -1,3 +1,5 @@
+/*
+
 import 'package:allwork/modals/amaal_model.dart';
 import 'package:allwork/providers/amaal_provider.dart';
 import 'package:allwork/utils/constants.dart';
@@ -33,3 +35,4 @@ class AmaalController extends GetxController {
     }
   }
 }
+*/

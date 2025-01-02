@@ -70,14 +70,14 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     final cdata = categoryDetails.cdata;
 
-    availableTypes = cdata
+    availableTypes = cdata!
         .where((e) => e.lyrics.isNotEmpty)
         .map((e) => e.type)
         .toSet()
         .toList();
 
     availableLyrics = {
-      for (var item in cdata)
+      for (var item in cdata!)
         if (item.lyrics.isNotEmpty) item.type: item.lyrics
     };
 
@@ -85,7 +85,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
-    if (cdata.isNotEmpty && cdata[0].offlineAudioPath != null) {
+    if (cdata!.isNotEmpty && cdata[0].offlineAudioPath != null) {
       isAudioDownloaded = true;
       log("Audio is already downloaded");
     }
@@ -96,7 +96,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             ? cdata[0].audiourl
             : null;
 
-    currentContentDataId = cdata[0].id ?? 0;
+    currentContentDataId = cdata![0].id ?? 0;
 
     currentAudioUrl = initialAudioUrl;
 
@@ -104,7 +104,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
-      final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
+      final String? newAudioUrl = cdata![selectedIndex].offlineAudioPath != null
           ? cdata[selectedIndex].offlineAudioPath!
           : cdata[selectedIndex].audiourl.isNotEmpty
               ? cdata[selectedIndex].audiourl
@@ -263,8 +263,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             ),
             FloatingActionButton.small(
               heroTag: null,
-              child: const Icon(Icons.favorite),
               onPressed: _handleAddToFavourite,
+              child: const Icon(Icons.favorite),
             ),
             FloatingActionButton.small(
               heroTag: null,

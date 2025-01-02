@@ -20,11 +20,11 @@ class CategoryListController extends GetxController {
   final CategoryProvider _categoryProvider =
       CategoryProvider(ApiConstants.token);
 
-  final AmaalProvider _amaalProvider = AmaalProvider(ApiConstants.token);
+  //final AmaalProvider _amaalProvider = AmaalProvider(ApiConstants.token);
 
   @override
   void onInit() {
-    _amaalProvider.fetchAmaalData();
+    //_amaalProvider.fetchAmaalData();
     super.onInit();
   }
 
