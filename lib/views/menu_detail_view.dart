@@ -122,12 +122,21 @@ class _MenuDetailViewState extends State<MenuDetailView> {
             log("I will navigate to CategoryListView MLV");
             final key = cities.keys.elementAt(0);
             final value = cities[key];
-            Get.off(() => CategoryListView(
-                  categoryItems: value,
-                  argument: widget.menuItem,
-                  selectedLanguage: widget.selectedLanguage,
+            log("Value type : ${value.runtimeType}");
+            if (value is List) {
+              Get.off(() => CategoryListView(
+                    categoryItems: value,
+                    argument: widget.menuItem,
+                    selectedLanguage: widget.selectedLanguage,
+                    menuItem: widget.menuItem,
+                  ));
+            } else if (value is Map) {
+              Get.off(() => DynamicScreen(
                   menuItem: widget.menuItem,
-                ));
+                  selectedLanguage: widget.selectedLanguage,
+                  title: key,
+                  data: value as Map<String, dynamic>));
+            }
           });
           controller.isItemSingle(false);
           return Scaffold(

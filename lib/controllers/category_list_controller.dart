@@ -49,11 +49,9 @@ class CategoryListController extends GetxController {
           response =
               await _categoryProvider.fetchApiResponse(endpoint, dayOfWeek);
 
-          /*
           if (response.data['data'].length == 1) {
             isItemSingle(true);
           }
-          */
 
           //log("Api Response Handler successfully converted \n ${response.toString()}");
           categoryData(response);
