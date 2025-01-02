@@ -54,22 +54,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           return BackgroundWrapper(
             child: Scaffold(
               backgroundColor: AppColors.backgroundBlue,
-              appBar: AppBar(
-                backgroundColor: AppColors.backgroundBlue,
-                title: Text(
-                  widget.menuItem,
-                  style: AppTextStyles.customStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                iconTheme: const IconThemeData(
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
               body: Center(
                 child: CircularProgressIndicator(
                   color: Colors.white,
