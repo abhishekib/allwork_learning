@@ -1,5 +1,4 @@
 import 'package:allwork/controllers/text_cleaner_controller.dart';
-import 'package:allwork/modals/amaal_model.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
@@ -32,11 +31,6 @@ class AmaalDetailsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Text(
-                    //   item.title,
-                    //   style:
-                    //       TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                    // ),
                     Text(
                       textCleanerController.cleanText(item.data!),
                       style: TextStyle(

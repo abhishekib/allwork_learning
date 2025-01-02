@@ -4,7 +4,7 @@ import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
-import 'package:allwork/views/amaal/amaal_details_screen.dart';
+import 'package:allwork/views/amaal_details_screen.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
