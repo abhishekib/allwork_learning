@@ -103,7 +103,7 @@ class _MenuListViewState extends State<MenuListView> {
                   ),
                   onTap: () async {
                     log("selected ----> $menuItem");
-                    if (menuItem == 'Amaal') {
+                    if (menuItem == 'Amaal' || menuItem=='અમ') {
                       // Navigate to the Amaal dynamic pages
                       Get.to(
                         () => AmaalCategoriesScreen(

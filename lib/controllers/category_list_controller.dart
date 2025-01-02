@@ -48,9 +48,12 @@ class CategoryListController extends GetxController {
           log("Active internet connection present");
           response =
               await _categoryProvider.fetchApiResponse(endpoint, dayOfWeek);
+          /*
           if (response.data['data'].length == 1) {
             isItemSingle(true);
           }
+          */
+          
           //log("Api Response Handler successfully converted \n ${response.toString()}");
           categoryData(response);
           log("Response getting successfully saved in controller");
@@ -80,13 +83,17 @@ class CategoryListController extends GetxController {
         return ApiConstants.duaEndpoint;
       case "Ziyarat":
         return ApiConstants.ziyaratEndpoint;
-      // case "Amaal":
-      // return ApiConstants.amaalEndpoint;
+      case "Amaal":
+        return ApiConstants.amaalEndpoint;
       case "Munajat":
         return ApiConstants.munajatEndpoint;
-      // case "Travel Ziyarat":
-      // return ApiConstants.travelZiyaratEndpoint;
+      case "Travel Ziyarat":
+        return ApiConstants.travelZiyaratEndpoint;
+      case "Amaal & Namaz":
+        return ApiConstants.amalAndNamazEndpoint;
+
       case "રોજની દોઆઓ":
+      case "રોજન ોઆઓ":
       case "રોન ોઆઓ":
         return ApiConstants.gujaratiDailyDuaEndpoint;
       case "સુરાહ":
@@ -95,16 +102,21 @@ class CategoryListController extends GetxController {
       case "ોઆઓ":
         return ApiConstants.gujaratiDuaEndpoint;
       case "ઝિયારાત":
+      case "ઝિાાત":
       case "ઝિયાત":
         return ApiConstants.gujaratiZiyaratEndpoint;
-      // case "અમલ":
-      // return ApiConstants.amaalEndpoint;
+      case "અમ":
+        return ApiConstants.gujaratiAmaalEndpoint;
       case "મુનાજાત":
+      case "મનાજાત":
       case "ુનાજાત":
         return ApiConstants.gujaratiMunajatEndpoint;
-      // case "Travel Ziyarat":
-      // return ApiConstants.travelZiyaratEndpoint;
+      case "મુકદ્સ મારાતી ઝયારત":
+        return ApiConstants.gujaratiTravelZiyaratEndpoint;
+      case "અમલ અને નમાઝ":
+        return ApiConstants.gujaratiAmalAndNamazEndpoint;
       default:
+        log("No match found of endpoint for the given menu item");
         return ApiConstants.baseUrl;
     }
   }

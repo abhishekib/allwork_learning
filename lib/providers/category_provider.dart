@@ -119,6 +119,8 @@ class CategoryProvider {
             ApiResponseHandler.fromJson(response.data);
 
         log("data getting written with endpoint $endpoint");
+        log(apiResponseHandler.toString());
+        
         //DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);
 
         //var responseFromDb = DbServices.instance.getCategoryResponse(endpoint)!;
