@@ -26,6 +26,8 @@ class AudioPlayerWidget extends StatefulWidget {
   AudioPlayerWidgetState createState() => AudioPlayerWidgetState();
 }
 
+const String playbackSpeedKey = 'playback_speed';
+
 class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
   bool isPlaying = false;
@@ -51,6 +53,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     _audioPlayer = AudioPlayer();
     _setupAudio();
     _loadViewPreference();
+    _loadPlaybackSpeed();
   }
 
   @override
@@ -59,6 +62,19 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     if (widget.audioUrl != oldWidget.audioUrl) {
       _setupAudio();
     }
+  }
+
+  Future<void> _loadPlaybackSpeed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      playbackSpeed = prefs.getDouble(playbackSpeedKey) ?? 1.0;
+    });
+    _audioPlayer.setPlaybackRate(playbackSpeed); // Apply saved speed
+  }
+
+  Future<void> _savePlaybackSpeed(double speed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(playbackSpeedKey, speed);
   }
 
   Future<void> _setupAudio() async {
@@ -297,6 +313,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         playbackSpeed = value;
                       });
                       _audioPlayer.setPlaybackRate(playbackSpeed);
+                      _savePlaybackSpeed(playbackSpeed);
                     },
                     itemBuilder: (context) => [
                       const PopupMenuItem(
@@ -458,6 +475,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               playbackSpeed = value;
             });
             _audioPlayer.setPlaybackRate(playbackSpeed);
+            _savePlaybackSpeed(playbackSpeed);
           },
           itemBuilder: (context) => [
             const PopupMenuItem(
