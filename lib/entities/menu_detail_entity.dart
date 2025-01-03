@@ -1,11 +1,11 @@
 import 'package:realm/realm.dart';
-    part 'api_response_model.realm.dart';
+    part 'menu_detail_entity.realm.dart';
 
 @RealmModel()
 class _MenuDetailEntity {
   @PrimaryKey()
   late String endpoint;
-  late _ApiResponseEntity? categoryGroups; // List of category groups
+  late _ApiResponseEntity? _apiResponseEntity; // List of category groups
 }
 
 @RealmModel()

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'api_response_model.dart';
+part of 'menu_detail_entity.dart';
 
 // **************************************************************************
 // RealmObjectGenerator
@@ -11,10 +11,10 @@ class MenuDetailEntity extends _MenuDetailEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   MenuDetailEntity(
     String endpoint, {
-    ApiResponseEntity? categoryGroups,
+    ApiResponseEntity? apiResponseEntity,
   }) {
     RealmObjectBase.set(this, 'endpoint', endpoint);
-    RealmObjectBase.set(this, 'categoryGroups', categoryGroups);
+    RealmObjectBase.set(this, '_apiResponseEntity', apiResponseEntity);
   }
 
   MenuDetailEntity._();
@@ -26,12 +26,12 @@ class MenuDetailEntity extends _MenuDetailEntity
   set endpoint(String value) => RealmObjectBase.set(this, 'endpoint', value);
 
   @override
-  ApiResponseEntity? get categoryGroups =>
-      RealmObjectBase.get<ApiResponseEntity>(this, 'categoryGroups')
+  ApiResponseEntity? get _apiResponseEntity =>
+      RealmObjectBase.get<ApiResponseEntity>(this, '_apiResponseEntity')
           as ApiResponseEntity?;
   @override
-  set categoryGroups(covariant ApiResponseEntity? value) =>
-      RealmObjectBase.set(this, 'categoryGroups', value);
+  set _apiResponseEntity(covariant ApiResponseEntity? value) =>
+      RealmObjectBase.set(this, '_apiResponseEntity', value);
 
   @override
   Stream<RealmObjectChanges<MenuDetailEntity>> get changes =>
@@ -49,7 +49,7 @@ class MenuDetailEntity extends _MenuDetailEntity
   EJsonValue toEJson() {
     return <String, dynamic>{
       'endpoint': endpoint.toEJson(),
-      'categoryGroups': categoryGroups.toEJson(),
+      '_apiResponseEntity': _apiResponseEntity.toEJson(),
     };
   }
 
@@ -62,7 +62,7 @@ class MenuDetailEntity extends _MenuDetailEntity
       } =>
         MenuDetailEntity(
           fromEJson(endpoint),
-          categoryGroups: fromEJson(ejson['categoryGroups']),
+          apiResponseEntity: fromEJson(ejson['_apiResponseEntity']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -74,7 +74,7 @@ class MenuDetailEntity extends _MenuDetailEntity
     return const SchemaObject(
         ObjectType.realmObject, MenuDetailEntity, 'MenuDetailEntity', [
       SchemaProperty('endpoint', RealmPropertyType.string, primaryKey: true),
-      SchemaProperty('categoryGroups', RealmPropertyType.object,
+      SchemaProperty('_apiResponseEntity', RealmPropertyType.object,
           optional: true, linkTarget: 'ApiResponseEntity'),
     ]);
   }();
