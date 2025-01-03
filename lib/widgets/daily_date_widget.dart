@@ -32,6 +32,13 @@ class DailyDateWidget extends StatelessWidget {
         final hijriText = hijriDateController.dailyDate.value?.event ?? '';
         final hijriColor =
             hijriDateController.dailyDate.value?.eventColor ?? '';
+        Color color;
+        try {
+          color = Color(int.parse(hijriColor.replaceFirst('#', '0xFF')));
+        } catch (e) {
+          color = Colors.white; // Default color
+          log("Error parsing color: $e");
+        }
         log("-------------------------->$hijriColor");
         return Center(
           child: Padding(
@@ -43,8 +50,7 @@ class DailyDateWidget extends StatelessWidget {
                   hijriDate.toString(),
                   style: AppTextStyles.whiteBoldText.copyWith(
                     fontSize: 20,
-                    color:
-                        Color(int.parse(hijriColor.replaceFirst('#', '0xFF'))),
+                    color: color,
                   ),
                 ),
                 SizedBox(height: 10),
@@ -53,8 +59,7 @@ class DailyDateWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: AppTextStyles.whiteBoldText.copyWith(
                     fontSize: 18,
-                    color:
-                        Color(int.parse(hijriColor.replaceFirst('#', '0xFF'))),
+                    color: color,
                   ),
                 ),
               ],
