@@ -24,7 +24,7 @@ class AudioProvider {
         }
       });
 
-      DbServices.instance.saveOfflineCategoryDataAudio(savePath, contentDataId);
+//      DbServices.instance.saveOfflineCategoryDataAudio(savePath, contentDataId);
 
       return savePath;
     } catch (e) {

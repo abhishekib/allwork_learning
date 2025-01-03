@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
 import 'package:allwork/entities/menu_entities/daily_date_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
@@ -31,12 +30,12 @@ class DbServices {
       PrayerTimeEntity.schema,
       MenuListEntity.schema,
       MenuListGujratiEntity.schema,
-      MenuDetailEntity.schema,
-      MenuDetailEntityNested.schema,
-      CategoryGroupEntity.schema,
-      CategoryEntity.schema,
-      ContentDataEntity.schema,
-      LyricsEntity.schema
+      // MenuDetailEntity.schema,
+      // MenuDetailEntityNested.schema,
+      // CategoryGroupEntity.schema,
+      // CategoryEntity.schema,
+      // ContentDataEntity.schema,
+      // LyricsEntity.schema
     ]);
     realm = Realm(config);
   }
@@ -209,6 +208,7 @@ class DbServices {
   //       realm.all<MenuDetailEntityNested>().first);
   // }
   
+ /* 
   void saveOfflineCategoryDataAudio(String savePath, int contentDataId) {
     final contentData = realm.find<ContentDataEntity>(contentDataId);
 
@@ -220,4 +220,5 @@ class DbServices {
       log("Cannot write the audio path because no such content exists");
     }
   }
+  */
 }

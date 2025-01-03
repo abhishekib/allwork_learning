@@ -1,4 +1,4 @@
-import 'package:allwork/entities/menu_detail_entity.dart';
+
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'dart:math';
@@ -21,7 +21,7 @@ Future<String> getUserTimeZone() async {
     throw Exception('Error fetching user timezone: $e');
   }
 }
-
+/*
 class MenuDetailsHelpers {
   static final List<int> _ran = [];
 
@@ -167,3 +167,4 @@ class MenuDetailsHelpers {
   }
 */
 }
+*/
