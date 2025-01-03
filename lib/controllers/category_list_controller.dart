@@ -105,6 +105,7 @@ class CategoryListController extends GetxController {
       case "ઝિયાત":
         return ApiConstants.gujaratiZiyaratEndpoint;
       case "અમ":
+      case "અમલ":
         return ApiConstants.gujaratiAmaalEndpoint;
       case "મુનાજાત":
       case "મનાજાત":
