@@ -313,18 +313,17 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 },
                 // tabs: availableTypes.map((type) => Tab(text: type)).toList(),
                 tabs: availableTypes.map((type) {
-                  String tabLabel =
-                      type;
+                  String tabLabel = type;
                   if (selectedLanguage == 'Gujarati') {
                     switch (type.toLowerCase()) {
                       case 'arabic':
                         tabLabel = 'અરબી';
                         break;
                       case 'transliteration':
-                        tabLabel = 'તરજુમા';
+                        tabLabel = 'ગુજરાતી';
                         break;
                       case 'translation':
-                        tabLabel = 'ગુજરાતી';
+                        tabLabel = 'તરજુમા';
                         break;
                     }
                   }
