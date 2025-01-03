@@ -311,7 +311,25 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 onTap: (index) {
                   controller.changeType(availableTypes[index]);
                 },
-                tabs: availableTypes.map((type) => Tab(text: type)).toList(),
+                // tabs: availableTypes.map((type) => Tab(text: type)).toList(),
+                tabs: availableTypes.map((type) {
+                  String tabLabel =
+                      type;
+                  if (selectedLanguage == 'Gujarati') {
+                    switch (type.toLowerCase()) {
+                      case 'arabic':
+                        tabLabel = 'અરબી';
+                        break;
+                      case 'transliteration':
+                        tabLabel = 'તરજુમા';
+                        break;
+                      case 'translation':
+                        tabLabel = 'ગુજરાતી';
+                        break;
+                    }
+                  }
+                  return Tab(text: tabLabel);
+                }).toList(),
               ),
               const SizedBox(height: 10),
               Flexible(
