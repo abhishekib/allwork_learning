@@ -276,9 +276,21 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ),
                   ),
                   PopupMenuButton<double>(
-                    icon: const Icon(
-                      Icons.settings,
-                      color: AppColors.backgroundBlue,
+                    icon: Container(
+                      height: 25,
+                      width: 35,
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.backgroundBlue),
+                          borderRadius: BorderRadius.circular(5),
+                          color: AppColors.backgroundBlue),
+                      child: Center(
+                        child: Text('${playbackSpeed.toStringAsFixed(2)}x',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            )),
+                      ),
                     ),
                     onSelected: (value) {
                       setState(() {
@@ -425,9 +437,21 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
         ),
         PopupMenuButton<double>(
-          icon: const Icon(
-            Icons.settings,
-            color: AppColors.backgroundBlue,
+          icon: Container(
+            height: 25,
+            width: 35,
+            decoration: BoxDecoration(
+                border: Border.all(color: AppColors.backgroundBlue),
+                borderRadius: BorderRadius.circular(5),
+                color: AppColors.backgroundBlue),
+            child: Center(
+              child: Text('${playbackSpeed.toStringAsFixed(2)}x',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 12,
+                    fontWeight: FontWeight.bold,
+                  )),
+            ),
           ),
           onSelected: (value) {
             setState(() {
