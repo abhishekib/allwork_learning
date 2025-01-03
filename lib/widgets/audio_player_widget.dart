@@ -169,7 +169,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       children: [
         if (isLoading)
           const Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(color: Colors.white),
           )
         else if (hasError)
           Column(
@@ -324,7 +324,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   downloaded
                       ? const SizedBox.shrink()
                       : isDownloading
-                          ? const CircularProgressIndicator()
+                          ? const CircularProgressIndicator(color: Colors.white)
                           : IconButton(
                               onPressed: () {
                                 if (!downloaded) {
@@ -473,7 +473,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         downloaded
             ? const SizedBox.shrink()
             : isDownloading
-                ? const CircularProgressIndicator()
+                ? const CircularProgressIndicator(color: Colors.white)
                 : IconButton(
                     onPressed: () {
                       if (!downloaded) {

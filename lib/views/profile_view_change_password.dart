@@ -29,7 +29,8 @@ class ChangePassword extends StatelessWidget {
       ),
       body: Obx(() {
         return passwordUpdateController.isLoading.value
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(
+                child: CircularProgressIndicator(color: Colors.white))
             : SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),

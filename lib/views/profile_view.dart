@@ -42,7 +42,8 @@ class ProfileViewState extends State<ProfileView> {
         body: Obx(
           () {
             if (_userInfoController.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(color: Colors.white));
             } else if (_userInfoController.errorMessage.isNotEmpty) {
               return Center(
                   child: Text(_userInfoController.errorMessage.value));

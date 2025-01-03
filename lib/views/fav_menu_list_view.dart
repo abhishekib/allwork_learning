@@ -37,7 +37,8 @@ class _FavMenuListViewState extends State<FavMenuListView> {
             final menuList = controller.menuList.value;
 
             if (controller.isLoading.value) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(
+                  child: CircularProgressIndicator(color: Colors.white));
             } else if (menuList.items.isEmpty) {
               return Center(
                 child: Column(

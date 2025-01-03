@@ -29,7 +29,8 @@ class AboutUsView extends StatelessWidget {
           child: Obx(
             () {
               if (_controller.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                    child: CircularProgressIndicator(color: Colors.white));
               } else {
                 return SingleChildScrollView(
                   child: Linkable(

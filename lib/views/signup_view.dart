@@ -88,7 +88,8 @@ class SignUpView extends StatelessWidget {
                 Center(
                   child: Obx(() {
                     if (registrationController.isLoading.value) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(
+                          color: Colors.white);
                     } else {
                       return ElevatedButton(
                         onPressed: () {

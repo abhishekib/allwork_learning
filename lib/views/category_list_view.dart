@@ -122,7 +122,7 @@ class CategoryListView extends StatelessWidget {
               ),
             )
           : Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Colors.white),
             ),
     );
   }

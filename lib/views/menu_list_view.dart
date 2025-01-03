@@ -61,7 +61,7 @@ class _MenuListViewState extends State<MenuListView> {
           widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
       if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator(color: Colors.white,));
       } else if (menuList.items.isEmpty) {
         return Center(
             child: Column(

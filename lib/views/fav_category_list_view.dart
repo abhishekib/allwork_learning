@@ -30,7 +30,8 @@ class FavCategoryListView extends StatelessWidget {
         ),
         body: Obx(() {
           if (favouriteController.isLoading.value) {
-            return Center(child: CircularProgressIndicator());
+            return Center(
+                child: CircularProgressIndicator(color: Colors.white));
           }
 
           if (favouriteController.hasError.value) {

@@ -65,7 +65,8 @@ class LoginView extends StatelessWidget {
                     children: [
                       Obx(() {
                         if (loginController.isLoading.value) {
-                          return const CircularProgressIndicator();
+                          return const CircularProgressIndicator(
+                              color: Colors.white);
                         } else {
                           return ElevatedButton(
                             onPressed: () {

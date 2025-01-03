@@ -126,7 +126,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           return Scaffold(
             backgroundColor: AppColors.backgroundBlue,
             body: Center(
-              child: CircularProgressIndicator(),
+              child: CircularProgressIndicator(color: Colors.white),
             ),
           );
         } else {
