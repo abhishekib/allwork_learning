@@ -13,4 +13,8 @@ class DailyDate {
     );
   }
   
+  @override
+  String toString() {
+    return "hijriDate : $hijriDate, \n event : $event, \n eventColor :$eventColor";
+  }
 }
