@@ -1,4 +1,4 @@
-name: Flutter CI
+name: Flutter CI / CD
 
 on:
   push:
@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-release:
     name: Build and Release APK
-    runs-on: ubuntu-latest
+    runs-on: hp-victus
 
     steps:
       # Step 1: Checkout the repository
