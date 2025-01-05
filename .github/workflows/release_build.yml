@@ -3,7 +3,7 @@ name: Flutter CI / CD
 on:
   push:
     tags:
-      - "v*.*.*" # Matches version tags like v1.0.0
+      - "v1.1" # Matches version tags like v1.0.0
   pull_request:
     branches:
       - main
