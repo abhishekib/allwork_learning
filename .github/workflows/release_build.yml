@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-release:
     name: Build and Release APK
-    runs-on: hp-victus
+    runs-on: [self-hosted, hp-victus]
 
     steps:
       # Step 1: Checkout the repository
