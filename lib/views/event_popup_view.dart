@@ -18,7 +18,7 @@ class EventPopupView extends StatelessWidget {
       child: Dialog(
         backgroundColor: Colors.transparent,
         child: Container(
-          // width: 450,
+          width: 450,
           decoration: BoxDecoration(
             color: AppColors.backgroundBlue,
             borderRadius: BorderRadius.circular(10.0),
