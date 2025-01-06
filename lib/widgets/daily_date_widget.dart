@@ -34,9 +34,17 @@ class DailyDateWidget extends StatelessWidget {
             hijriDateController.dailyDate.value?.eventColor ?? '';
         Color color;
         try {
-          color = Color(int.parse(hijriColor.replaceFirst('#', '0xFF')));
+          String colorHex = hijriColor.replaceFirst('#', '0xFF');
+          int parsedColor = int.parse(colorHex);
+
+          if ((parsedColor & 0xFFFFFF) <= 0x333333) {
+            // color = Color(parsedColor);
+            color = Color(0xFF1b8415);
+          } else {
+            color = Color(0xFF1b8415);
+          }
         } catch (e) {
-          color = Colors.white; // Default color
+          color = Color(0xFF1b8415);
           log("Error parsing color: $e");
         }
         log("-------------------------->$hijriColor");
@@ -54,12 +62,14 @@ class DailyDateWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                Text(
-                  hijriText.toString(),
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.whiteBoldText.copyWith(
-                    fontSize: 18,
-                    color: color,
+                Visibility(
+                  visible: hijriText.isNotEmpty,
+                  child: Text(
+                    hijriText.toString(),
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.whiteBoldText.copyWith(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
               ],

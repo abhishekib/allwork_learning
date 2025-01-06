@@ -6,7 +6,6 @@ import 'package:allwork/views/category_list_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class DynamicScreen extends StatelessWidget {
   final String menuItem;
@@ -23,7 +22,7 @@ class DynamicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
+    // final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     return BackgroundWrapper(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -33,7 +32,7 @@ class DynamicScreen extends StatelessWidget {
             centerTitle: true,
             title: Text(title,
                 style: AppTextStyles.customStyle(
-                  fontFamily: fontFamily,
+                  fontFamily: 'Roboto',
                   fontSize: 30,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
