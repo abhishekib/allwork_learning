@@ -146,8 +146,8 @@ class ApiResponseEntity extends _ApiResponseEntity
 
 class KeyValueEntity extends _KeyValueEntity
     with RealmEntity, RealmObjectBase, RealmObject {
-  KeyValueEntity(
-    String key, {
+  KeyValueEntity({
+    String? key,
     String? stringValue,
     int? intValue,
     double? doubleValue,
@@ -169,9 +169,9 @@ class KeyValueEntity extends _KeyValueEntity
   KeyValueEntity._();
 
   @override
-  String get key => RealmObjectBase.get<String>(this, 'key') as String;
+  String? get key => RealmObjectBase.get<String>(this, 'key') as String?;
   @override
-  set key(String value) => RealmObjectBase.set(this, 'key', value);
+  set key(String? value) => RealmObjectBase.set(this, 'key', value);
 
   @override
   String? get stringValue =>
@@ -240,21 +240,15 @@ class KeyValueEntity extends _KeyValueEntity
   static EJsonValue _toEJson(KeyValueEntity value) => value.toEJson();
   static KeyValueEntity _fromEJson(EJsonValue ejson) {
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
-    return switch (ejson) {
-      {
-        'key': EJsonValue key,
-      } =>
-        KeyValueEntity(
-          fromEJson(key),
-          stringValue: fromEJson(ejson['stringValue']),
-          intValue: fromEJson(ejson['intValue']),
-          doubleValue: fromEJson(ejson['doubleValue']),
-          boolValue: fromEJson(ejson['boolValue']),
-          nestedValues: fromEJson(ejson['nestedValues']),
-          listValues: fromEJson(ejson['listValues']),
-        ),
-      _ => raiseInvalidEJson(ejson),
-    };
+    return KeyValueEntity(
+      key: fromEJson(ejson['key']),
+      stringValue: fromEJson(ejson['stringValue']),
+      intValue: fromEJson(ejson['intValue']),
+      doubleValue: fromEJson(ejson['doubleValue']),
+      boolValue: fromEJson(ejson['boolValue']),
+      nestedValues: fromEJson(ejson['nestedValues']),
+      listValues: fromEJson(ejson['listValues']),
+    );
   }
 
   static final schema = () {
@@ -262,7 +256,7 @@ class KeyValueEntity extends _KeyValueEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, KeyValueEntity, 'KeyValueEntity', [
-      SchemaProperty('key', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('key', RealmPropertyType.string, optional: true),
       SchemaProperty('stringValue', RealmPropertyType.string, optional: true),
       SchemaProperty('intValue', RealmPropertyType.int, optional: true),
       SchemaProperty('doubleValue', RealmPropertyType.double, optional: true),

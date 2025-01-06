@@ -6,6 +6,7 @@ import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/modals/daily_date.dart';
@@ -122,6 +123,12 @@ class DbServices {
     return Helpers.convertToMenuListGujrati(
         realm.all<MenuListGujratiEntity>().first);
   }
+
+  void writeApiResponse(String endpoint, ApiResponseHandler apiResponseHandler)
+  {
+    
+  }
+
 
 //write the CategoryResponse model in db
   /*

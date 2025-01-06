@@ -18,8 +18,8 @@ class _ApiResponseEntity{
 @RealmModel()
 // Define a RealmObject for a generic key-value pair
 class _KeyValueEntity{
-  @PrimaryKey()
-  late String key; // The key for the entry
+  
+  late String? key; // The key for the entry
 
   late String? stringValue; // Store string values
   late int? intValue; // Store integer values
