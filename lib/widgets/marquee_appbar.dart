@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:marquee/marquee.dart';
@@ -10,6 +11,7 @@ class MarqueeTextWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextCleanerController textCleanerController = TextCleanerController();
     return Container(
       color: AppColors.backgroundBlue, // Background color for the container
       height: 36.0,
@@ -20,8 +22,8 @@ class MarqueeTextWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Marquee(
-                text: marqueeTexts.join(
-                    '   ||   '), // Joining all the text items with separator
+                text: textCleanerController.cleanText(marqueeTexts.join(
+                    '   ||   ')), // Joining all the text items with separator
                 style:
                     AppTextStyles.whiteText, // Custom TextStyle for the marquee
                 blankSpace: 50.0,
