@@ -7,12 +7,9 @@ import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
-import 'package:allwork/modals/category.dart';
-import 'package:allwork/modals/category_response.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
-import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:realm/realm.dart';
 

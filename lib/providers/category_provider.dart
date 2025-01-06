@@ -1,11 +1,8 @@
 import 'dart:developer';
 
 import 'package:allwork/modals/api_response_handler.dart';
-import 'package:allwork/modals/category.dart';
-import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:allwork/modals/category_response.dart';
 
 class CategoryProvider {
   final String token;
