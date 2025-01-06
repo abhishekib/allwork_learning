@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/modals/amal_namaz_popup_model.dart';
 import 'package:allwork/modals/event_popup_model.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/utils/constants.dart';
@@ -19,27 +20,19 @@ class EventPopupProvider {
           ),
         );
 
-  Future<EventPopupModel?> getEventPopup() async {
-    final DateTime now = DateTime.now();
-    final String date = now.day.toString();
-    final String month = now.month.toString();
-
+  Future<AmalNamazPopupModel?> getEventPopup() async {
     try {
       final String completeUrl =
-          '${ApiConstants.baseUrl}${ApiConstants.eventPopupEndpoint}?date=$date&month=$month';
+          '${ApiConstants.baseUrl}${ApiConstants.amalNamazPopupEndpoint}';
 
       log('Complete URL: $completeUrl');
 
       final response = await _dio.post(
-        ApiConstants.eventPopupEndpoint,
-        queryParameters: {
-          'date': date,
-          'month': month,
-        },
+        ApiConstants.amalNamazPopupEndpoint,
       );
 
       if (response.statusCode == 200) {
-        return EventPopupModel.fromJson(response.data);
+        return AmalNamazPopupModel.fromJson(response.data);
       } else {
         throw Exception('Failed to fetch event popup');
       }

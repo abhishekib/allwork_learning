@@ -56,7 +56,7 @@ class ApiConstants {
   static const String prayertime = 'prayertimes';
 
   static const String aboutusEndpoint = 'about';
-  static const String eventPopupEndpoint = 'eventpopup';
+  static const String amalNamazPopupEndpoint = 'amaalnamazpopup';
 
   static const String listFavDailyDua = 'favdailydualist';
   static const String listFavDua = 'favdualist';

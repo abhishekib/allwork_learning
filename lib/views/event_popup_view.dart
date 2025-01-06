@@ -41,20 +41,20 @@ class EventPopupView extends StatelessWidget {
                     ),
                     SizedBox(height: 10),
                     Image.network(
-                      eventPopupController.eventPopupModel.value?.imageUrl ??
+                      eventPopupController.amalNamazPopupModel.value?.data ??
                           '',
                       fit: BoxFit.cover,
                       // height: 400,
                     ),
                     SizedBox(height: 10),
-                    Text(
-                      eventPopupController.eventPopupModel.value?.title ?? '',
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
+                    // Text(
+                    //   eventPopupController.eventPopupModel.value?.title ?? '',
+                    //   style: TextStyle(
+                    //     fontSize: 18,
+                    //     color: Colors.white,
+                    //   ),
+                    //   textAlign: TextAlign.center,
+                    // ),
                   ],
                 ),
               ),
