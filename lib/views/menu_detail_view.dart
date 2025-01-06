@@ -51,7 +51,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
         if (controller.isLoading.value) {
           return BackgroundWrapper(
             child: Scaffold(
-              backgroundColor: AppColors.backgroundBlue,
               body: Center(
                 child: CircularProgressIndicator(
                   color: Colors.white,
@@ -65,9 +64,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
 
         if (data.isEmpty) {
           return Scaffold(
-            backgroundColor: AppColors.backgroundBlue,
             appBar: AppBar(
-              backgroundColor: AppColors.backgroundBlue,
               centerTitle: true,
               title: Text(
                 widget.menuItem,
@@ -122,7 +119,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           });
           controller.isItemSingle(false);
           return Scaffold(
-            backgroundColor: AppColors.backgroundBlue,
             body: Center(
               child: CircularProgressIndicator(color: Colors.white),
             ),
@@ -131,9 +127,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           return BackgroundWrapper(
             child: Scaffold(
                 extendBodyBehindAppBar: true,
-                backgroundColor: AppColors.backgroundBlue,
                 appBar: AppBar(
-                    backgroundColor: AppColors.backgroundBlue,
                     centerTitle: true,
                     title: Text(widget.menuItem,
                         style: AppTextStyles.customStyle(

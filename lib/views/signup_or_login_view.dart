@@ -52,7 +52,6 @@ class SignUpOrLoginView extends StatelessWidget {
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           title: const Text(
             '',
             style: AppTextStyles.whiteBoldTitleText,

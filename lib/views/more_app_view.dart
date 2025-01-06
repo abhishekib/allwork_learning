@@ -43,9 +43,7 @@ class MoreAppsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundBlue,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundBlue,
         title: Text(
           'More Apps',
           style: AppTextStyles.whiteBoldTitleText,

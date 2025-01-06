@@ -35,9 +35,7 @@ class CategoryListView extends StatelessWidget {
     return BackgroundWrapper(
       child: categoryListController.isLoading.value
           ? Scaffold(
-              backgroundColor: AppColors.backgroundBlue,
               appBar: AppBar(
-                backgroundColor: AppColors.backgroundBlue,
                 iconTheme: IconThemeData(
                   color: Colors.white,
                   size: 30,

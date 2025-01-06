@@ -20,9 +20,7 @@ class ChangePassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundBlue,
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundBlue,
         centerTitle: true,
         title: Text("Change Password", style: AppTextStyles.whiteBoldText),
         iconTheme: const IconThemeData(color: Colors.white),

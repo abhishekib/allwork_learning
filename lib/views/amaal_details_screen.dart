@@ -16,10 +16,8 @@ class AmaalDetailsScreen extends StatelessWidget {
 
     return BackgroundWrapper(
         child: Scaffold(
-            backgroundColor: AppColors.backgroundBlue,
             appBar: AppBar(
                 iconTheme: IconThemeData(color: Colors.white),
-                backgroundColor: AppColors.backgroundBlue,
                 title: Text(
                   'Amaal Details',
                   style: AppTextStyles.whiteBoldText,

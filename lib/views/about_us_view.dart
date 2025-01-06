@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:linkable/linkable.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/about_us_controller.dart';
-import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 
@@ -14,9 +13,7 @@ class AboutUsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           title: Text(
             'About Us',
             style: AppTextStyles.whiteBoldTitleText,

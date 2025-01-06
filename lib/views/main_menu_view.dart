@@ -50,7 +50,6 @@ class MainMenuViewState extends State<MainMenuView> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: CustomDrawer(),
-        backgroundColor: AppColors.backgroundBlue,
         body: Column(
           children: [
             // Static content that should not scroll

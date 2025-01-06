@@ -28,9 +28,7 @@ class DynamicScreen extends StatelessWidget {
     return BackgroundWrapper(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-            backgroundColor: AppColors.backgroundBlue,
             centerTitle: true,
             title: Text(textCleanerController.cleanText(title),
                 style: AppTextStyles.customStyle(

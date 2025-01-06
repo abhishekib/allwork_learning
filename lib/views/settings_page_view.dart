@@ -49,9 +49,7 @@ class SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           title: const Text(
             "Settings",
             style: AppTextStyles.whiteBoldTitleText,
