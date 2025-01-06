@@ -65,10 +65,11 @@ class DailyDateWidget extends StatelessWidget {
                 Visibility(
                   visible: hijriText.isNotEmpty,
                   child: Text(
-                    hijriText.toString(),
+                    '(${hijriText.toString()})',
                     textAlign: TextAlign.center,
                     style: AppTextStyles.whiteBoldText.copyWith(
                       fontSize: 18,
+                      color: color
                     ),
                   ),
                 ),
