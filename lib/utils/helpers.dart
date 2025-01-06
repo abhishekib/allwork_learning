@@ -239,4 +239,59 @@ class MenuDetailsHelpers {
     }
     return RealmList<KeyValueEntity>(entities);
   }
+
+// Helper function to convert _ApiResponseEntity back to ApiResponseHandler
+ApiResponseHandler convertToApiResponseHandler(ApiResponseEntity entity) {
+  Map<String, dynamic> dataMap = _convertKeyValueEntitiesToMap(entity.data);
+  return ApiResponseHandler(data: dataMap);
+}
+
+Map<String, dynamic> _convertKeyValueEntitiesToMap(RealmList<KeyValueEntity> entities) {
+  Map<String, dynamic> map = {};
+  for (KeyValueEntity entity in entities) {
+    dynamic value;
+    if (entity.nestedValues.isNotEmpty) {
+      value = _convertKeyValueEntitiesToMap(entity.nestedValues);
+    } else if (entity.listValues.isNotEmpty) {
+      value = _convertKeyValueEntitiesToList(entity.listValues);
+    } else {
+      // Assign primitive values from the corresponding fields
+      if (entity.stringValue != null) {
+        value = entity.stringValue;
+      } else if (entity.intValue != null) {
+        value = entity.intValue;
+      } else if (entity.doubleValue != null) {
+        value = entity.doubleValue;
+      } else if (entity.boolValue != null) {
+        value = entity.boolValue;
+      }
+    }
+    map[entity.key!] = value;
+  }
+  return map;
+}
+
+List<dynamic> _convertKeyValueEntitiesToList(RealmList<KeyValueEntity> entities) {
+  List<dynamic> list = [];
+  for (KeyValueEntity entity in entities) {
+    if (entity.nestedValues.isNotEmpty) {
+      list.add(_convertKeyValueEntitiesToMap(entity.nestedValues));
+    } else if (entity.listValues.isNotEmpty) {
+      list.add(_convertKeyValueEntitiesToList(entity.listValues));
+    } else {
+      // Append primitive values directly to the list
+      if (entity.stringValue != null) {
+        list.add(entity.stringValue);
+      } else if (entity.intValue != null) {
+        list.add(entity.intValue);
+      } else if (entity.doubleValue != null) {
+        list.add(entity.doubleValue);
+      } else if (entity.boolValue != null) {
+        list.add(entity.boolValue);
+      }
+    }
+  }
+  return list;
+}
+
 }

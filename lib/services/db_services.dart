@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
 import 'package:allwork/entities/menu_entities/daily_date_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
@@ -124,11 +125,17 @@ class DbServices {
         realm.all<MenuListGujratiEntity>().first);
   }
 
-  void writeApiResponse(String endpoint, ApiResponseHandler apiResponseHandler)
-  {
-    
-  }
 
+  // void writeApiResponseHandler(
+  //     String endpoint, ApiResponseHandler apiResponseHandler) {
+  //   MenuDetailsHelpers.toMenuDetailEntity(endpoint, apiResponseHandler);
+  // }
+
+// ApiResponseHandler getApiResponseEntity(
+//   String endpoint
+// ){
+
+// }
 
 //write the CategoryResponse model in db
   /*
@@ -214,8 +221,8 @@ class DbServices {
   //   return MenuDetailsHelpers.toCategoryResponse2(
   //       realm.all<MenuDetailEntityNested>().first);
   // }
-  
- /* 
+
+  /* 
   void saveOfflineCategoryDataAudio(String savePath, int contentDataId) {
     final contentData = realm.find<ContentDataEntity>(contentDataId);
 
