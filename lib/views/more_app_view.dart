@@ -1,7 +1,6 @@
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/app_card.dart';
 import 'package:flutter/material.dart';
-import 'package:allwork/utils/colors.dart';
 
 class MoreAppsView extends StatelessWidget {
   const MoreAppsView({super.key});

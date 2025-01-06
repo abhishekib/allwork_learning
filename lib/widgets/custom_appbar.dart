@@ -1,4 +1,3 @@
-import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
