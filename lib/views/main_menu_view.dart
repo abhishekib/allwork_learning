@@ -1,6 +1,7 @@
 import 'package:allwork/controllers/event_popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/menu_list_view.dart';
+import 'package:allwork/views/search_page.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/custom_drawer.dart';
 import 'package:allwork/widgets/daily_date_widget.dart';
@@ -48,6 +49,12 @@ class MainMenuViewState extends State<MainMenuView> {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            Get.to(() => SearchPage());
+          },
+          child: Icon(Icons.search),
+        ),
         key: _scaffoldKey,
         drawer: CustomDrawer(),
         body: Column(
@@ -71,7 +78,9 @@ class MainMenuViewState extends State<MainMenuView> {
                         return Container(
                           height: 50.0,
                           alignment: Alignment.center,
-                          child: const CircularProgressIndicator(color: Colors.white,),
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                         );
                       } else if (animatedTextController
                           .animatedTextList.isEmpty) {
