@@ -96,7 +96,10 @@ class LyricsTabState extends State<LyricsTab> {
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              color: isCurrentHighlighted ? Colors.white : Colors.white,
+              color: (isCurrentHighlighted &&
+                      widget.lyricsList[index].time.isNotEmpty)
+                  ? const Color.fromARGB(255, 184, 229, 255)
+                  : Colors.white,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -237,9 +240,13 @@ class LyricsTabState extends State<LyricsTab> {
           ? _parseTimestamp(widget.lyricsList[i + 1].time)
           : 9223372036854775807;
 
+      // Skip highlighting if the timestamp is empty or invalid
+      if (timeInMilliseconds == null) {
+        continue;
+      }
+
       // Ensure time is valid before scrolling
-      if (timeInMilliseconds != null &&
-          currentPosition >= timeInMilliseconds &&
+      if (currentPosition >= timeInMilliseconds &&
           currentPosition < nextTimeInMilliseconds!) {
         return i;
       }
