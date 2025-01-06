@@ -85,21 +85,14 @@ class MenuDetailEntity extends _MenuDetailEntity
 
 class ApiResponseEntity extends _ApiResponseEntity
     with RealmEntity, RealmObjectBase, RealmObject {
-  ApiResponseEntity(
-    String id, {
+  ApiResponseEntity({
     Iterable<KeyValueEntity> data = const [],
   }) {
-    RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set<RealmList<KeyValueEntity>>(
         this, 'data', RealmList<KeyValueEntity>(data));
   }
 
   ApiResponseEntity._();
-
-  @override
-  String get id => RealmObjectBase.get<String>(this, 'id') as String;
-  @override
-  set id(String value) => RealmObjectBase.set(this, 'id', value);
 
   @override
   RealmList<KeyValueEntity> get data =>
@@ -124,7 +117,6 @@ class ApiResponseEntity extends _ApiResponseEntity
 
   EJsonValue toEJson() {
     return <String, dynamic>{
-      'id': id.toEJson(),
       'data': data.toEJson(),
     };
   }
@@ -132,16 +124,9 @@ class ApiResponseEntity extends _ApiResponseEntity
   static EJsonValue _toEJson(ApiResponseEntity value) => value.toEJson();
   static ApiResponseEntity _fromEJson(EJsonValue ejson) {
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
-    return switch (ejson) {
-      {
-        'id': EJsonValue id,
-      } =>
-        ApiResponseEntity(
-          fromEJson(id),
-          data: fromEJson(ejson['data']),
-        ),
-      _ => raiseInvalidEJson(ejson),
-    };
+    return ApiResponseEntity(
+      data: fromEJson(ejson['data']),
+    );
   }
 
   static final schema = () {
@@ -149,7 +134,6 @@ class ApiResponseEntity extends _ApiResponseEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, ApiResponseEntity, 'ApiResponseEntity', [
-      SchemaProperty('id', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('data', RealmPropertyType.object,
           linkTarget: 'KeyValueEntity',
           collectionType: RealmCollectionType.list),

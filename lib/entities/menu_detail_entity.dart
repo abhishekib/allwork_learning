@@ -11,9 +11,6 @@ class _MenuDetailEntity {
 @RealmModel()
 // Define a top-level wrapper class
 class _ApiResponseEntity{
-  @PrimaryKey()
-  late String id; // Unique identifier for the response
-
   late List<_KeyValueEntity> data; // Top-level data map
 }
 
