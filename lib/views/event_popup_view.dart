@@ -1,13 +1,15 @@
-import 'package:allwork/controllers/event_popup_controller.dart';
+import 'package:allwork/controllers/popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/popupEnums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class EventPopupView extends StatelessWidget {
-  final EventPopupController eventPopupController =
-      Get.put(EventPopupController());
+class PopupView extends StatelessWidget {
+  final PopupController eventPopupController = Get.put(PopupController());
 
-  EventPopupView({super.key});
+  PopupType popupType;
+
+  PopupView(this.popupType, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,12 +42,20 @@ class EventPopupView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(height: 10),
-                    Image.network(
-                      eventPopupController.amalNamazPopupModel.value?.data ??
-                          '',
-                      fit: BoxFit.cover,
-                      // height: 400,
-                    ),
+                    popupType == PopupType.AMAL_NAMAZ_POPUP
+                        ? Image.network(
+                            eventPopupController
+                                    .amalNamazPopupModel.value?.data ??
+                                '',
+                            fit: BoxFit.cover,
+                            // height: 400,
+                          )
+                        : popupType == PopupType.EVENT_POPUP
+                            ? Image.network(eventPopupController
+                                    .eventPopupModel.value?.imageUrl ??
+                                '')
+                            : Image.asset(
+                                'assets/images/start_popup_image.jpeg'),
                     SizedBox(height: 10),
                     // Text(
                     //   eventPopupController.eventPopupModel.value?.title ?? '',

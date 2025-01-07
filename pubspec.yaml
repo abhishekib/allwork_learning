@@ -53,6 +53,8 @@ flutter:
     - assets/icons/Maghrib.png
     - assets/app_icon.png
     - assets/icons/google_login.png
+    - assets/images/start_popup_image.jpeg
+    - assets/images/default_popup.jfif
 
 
 
