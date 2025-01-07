@@ -16,10 +16,13 @@ class AmaalDetailsScreen extends StatelessWidget {
     return BackgroundWrapper(
         child: Scaffold(
             appBar: AppBar(
-                iconTheme: IconThemeData(color: Colors.white),
+                iconTheme: IconThemeData(
+                  color: Colors.white,
+                  size: 30,
+                ),
                 title: Text(
-                  'Amaal Details',
-                  style: AppTextStyles.whiteBoldText,
+                  textCleanerController.cleanText(item.title),
+                  style: AppTextStyles.whiteBoldTitleText,
                 )),
             body: Card(
               margin: EdgeInsets.all(8.0),
