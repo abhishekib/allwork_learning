@@ -1,4 +1,6 @@
 import 'package:allwork/controllers/search_custom_controller.dart';
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -42,12 +44,25 @@ class SearchPage extends StatelessWidget {
             TextField(
               controller: searchControllerInput,
               decoration: InputDecoration(
-                hintText: "Enter keywords...",
+                prefixIcon: const Icon(Icons.search, color: Colors.grey),
+                hintText: 'Search...',
+                fillColor: Colors.white,
+                filled: true,
+                contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
                 ),
-                prefixIcon: const Icon(Icons.search),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                  borderSide: BorderSide(color: AppColors.backgroundBlue),
+                ),
               ),
+              style: const TextStyle(fontSize: 16.0, color: Colors.black),
               onSubmitted: (value) {
                 if (value.trim().isNotEmpty) {
                   searchController.fetchSearchResults(
@@ -59,6 +74,7 @@ class SearchPage extends StatelessWidget {
                     'Error',
                     'Please enter a search term.',
                     snackPosition: SnackPosition.BOTTOM,
+                    colorText: Colors.white,
                   );
                 }
               },
@@ -69,14 +85,29 @@ class SearchPage extends StatelessWidget {
               child: Obx(() {
                 if (searchController.isLoading.value) {
                   return const Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  );
+                }
+
+                if (!searchController.hasSearched.value) {
+                  // First visit state
+                  return const Center(
+                    child: Text(
+                      "Start searching by entering a keyword above.",
+                      style: AppTextStyles.whiteBoldText,
+                    ),
                   );
                 }
 
                 final results = searchController.apiResponse.value.posts;
                 if (results == null || results.isEmpty) {
-                  return const Center(
-                    child: Text("No results found."),
+                  return Center(
+                    child: Text(
+                      "No results found.",
+                      style: AppTextStyles.whiteBoldText,
+                    ),
                   );
                 }
 
@@ -84,14 +115,14 @@ class SearchPage extends StatelessWidget {
                   itemCount: results.length,
                   itemBuilder: (context, index) {
                     final post = results[index];
-                    final title = post.title; // Null safety check
-                    final postType = post.postType; // Null safety check
+                    final title = post.title ?? 'Untitled';
+                    final postType = post.postType ?? 'Unknown Type';
 
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
                         title: Text(title),
-                        subtitle: Text(postType ?? 'Unknown Type'),
+                        subtitle: Text(postType),
                         onTap: () {
                           // Handle post click, e.g., navigate to details
                           Get.to(() => PostDetailsPage(post: post));

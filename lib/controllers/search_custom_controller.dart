@@ -6,7 +6,8 @@ import 'package:get/get.dart';
 
 class SearchCustomController extends GetxController {
   final SearchProvider _provider = SearchProvider();
-  var isLoading = true.obs;
+  var isLoading = false.obs;
+  var hasSearched = false.obs;
   var apiResponse = ApiResponseHandler(data: {}, posts: []).obs;
 
   var keywords = ''.obs;
@@ -19,6 +20,7 @@ class SearchCustomController extends GetxController {
 
   void fetchSearchResults({required String keywords, required int page}) async {
     isLoading(true);
+    hasSearched(true);
     try {
       final response = await _provider.fetchSearchResults(
         keywords: keywords,
@@ -33,7 +35,14 @@ class SearchCustomController extends GetxController {
         snackPosition: SnackPosition.BOTTOM,
       );
     } finally {
-      isLoading(false);
+      isLoading(false); // Stop loading
     }
+  }
+
+  /// Resets the controller state to idle
+  void resetSearch() {
+    hasSearched(false); // Reset the searched flag
+    apiResponse.value =
+        ApiResponseHandler(data: {}, posts: []); // Clear results
   }
 }

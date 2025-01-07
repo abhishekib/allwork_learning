@@ -49,12 +49,6 @@ class MainMenuViewState extends State<MainMenuView> {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
-        floatingActionButton: GestureDetector(
-          onTap: () {
-            Get.to(() => SearchPage());
-          },
-          child: Icon(Icons.search),
-        ),
         key: _scaffoldKey,
         drawer: CustomDrawer(),
         body: Column(
@@ -106,7 +100,12 @@ class MainMenuViewState extends State<MainMenuView> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  SearchBarWidget(),
+                  GestureDetector(
+                    child: SearchBarWidget(),
+                    onTap: () {
+                      Get.to(() => SearchPage());
+                    },
+                  ),
                   DailyDateWidget(),
                   PrayerTimeWidget(),
 
