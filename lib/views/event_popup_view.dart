@@ -53,19 +53,8 @@ class PopupView extends StatelessWidget {
                           )
                         : popupType == PopupType.EVENT_POPUP
                             ? Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    eventPopupController
-                                            .eventPopupModel.value?.title ??
-                                        '',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  SizedBox(height: 10),
                                   Image.network(
                                     eventPopupController
                                             .eventPopupModel.value?.imageUrl ??
@@ -84,15 +73,29 @@ class PopupView extends StatelessWidget {
                   ],
                 ),
               ),
-              Positioned(
-                right: 0,
-                top: 0,
-                child: IconButton(
-                  icon: Icon(Icons.close, color: Colors.white),
-                  onPressed: () {
-                    eventPopupController.closeBanner(); // Close the popup
-                  },
-                ),
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Text(
+                      eventPopupController.eventPopupModel.value?.title ?? '',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.white),
+                      onPressed: () {
+                        eventPopupController.closeBanner(); // Close the popup
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
