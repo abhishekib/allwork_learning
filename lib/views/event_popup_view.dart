@@ -32,6 +32,7 @@ class PopupView extends StatelessWidget {
                 padding: const EdgeInsets.all(5.0),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
                       '', // You can dynamically change this text
@@ -48,23 +49,38 @@ class PopupView extends StatelessWidget {
                                     .amalNamazPopupModel.value?.data ??
                                 '',
                             fit: BoxFit.cover,
-                            // height: 400,
+                            height: 400,
                           )
                         : popupType == PopupType.EVENT_POPUP
-                            ? Image.network(eventPopupController
-                                    .eventPopupModel.value?.imageUrl ??
-                                '')
+                            ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    eventPopupController
+                                            .eventPopupModel.value?.title ??
+                                        '',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Image.network(
+                                    eventPopupController
+                                            .eventPopupModel.value?.imageUrl ??
+                                        '',
+                                    fit: BoxFit.cover,
+                                    height: 400,
+                                  ),
+                                ],
+                              )
                             : Image.asset(
-                                'assets/images/start_popup_image.jpeg'),
+                                'assets/images/start_popup_image.jpeg',
+                                fit: BoxFit.cover,
+                                height: 400,
+                              ),
                     SizedBox(height: 10),
-                    // Text(
-                    //   eventPopupController.eventPopupModel.value?.title ?? '',
-                    //   style: TextStyle(
-                    //     fontSize: 18,
-                    //     color: Colors.white,
-                    //   ),
-                    //   textAlign: TextAlign.center,
-                    // ),
                   ],
                 ),
               ),
