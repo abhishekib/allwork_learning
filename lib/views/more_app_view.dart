@@ -8,7 +8,7 @@ class MoreAppsView extends StatelessWidget {
   // Define app data here
   static final List<Map<String, String>> apps = [
     {
-      'name': 'My Dua Online',
+      'name': 'MyDua Online',
       'imagePath':
           'https://play-lh.googleusercontent.com/MIoC_0t3bgvl9TEkneaagwgGgyaS1LLMAUDVtf8tM9jZO9oQv5o_n8V5G8_iqune3A=s48-rw',
       'url': 'https://mydua.online/app/',
@@ -30,13 +30,12 @@ class MoreAppsView extends StatelessWidget {
       'text': 'Check out this app: Zawwar\nhttps://wwbz.media/app'
     },
     {
-      'name': 'Share Mafatihuljinan.online',
+      'name': 'Mafatihuljinan',
       'imagePath':
           'https://play-lh.googleusercontent.com/jozURWe1UvmFiGFlazdCPlKS0dqE-ddMz8eXrRy_5QoHFAeHHEetFJeIMdXeENFtZUG-=s48-rw',
-      'url': 'https://mafatihuljinan.org/app',
-      'text': 'Check out this app: Mafatihuljinan\nhttps://mafatihuljinan.org/app'
+      'text':
+          'Check out this app: Mafatihuljinan\nhttps://mafatihuljinan.org/app'
     },
-    
   ];
 
   @override
@@ -58,7 +57,7 @@ class MoreAppsView extends StatelessWidget {
             return AppCard(
               name: app['name']!,
               imagePath: app['imagePath']!,
-              url: app['url']!,
+              url: app['url'],
               text: app['text']!,
             );
           },
