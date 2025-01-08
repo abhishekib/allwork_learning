@@ -19,9 +19,7 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           title: Text(
             "Login",
             style: AppTextStyles.whiteBoldTitleText,

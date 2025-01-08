@@ -1,6 +1,7 @@
-import 'package:allwork/controllers/event_popup_controller.dart';
+import 'package:allwork/controllers/popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/menu_list_view.dart';
+import 'package:allwork/views/search_page.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/custom_drawer.dart';
 import 'package:allwork/widgets/daily_date_widget.dart';
@@ -22,7 +23,7 @@ class MainMenuView extends StatefulWidget {
 class MainMenuViewState extends State<MainMenuView> {
   String selectedLanguage = 'English';
   final animatedTextController = Get.put(AnimatedTextController());
-  final eventController = Get.put(EventPopupController());
+  final popupController = Get.put(PopupController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   Future<void> _saveLanguagePreference(String language) async {
@@ -41,7 +42,10 @@ class MainMenuViewState extends State<MainMenuView> {
   void initState() {
     super.initState();
     _loadLanguagePreference();
-    eventController.fetchEventPopup();
+    popupController
+        .fetchAmalNamazPopup()
+        .then((_) => popupController.fetchEventPopup())
+        .then((_) => popupController.fetchStartPopup());
   }
 
   @override
@@ -50,7 +54,6 @@ class MainMenuViewState extends State<MainMenuView> {
       child: Scaffold(
         key: _scaffoldKey,
         drawer: CustomDrawer(),
-        backgroundColor: AppColors.backgroundBlue,
         body: Column(
           children: [
             // Static content that should not scroll
@@ -72,7 +75,9 @@ class MainMenuViewState extends State<MainMenuView> {
                         return Container(
                           height: 50.0,
                           alignment: Alignment.center,
-                          child: const CircularProgressIndicator(color: Colors.white,),
+                          child: const CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
                         );
                       } else if (animatedTextController
                           .animatedTextList.isEmpty) {
@@ -98,7 +103,12 @@ class MainMenuViewState extends State<MainMenuView> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  SearchBarWidget(),
+                  GestureDetector(
+                    child: SearchBarWidget(),
+                    onTap: () {
+                      Get.to(() => SearchPage());
+                    },
+                  ),
                   DailyDateWidget(),
                   PrayerTimeWidget(),
 

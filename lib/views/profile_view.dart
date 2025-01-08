@@ -29,9 +29,7 @@ class ProfileViewState extends State<ProfileView> {
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           title: const Text(
             "Profile",
             style: AppTextStyles.whiteBoldTitleText,

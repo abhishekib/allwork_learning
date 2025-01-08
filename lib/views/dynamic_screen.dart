@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_list_view.dart';
@@ -22,15 +23,14 @@ class DynamicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextCleanerController textCleanerController = TextCleanerController();
     // final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     return BackgroundWrapper(
       child: Scaffold(
         extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-            backgroundColor: AppColors.backgroundBlue,
             centerTitle: true,
-            title: Text(title,
+            title: Text(textCleanerController.cleanText(title),
                 style: AppTextStyles.customStyle(
                   fontFamily: 'Roboto',
                   fontSize: 30,
@@ -57,14 +57,14 @@ class DynamicScreen extends StatelessWidget {
                     ),
                     child: ListTile(
                       tileColor: AppColors.backgroundBlue,
-                      title: Text(key,
+                      title: Text(textCleanerController.cleanText(key),
                           style: AppTextStyles.customStyle(
                             fontFamily: 'Roboto',
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
                             color: AppColors.backgroundBlue,
                           )),
-                      trailing: Icon(Icons.arrow_forward),
+                      trailing: Icon(Icons.arrow_forward_ios),
                       onTap: () {
                         log("Screen Tapped $key");
                         if (value is Map<String, dynamic>) {

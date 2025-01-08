@@ -2,6 +2,7 @@ import 'package:allwork/modals/content_data.dart';
 
 class Category {
   final String category;
+  final String? postType;
   final int id;
   final String title;
   final String? isFav;
@@ -13,13 +14,15 @@ class Category {
       required this.id,
       required this.title,
       required this.isFav,
+      this.postType,
       this.cdata,
       this.data});
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
         category: json['cat'] ?? '',
-        id: json['id'] ?? 0,
+        postType: json['posttype'] ?? '',
+        id: _parseId(json['id']),
         title: json['title'] ?? '',
         isFav: json['isfav'] ?? 'No',
         cdata: json['cdata'] != null
@@ -33,5 +36,15 @@ class Category {
   @override
   String toString() {
     return "cat: $category, id $id, title $title, isFav $isFav, cData $cdata";
+  }
+
+  static int _parseId(dynamic id) {
+    if (id is int) {
+      return id;
+    } else if (id is String) {
+      return int.tryParse(id) ?? 0;
+    } else {
+      return 0;
+    }
   }
 }

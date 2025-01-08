@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,15 @@ class MyApp extends StatelessWidget {
       title: 'Menu App',
       initialRoute: '/',
       theme: ThemeData(
+        scaffoldBackgroundColor: AppColors.backgroundBlue,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.backgroundBlue,
+          iconTheme: IconThemeData(color: Colors.white, size: 24),
+          elevation: 0,
+        ),
+        drawerTheme: const DrawerThemeData(
+          backgroundColor: AppColors.backgroundBlue,
+        ),
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: <TargetPlatform, PageTransitionsBuilder>{
             // Set the predictive back transitions for Android.

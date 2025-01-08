@@ -1,24 +1,22 @@
 import 'dart:developer';
 
-import 'package:allwork/modals/category.dart';
-import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_list_view.dart';
 import 'package:allwork/views/dynamic_screen.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/widgets/daily_date_widget.dart';
 import 'package:allwork/widgets/prayer_time_widget.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class MenuDetailView extends StatefulWidget {
   final String menuItem;
   final String selectedLanguage;
 
-  MenuDetailView({
+  const MenuDetailView({
     super.key,
     required this.menuItem,
     required this.selectedLanguage,
@@ -53,7 +51,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
         if (controller.isLoading.value) {
           return BackgroundWrapper(
             child: Scaffold(
-              backgroundColor: AppColors.backgroundBlue,
               body: Center(
                 child: CircularProgressIndicator(
                   color: Colors.white,
@@ -67,9 +64,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
 
         if (data.isEmpty) {
           return Scaffold(
-            backgroundColor: AppColors.backgroundBlue,
             appBar: AppBar(
-              backgroundColor: AppColors.backgroundBlue,
               centerTitle: true,
               title: Text(
                 widget.menuItem,
@@ -124,7 +119,6 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           });
           controller.isItemSingle(false);
           return Scaffold(
-            backgroundColor: AppColors.backgroundBlue,
             body: Center(
               child: CircularProgressIndicator(color: Colors.white),
             ),
@@ -133,9 +127,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
           return BackgroundWrapper(
             child: Scaffold(
                 extendBodyBehindAppBar: true,
-                backgroundColor: AppColors.backgroundBlue,
                 appBar: AppBar(
-                    backgroundColor: AppColors.backgroundBlue,
                     centerTitle: true,
                     title: Text(widget.menuItem,
                         style: AppTextStyles.customStyle(

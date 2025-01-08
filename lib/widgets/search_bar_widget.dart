@@ -23,6 +23,8 @@ class SearchBarWidget extends StatelessWidget {
           hintText: 'Search...',
           fillColor: Colors.white,
           filled: true,
+          enabled: false,
+          
           contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30.0),

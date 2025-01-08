@@ -208,9 +208,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     return BackgroundWrapper(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           iconTheme: IconThemeData(
             color: Colors.white,
             size: 30,

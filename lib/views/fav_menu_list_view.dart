@@ -23,7 +23,6 @@ class _FavMenuListViewState extends State<FavMenuListView> {
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           elevation: 1,
           iconTheme: IconThemeData(color: Colors.white),
           title: Text(
@@ -31,7 +30,6 @@ class _FavMenuListViewState extends State<FavMenuListView> {
             style: AppTextStyles.whiteBoldTitleText,
           ),
         ),
-        backgroundColor: AppColors.backgroundBlue,
         body: Obx(
           () {
             final menuList = controller.menuList.value;

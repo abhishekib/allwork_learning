@@ -1,10 +1,23 @@
+import 'package:allwork/modals/category.dart';
+
 class ApiResponseHandler {
   final Map<String, dynamic> data;
+  final int? totalPages;
+  final List<Category>? posts;
 
-  ApiResponseHandler({required this.data});
+  ApiResponseHandler({required this.data, this.totalPages, this.posts});
 
   factory ApiResponseHandler.fromJson(Map<String, dynamic> json) {
-    return ApiResponseHandler(data: parseData(json));
+    final isSearchResponse = json['data'] is List<dynamic>;
+    // return ApiResponseHandler(data: parseData(json));
+    return ApiResponseHandler(
+      data: parseData(json),
+      posts: isSearchResponse
+          ? (json['data'] as List<dynamic>? ?? [])
+              .map((item) => Category.fromJson(item))
+              .toList()
+          : null,
+    );
   }
 
   static dynamic parseData(dynamic value) {
@@ -22,4 +35,3 @@ class ApiResponseHandler {
     return data.toString();
   }
 }
-

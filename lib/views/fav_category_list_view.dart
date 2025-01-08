@@ -19,9 +19,7 @@ class FavCategoryListView extends StatelessWidget {
 
     return BackgroundWrapper(
       child: Scaffold(
-        backgroundColor: AppColors.backgroundBlue,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundBlue,
           iconTheme: IconThemeData(color: Colors.white),
           title: Text(
             "Favourite $menuItem",

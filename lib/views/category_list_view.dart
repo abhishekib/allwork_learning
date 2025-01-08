@@ -35,9 +35,7 @@ class CategoryListView extends StatelessWidget {
     return BackgroundWrapper(
       child: categoryListController.isLoading.value
           ? Scaffold(
-              backgroundColor: AppColors.backgroundBlue,
               appBar: AppBar(
-                backgroundColor: AppColors.backgroundBlue,
                 iconTheme: IconThemeData(
                   color: Colors.white,
                   size: 30,
@@ -86,7 +84,7 @@ class CategoryListView extends StatelessWidget {
                               log(category.toString());
 
                               //  log(menuItem);
-                              if (menuItem == 'Amaal' || menuItem == "અમ") {
+                              if (menuItem == 'Amaal' || menuItem == "અમલ") {
                                 Get.to(AmaalDetailsScreen(item: category));
                               } else {
                                 Get.toNamed(

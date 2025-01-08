@@ -7,19 +7,19 @@ import 'package:url_launcher/url_launcher.dart';
 class AppCard extends StatelessWidget {
   final String name;
   final String imagePath;
-  final String url;
+  final String? url;
   final String text;
 
   const AppCard({
     super.key,
     required this.name,
     required this.imagePath,
-    required this.url,
+    this.url,
     required this.text,
   });
 
   void _launchURL() async {
-    final Uri uri = Uri.parse(url);
+    final Uri uri = Uri.parse(url ?? '');
     if (!await launchUrl(
       uri,
       mode: LaunchMode.externalApplication, // Opens in an external browser
@@ -49,8 +49,9 @@ class AppCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: ListTile(
         leading: Container(
-          width: 60,
-          height: 60,
+          width: 45,
+          height: 45,
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             image: DecorationImage(
@@ -66,9 +67,13 @@ class AppCard extends StatelessWidget {
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              icon: const Icon(Icons.download, color: AppColors.backgroundBlue),
-              onPressed: _launchURL,
+            Visibility(
+              visible: url?.isNotEmpty ?? false,
+              child: IconButton(
+                icon:
+                    const Icon(Icons.download, color: AppColors.backgroundBlue),
+                onPressed: _launchURL,
+              ),
             ),
             IconButton(
               icon: const Icon(Icons.share, color: AppColors.backgroundBlue),

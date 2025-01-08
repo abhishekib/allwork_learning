@@ -1,6 +1,5 @@
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
-import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -16,13 +15,14 @@ class AmaalDetailsScreen extends StatelessWidget {
 
     return BackgroundWrapper(
         child: Scaffold(
-            backgroundColor: AppColors.backgroundBlue,
             appBar: AppBar(
-                iconTheme: IconThemeData(color: Colors.white),
-                backgroundColor: AppColors.backgroundBlue,
+                iconTheme: IconThemeData(
+                  color: Colors.white,
+                  size: 30,
+                ),
                 title: Text(
-                  'Amaal Details',
-                  style: AppTextStyles.whiteBoldText,
+                  textCleanerController.cleanText(item.title),
+                  style: AppTextStyles.whiteBoldTitleText,
                 )),
             body: Card(
               margin: EdgeInsets.all(8.0),
