@@ -5,7 +5,7 @@ import 'package:allwork/modals/event_popup_model.dart';
 import 'package:allwork/providers/popup_provider.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/popupEnums.dart';
-import 'package:allwork/views/event_popup_view.dart';
+import 'package:allwork/views/popup_view.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
