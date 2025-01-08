@@ -74,4 +74,6 @@ class ApiConstants {
   static const String addFavdailydua = 'favdailydua';
   // static const String addFavSuraha = 'favsurahlist';
   static const String addFavTravelZiyarat = 'favtravelziyarat';
+
+  static const String searchEndpoint = 'search';
 }

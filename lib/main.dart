@@ -28,6 +28,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: AppColors.backgroundBlue,
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.backgroundBlue,
+          iconTheme: IconThemeData(color: Colors.white, size: 24),
           elevation: 0,
         ),
         drawerTheme: const DrawerThemeData(

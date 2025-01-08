@@ -1,6 +1,7 @@
 import 'package:allwork/controllers/popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/menu_list_view.dart';
+import 'package:allwork/views/search_page.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:allwork/widgets/custom_drawer.dart';
 import 'package:allwork/widgets/daily_date_widget.dart';
@@ -102,7 +103,12 @@ class MainMenuViewState extends State<MainMenuView> {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  SearchBarWidget(),
+                  GestureDetector(
+                    child: SearchBarWidget(),
+                    onTap: () {
+                      Get.to(() => SearchPage());
+                    },
+                  ),
                   DailyDateWidget(),
                   PrayerTimeWidget(),
 
