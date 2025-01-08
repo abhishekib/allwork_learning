@@ -1,6 +1,9 @@
 import 'package:allwork/controllers/search_custom_controller.dart';
+import 'package:allwork/controllers/text_cleaner_controller.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/category_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,6 +14,8 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController searchControllerInput = TextEditingController();
+    final TextCleanerController textCleanerController =
+        Get.put(TextCleanerController());
 
     return Scaffold(
       appBar: AppBar(
@@ -121,11 +126,25 @@ class SearchPage extends StatelessWidget {
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
-                        title: Text(title),
-                        subtitle: Text(postType),
+                        title: Text(textCleanerController.cleanText(title)),
+                        subtitle:
+                            Text(textCleanerController.cleanText(postType)),
                         onTap: () {
-                          // Handle post click, e.g., navigate to details
-                          Get.to(() => PostDetailsPage(post: post));
+                          // Navigate to CategoryDetailView with required arguments
+                          Get.to(
+                            () => const CategoryDetailView(),
+                            arguments: {
+                              'category': Category(
+                                category: postType,
+                                id: post.id,
+                                title: post.title,
+                                isFav: "No",
+                                cdata: post.cdata,
+                              ),
+                              'language': 'English',
+                              'menuItem': '',
+                            },
+                          );
                         },
                       ),
                     );
@@ -133,40 +152,6 @@ class SearchPage extends StatelessWidget {
                 );
               }),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class PostDetailsPage extends StatelessWidget {
-  final dynamic post;
-
-  const PostDetailsPage({required this.post, Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(post.title ?? 'Post Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              post.title ?? 'No Title',
-              style: const TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(post.postType ?? 'Unknown Type'),
-            const SizedBox(height: 20),
-            // Add more details based on post structure
           ],
         ),
       ),
