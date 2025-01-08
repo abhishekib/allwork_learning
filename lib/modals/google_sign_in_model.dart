@@ -1,7 +1,11 @@
+import 'package:allwork/utils/constants.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInModel {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    clientId: ApiConstants.googleClientId,
+    scopes: ['email', 'profile'],
+  );
 
   Future<Map<String, dynamic>?> signInWithGoogle() async {
     try {

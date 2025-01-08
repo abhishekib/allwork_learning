@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/utils/constants.dart';
 import 'package:allwork/modals/login_response.dart';
 import 'package:dio/dio.dart';
@@ -65,6 +67,7 @@ class LoginProvider {
       );
 
       if (response.statusCode == 200) {
+        log(idToken);
         return LoginResponse.fromJson(response.data);
       } else {
         throw Exception('Google login failed');
