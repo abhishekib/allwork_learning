@@ -14,7 +14,7 @@ class MenuDetailEntity extends _MenuDetailEntity
     ApiResponseEntity? apiResponseEntity,
   }) {
     RealmObjectBase.set(this, 'endpoint', endpoint);
-    RealmObjectBase.set(this, '_apiResponseEntity', apiResponseEntity);
+    RealmObjectBase.set(this, 'apiResponseEntity', apiResponseEntity);
   }
 
   MenuDetailEntity._();
@@ -26,12 +26,12 @@ class MenuDetailEntity extends _MenuDetailEntity
   set endpoint(String value) => RealmObjectBase.set(this, 'endpoint', value);
 
   @override
-  ApiResponseEntity? get _apiResponseEntity =>
-      RealmObjectBase.get<ApiResponseEntity>(this, '_apiResponseEntity')
+  ApiResponseEntity? get apiResponseEntity =>
+      RealmObjectBase.get<ApiResponseEntity>(this, 'apiResponseEntity')
           as ApiResponseEntity?;
   @override
-  set _apiResponseEntity(covariant ApiResponseEntity? value) =>
-      RealmObjectBase.set(this, '_apiResponseEntity', value);
+  set apiResponseEntity(covariant ApiResponseEntity? value) =>
+      RealmObjectBase.set(this, 'apiResponseEntity', value);
 
   @override
   Stream<RealmObjectChanges<MenuDetailEntity>> get changes =>
@@ -49,7 +49,7 @@ class MenuDetailEntity extends _MenuDetailEntity
   EJsonValue toEJson() {
     return <String, dynamic>{
       'endpoint': endpoint.toEJson(),
-      '_apiResponseEntity': _apiResponseEntity.toEJson(),
+      'apiResponseEntity': apiResponseEntity.toEJson(),
     };
   }
 
@@ -62,7 +62,7 @@ class MenuDetailEntity extends _MenuDetailEntity
       } =>
         MenuDetailEntity(
           fromEJson(endpoint),
-          apiResponseEntity: fromEJson(ejson['_apiResponseEntity']),
+          apiResponseEntity: fromEJson(ejson['apiResponseEntity']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -74,7 +74,7 @@ class MenuDetailEntity extends _MenuDetailEntity
     return const SchemaObject(
         ObjectType.realmObject, MenuDetailEntity, 'MenuDetailEntity', [
       SchemaProperty('endpoint', RealmPropertyType.string, primaryKey: true),
-      SchemaProperty('_apiResponseEntity', RealmPropertyType.object,
+      SchemaProperty('apiResponseEntity', RealmPropertyType.object,
           optional: true, linkTarget: 'ApiResponseEntity'),
     ]);
   }();

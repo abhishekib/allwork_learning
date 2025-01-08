@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/modals/api_response_handler.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 
@@ -115,10 +116,12 @@ class CategoryProvider {
         ApiResponseHandler apiResponseHandler =
             ApiResponseHandler.fromJson(response.data);
 
+        DbServices.instance
+            .writeApiResponseHandler(endpoint, apiResponseHandler);
         log("data getting written with endpoint $endpoint");
         log(apiResponseHandler.toString());
 
-        //DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);    
+        //DbServices.instance.writeCategoryResponse(endpoint, categoryResponse);
 
         //var responseFromDb = DbServices.instance.getCategoryResponse(endpoint)!;
         //log("Response from database $responseFromDb");

@@ -241,12 +241,12 @@ class MenuDetailsHelpers {
   }
 
 // Helper function to convert _ApiResponseEntity back to ApiResponseHandler
-ApiResponseHandler convertToApiResponseHandler(ApiResponseEntity entity) {
+static ApiResponseHandler convertToApiResponseHandler(ApiResponseEntity entity) {
   Map<String, dynamic> dataMap = _convertKeyValueEntitiesToMap(entity.data);
   return ApiResponseHandler(data: dataMap);
 }
 
-Map<String, dynamic> _convertKeyValueEntitiesToMap(RealmList<KeyValueEntity> entities) {
+static Map<String, dynamic> _convertKeyValueEntitiesToMap(RealmList<KeyValueEntity> entities) {
   Map<String, dynamic> map = {};
   for (KeyValueEntity entity in entities) {
     dynamic value;
@@ -271,7 +271,7 @@ Map<String, dynamic> _convertKeyValueEntitiesToMap(RealmList<KeyValueEntity> ent
   return map;
 }
 
-List<dynamic> _convertKeyValueEntitiesToList(RealmList<KeyValueEntity> entities) {
+static List<dynamic> _convertKeyValueEntitiesToList(RealmList<KeyValueEntity> entities) {
   List<dynamic> list = [];
   for (KeyValueEntity entity in entities) {
     if (entity.nestedValues.isNotEmpty) {

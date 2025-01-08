@@ -7,9 +7,11 @@ import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
+import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
+import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:realm/realm.dart';
 
@@ -121,11 +123,34 @@ class DbServices {
         realm.all<MenuListGujratiEntity>().first);
   }
 
+  void writeApiResponseHandler(
+      String endpoint, ApiResponseHandler apiResponseHandler) {
+    MenuDetailEntity newMenuDetailEntity =
+        MenuDetailsHelpers.toMenuDetailEntity(endpoint, apiResponseHandler);
 
-  // void writeApiResponseHandler(
-  //     String endpoint, ApiResponseHandler apiResponseHandler) {
-  //   MenuDetailsHelpers.toMenuDetailEntity(endpoint, apiResponseHandler);
-  // }
+    realm.write(() {
+      var existingMenuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
+
+      if (existingMenuDetailEntity == null) {
+        log("addinge the endpoint as it does not exist : $endpoint");
+        realm.add(newMenuDetailEntity);
+      } else {
+        log("deleting the old menu detail entity");
+        realm.delete<MenuDetailEntity>(existingMenuDetailEntity);
+        log("Adding the new menu detail entity");
+        realm.add(newMenuDetailEntity);
+      }
+    });
+  }
+
+  ApiResponseHandler? getApiResponseHandler(String endpoint) {
+    MenuDetailEntity? menuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
+    if (menuDetailEntity != null) {
+      return MenuDetailsHelpers.convertToApiResponseHandler(
+          menuDetailEntity.apiResponseEntity!);
+    }
+    return null;
+  }
 
 // ApiResponseHandler getApiResponseEntity(
 //   String endpoint
