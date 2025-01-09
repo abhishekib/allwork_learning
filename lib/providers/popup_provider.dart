@@ -22,8 +22,8 @@ class PopupProvider {
 
   Future<EventPopupModel?> getEventPopup() async {
     final DateTime now = DateTime.now();
-    final String date = "31"; //now.day.toString();
-    final String month = "05"; //now.month.toString();
+    final String date = now.day.toString(); //now.day.toString();
+    final String month = now.month.toString(); //now.month.toString();
     try {
       final String completeUrl =
           '${ApiConstants.baseUrl}${ApiConstants.eventPopupEndpoint}';

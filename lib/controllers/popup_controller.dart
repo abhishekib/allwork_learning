@@ -15,8 +15,7 @@ class PopupController extends GetxController {
   final Rx<AmalNamazPopupModel?> amalNamazPopupModel =
       Rx<AmalNamazPopupModel?>(null);
 
-  final PopupProvider _eventPopupProvider =
-      PopupProvider(ApiConstants.token);
+  final PopupProvider _eventPopupProvider = PopupProvider(ApiConstants.token);
 
   Future<void> fetchStartPopup() async {
     // Obtain shared preferences instance
@@ -40,16 +39,15 @@ class PopupController extends GetxController {
     try {
       final response = await _eventPopupProvider.getAmalNamazPopup();
       if (response != null) {
-        //eventPopupModel.value = response;
-        amalNamazPopupModel.value = response;
-        isVisible.value = true;
-        log("Event Popup Data: $response");
+        if(response.data.isNotEmpty) {
+          amalNamazPopupModel.value = response;
+          isVisible.value = true;
+          log("Event Popup Data: $response");
 
-        // Show the event popup dialog
-        // if (response.imageUrl != null) {
-        Get.dialog(PopupView(PopupType.AMAL_NAMAZ_POPUP),
-            barrierDismissible: true);
-        // }
+          // Show the event popup dialog
+          Get.dialog(PopupView(PopupType.AMAL_NAMAZ_POPUP),
+              barrierDismissible: true);
+        }
       } else {
         // eventPopupModel.value = null;
         isVisible.value = false;
@@ -66,15 +64,15 @@ class PopupController extends GetxController {
     try {
       final response = await _eventPopupProvider.getEventPopup();
       if (response != null) {
-        eventPopupModel.value = response;
-        isVisible.value = true;
-        log("Event Popup Data: $response");
-
-        // Show the event popup dialog
         if (response.imageUrl != null) {
-        Get.dialog(PopupView(PopupType.EVENT_POPUP),
-            barrierDismissible: true);
-         }
+          eventPopupModel.value = response;
+          isVisible.value = true;
+          log("Event Popup Data: $response");
+
+          // Show the event popup dialog
+          Get.dialog(PopupView(PopupType.EVENT_POPUP),
+              barrierDismissible: true);
+        }
       } else {
         eventPopupModel.value = null;
         isVisible.value = false;

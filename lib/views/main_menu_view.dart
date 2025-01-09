@@ -141,7 +141,7 @@ class MainMenuViewState extends State<MainMenuView> {
                         DropdownButton<String>(
                           value: selectedLanguage,
                           dropdownColor: AppColors.backgroundBlue,
-                          items: <String>['English', 'Gujarati']
+                          items: <String>['English', 'ગુજરાતી']
                               .map((String value) {
                             return DropdownMenuItem<String>(
                               value: value,
