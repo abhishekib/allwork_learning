@@ -174,7 +174,7 @@ class MenuDetailsHelpers {
       String endpoint, ApiResponseHandler apiResponsehandler) {
     developer.log("Converting to MenuDetailEntity");
     return MenuDetailEntity(
-        endpoint: endpoint,
+        endpoint,
         apiResponseEntity: _convertToApiResponseEntity(apiResponsehandler));
   }
 

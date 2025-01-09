@@ -1,9 +1,10 @@
 import 'package:realm/realm.dart';
-part 'menu_detail_entity.realm.dart';
-
+    part 'menu_detail_entity.realm.dart';
+    
 @RealmModel()
 class _MenuDetailEntity {
-  String? endpoint;
+  @PrimaryKey()
+  late String endpoint;
   _ApiResponseEntity? apiResponseEntity; // List of category groups
 }
 

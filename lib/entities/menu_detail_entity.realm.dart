@@ -9,8 +9,8 @@ part of 'menu_detail_entity.dart';
 // ignore_for_file: type=lint
 class MenuDetailEntity extends _MenuDetailEntity
     with RealmEntity, RealmObjectBase, RealmObject {
-  MenuDetailEntity({
-    String? endpoint,
+  MenuDetailEntity(
+    String endpoint, {
     ApiResponseEntity? apiResponseEntity,
   }) {
     RealmObjectBase.set(this, 'endpoint', endpoint);
@@ -20,10 +20,10 @@ class MenuDetailEntity extends _MenuDetailEntity
   MenuDetailEntity._();
 
   @override
-  String? get endpoint =>
-      RealmObjectBase.get<String>(this, 'endpoint') as String?;
+  String get endpoint =>
+      RealmObjectBase.get<String>(this, 'endpoint') as String;
   @override
-  set endpoint(String? value) => RealmObjectBase.set(this, 'endpoint', value);
+  set endpoint(String value) => RealmObjectBase.set(this, 'endpoint', value);
 
   @override
   ApiResponseEntity? get apiResponseEntity =>
@@ -56,10 +56,16 @@ class MenuDetailEntity extends _MenuDetailEntity
   static EJsonValue _toEJson(MenuDetailEntity value) => value.toEJson();
   static MenuDetailEntity _fromEJson(EJsonValue ejson) {
     if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
-    return MenuDetailEntity(
-      endpoint: fromEJson(ejson['endpoint']),
-      apiResponseEntity: fromEJson(ejson['apiResponseEntity']),
-    );
+    return switch (ejson) {
+      {
+        'endpoint': EJsonValue endpoint,
+      } =>
+        MenuDetailEntity(
+          fromEJson(endpoint),
+          apiResponseEntity: fromEJson(ejson['apiResponseEntity']),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
   }
 
   static final schema = () {
@@ -67,7 +73,7 @@ class MenuDetailEntity extends _MenuDetailEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, MenuDetailEntity, 'MenuDetailEntity', [
-      SchemaProperty('endpoint', RealmPropertyType.string, optional: true),
+      SchemaProperty('endpoint', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('apiResponseEntity', RealmPropertyType.object,
           optional: true, linkTarget: 'ApiResponseEntity'),
     ]);
