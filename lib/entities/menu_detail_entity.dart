@@ -3,15 +3,14 @@ part 'menu_detail_entity.realm.dart';
 
 @RealmModel()
 class _MenuDetailEntity {
-  @PrimaryKey()
-  late String endpoint;
+  String? endpoint;
   _ApiResponseEntity? apiResponseEntity; // List of category groups
 }
 
 @RealmModel()
 // Define a top-level wrapper class
 class _ApiResponseEntity {
-  late List<_KeyValueEntity> data; // Top-level data map
+  List<_KeyValueEntity> data = []; // Top-level data map
 }
 
 @RealmModel()
@@ -24,6 +23,6 @@ class _KeyValueEntity {
   double? doubleValue; // Store double values
   bool? boolValue; // Store boolean values
 
-  late List<_KeyValueEntity> nestedValues; // For nested objects
-  late List<_KeyValueEntity> listValues; // For arrays
+  List<_KeyValueEntity> nestedValues= []; // For nested objects
+  List<_KeyValueEntity> listValues=[]; // For arrays
 }

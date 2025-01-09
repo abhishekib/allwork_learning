@@ -30,9 +30,9 @@ class DbServices {
       PrayerTimeEntity.schema,
       MenuListEntity.schema,
       MenuListGujratiEntity.schema,
-      // MenuDetailEntity.schema,
-      // MenuDetailEntityNested.schema,
-      // CategoryGroupEntity.schema,
+      MenuDetailEntity.schema,
+      ApiResponseEntity.schema,
+      KeyValueEntity.schema
       // CategoryEntity.schema,
       // ContentDataEntity.schema,
       // LyricsEntity.schema

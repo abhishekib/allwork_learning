@@ -1,8 +1,5 @@
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
-import 'package:allwork/modals/category.dart';
-import 'package:allwork/modals/content_data.dart';
-import 'dart:math';
 import 'dart:developer' as developer;
 
 import 'package:realm/realm.dart';
@@ -175,123 +172,170 @@ class MenuDetailsHelpers {
 class MenuDetailsHelpers {
   static MenuDetailEntity toMenuDetailEntity(
       String endpoint, ApiResponseHandler apiResponsehandler) {
-    return MenuDetailEntity(endpoint,
+    developer.log("Converting to MenuDetailEntity");
+    return MenuDetailEntity(
+        endpoint: endpoint,
         apiResponseEntity: _convertToApiResponseEntity(apiResponsehandler));
   }
 
   // Helper function to convert ApiResponseHandler to _ApiResponseEntity
   static ApiResponseEntity _convertToApiResponseEntity(
       ApiResponseHandler handler) {
-    return ApiResponseEntity()
-      ..data = _convertMapToKeyValueEntities(handler.data);
+    developer.log("Converting to ApiResponseEntity");
+    return ApiResponseEntity(data: _convertMapToKeyValueEntities(handler.data));
   }
 
-  static RealmList<KeyValueEntity> _convertMapToKeyValueEntities(
+  static List<KeyValueEntity> _convertMapToKeyValueEntities(
       Map<String, dynamic> map) {
+    developer.log("converting map to key value entities");
     List<KeyValueEntity> entities = [];
+
     map.forEach((key, value) {
-      KeyValueEntity entity = KeyValueEntity();
-      entity.key = key;
+      List<KeyValueEntity> nestedValues = [];
+      List<KeyValueEntity> listValues = [];
+      String? stringValue;
+      int? intValue;
+      double? doubleValue;
+      bool? boolValue;
+      //KeyValueEntity entity = KeyValueEntity();
+      //entity.key = key;
 
       if (value is Map<String, dynamic>) {
-        entity.nestedValues = _convertMapToKeyValueEntities(value);
+        //entity.nestedValues = _convertMapToKeyValueEntities(value);
+        nestedValues = _convertMapToKeyValueEntities(value);
       } else if (value is List) {
-        entity.listValues = _convertListToKeyValueEntities(value);
+        //entity.listValues = _convertListToKeyValueEntities(value);
+        nestedValues = _convertListToKeyValueEntities(value);
       } else {
         // Assign primitive values to the corresponding fields
         if (value is String) {
-          entity.stringValue = value;
+          //entity.stringValue = value;
+          stringValue = value;
         } else if (value is int) {
-          entity.intValue = value;
+          //entity.intValue = value;
+          intValue = value;
         } else if (value is double) {
-          entity.doubleValue = value;
+          //entity.doubleValue = value;
+          doubleValue = value;
         } else if (value is bool) {
-          entity.boolValue = value;
+          //entity.boolValue = value;
+          boolValue = value;
         }
       }
+      KeyValueEntity entity = KeyValueEntity(
+          key: key,
+          nestedValues: RealmList<KeyValueEntity>(nestedValues),
+          listValues: RealmList<KeyValueEntity>(listValues),
+          stringValue: stringValue,
+          intValue: intValue,
+          doubleValue: doubleValue,
+          boolValue: boolValue);
+
       entities.add(entity);
     });
-    return RealmList<KeyValueEntity>(entities);
+    return entities;
   }
 
-  static RealmList<KeyValueEntity> _convertListToKeyValueEntities(
+  static List<KeyValueEntity> _convertListToKeyValueEntities(
       List<dynamic> list) {
+    developer.log("converting list to key value entities");
     List<KeyValueEntity> entities = [];
     for (var item in list) {
-      KeyValueEntity entity = KeyValueEntity();
+      //KeyValueEntity entity = KeyValueEntity();
+      List<KeyValueEntity> nestedValues = [];
+      List<KeyValueEntity> listValues = [];
+      String? stringValue;
+      int? intValue;
+      double? doubleValue;
+      bool? boolValue;
       if (item is Map<String, dynamic>) {
-        entity.nestedValues = _convertMapToKeyValueEntities(item);
+        //entity.nestedValues = _convertMapToKeyValueEntities(item);
+        nestedValues = _convertMapToKeyValueEntities(item);
       } else if (item is List) {
-        entity.listValues = _convertListToKeyValueEntities(item);
+        //entity.listValues = _convertListToKeyValueEntities(item);
+        listValues = _convertListToKeyValueEntities(item);
       } else {
         // Handle primitive values in lists similarly
         if (item is String) {
-          entity.stringValue = item;
+          //entity.stringValue = item;
+          stringValue = item;
         } else if (item is int) {
-          entity.intValue = item;
+          //entity.intValue = item;
+          intValue = item;
         } else if (item is double) {
-          entity.doubleValue = item;
+          //entity.doubleValue = item;
+          doubleValue = item;
         } else if (item is bool) {
-          entity.boolValue = item;
+          //entity.boolValue = item;
+          boolValue = item;
         }
       }
+      KeyValueEntity entity = KeyValueEntity(
+          nestedValues: RealmList<KeyValueEntity>(nestedValues),
+          listValues: RealmList<KeyValueEntity>(listValues),
+          stringValue: stringValue,
+          intValue: intValue,
+          doubleValue: doubleValue,
+          boolValue: boolValue);
       entities.add(entity);
     }
-    return RealmList<KeyValueEntity>(entities);
+    return entities;
   }
 
 // Helper function to convert _ApiResponseEntity back to ApiResponseHandler
-static ApiResponseHandler convertToApiResponseHandler(ApiResponseEntity entity) {
-  Map<String, dynamic> dataMap = _convertKeyValueEntitiesToMap(entity.data);
-  return ApiResponseHandler(data: dataMap);
-}
+  static ApiResponseHandler convertToApiResponseHandler(
+      ApiResponseEntity entity) {
+    Map<String, dynamic> dataMap = _convertKeyValueEntitiesToMap(entity.data);
+    return ApiResponseHandler(data: dataMap);
+  }
 
-static Map<String, dynamic> _convertKeyValueEntitiesToMap(RealmList<KeyValueEntity> entities) {
-  Map<String, dynamic> map = {};
-  for (KeyValueEntity entity in entities) {
-    dynamic value;
-    if (entity.nestedValues.isNotEmpty) {
-      value = _convertKeyValueEntitiesToMap(entity.nestedValues);
-    } else if (entity.listValues.isNotEmpty) {
-      value = _convertKeyValueEntitiesToList(entity.listValues);
-    } else {
-      // Assign primitive values from the corresponding fields
-      if (entity.stringValue != null) {
-        value = entity.stringValue;
-      } else if (entity.intValue != null) {
-        value = entity.intValue;
-      } else if (entity.doubleValue != null) {
-        value = entity.doubleValue;
-      } else if (entity.boolValue != null) {
-        value = entity.boolValue;
+  static Map<String, dynamic> _convertKeyValueEntitiesToMap(
+      RealmList<KeyValueEntity> entities) {
+    Map<String, dynamic> map = {};
+    for (KeyValueEntity entity in entities) {
+      dynamic value;
+      if (entity.nestedValues.isNotEmpty) {
+        value = _convertKeyValueEntitiesToMap(entity.nestedValues);
+      } else if (entity.listValues.isNotEmpty) {
+        value = _convertKeyValueEntitiesToList(entity.listValues);
+      } else {
+        // Assign primitive values from the corresponding fields
+        if (entity.stringValue != null) {
+          value = entity.stringValue;
+        } else if (entity.intValue != null) {
+          value = entity.intValue;
+        } else if (entity.doubleValue != null) {
+          value = entity.doubleValue;
+        } else if (entity.boolValue != null) {
+          value = entity.boolValue;
+        }
+      }
+      map[entity.key!] = value;
+    }
+    return map;
+  }
+
+  static List<dynamic> _convertKeyValueEntitiesToList(
+      RealmList<KeyValueEntity> entities) {
+    List<dynamic> list = [];
+    for (KeyValueEntity entity in entities) {
+      if (entity.nestedValues.isNotEmpty) {
+        list.add(_convertKeyValueEntitiesToMap(entity.nestedValues));
+      } else if (entity.listValues.isNotEmpty) {
+        list.add(_convertKeyValueEntitiesToList(entity.listValues));
+      } else {
+        // Append primitive values directly to the list
+        if (entity.stringValue != null) {
+          list.add(entity.stringValue);
+        } else if (entity.intValue != null) {
+          list.add(entity.intValue);
+        } else if (entity.doubleValue != null) {
+          list.add(entity.doubleValue);
+        } else if (entity.boolValue != null) {
+          list.add(entity.boolValue);
+        }
       }
     }
-    map[entity.key!] = value;
+    return list;
   }
-  return map;
-}
-
-static List<dynamic> _convertKeyValueEntitiesToList(RealmList<KeyValueEntity> entities) {
-  List<dynamic> list = [];
-  for (KeyValueEntity entity in entities) {
-    if (entity.nestedValues.isNotEmpty) {
-      list.add(_convertKeyValueEntitiesToMap(entity.nestedValues));
-    } else if (entity.listValues.isNotEmpty) {
-      list.add(_convertKeyValueEntitiesToList(entity.listValues));
-    } else {
-      // Append primitive values directly to the list
-      if (entity.stringValue != null) {
-        list.add(entity.stringValue);
-      } else if (entity.intValue != null) {
-        list.add(entity.intValue);
-      } else if (entity.doubleValue != null) {
-        list.add(entity.doubleValue);
-      } else if (entity.boolValue != null) {
-        list.add(entity.boolValue);
-      }
-    }
-  }
-  return list;
-}
-
 }
