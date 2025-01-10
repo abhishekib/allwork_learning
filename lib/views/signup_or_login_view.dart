@@ -1,5 +1,6 @@
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/views/login_view.dart';
+import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/signup_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -42,7 +43,7 @@ class SignUpOrLoginView extends StatelessWidget {
       confirmTextColor: Colors.white,
       buttonColor: AppColors.backgroundBlue,
       onConfirm: () {
-        Get.back(); // Close the dialog
+        Get.offAll(MainMenuView());
       },
     );
   }
@@ -163,27 +164,35 @@ class SignUpOrLoginView extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => _onGoogleLogin(),
-                  style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    backgroundColor: Colors.white,
-                    elevation: 20,
-                  ),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    margin: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
+                Obx(() {
+                  if (loginController.isLoading.value) {
+                    return const CircularProgressIndicator(
                       color: Colors.white,
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                        image: AssetImage('assets/icons/google_login.png'),
-                        fit: BoxFit.cover,
+                    );
+                  } else {
+                    return ElevatedButton(
+                      onPressed: () => _onGoogleLogin(),
+                      style: ElevatedButton.styleFrom(
+                        shape: CircleBorder(),
+                        backgroundColor: Colors.white,
+                        elevation: 20,
                       ),
-                    ),
-                  ),
-                ),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        margin: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          image: DecorationImage(
+                            image: AssetImage('assets/icons/google_login.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                }),
               ],
             ),
           ),

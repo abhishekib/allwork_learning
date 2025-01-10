@@ -146,7 +146,7 @@ class LoginController extends GetxController {
         final idToken = userData['idToken'];
         final response = await _loginProvider.loginWithGoogle(idToken);
 
-        if (response.type == 'success') {
+        if (response.status == 'success') {
           loginResponse.value = response;
           isLoggedIn.value = true;
 
@@ -165,6 +165,7 @@ class LoginController extends GetxController {
         errorMessage.value = 'Google login failed. Please try again.';
       }
     } catch (e) {
+      // log('LoginResponse or User object is null: ${loginResponse.value}');
       errorMessage.value = 'An error occurred while logging in with Google: $e';
       log(errorMessage.value);
     } finally {
