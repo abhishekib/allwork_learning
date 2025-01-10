@@ -45,7 +45,7 @@ class ApiConstants {
   static const String favduaEndpoint = '/favdua';
 
   static const String animatedText = 'themeoptions';
-  static const String dailyDateEndpoint = "hijridateapi";
+  static const String dailyDateEndpoint = "showhijridate";
 
   static const String register = 'register';
   static const String userinfo = 'userinfo';
