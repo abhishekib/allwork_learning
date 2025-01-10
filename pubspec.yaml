@@ -30,6 +30,8 @@ dependencies:
   linkable: ^3.0.2
   share_plus: ^10.1.3
   path_provider: ^2.1.5
+  get_ip_address: ^0.0.7
+  
 
 dev_dependencies:
   flutter_test:
