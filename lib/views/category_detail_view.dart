@@ -4,7 +4,6 @@ import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
-import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
@@ -63,6 +62,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         category: '',
         id: 0,
         title: 'No data',
+        link: data.link.toString(),
         isFav: 'No',
         cdata: [],
       );
@@ -246,8 +246,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.share),
               onPressed: () {
-                _shareAllLyrics(
-                    context, availableLyrics, categoryDetails.title);
+                Share.shareUri(Uri.parse(categoryDetails.link!));
               },
             ),
             FloatingActionButton.small(
