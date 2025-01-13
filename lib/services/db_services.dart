@@ -123,10 +123,14 @@ class DbServices {
         realm.all<MenuListGujratiEntity>().first);
   }
 
-  void writeApiResponseHandler(
-      String endpoint, ApiResponseHandler apiResponseHandler) {
+  Future<void> writeApiResponseHandler(
+      String endpoint, ApiResponseHandler apiResponseHandler) async {
     MenuDetailEntity newMenuDetailEntity =
         MenuDetailsHelpers.toMenuDetailEntity(endpoint, apiResponseHandler);
+
+    newMenuDetailEntity.apiResponseEntity!.data.asMap().forEach((index, value) {
+      log("$index : $value");
+    });
 
     realm.write(() {
       var existingMenuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
@@ -145,115 +149,11 @@ class DbServices {
 
   ApiResponseHandler? getApiResponseHandler(String endpoint) {
     MenuDetailEntity? menuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
-    if (menuDetailEntity != null) {
-      return MenuDetailsHelpers.convertToApiResponseHandler(
-          menuDetailEntity.apiResponseEntity!);
+    final apiResponseEntity = menuDetailEntity?.apiResponseEntity;
+    if (apiResponseEntity != null) {
+      return MenuDetailsHelpers.convertToApiResponseHandler(apiResponseEntity);
     }
     return null;
   }
 
-// ApiResponseHandler getApiResponseEntity(
-//   String endpoint
-// ){
-
-// }
-
-//write the CategoryResponse model in db
-  /*
-  Future<void> writeCategoryResponse(
-      String endpoint, CategoryResponse categoryResponse) async {
-    // Convert CategoryResponse to MenuDetailEntity before the transaction
-    MenuDetailEntity newMenuDetailEntity =
-        MenuDetailsHelpers.toMenuDetailEntity(endpoint, categoryResponse);
-
-    realm.write(() {
-      // Find the existing MenuDetailEntity
-      var existingMenuDetail = realm.find<MenuDetailEntity>(endpoint);
-
-      if (existingMenuDetail == null) {
-        // Add the new document if it does not exist
-        log("addinge the endpoint as it does not exist : $endpoint");
-        realm.add(newMenuDetailEntity);
-      } else {
-        // Collect all objects for deletion safely
-        log("updating the endpoint as it exists : $endpoint");
-        final categoryGroupsToDelete =
-            existingMenuDetail.categoryGroups.toList();
-        final categoryEntitiesToDelete = categoryGroupsToDelete
-            .expand((group) => group.categoryEntities)
-            .toList();
-        final contentDataToDelete = categoryEntitiesToDelete
-            .expand((category) => category.cdataEntities)
-            .toList();
-        final lyricsToDelete = contentDataToDelete
-            .expand((contentData) => contentData.lyricsEntities)
-            .toList();
-
-        // Delete in bulk without iterating over the managed lists
-        realm.deleteMany(lyricsToDelete);
-        realm.deleteMany(contentDataToDelete);
-        realm.deleteMany(categoryEntitiesToDelete);
-        realm.deleteMany(categoryGroupsToDelete);
-
-        // Clear the existing categoryGroups list
-        existingMenuDetail.categoryGroups.clear();
-
-        // Add new data
-        existingMenuDetail.categoryGroups
-            .addAll(newMenuDetailEntity.categoryGroups);
-      }
-    });
-
-    log("Written $endpoint model in DB");
-  }
-*/
-//get the CategoryResponse model from db
-/*
-  CategoryResponse? getCategoryResponse(String endpoint) {
-    var existingMenuDetail = realm.find<MenuDetailEntity>(endpoint);
-
-    if (existingMenuDetail != null) {
-      return MenuDetailsHelpers.toCategoryResponse(existingMenuDetail);
-    }
-    return null;
-  }
-*/
-  // Future<void> writeCategoryResponse2(
-  //     String endpoint, CategoryResponse2 categoryResponse2) async {
-  //   MenuDetailEntityNested newMenuDetailEntityNested =
-  //       MenuDetailsHelpers.toMenuDetailEntityNested(
-  //           endpoint, categoryResponse2);
-
-  //   realm.write(() {
-  //     // Find the existing MenuDetailEntityNested
-  //     var existingMenuDetailNested =
-  //         realm.find<MenuDetailEntityNested>(endpoint);
-  //     if (existingMenuDetailNested == null) {
-  //       // Add the new document if it does not exist
-  //       log("addinge the endpoint as it does not exist : $endpoint");
-  //       realm.add(newMenuDetailEntityNested);
-  //     } else {
-  //       log("Ziyarat already exists");
-  //     }
-  //   });
-  // }
-
-  // CategoryResponse2 getCategoryResponse2() {
-  //   return MenuDetailsHelpers.toCategoryResponse2(
-  //       realm.all<MenuDetailEntityNested>().first);
-  // }
-
-  /* 
-  void saveOfflineCategoryDataAudio(String savePath, int contentDataId) {
-    final contentData = realm.find<ContentDataEntity>(contentDataId);
-
-    if (contentData != null) {
-      realm.write(() {
-        contentData.offlineAudioUrl ??= savePath;
-      });
-    } else {
-      log("Cannot write the audio path because no such content exists");
-    }
-  }
-  */
 }

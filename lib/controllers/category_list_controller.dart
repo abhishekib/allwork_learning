@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/providers/category_provider.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/state_manager.dart';
@@ -56,7 +57,7 @@ class CategoryListController extends GetxController {
         } else {
           log("Active internet connection not present");
           log(endpoint);
-          //response = DbServices.instance.getCategoryResponse(endpoint)!;
+          response = DbServices.instance.getApiResponseHandler(endpoint)!;
         }
       } catch (e) {
         log("Error fetching category data for $endpoint: $e");

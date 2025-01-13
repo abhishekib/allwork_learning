@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
 import 'dart:developer' as developer;
@@ -22,159 +24,11 @@ Future<String> getUserTimeZone() async {
   }
 }
 
-/*
-class MenuDetailsHelpers {
-  static final List<int> _ran = [];
-
-  static LyricsEntity _toLyricsEntity(Lyrics lyrics) {
-    return LyricsEntity(
-        lyrics.time, lyrics.arabic, lyrics.translitration, lyrics.translation);
-  }
-
-  static Lyrics _toLyrics(LyricsEntity lyricsEntity) {
-    return Lyrics(
-        time: lyricsEntity.time,
-        arabic: lyricsEntity.arabic,
-        translitration: lyricsEntity.transliteration,
-        translation: lyricsEntity.translation);
-  }
-
-  static ContentDataEntity _toContentDataEntity(ContentData contentData) {
-    var random = Random();
-    int ranNum;
-    do {
-      ranNum = random.nextInt(4294967296);
-    } while (_ran.contains(ranNum));
-
-//generate a random primary key
-    _ran.add(ranNum);
-
-    developer.log("I am getting called");
-
-    return ContentDataEntity(ranNum, contentData.type, contentData.audiourl,
-        lyricsEntities:
-            contentData.lyrics.map((lyric) => _toLyricsEntity(lyric)).toList());
-  }
-
-  static ContentData _toContentData(ContentDataEntity contentDataEntity) {
-    developer.log("content data entity assigned to id ${contentDataEntity.id}");
-    return ContentData(
-       id: contentDataEntity.id,
-        type: contentDataEntity.type,
-        audiourl: contentDataEntity.audiourl,
-        offlineAudioPath: contentDataEntity.offlineAudioUrl,
-        lyrics: contentDataEntity.lyricsEntities
-            .map((lyricEntity) => _toLyrics(lyricEntity))
-            .toList());
-  }
-
-  static CategoryEntity _toCategoryEntity(Category category) {
-    return CategoryEntity(category.id, category.category, category.title,
-        isFav: category.isFav,
-        cdataEntities: category.cdata!
-            .map((cdata) => _toContentDataEntity(cdata))
-            .toList());
-  }
-
-  static Category _toCategory(CategoryEntity categoryEntity) {
-    return Category(
-        category: categoryEntity.category,
-        id: categoryEntity.id,
-        title: categoryEntity.title,
-        isFav: categoryEntity.isFav ?? '',
-        cdata: categoryEntity.cdataEntities
-            .map((cdata) => _toContentData(cdata))
-            .toList());
-  }
-
-  static CategoryGroupEntity _toCategoryGroupEntity(
-      MapEntry<String, List<Category>> category) {
-    return CategoryGroupEntity(category.key,
-        categoryEntities: category.value
-            .map((category) => _toCategoryEntity(category))
-            .toList());
-  }
-
-  static MapEntry<String, List<Category>> _toMapEntry(
-      CategoryGroupEntity categoryGroupEntity) {
-    return MapEntry<String, List<Category>>(
-        categoryGroupEntity.groupName,
-        categoryGroupEntity.categoryEntities
-            .map((categoryEntity) => _toCategory(categoryEntity))
-            .toList());
-  }
-
-/*
-  static MenuDetailEntity toMenuDetailEntity(
-      String endpoint, CategoryResponse categoryResponse) {
-    List<CategoryGroupEntity> categoryGroups = categoryResponse
-        .categories.entries
-        .map((e) => _toCategoryGroupEntity(e))
-        .toList();
-    return MenuDetailEntity(endpoint, categoryGroups: categoryGroups);
-  }
-
-  static MenuDetailEntityNested toMenuDetailEntityNested(
-      String endpoint, CategoryResponse2 categoryResponse2) {
-    List<MenuDetailEntity> menuDetailEntities = [];
-
-    menuDetailEntities.add(toMenuDetailEntity(
-        categoryResponse2.ziyarat14Masoomeen.keys.elementAt(0),
-        categoryResponse2.ziyarat14Masoomeen[
-            categoryResponse2.ziyarat14Masoomeen.keys.elementAt(0)]!));
-
-    MenuDetailEntity others =
-        toMenuDetailEntity(endpoint, categoryResponse2.otherZiyarats);
-
-    MenuDetailEntityNested result = MenuDetailEntityNested(endpoint,
-        menuDetailEntity: menuDetailEntities, others: others);
-
-    developer.log("Data saved is: $result");
-
-    return result;
-  }
-
- static CategoryResponse2 toCategoryResponse2(MenuDetailEntityNested menuDetailEntityNested) {
-    // Map to store the ziyarat14Masoomeen using the MenuDetailEntity list
-    Map<String, CategoryResponse> ziyarat14Masoomeen = {};
-
-    // Assuming that there is only one key in the MenuDetailEntity corresponding to ziyarat14Masoomeen
-    String keyFor14Masoomeen = menuDetailEntityNested.menuDetailEntity.first.endpoint;
-
-    CategoryResponse responseFor14Masoomeen = toCategoryResponse(menuDetailEntityNested.menuDetailEntity.first);
-
-    ziyarat14Masoomeen[keyFor14Masoomeen] = responseFor14Masoomeen;
-
-    // Convert the 'others' MenuDetailEntity to a CategoryResponse
-    CategoryResponse otherZiyaratsResponse = toCategoryResponse(menuDetailEntityNested.others!);
-
-    // Create a CategoryResponse2 object with the constructed maps
-    CategoryResponse2 categoryResponse2 = CategoryResponse2(
-      ziyarat14Masoomeen: ziyarat14Masoomeen,
-      otherZiyarats: otherZiyaratsResponse
-    );
-
-    //log("Converted to CategoryResponse2: $categoryResponse2");
-    return categoryResponse2;
-  }
-
-
-  static CategoryResponse toCategoryResponse(
-      MenuDetailEntity menuDetailEntity) {
-    Map<String, List<Category>> categories = Map.fromEntries(menuDetailEntity
-        .categoryGroups
-        .map((categoryGroupEntity) => _toMapEntry(categoryGroupEntity)));
-    return CategoryResponse(categories: categories);
-  }
-*/
-}
-*/
 class MenuDetailsHelpers {
   static MenuDetailEntity toMenuDetailEntity(
       String endpoint, ApiResponseHandler apiResponsehandler) {
     developer.log("Converting to MenuDetailEntity");
-    return MenuDetailEntity(
-        endpoint,
+    return MenuDetailEntity(endpoint,
         apiResponseEntity: _convertToApiResponseEntity(apiResponsehandler));
   }
 
@@ -205,7 +59,12 @@ class MenuDetailsHelpers {
         nestedValues = _convertMapToKeyValueEntities(value);
       } else if (value is List) {
         //entity.listValues = _convertListToKeyValueEntities(value);
-        nestedValues = _convertListToKeyValueEntities(value);
+        log("====================================");
+        log("converting list to key value entities");
+        log(key);
+        log(value.toString());
+        log("====================================");
+        listValues = _convertListToKeyValueEntities(value);
       } else {
         // Assign primitive values to the corresponding fields
         if (value is String) {
@@ -286,11 +145,15 @@ class MenuDetailsHelpers {
   static ApiResponseHandler convertToApiResponseHandler(
       ApiResponseEntity entity) {
     Map<String, dynamic> dataMap = _convertKeyValueEntitiesToMap(entity.data);
+    //before this line, exception is coming
+    developer.log("data map: $dataMap");
     return ApiResponseHandler(data: dataMap);
   }
 
+//exception is coming here
   static Map<String, dynamic> _convertKeyValueEntitiesToMap(
       RealmList<KeyValueEntity> entities) {
+    log("Converting key value entities to map");
     Map<String, dynamic> map = {};
     for (KeyValueEntity entity in entities) {
       dynamic value;
@@ -310,13 +173,17 @@ class MenuDetailsHelpers {
           value = entity.boolValue;
         }
       }
-      map[entity.key!] = value;
+      //exception is here
+      if (entity.key != null) {
+        map[entity.key!] = value;
+      }
     }
     return map;
   }
 
   static List<dynamic> _convertKeyValueEntitiesToList(
       RealmList<KeyValueEntity> entities) {
+    log("Converting key value entities to map");
     List<dynamic> list = [];
     for (KeyValueEntity entity in entities) {
       if (entity.nestedValues.isNotEmpty) {

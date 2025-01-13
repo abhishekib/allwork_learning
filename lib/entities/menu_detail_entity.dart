@@ -18,7 +18,7 @@ class _ApiResponseEntity {
 // Define a RealmObject for a generic key-value pair
 class _KeyValueEntity {
   String? key; // The key for the entry
-
+ 
   String? stringValue; // Store string values
   int? intValue; // Store integer values
   double? doubleValue; // Store double values
