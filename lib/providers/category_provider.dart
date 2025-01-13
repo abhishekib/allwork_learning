@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:isolate';
 
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/services/db_services.dart';
@@ -35,15 +36,20 @@ class CategoryProvider {
         ApiResponseHandler apiResponseHandler =
             ApiResponseHandler.fromJson(response.data);
 
-        await DbServices.instance
-            .writeApiResponseHandler(endpoint, apiResponseHandler);
-        log("data getting written with endpoint $endpoint");
+        final receivePort1 = ReceivePort();
+        await Isolate.spawn((_) {
+          DbServices.instance
+              .writeApiResponseHandler(endpoint, apiResponseHandler);
+        }, receivePort1.sendPort);
 
-        ApiResponseHandler? apiResponseHandler2 =
-           DbServices.instance.getApiResponseHandler(endpoint);
+        receivePort1.listen((message) {
+          log('Data saved in DB');
+        });
 
-        log("data getting read with endpoint $endpoint: $apiResponseHandler2");
-        return apiResponseHandler2!;
+
+        // ApiResponseHandler? apiResponseHandlerFromDB =
+        //     DbServices.instance.getApiResponseHandler(endpoint);
+        return apiResponseHandler;
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }
