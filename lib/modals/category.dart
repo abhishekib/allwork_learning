@@ -5,18 +5,21 @@ class Category {
   final String? postType;
   final int id;
   final String title;
+  final String? link;
   final String? isFav;
   final List<ContentData>? cdata;
   final String? data;
 
-  Category(
-      {required this.category,
-      required this.id,
-      required this.title,
-      required this.isFav,
-      this.postType,
-      this.cdata,
-      this.data});
+  Category({
+    required this.category,
+    required this.id,
+    required this.title,
+    required this.isFav,
+    this.link,
+    this.postType,
+    this.cdata,
+    this.data,
+  });
 
   factory Category.fromJson(Map<String, dynamic> json) {
     return Category(
@@ -24,6 +27,7 @@ class Category {
         postType: json['posttype'] ?? '',
         id: _parseId(json['id']),
         title: json['title'] ?? '',
+        link: json['link'] ?? '',
         isFav: json['isfav'] ?? 'No',
         cdata: json['cdata'] != null
             ? (json['cdata'] as List)

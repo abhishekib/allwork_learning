@@ -1,5 +1,5 @@
-import 'package:allwork/utils/constants.dart';
 import 'package:allwork/modals/login_response.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 
 class LoginProvider {
@@ -54,16 +54,15 @@ class LoginProvider {
     }
   }
 
-  Future<LoginResponse> loginWithGoogle(String idToken) async {
+  Future<LoginResponse> loginWithGoogle(String accessToken) async {
     try {
       final response = await _dio.post(
         ApiConstants.googleLoginEndpoint,
         data: {
           'provider': 'google',
-          'idToken': idToken,
+          'access_token': accessToken,
         },
       );
-
       if (response.statusCode == 200) {
         return LoginResponse.fromJson(response.data);
       } else {

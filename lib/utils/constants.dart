@@ -41,6 +41,8 @@ class ApiConstants {
 
   static const String loginEndpoint = '/login';
   static const String googleLoginEndpoint = 'social-login';
+  static const String googleClientId =
+      '857582308596-lgbr55eotpjpjq4bip5inh5o2lr94rom.apps.googleusercontent.com';
 
   static const String favduaEndpoint = '/favdua';
 
