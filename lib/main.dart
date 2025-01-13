@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
+import 'package:allwork/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Menu App',
-      initialRoute: '/',
+      initialRoute: '/splash',
       theme: ThemeData(
         scaffoldBackgroundColor: AppColors.backgroundBlue,
         appBarTheme: const AppBarTheme(
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
       ),
       getPages: [
         GetPage(name: '/', page: () => const MainMenuView()),
+        GetPage(name: '/splash', page: () => const SplashScreen()),
         GetPage(
             name: '/menu-detail',
             page: () => MenuDetailView(
