@@ -107,7 +107,7 @@ class MainMenuViewState extends State<MainMenuView> {
                   GestureDetector(
                     child: SearchBarWidget(),
                     onTap: () {
-                      Get.to(() => SearchPage());
+                      Get.to(() => BackgroundWrapper(child: SearchPage()));
                     },
                   ),
                   DailyDateWidget(),
