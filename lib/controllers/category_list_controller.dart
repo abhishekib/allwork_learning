@@ -28,6 +28,7 @@ class CategoryListController extends GetxController {
 
   Future<void> fetchCategoryData(String menuItem) async {
     isLoading(true);
+    categoryData(ApiResponseHandler(data: {}));
     log("menu item =$menuItem");
     final endpoint = _getEndpointForMenuItem(menuItem);
     log("endpoint=$endpoint");
@@ -41,7 +42,7 @@ class CategoryListController extends GetxController {
           log("dayOfWeek $dayOfWeek");
         }
 
-        ApiResponseHandler response;
+        ApiResponseHandler? response;
         if (await Helpers.hasActiveInternetConnection()) {
           log("Active internet connection present");
           response =
@@ -57,7 +58,8 @@ class CategoryListController extends GetxController {
         } else {
           log("Active internet connection not present");
           log(endpoint);
-          response = DbServices.instance.getApiResponseHandler(endpoint)!;
+          response = DbServices.instance.getApiResponseHandler(endpoint);
+          categoryData(response);
         }
       } catch (e) {
         log("Error fetching category data for $endpoint: $e");
