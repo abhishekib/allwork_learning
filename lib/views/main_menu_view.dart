@@ -42,10 +42,11 @@ class MainMenuViewState extends State<MainMenuView> {
   void initState() {
     super.initState();
     _loadLanguagePreference();
-    popupController
-        .fetchAmalNamazPopup()
-        .then((_) => popupController.fetchEventPopup())
-        .then((_) => popupController.fetchStartPopup());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      popupController.fetchStartPopup();
+      popupController.fetchAmalNamazPopup();
+      popupController.fetchEventPopup();
+    });
   }
 
   @override

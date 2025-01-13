@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/google_sign_in_model.dart';
 import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
@@ -93,9 +95,9 @@ class LoginController extends GetxController {
   Future<void> _saveUserLoginState(LoginResponse response) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setBool('isLoggedIn', true);
-    prefs.setString('userId', response.message.data.id);
-    prefs.setString('userData', response.message.data.displayName);
-    prefs.setString('userEmail', response.message.data.userEmail);
+    prefs.setString('userId', response.message!.data.id);
+    prefs.setString('userData', response.message!.data.displayName);
+    prefs.setString('userEmail', response.message!.data.userEmail);
   }
 
   Future<void> _loadUserLoginState() async {
@@ -141,40 +143,31 @@ class LoginController extends GetxController {
       final userData = await _model.signInWithGoogle();
 
       if (userData != null) {
-        loginResponse.value = LoginResponse(
-          type: 'success',
-          message: Message(
-            data: Data(
-              id: '', // Use a unique identifier from your backend if required
-              userLogin: '',
-              userPass: '',
-              userNicename: userData['displayName'] ?? '',
-              userEmail: userData['email'] ?? '',
-              userUrl: '',
-              userRegistered: '',
-              userActivationKey: '',
-              userStatus: '',
-              displayName: userData['displayName'] ?? '',
-            ),
-            id: 0,
-            caps: {},
-            capKey: '',
-            roles: [],
-            allcaps: {},
-          ),
-        );
-        isLoggedIn.value = true;
+        final idToken = userData['idToken'];
+        final response = await _loginProvider.loginWithGoogle(idToken);
 
-        // Save user data to shared preferences
+        if (response.status == 'success') {
+          loginResponse.value = response;
+          isLoggedIn.value = true;
+
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isLoggedIn', true);
+          prefs.setString('userEmail', userData['email']);
+          prefs.setString('displayName', userData['displayName']);
+        } else {
+          errorMessage.value = 'Failed to authenticate with backend.';
+        }
+        isLoggedIn.value = true;
         final prefs = await SharedPreferences.getInstance();
         prefs.setBool('isLoggedIn', true);
-        prefs.setString('userEmail', userData['email']);
-        prefs.setString('displayName', userData['displayName']);
+        prefs.setString('userId', loginResponse.value!.user!.userId);
       } else {
         errorMessage.value = 'Google login failed. Please try again.';
       }
     } catch (e) {
+      // log('LoginResponse or User object is null: ${loginResponse.value}');
       errorMessage.value = 'An error occurred while logging in with Google: $e';
+      log(errorMessage.value);
     } finally {
       isLoading(false);
     }
@@ -186,11 +179,11 @@ class LoginController extends GetxController {
     try {
       await _model.signOutFromGoogle();
       if (kDebugMode) {
-        print('Google Sign-Out successful');
+        log('Google Sign-Out successful');
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Error signing out from Google: $e');
+        log('Error signing out from Google: $e');
       }
     }
 

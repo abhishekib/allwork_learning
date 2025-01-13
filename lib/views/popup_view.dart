@@ -12,23 +12,21 @@ class PopupView extends StatelessWidget {
   PopupView(this.popupType, {super.key});
 
   Future<String?> _getImageUrl() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? imageUrl;
-
-    if (popupType == PopupType.AMAL_NAMAZ_POPUP) {
-      imageUrl = eventPopupController.amalNamazPopupModel.value?.data;
-    } else if (popupType == PopupType.EVENT_POPUP) {
-      imageUrl = eventPopupController.eventPopupModel.value?.imageUrl;
-    } else {
-      // Check if START_POPUP has been shown
-      bool hasShownStartPopup = prefs.getBool('hasShownStartPopup') ?? false;
-      if (!hasShownStartPopup) {
-        imageUrl = 'assets/images/start_popup_image.jpeg';
-        await prefs.setBool('hasShownStartPopup', true);
-      }
+    if (popupType == PopupType.START_POPUP) {
+      return 'assets/images/start_popup_image.jpeg';
     }
 
-    return imageUrl;
+    if (popupType == PopupType.AMAL_NAMAZ_POPUP &&
+        eventPopupController.amalNamazPopupModel.value?.data != null) {
+      return eventPopupController.amalNamazPopupModel.value!.data;
+    }
+
+    if (popupType == PopupType.EVENT_POPUP &&
+        eventPopupController.eventPopupModel.value?.imageUrl != null) {
+      return eventPopupController.eventPopupModel.value!.imageUrl;
+    }
+
+    return null;
   }
 
   @override
@@ -42,14 +40,13 @@ class PopupView extends StatelessWidget {
 
         String? imageUrl = snapshot.data;
 
-        // Do not show the popup if no image is available
         if (imageUrl == null || imageUrl.isEmpty) {
-          return SizedBox.shrink();
+          return const SizedBox.shrink();
         }
 
         return GestureDetector(
           onTap: () {
-            eventPopupController.closeBanner();
+            Get.back();
           },
           child: Dialog(
             backgroundColor: Colors.transparent,
@@ -63,44 +60,43 @@ class PopupView extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      height: 30,
-                    ),
+                    const SizedBox(height: 30),
                     Stack(
                       clipBehavior: Clip.none,
                       children: [
-                        if (imageUrl != null)
-                          if (imageUrl.startsWith('assets'))
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.asset(
-                                imageUrl,
-                                fit: BoxFit.contain,
-                              ),
-                            )
-                          else
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                imageUrl,
-                                fit: BoxFit.contain,
-                                loadingBuilder:
-                                    (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(
-                                    child: CircularProgressIndicator(),
-                                  );
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return const Center(
-                                    child: Text(
-                                      'Failed to load image',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  );
-                                },
-                              ),
+                        if (imageUrl.startsWith('assets'))
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.asset(
+                              imageUrl,
+                              fit: BoxFit.contain,
+                              height: 350,
+                              width: 300,
                             ),
+                          )
+                        else
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.contain,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Text(
+                                    'Failed to load image',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         Positioned(
                           top: -40,
                           right: 5,
@@ -112,7 +108,7 @@ class PopupView extends StatelessWidget {
                                   const Icon(Icons.close, color: Colors.black),
                               iconSize: 28,
                               onPressed: () {
-                                eventPopupController.closeBanner();
+                                Get.back();
                               },
                             ),
                           ),
