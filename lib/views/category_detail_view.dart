@@ -222,6 +222,52 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               color: Colors.white,
             ),
           ),
+          actions: [
+            PopupMenuButton<int>(
+              icon: const Icon(Icons.settings, color: Colors.white),
+              onSelected: (value) {
+                // No action required here as state is managed by GetX
+              },
+              itemBuilder: (context) => [
+                PopupMenuItem<int>(
+                  value: 1,
+                  child: Obx(() => SwitchListTile(
+                        title: const Text("Show Arabic"),
+                        value: controller.showArabic.value,
+                        onChanged: (value) {
+                          controller.showArabic.value = value;
+                          Navigator.pop(
+                              context); // Close the menu after selection
+                        },
+                      )),
+                ),
+                PopupMenuItem<int>(
+                  value: 2,
+                  child: Obx(() => SwitchListTile(
+                        title: const Text("Show Transliteration"),
+                        value: controller.showTransliteration.value,
+                        onChanged: (value) {
+                          controller.showTransliteration.value = value;
+                          Navigator.pop(
+                              context); // Close the menu after selection
+                        },
+                      )),
+                ),
+                PopupMenuItem<int>(
+                  value: 3,
+                  child: Obx(() => SwitchListTile(
+                        title: const Text("Show Translation"),
+                        value: controller.showTranslation.value,
+                        onChanged: (value) {
+                          controller.showTranslation.value = value;
+                          Navigator.pop(
+                              context); // Close the menu after selection
+                        },
+                      )),
+                ),
+              ],
+            ),
+          ],
         ),
         floatingActionButtonLocation: ExpandableFab.location,
         floatingActionButton: ExpandableFab(

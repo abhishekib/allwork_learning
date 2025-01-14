@@ -101,9 +101,15 @@ class LyricsTabState extends State<LyricsTab> {
                   ? const Color.fromARGB(255, 184, 229, 255)
                   : Colors.white,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _buildLyricsContent(lyrics),
+            child: Obx(
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: _buildLyricsContent(
+                    lyrics,
+                    controller.showArabic.value,
+                    controller.showTransliteration.value,
+                    controller.showTranslation.value),
+              ),
             ),
           ),
         );
@@ -111,53 +117,54 @@ class LyricsTabState extends State<LyricsTab> {
     );
   }
 
-  List<Widget> _buildLyricsContent(Lyrics lyrics) {
+  List<Widget> _buildLyricsContent(Lyrics lyrics, bool showArabic,
+      bool showTransliteration, bool showTranslation) {
     List<Widget> contentWidgets = [];
     switch (controller.selectedType.value.toLowerCase()) {
       case "arabic":
       case "અરબી":
         contentWidgets.addAll([
-          _buildArabicText(lyrics),
+          _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
-          _buildTransliterationText(lyrics),
+          _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
-          _buildTranslationText(lyrics),
+          _buildTranslationText(lyrics, showTranslation),
         ]);
         break;
       case "transliteration":
       case "તરજુમા":
         contentWidgets.addAll([
-          _buildTransliterationText(lyrics),
+          _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
-          _buildArabicText(lyrics),
+          _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
-          _buildTranslationText(lyrics),
+          _buildTranslationText(lyrics, showTranslation),
         ]);
         break;
       case "translation":
       case "ગુજરાતી":
         contentWidgets.addAll([
-          _buildTranslationText(lyrics),
+          _buildTranslationText(lyrics, showTranslation),
           const SizedBox(height: 8),
-          _buildArabicText(lyrics),
+          _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
-          _buildTransliterationText(lyrics),
+          _buildTransliterationText(lyrics, showTransliteration),
         ]);
         break;
       default:
         contentWidgets.addAll([
-          _buildArabicText(lyrics),
+          _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
-          _buildTransliterationText(lyrics),
+          _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
-          _buildTranslationText(lyrics),
+          _buildTranslationText(lyrics, showTranslation),
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
     return contentWidgets;
   }
 
-  Widget _buildArabicText(Lyrics lyrics) {
+  Widget _buildArabicText(Lyrics lyrics, bool showArabic) {
     final isArabicHighlighted =
         controller.selectedType.value.toLowerCase() == "arabic" ||
             controller.selectedType.value == "અરબી";
@@ -167,7 +174,7 @@ class LyricsTabState extends State<LyricsTab> {
     }
 
     return Visibility(
-      visible: lyrics.arabic.isNotEmpty,
+      visible: lyrics.arabic.isNotEmpty && showArabic,
       child: Text(
         _textCleanerController.cleanText(lyrics.arabic),
         textDirection: TextDirection.rtl,
@@ -182,7 +189,7 @@ class LyricsTabState extends State<LyricsTab> {
     );
   }
 
-  Widget _buildTransliterationText(Lyrics lyrics) {
+  Widget _buildTransliterationText(Lyrics lyrics, bool showTransliteration) {
     final isTransliterationHighlighted =
         controller.selectedType.value.toLowerCase() == "transliteration" ||
             controller.selectedType.value == "તરજુમા";
@@ -191,7 +198,7 @@ class LyricsTabState extends State<LyricsTab> {
     }
 
     return Visibility(
-      visible: lyrics.translitration.isNotEmpty,
+      visible: lyrics.translitration.isNotEmpty && showTransliteration,
       child: Text(
         _textCleanerController.cleanText(lyrics.translitration),
         style: TextStyle(
@@ -208,7 +215,7 @@ class LyricsTabState extends State<LyricsTab> {
     );
   }
 
-  Widget _buildTranslationText(Lyrics lyrics) {
+  Widget _buildTranslationText(Lyrics lyrics, bool showTranslation) {
     final isTranslationHighlighted =
         controller.selectedType.value.toLowerCase() == "translation" ||
             controller.selectedType.value == "ગુજરાતી";
@@ -217,7 +224,7 @@ class LyricsTabState extends State<LyricsTab> {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
     return Visibility(
-      visible: lyrics.translation.isNotEmpty,
+      visible: lyrics.translation.isNotEmpty && showTranslation,
       child: Text(
         _textCleanerController.cleanText(lyrics.translation),
         style: TextStyle(

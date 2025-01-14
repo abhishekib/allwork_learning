@@ -1,6 +1,6 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:audioplayers/audioplayers.dart'; // Import the audioplayers package
+import 'package:audioplayers/audioplayers.dart';
 
 class CategoryDetailController extends GetxController {
   // Audio Player Instance
@@ -15,6 +15,11 @@ class CategoryDetailController extends GetxController {
   var selectedType = 'Arabic'.obs;
 
   var lyricsList = <Map<String, dynamic>>[].obs;
+
+  // Observables for visibility toggles
+  var showArabic = true.obs;
+  var showTransliteration = true.obs;
+  var showTranslation = true.obs;
 
   get audioPlayer => _audioPlayer;
 
@@ -37,6 +42,11 @@ class CategoryDetailController extends GetxController {
     totalTime.close();
     log("Audio player disposed");
   }
+
+  // Method to toggle visibility
+  void toggleArabicVisibility() => showArabic.value = !showArabic.value;
+  void toggleTransliterationVisibility() => showTransliteration.value = !showTransliteration.value;
+  void toggleTranslationVisibility() => showTranslation.value = !showTranslation.value;
 
   // Method to play or pause the audio
   void playPauseAudio() {
