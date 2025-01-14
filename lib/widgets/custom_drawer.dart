@@ -1,6 +1,7 @@
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/about_us_view.dart';
+import 'package:allwork/views/bookmark_view.dart';
 import 'package:allwork/views/fav_menu_list_view.dart';
 import 'package:allwork/views/more_app_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
@@ -44,6 +45,19 @@ class CustomDrawer extends StatelessWidget {
                       },
                     ),
                   ],
+                  ListTile(
+                    leading: const Icon(
+                      Icons.bookmark,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Bookmark',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.to(BookmarkView());
+                    },
+                  ),
                   if (loginController.isLoggedIn.value) ...[
                     ListTile(
                       leading: const Icon(
