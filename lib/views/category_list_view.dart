@@ -104,9 +104,32 @@ class CategoryListView extends StatelessWidget {
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
-                                child: Icon(
-                                  Icons.arrow_forward_ios_rounded,
-                                  color: Colors.white,
+                                child: SizedBox(
+                                  width: 100,
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        child: Icon(
+                                          Icons.bookmark,
+                                          color: Colors.blue,
+                                        ),
+                                        onTap: () {
+                                          final Category category =
+                                              Category.fromJson(item);
+
+                                          categoryListController.saveCategoryListDetail(
+                                              category);    
+
+                                          log(category.toString());
+                                        },
+                                      ),
+                                      SizedBox(width: 10.0),
+                                      Icon(
+                                        Icons.arrow_forward_ios_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/modals/api_response_handler.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/category_provider.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
@@ -120,5 +121,9 @@ class CategoryListController extends GetxController {
         log("No match found of endpoint for the given menu item");
         return ApiConstants.baseUrl;
     }
+  }
+
+  void saveCategoryListDetail(Category category){
+    DbServices.instance.writeBookmark(category);
   }
 }

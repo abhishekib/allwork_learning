@@ -1,7 +1,11 @@
 import 'dart:developer';
 
+import 'package:allwork/entities/bookmark_data_entity.dart';
+import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
+import 'package:allwork/modals/category.dart';
+import 'package:allwork/modals/content_data.dart';
 import 'dart:developer' as developer;
 
 import 'package:realm/realm.dart';
@@ -204,5 +208,92 @@ class MenuDetailsHelpers {
       }
     }
     return list;
+  }
+}
+
+class BookmarkDataHelpers {
+  static BookmarkDataEntity toBookmarkDataEntity(Category category) {
+    BookmarkDataEntity bookmarkDataEntity = BookmarkDataEntity(category.title);
+    bookmarkDataEntity.category = _toCategoryEntity(category);
+    return bookmarkDataEntity;
+  }
+
+  static CategoryEntity _toCategoryEntity(Category category) {
+    log("Category data in helpers ${category.toString()}");
+
+    List<ContentDataEntity> contentDataEntities = [];
+
+    for (ContentData contentData in category.cdata!) {
+      contentDataEntities.add(_convertToContentDataEntity(contentData));
+    }
+
+    return CategoryEntity(
+        category.category, category.id, category.title, category.isFav ?? 'No',
+        contentData: contentDataEntities);
+  }
+
+  static ContentDataEntity _convertToContentDataEntity(ContentData cdata) {
+    List<LyricsEntity> lyricsEntities = [];
+
+    for (Lyrics lyrics in cdata.lyrics) {
+      lyricsEntities.add(_convertToLyricsEntity(lyrics));
+    }
+
+    return ContentDataEntity(
+        cdata.type, cdata.audiourl, cdata.offlineAudioPath ?? '',
+        lyrics: lyricsEntities);
+  }
+
+  static LyricsEntity _convertToLyricsEntity(Lyrics lyrics) {
+    return LyricsEntity(
+        lyrics.time, lyrics.arabic, lyrics.translitration, lyrics.translation);
+  }
+
+  static Category toCategory(CategoryEntity categoryEntity) {
+    List<ContentDataEntity> contentDataEntities = categoryEntity.contentData;
+    List<ContentData> contentData = [];
+
+    for (ContentDataEntity contentDataEntity in contentDataEntities) {
+      contentData.add(_convertToContentData(contentDataEntity));
+    }
+
+    Category category = Category(
+        category: categoryEntity.category,
+        id: categoryEntity.id,
+        title: categoryEntity.title,
+        isFav: categoryEntity.isFav,
+        cdata: contentData);
+    return category;
+  }
+
+  static ContentData _convertToContentData(
+      ContentDataEntity contentDataEntity) {
+    List<Lyrics> lyrics = [];
+    for (LyricsEntity lyricsEntity in contentDataEntity.lyrics) {
+      lyrics.add(_convertToLyrics(lyricsEntity));
+    }
+    return ContentData(
+        type: contentDataEntity.type,
+        audiourl: contentDataEntity.audiourl,
+        offlineAudioPath: contentDataEntity.offlineAudioPath,
+        lyrics: lyrics);
+  }
+
+  static Lyrics _convertToLyrics(LyricsEntity lyricsEntity) {
+    return Lyrics(
+        time: lyricsEntity.time,
+        arabic: lyricsEntity.arabic,
+        translitration: lyricsEntity.translitration,
+        translation: lyricsEntity.translation);
+  }
+}
+
+class BookmarkHelpers {
+  static List<String> toBookmarkTitles(List<BookmarkEntity> bookmarks) {
+    List<String> titles = [];
+    for (BookmarkEntity bookmark in bookmarks) {
+      titles.add(bookmark.title);
+    }
+    return titles;
   }
 }
