@@ -36,16 +36,19 @@ class CategoryProvider {
         ApiResponseHandler apiResponseHandler =
             ApiResponseHandler.fromJson(response.data);
 
-        final receivePort1 = ReceivePort();
-        await Isolate.spawn((_) {
+//==========================================
+//write data in DB in a separate isolate
+        final receivePort = ReceivePort();
+        await Isolate.spawn((SendPort sendPort) async {
           DbServices.instance
               .writeApiResponseHandler(endpoint, apiResponseHandler);
-        }, receivePort1.sendPort);
+              sendPort.send('Data saved in DB');
+        }, receivePort.sendPort);
 
-        receivePort1.listen((message) {
-          log('Data saved in DB');
+        receivePort.listen((message) {
+          log(message);
         });
-
+//==========================================
 
         // ApiResponseHandler? apiResponseHandlerFromDB =
         //     DbServices.instance.getApiResponseHandler(endpoint);
