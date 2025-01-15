@@ -169,4 +169,9 @@ class DbServices {
     });
     log("written bookmark in db");
   }
+
+  List<String> getSavedBookmarks()
+  {
+    return realm.all<BookmarkEntity>().map((e) => e.title).toList();
+  }
 }
