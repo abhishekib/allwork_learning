@@ -9,6 +9,7 @@ import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
+import 'package:bottom_picker/bottom_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -314,6 +315,27 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               child: const Icon(Icons.access_alarm),
               onPressed: () {
                 // Implement favorite functionality
+                BottomPicker.dateTime(
+                  pickerTitle: Text(
+                    'Set the event exact time and date',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.black,
+                    ),
+                  ),
+                  onSubmit: (date) {
+                    log(date.toString());
+                    controller.scheduleNotification(
+                        date, categoryDetails.title);
+                  },
+                  onClose: () {
+                    Navigator.pop(context);
+                  },
+                  minDateTime: DateTime.now(),
+                  initialDateTime: DateTime.now(),
+                  buttonSingleColor: Colors.pink,
+                ).show(context);
               },
             ),
             FloatingActionButton.small(

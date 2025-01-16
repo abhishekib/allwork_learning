@@ -124,4 +124,11 @@ class CategoryDetailController extends GetxController {
     selectedType.value = type;
     log("Changed selected type to: $type");
   }
+
+  void scheduleNotification(DateTime date, String title) {
+    log("Scheduling notification for: $date with title: $title");
+    
+  }
+
+
 }
