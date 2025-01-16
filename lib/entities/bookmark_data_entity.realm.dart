@@ -71,7 +71,7 @@ class BookmarkDataEntity extends _BookmarkDataEntity
     register(_toEJson, _fromEJson);
     return const SchemaObject(
         ObjectType.realmObject, BookmarkDataEntity, 'BookmarkDataEntity', [
-      SchemaProperty('title', RealmPropertyType.string),
+      SchemaProperty('title', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('category', RealmPropertyType.object,
           optional: true, linkTarget: 'CategoryEntity'),
     ]);
@@ -85,17 +85,23 @@ class CategoryEntity extends _CategoryEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   CategoryEntity(
     String category,
+    String postType,
     int id,
     String title,
-    String isFav, {
-    Iterable<ContentDataEntity> contentData = const [],
+    String link,
+    String isFav,
+    String data, {
+    Iterable<ContentDataEntity> cData = const [],
   }) {
     RealmObjectBase.set(this, 'category', category);
+    RealmObjectBase.set(this, 'postType', postType);
     RealmObjectBase.set(this, 'id', id);
     RealmObjectBase.set(this, 'title', title);
+    RealmObjectBase.set(this, 'link', link);
     RealmObjectBase.set(this, 'isFav', isFav);
     RealmObjectBase.set<RealmList<ContentDataEntity>>(
-        this, 'contentData', RealmList<ContentDataEntity>(contentData));
+        this, 'cData', RealmList<ContentDataEntity>(cData));
+    RealmObjectBase.set(this, 'data', data);
   }
 
   CategoryEntity._();
@@ -105,6 +111,12 @@ class CategoryEntity extends _CategoryEntity
       RealmObjectBase.get<String>(this, 'category') as String;
   @override
   set category(String value) => RealmObjectBase.set(this, 'category', value);
+
+  @override
+  String get postType =>
+      RealmObjectBase.get<String>(this, 'postType') as String;
+  @override
+  set postType(String value) => RealmObjectBase.set(this, 'postType', value);
 
   @override
   int get id => RealmObjectBase.get<int>(this, 'id') as int;
@@ -117,17 +129,27 @@ class CategoryEntity extends _CategoryEntity
   set title(String value) => RealmObjectBase.set(this, 'title', value);
 
   @override
+  String get link => RealmObjectBase.get<String>(this, 'link') as String;
+  @override
+  set link(String value) => RealmObjectBase.set(this, 'link', value);
+
+  @override
   String get isFav => RealmObjectBase.get<String>(this, 'isFav') as String;
   @override
   set isFav(String value) => RealmObjectBase.set(this, 'isFav', value);
 
   @override
-  RealmList<ContentDataEntity> get contentData =>
-      RealmObjectBase.get<ContentDataEntity>(this, 'contentData')
+  RealmList<ContentDataEntity> get cData =>
+      RealmObjectBase.get<ContentDataEntity>(this, 'cData')
           as RealmList<ContentDataEntity>;
   @override
-  set contentData(covariant RealmList<ContentDataEntity> value) =>
+  set cData(covariant RealmList<ContentDataEntity> value) =>
       throw RealmUnsupportedSetError();
+
+  @override
+  String get data => RealmObjectBase.get<String>(this, 'data') as String;
+  @override
+  set data(String value) => RealmObjectBase.set(this, 'data', value);
 
   @override
   Stream<RealmObjectChanges<CategoryEntity>> get changes =>
@@ -144,10 +166,13 @@ class CategoryEntity extends _CategoryEntity
   EJsonValue toEJson() {
     return <String, dynamic>{
       'category': category.toEJson(),
+      'postType': postType.toEJson(),
       'id': id.toEJson(),
       'title': title.toEJson(),
+      'link': link.toEJson(),
       'isFav': isFav.toEJson(),
-      'contentData': contentData.toEJson(),
+      'cData': cData.toEJson(),
+      'data': data.toEJson(),
     };
   }
 
@@ -157,16 +182,22 @@ class CategoryEntity extends _CategoryEntity
     return switch (ejson) {
       {
         'category': EJsonValue category,
+        'postType': EJsonValue postType,
         'id': EJsonValue id,
         'title': EJsonValue title,
+        'link': EJsonValue link,
         'isFav': EJsonValue isFav,
+        'data': EJsonValue data,
       } =>
         CategoryEntity(
           fromEJson(category),
+          fromEJson(postType),
           fromEJson(id),
           fromEJson(title),
+          fromEJson(link),
           fromEJson(isFav),
-          contentData: fromEJson(ejson['contentData']),
+          fromEJson(data),
+          cData: fromEJson(ejson['cData']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -178,12 +209,15 @@ class CategoryEntity extends _CategoryEntity
     return const SchemaObject(
         ObjectType.realmObject, CategoryEntity, 'CategoryEntity', [
       SchemaProperty('category', RealmPropertyType.string),
+      SchemaProperty('postType', RealmPropertyType.string),
       SchemaProperty('id', RealmPropertyType.int),
       SchemaProperty('title', RealmPropertyType.string),
+      SchemaProperty('link', RealmPropertyType.string),
       SchemaProperty('isFav', RealmPropertyType.string),
-      SchemaProperty('contentData', RealmPropertyType.object,
+      SchemaProperty('cData', RealmPropertyType.object,
           linkTarget: 'ContentDataEntity',
           collectionType: RealmCollectionType.list),
+      SchemaProperty('data', RealmPropertyType.string),
     ]);
   }();
 

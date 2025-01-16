@@ -228,8 +228,14 @@ class BookmarkDataHelpers {
     }
 
     return CategoryEntity(
-        category.category, category.id, category.title, category.isFav ?? 'No',
-        contentData: contentDataEntities);
+        category.category,
+        category.postType ?? '',
+        category.id,
+        category.title,
+        category.link ?? '',
+        category.isFav ?? 'No',
+        cData: contentDataEntities,
+        category.data ?? '');
   }
 
   static ContentDataEntity _convertToContentDataEntity(ContentData cdata) {
@@ -250,7 +256,7 @@ class BookmarkDataHelpers {
   }
 
   static Category toCategory(CategoryEntity categoryEntity) {
-    List<ContentDataEntity> contentDataEntities = categoryEntity.contentData;
+    List<ContentDataEntity> contentDataEntities = categoryEntity.cData;
     List<ContentData> contentData = [];
 
     for (ContentDataEntity contentDataEntity in contentDataEntities) {
@@ -262,7 +268,10 @@ class BookmarkDataHelpers {
         id: categoryEntity.id,
         title: categoryEntity.title,
         isFav: categoryEntity.isFav,
-        cdata: contentData);
+        link: categoryEntity.link,
+        postType: categoryEntity.postType,
+        cdata: contentData,
+        data: categoryEntity.data);
     return category;
   }
 

@@ -2,19 +2,22 @@ import 'package:realm/realm.dart';
 part 'bookmark_data_entity.realm.dart';
 
 @RealmModel()
-class _BookmarkDataEntity{
+class _BookmarkDataEntity {
+  @PrimaryKey()
   late String title;
   _CategoryEntity? category;
-
 }
 
 @RealmModel()
 class _CategoryEntity {
   late String category;
+  late String postType;
   late int id;
   late String title;
+  late String link;
   late String isFav;
-  late List<_ContentDataEntity> contentData; 
+  late List<_ContentDataEntity> cData;
+  late String data;
 }
 
 @RealmModel()

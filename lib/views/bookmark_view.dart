@@ -8,7 +8,7 @@ import 'package:get/get_core/src/get_main.dart';
 class BookmarkView extends StatelessWidget {
   BookmarkView({super.key});
 
-var controller = Get.put(BookmarkController());
+  var controller = Get.put(BookmarkController());
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +21,19 @@ var controller = Get.put(BookmarkController());
           ),
         ),
         body: Center(
-          child: ListView.builder(
-            itemCount: controller.bookmarks.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(controller.bookmarks[index], style: AppTextStyles.whiteBoldText),
-              );
-            },
-          ),
+          child: controller.bookmarks.isEmpty
+              ? Text("No bookmarks saved", style: AppTextStyles.whiteBoldText)
+              : ListView.builder(
+                  itemCount: controller.bookmarks.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(onTap: () {
+                      controller.openBookmark(index);
+                    },
+                      title: Text(controller.bookmarks[index],
+                          style: AppTextStyles.whiteBoldText),
+                    );
+                  },
+                ),
         ),
       ),
     );

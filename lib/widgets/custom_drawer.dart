@@ -55,7 +55,7 @@ class CustomDrawer extends StatelessWidget {
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
-                      Get.to(BookmarkView());
+                      Get.to(()=>BookmarkView());
                     },
                   ),
                   if (loginController.isLoggedIn.value) ...[
