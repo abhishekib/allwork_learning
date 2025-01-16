@@ -58,46 +58,79 @@ class LoginView extends StatelessWidget {
                       ),
                     )),
                 const SizedBox(height: 30),
-                Center(
-                  child: Column(
-                    children: [
-                      Obx(() {
-                        if (loginController.isLoading.value) {
-                          return const CircularProgressIndicator(
-                              color: Colors.white);
-                        } else {
-                          return ElevatedButton(
-                            onPressed: () {
-                              _onLogin();
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 50, vertical: 15),
+                Center(child: Obx(() {
+                  if (loginController.isLoading.value) {
+                    return const CircularProgressIndicator(color: Colors.white);
+                  } else {
+                    return Column(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            _onLogin();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
                             ),
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                color: AppColors.backgroundBlue,
-                                fontWeight: FontWeight.bold,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 50, vertical: 15),
+                          ),
+                          child: Text(
+                            "Login",
+                            style: TextStyle(
+                              color: AppColors.backgroundBlue,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            if (!loginController.isLoading.value) {
+                              _onGoogleLogin();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: const CircleBorder(),
+                            backgroundColor: Colors.white,
+                            elevation: 20,
+                          ),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            margin: const EdgeInsets.all(5),
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                image:
+                                    AssetImage('assets/icons/google_login.png'),
+                                fit: BoxFit.cover,
                               ),
                             ),
-                          );
-                        }
-                      }),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
+                          ),
+                        )
+                      ],
+                    );
+                  }
+                })),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  void _onGoogleLogin() {
+    loginController.loginWithGoogle().then((_) {
+      if (loginController.errorMessage.isNotEmpty) {
+        _showErrorAlert("Error", loginController.errorMessage.value);
+      } else {
+        _showSuccessDialog();
+      }
+    });
   }
 
   void _onLogin() {
