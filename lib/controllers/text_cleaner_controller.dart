@@ -8,6 +8,7 @@ class TextCleanerController extends GetxController {
     cleanedText = cleanedText.replaceAll(':nbsp&', '');
     cleanedText = cleanedText.replaceAll('&#8211;', '');
     cleanedText = cleanedText.replaceAll('&#8217;', '');
+    cleanedText = cleanedText.replaceAll('&nbsp:', '');
 
     return cleanedText.trim();
   }
