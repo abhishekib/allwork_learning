@@ -36,8 +36,6 @@ class CategoryProvider {
         ApiResponseHandler apiResponseHandler =
             ApiResponseHandler.fromJson(response.data);
 
-//==========================================
-//write data in DB in a separate isolate
         final receivePort = ReceivePort();
         await Isolate.spawn((SendPort sendPort) async {
           DbServices.instance
@@ -48,10 +46,7 @@ class CategoryProvider {
         receivePort.listen((message) {
           log(message);
         });
-//==========================================
-
-        // ApiResponseHandler? apiResponseHandlerFromDB =
-        //     DbServices.instance.getApiResponseHandler(endpoint);
+        
         return apiResponseHandler;
       } else {
         throw Exception('Failed to fetch data from $endpoint');

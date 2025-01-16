@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:allwork/entities/bookmark_data_entity.dart';
+import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
 import 'package:allwork/entities/menu_entities/daily_date_entity.dart';
@@ -8,6 +10,7 @@ import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/api_response_handler.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
@@ -32,10 +35,12 @@ class DbServices {
       MenuListGujratiEntity.schema,
       MenuDetailEntity.schema,
       ApiResponseEntity.schema,
-      KeyValueEntity.schema
-      // CategoryEntity.schema,
-      // ContentDataEntity.schema,
-      // LyricsEntity.schema
+      KeyValueEntity.schema,
+      BookmarkEntity.schema,
+      BookmarkDataEntity.schema,
+      CategoryEntity.schema,
+      ContentDataEntity.schema,
+      LyricsEntity.schema
     ]);
     realm = Realm(config);
   }
@@ -128,20 +133,20 @@ class DbServices {
     MenuDetailEntity newMenuDetailEntity =
         MenuDetailsHelpers.toMenuDetailEntity(endpoint, apiResponseHandler);
 
-    newMenuDetailEntity.apiResponseEntity!.data.asMap().forEach((index, value) {
-      log("$index : $value");
-    });
+    // newMenuDetailEntity.apiResponseEntity!.data.asMap().forEach((index, value) {
+    //   log("$index : $value");
+    // });
 
     realm.write(() {
       var existingMenuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
 
       if (existingMenuDetailEntity == null) {
-        log("addinge the endpoint as it does not exist : $endpoint");
+        //log("addinge the endpoint as it does not exist : $endpoint");
         realm.add(newMenuDetailEntity);
       } else {
-        log("deleting the old menu detail entity");
+        //log("deleting the old menu detail entity");
         realm.delete<MenuDetailEntity>(existingMenuDetailEntity);
-        log("Adding the new menu detail entity");
+        //log("Adding the new menu detail entity");
         realm.add(newMenuDetailEntity);
       }
     });
@@ -156,4 +161,25 @@ class DbServices {
     return null;
   }
 
+  Future<void> writeBookmark(Category category) async {
+    realm.write(() {
+      // Add the new object
+      realm.add(BookmarkEntity(category.title));
+      realm.add(BookmarkDataHelpers.toBookmarkDataEntity(category));
+    });
+    log("written bookmark in db");
+  }
+
+  List<String> getSavedBookmarks() {
+    return realm.all<BookmarkEntity>().map((e) => e.title).toList();
+  }
+
+  Category getBookmarkData(String title) {
+    log(title);
+    BookmarkDataEntity? bookmarkDataEntity =
+        realm.find<BookmarkDataEntity>(title);
+
+    log(bookmarkDataEntity.toEJson().toString());
+    return BookmarkDataHelpers.toCategory(bookmarkDataEntity!.category!);
+  }
 }
