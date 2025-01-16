@@ -32,22 +32,27 @@ class DailyDateWidget extends StatelessWidget {
         final hijriText = hijriDateController.dailyDate.value?.event ?? '';
         final hijriColor =
             hijriDateController.dailyDate.value?.eventColor ?? '';
-        Color color;
-        try {
-          String colorHex = hijriColor.replaceFirst('#', '0xFF');
-          int parsedColor = int.parse(colorHex);
+        Color parseColor(String hijriColor) {
+          try {
+            if (hijriColor.startsWith('#')) {
+              if (hijriColor.length == 4) {
+                hijriColor =
+                    '#${hijriColor[1]}${hijriColor[1]}${hijriColor[2]}${hijriColor[2]}${hijriColor[3]}${hijriColor[3]}';
+              }
+            } else {
+              throw FormatException('Invalid color format: $hijriColor');
+            }
 
-          if ((parsedColor & 0xFFFFFF) <= 0x333333) {
-            // color = Color(parsedColor);
-            color = Color(0xFF1b8415);
-          } else {
-            color = Color(0xFF1b8415);
+            String colorHex = hijriColor.replaceFirst('#', '0xFF');
+            int parsedColor = int.parse(colorHex);
+            return Color(parsedColor);
+          } catch (e) {
+            log("Error parsing color: $e");
+            return Color(0xFF1b8415);
           }
-        } catch (e) {
-          color = Color(0xFF1b8415);
-          log("Error parsing color: $e");
         }
-        log("-------------------------->$hijriColor");
+
+        // log("-------------------------->$hijriColor");
         return Center(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -58,7 +63,7 @@ class DailyDateWidget extends StatelessWidget {
                   hijriDate.toString(),
                   style: AppTextStyles.whiteBoldText.copyWith(
                     fontSize: 20,
-                    color: color,
+                    color: Color(0xFF1b8415),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -69,7 +74,7 @@ class DailyDateWidget extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: AppTextStyles.whiteBoldText.copyWith(
                       fontSize: 18,
-                      color: color
+                      color: parseColor(hijriColor),
                     ),
                   ),
                 ),
