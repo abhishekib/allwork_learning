@@ -16,6 +16,7 @@ class HijriDateAdjustmentView extends StatelessWidget {
   final HijriDateAdjustmentController controller =
       Get.put(HijriDateAdjustmentController());
 
+  @override
   Widget build(BuildContext context) {
     return BackgroundWrapper(
       child: Scaffold(
@@ -30,44 +31,49 @@ class HijriDateAdjustmentView extends StatelessWidget {
           body: Center(
             child: Column(
               children: [
-                GetBuilder<HijriDateAdjustmentController>(
-                  builder: (_) => DailyDateWidget(),
+              GetBuilder<HijriDateAdjustmentController>(
+                builder: (_) => DailyDateWidget(),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppColors.backgroundBlue,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.backgroundBlue,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        const Text(
-                          'Adjust the Hijri date to match the local sighting',
-                          style: AppTextStyles.whiteText,
-                        ),
-                        const SizedBox(height: 10),
-                        DropdownMenu(
-                            menuStyle: MenuStyle(
-                                backgroundColor:
-                                    WidgetStateProperty.all<Color?>(
-                                        Colors.white)),
-                            controller: controller.adjustmentController,
-                            textStyle: AppTextStyles.whiteBoldText,
-                            dropdownMenuEntries: controller.hijriDateAdjustment
-                                .map((value) => DropdownMenuEntry(
-                                      value: value,
-                                      label: value,
-                                    ))
-                                .toList(),
-                            onSelected: (value) {
-                              controller
-                                  .setSelectedAdjustment(value.toString());
-                            }),
-                      ],
-                    )),
-              ],
-            ),
+                padding: const EdgeInsets.all(10),
+                child:
+                    Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+                  const Text(
+                    'Adjust the Hijri date to match the local sighting',
+                    style: AppTextStyles.whiteText,
+                  ),
+                  const SizedBox(height: 10),
+                  Center(
+                    child: DropdownMenu(
+                        menuStyle: MenuStyle(
+                            backgroundColor:
+                                WidgetStateProperty.all<Color?>(Colors.white)),
+                        controller: controller.adjustmentController,
+                        textStyle: AppTextStyles.whiteBoldText,
+                        dropdownMenuEntries: controller.hijriDateAdjustment
+                            .map((value) => DropdownMenuEntry(
+                                value: value,
+                                labelWidget: Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Center(
+                                      child: Text(value,
+                                          style: AppTextStyles.whiteText)),
+                                ),
+                                label: value))
+                            .toList(),
+                        onSelected: (value) {
+                          controller.setSelectedAdjustment(value.toString());
+                        }),
+                  ),
+                ]),
+              )
+            ]),
           )),
     );
   }
