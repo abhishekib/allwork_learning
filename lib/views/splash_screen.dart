@@ -1,7 +1,7 @@
-import 'package:allwork/utils/colors.dart';
-import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/widgets/background_wrapper.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -13,22 +13,32 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   double _opacity = 1.0;
+  bool _imagesPreCached = false;
 
   @override
   void initState() {
     super.initState();
-
-    // Start fading out after a delay
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
         _opacity = 0.0;
       });
     });
 
-    // Navigate to the main menu after fading out
     Future.delayed(const Duration(seconds: 3), () {
       Get.offAllNamed('/');
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Precache images only once.
+    if (!_imagesPreCached) {
+      precacheImage(
+          const AssetImage('assets/images/azadar_media.webp'), context);
+      precacheImage(const AssetImage('assets/app_icon.png'), context);
+      _imagesPreCached = true;
+    }
   }
 
   @override
@@ -41,9 +51,10 @@ class _SplashScreenState extends State<SplashScreen>
     // Dynamic sizes
     final imageSize = isLandscape
         ? screenHeight * 0.3
-        : screenWidth * 0.4; // 30% height for landscape
-    final fontSize = screenWidth * 0.05; // 5% of screen width
-    final spacing = screenHeight * 0.03; // 3% of screen height
+        : screenWidth *
+            0.4;
+    final fontSize = screenWidth * 0.05;
+    final spacing = screenHeight * 0.03;
 
     return BackgroundWrapper(
       child: Scaffold(
@@ -52,206 +63,131 @@ class _SplashScreenState extends State<SplashScreen>
           opacity: _opacity,
           child: Center(
             child: isLandscape
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Column for images
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 20,
-                                  spreadRadius: 9,
-                                  offset: Offset(8, 8),
-                                ),
-                              ],
-                            ),
-                            width: imageSize,
-                            height: imageSize,
-                            child: Image(
-                              image: const AssetImage(
-                                  'assets/images/azadar_media.webp'),
-                              fit: BoxFit.cover,
-                              colorBlendMode: BlendMode.colorBurn,
-                            ),
-                          ),
-                          SizedBox(height: spacing),
-                          Container(
-                            width: imageSize,
-                            height: imageSize,
-                            decoration: BoxDecoration(
-                              color: AppColors.backgroundBlue,
-                              border: Border.all(
-                                color: Colors.white,
-                                width: 5,
-                              ),
-                              shape: BoxShape.circle,
-                              // boxShadow: const [
-                              //   BoxShadow(
-                              //     color: Colors.white,
-                              //     // blurRadius: 20,
-                              //     offset: Offset(0, 0),
-                              //   ),
-                              // ],
-                              image: DecorationImage(
-                                image: const AssetImage('assets/app_icon.png'),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(width: spacing * 2),
-                      // Column for text
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'In loving Memory of',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                          SizedBox(height: spacing / 2),
-                          Text(
-                            'Haji Ramzanali Halani',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                          SizedBox(height: spacing / 2),
-                          Text(
-                            'Maraziya Badur Ali',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                          SizedBox(height: spacing / 2),
-                          Text(
-                            'Alhajj Shabbirali Mukadam',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: fontSize * 0.8, // Slightly smaller
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  )
-                : Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // First Image with shadow on bottom and right
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 20,
-                              spreadRadius: 9,
-                              offset: Offset(8, 8),
-                            ),
-                          ],
-                        ),
-                        width: imageSize,
-                        height: imageSize,
-                        child: Image(
-                          image: const AssetImage(
-                              'assets/images/azadar_media.webp'),
-                          fit: BoxFit.cover,
-                          colorBlendMode: BlendMode.colorBurn,
-                        ),
-                      ),
-                      SizedBox(height: spacing),
-                      // Second Image as a circular shape
-                      Container(
-                        width: imageSize,
-                        height: imageSize,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 20,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                          image: DecorationImage(
-                            image: const AssetImage('assets/app_icon.png'),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: spacing),
-                      // Text with responsive font sizes
-                      Column(
-                        children: [
-                          Text(
-                            'In loving Memory of',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                          SizedBox(height: spacing / 2),
-                          Text(
-                            'Haji Ramzanali Halani',
-                            style: TextStyle(
-                              color: Colors.green,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                          SizedBox(height: spacing / 2),
-                          Text(
-                            'Maraziya Badur Ali',
-                            style: TextStyle(
-                              color: Colors.blue,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                          SizedBox(height: spacing / 2),
-                          Text(
-                            'Alhajj Shabbirali Mukadam',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: fontSize * 0.8, // Slightly smaller
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'serif',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                ? buildLandscapeContent(imageSize, spacing, fontSize)
+                : buildPortraitContent(imageSize, spacing, fontSize),
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildLandscapeContent(
+      double imageSize, double spacing, double fontSize) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            buildImageContainer(imageSize),
+            SizedBox(height: spacing),
+            buildCircularImage(imageSize)
+          ],
+        ),
+        SizedBox(width: spacing * 2),
+        buildTextColumn(fontSize, spacing),
+      ],
+    );
+  }
+
+  Widget buildPortraitContent(
+      double imageSize, double spacing, double fontSize) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        buildImageContainer(imageSize),
+        SizedBox(height: spacing),
+        buildCircularImage(imageSize),
+        SizedBox(height: spacing),
+        buildTextColumn(fontSize, spacing),
+      ],
+    );
+  }
+
+  Widget buildImageContainer(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black,
+            blurRadius: 20,
+            spreadRadius: 9,
+            offset: Offset(8, 8),
+          ),
+        ],
+      ),
+      child: Image(
+        image: const AssetImage('assets/images/azadar_media.webp'),
+        fit: BoxFit.cover,
+        colorBlendMode: BlendMode.colorBurn,
+      ),
+    );
+  }
+
+  Widget buildCircularImage(double size) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppColors.backgroundBlue,
+        border: Border.all(color: Colors.white, width: 5),
+        shape: BoxShape.circle,
+      ),
+      child: ClipOval(
+        child: Image(
+          image: const AssetImage('assets/app_icon.png'),
+          fit: BoxFit.cover,
+          colorBlendMode: BlendMode.colorBurn,
+        ),
+      ),
+    );
+  }
+
+  Widget buildTextColumn(double fontSize, double spacing) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'In loving Memory of',
+          style: TextStyle(
+              color: Colors.red,
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'serif'),
+        ),
+        SizedBox(height: spacing / 2),
+        Text(
+          'Haji Ramzanali Halani',
+          style: TextStyle(
+              color: Colors.green,
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'serif'),
+        ),
+        SizedBox(height: spacing / 2),
+        Text(
+          'Maraziya Badur Ali',
+          style: TextStyle(
+              color: Colors.blue,
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'serif'),
+        ),
+        SizedBox(height: spacing / 2),
+        Text(
+          'Alhajj Shabbirali Mukadam',
+          style: TextStyle(
+              color: Colors.white,
+              fontSize: fontSize * 0.8,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'serif'),
+        ),
+      ],
     );
   }
 }
