@@ -5,6 +5,8 @@ import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/modals/daily_date.dart';
+import 'package:flutter/foundation.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,11 +41,55 @@ class DailyDateProvider {
     }
   }
 
+  Future<Position?> getUserLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      if (kDebugMode) {
+        print('Location services are disabled.');
+      }
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        if (kDebugMode) {
+          print('Location permission denied');
+        }
+        return null;
+      }
+    }
+
+    LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+      timeLimit: Duration(seconds: 30),
+    );
+
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+
+    log("Position lat ${position.latitude}");
+    log("Position long ${position.longitude}");
+
+  return position;
+  }
+
+
   Future<DailyDate> fetchDailyDate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final ipAddress = await getIpAddress();
     log("IP Address: $ipAddress");
+
+    final position = await getUserLocation();
+    
 
     DateTime now = DateTime.now().toLocal();
 
@@ -58,6 +104,8 @@ class DailyDateProvider {
       final response = await _dio.post(
         ApiConstants.dailyDateEndpoint,
         queryParameters: {
+          'lat': position?.latitude??'',
+          'long':  position?.longitude??'',
           'ip': ipAddress,
           'date': date,
           'time': time,

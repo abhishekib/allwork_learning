@@ -5,7 +5,9 @@ import 'package:allwork/providers/dailydate_provider.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
 
 class DailyDateController extends GetxController {
@@ -14,9 +16,33 @@ class DailyDateController extends GetxController {
   final DailyDateProvider _dailyDateProvider =
       DailyDateProvider(ApiConstants.dailyDuaToken);
 
+  final List<String> dayDifference = [
+    '-4',
+    '-3',
+    '-2',
+    '-1',
+    '0',
+    '1',
+    '2',
+    '3',
+    '4'
+  ];
+
+  String selectedDayDifference = '0';
+  TextEditingController selectedDayDifferenceController =
+      TextEditingController();
+  late SharedPreferences prefs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
+
+    prefs = await SharedPreferences.getInstance();
+    selectedDayDifference =
+        prefs.getString('hijri_date_adjustment') ?? '0';
+    selectedDayDifferenceController.text = selectedDayDifference;
+    super.onInit();
+
     bool hasInternet = await Helpers.hasActiveInternetConnection();
     if (hasInternet) {
       fetchDailyDateFromAPI();
@@ -25,6 +51,14 @@ class DailyDateController extends GetxController {
       fetchDailyDateFromDB();
       log('No internet connection');
     }
+  }
+
+  Future<void> setDayDifference(String value) async {
+    selectedDayDifference = value;
+    prefs.setString('hijri_date_adjustment', value);
+    log(value);
+    fetchDailyDateFromAPI();
+    update();
   }
 
   Future<void> fetchDailyDateFromAPI() async {

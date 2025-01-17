@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:allwork/controllers/daily_date_controller.dart';
-import 'package:allwork/controllers/hijri_date_adjustment_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/utils/styles.dart';
@@ -11,8 +10,12 @@ class DailyDateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hijriDateController = Get.put(DailyDateController());
+
     return Obx(() {
+      log("Reconstruction");
+      
+    final hijriDateController = Get.put(DailyDateController());
+
       if (hijriDateController.isLoading.value) {
         return const Center(
           child: CircularProgressIndicator(
