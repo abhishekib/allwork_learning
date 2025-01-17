@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,6 +18,7 @@ class HijriDateAdjustmentController extends GetxController {
   ];
 
   RxString selectedAdjustment = RxString('0');
+  TextEditingController adjustmentController = TextEditingController();
 
   late SharedPreferences prefs;
 
@@ -24,6 +26,7 @@ class HijriDateAdjustmentController extends GetxController {
   Future<void> onInit() async {
     prefs = await SharedPreferences.getInstance();
     selectedAdjustment.value = prefs.getString('hijri_date_adjustment') ?? '0';
+    adjustmentController.text = selectedAdjustment.value;
     super.onInit();
   }
 
@@ -31,6 +34,7 @@ class HijriDateAdjustmentController extends GetxController {
     selectedAdjustment.value = value;
     prefs.setString('hijri_date_adjustment', value);
     log(value);
+    update();
   }
 
   void closeDialogue() {

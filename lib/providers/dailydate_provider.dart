@@ -31,7 +31,7 @@ class DailyDateProvider {
 
       /// Get the IpAddress based on requestType.
       dynamic data = await ipAddress.getIpAddress();
-      //log(data.toString());
+      log(data['ip'].toString());
       return data['ip'];
     } on IpAddressException catch (exception) {
       /// Handle the exception.
