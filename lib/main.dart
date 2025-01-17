@@ -16,12 +16,12 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // Ensure widgets are initialized before running the app
-  tz.initializeTimeZones(); // Initialize timezones
+  // WidgetsFlutterBinding
+  //     .ensureInitialized(); // Ensure widgets are initialized before running the app
+  // tz.initializeTimeZones(); // Initialize timezones
 
   // Initialize notifications
-  await initNotifications();
+//  await initNotifications();
 
   runApp(const MyApp());
   if (Platform.isAndroid || Platform.isIOS) {
