@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:get_ip_address/get_ip_address.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
 
 class DailyDateProvider {
@@ -40,10 +41,11 @@ class DailyDateProvider {
 
   Future<DailyDate> fetchDailyDate() async {
     final userTimeZone = await getUserTimeZone();
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    
     final body = json.encode({
       'tz': userTimeZone,
-      'dd': -1,
+      'dd': prefs.getString('hijri_date_adjustment') ?? '0',
     });
 
     final ipAddress = await getIpAddress();
