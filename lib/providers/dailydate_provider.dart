@@ -42,11 +42,13 @@ class DailyDateProvider {
   Future<DailyDate> fetchDailyDate() async {
     final userTimeZone = await getUserTimeZone();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    
+
     final body = json.encode({
       'tz': userTimeZone,
       'dd': prefs.getString('hijri_date_adjustment') ?? '0',
     });
+
+    log("dd body $body");
 
     final ipAddress = await getIpAddress();
     log("IP Address: $ipAddress");
