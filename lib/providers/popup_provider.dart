@@ -4,6 +4,9 @@ import 'package:allwork/modals/amal_namaz_popup_model.dart';
 import 'package:allwork/modals/event_popup_model.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/utils/constants.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopupProvider {
   final Dio _dio;
@@ -49,8 +52,54 @@ class PopupProvider {
     }
   }
 
+  Future<Position?> getUserLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      log('Location services are disabled.');
+
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        log('Location permission denied');
+
+        return null;
+      }
+    }
+
+    LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+      timeLimit: Duration(seconds: 30),
+    );
+
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+
+    log("Position lat ${position.latitude}");
+    log("Position long ${position.longitude}");
+
+    return position;
+  }
+
   Future<AmalNamazPopupModel?> getAmalNamazPopup() async {
     try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      final position = await getUserLocation();
+
+      DateTime now = DateTime.now().toLocal();
+
+      final date = DateFormat('yyyy-MM-dd').format(now);
+      final time = DateFormat('HH:mm:ss').format(now);
       final String completeUrl =
           '${ApiConstants.baseUrl}${ApiConstants.amalNamazPopupEndpoint}';
 
@@ -58,6 +107,13 @@ class PopupProvider {
 
       final response = await _dio.post(
         ApiConstants.amalNamazPopupEndpoint,
+        queryParameters: {
+          'lat': position?.latitude ?? '',
+          'long': position?.longitude ?? '',
+          'date': date,
+          'time': time,
+          'dd': prefs.getString('hijri_date_adjustment') ?? '0',
+        },
       );
 
       if (response.statusCode == 200) {
