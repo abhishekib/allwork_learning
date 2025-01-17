@@ -7,6 +7,7 @@ import 'package:allwork/views/more_app_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/views/signup_or_login_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
+import 'package:allwork/widgets/hijri_date_adjustment_dialogue.dart';
 import 'package:flutter/material.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:get/get.dart';
@@ -55,7 +56,7 @@ class CustomDrawer extends StatelessWidget {
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
-                      Get.to(()=>BookmarkView());
+                      Get.to(() => BookmarkView());
                     },
                   ),
                   if (loginController.isLoggedIn.value) ...[
@@ -196,7 +197,19 @@ class CustomDrawer extends StatelessWidget {
                       },
                     ),
                   ],
-
+                  ListTile(
+                    leading: const Icon(
+                      Icons.timelapse_outlined,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Hijri Date Adjustment',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.dialog(HijriDate());
+                    },
+                  ),
                   ListTile(
                     leading: const Icon(
                       Icons.settings,
