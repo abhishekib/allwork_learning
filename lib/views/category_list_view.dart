@@ -97,41 +97,45 @@ class CategoryListView extends StatelessWidget {
                                 );
                               }
                             },
-                            trailing: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.backgroundBlue,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: SizedBox(
-                                  width: 100,
-                                  child: Row(
-                                    children: [
-                                      GestureDetector(
-                                        child: Icon(
-                                          Icons.bookmark,
-                                          color: Colors.blue,
-                                        ),
-                                        onTap: () {
-                                          final Category category =
-                                              Category.fromJson(item);
-
-                                          categoryListController.saveCategoryListDetail(
-                                              category);    
-
-                                          log(category.toString());
-                                        },
-                                      ),
-                                      SizedBox(width: 10.0),
-                                      Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        color: Colors.white,
-                                      ),
-                                    ],
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              spacing: 10,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.backgroundBlue,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: GestureDetector(
+                                    child: Icon(
+                                      Icons.bookmark_border,
+                                      color: Colors.white,
+                                      size: 16,
+                                    ),
+                                    onTap: () {
+                                      final Category category =
+                                          Category.fromJson(item);
+                                      categoryListController
+                                          .saveCategoryListDetail(category);
+                                      log(category.toString());
+                                    },
                                   ),
                                 ),
-                              ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.backgroundBlue,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),

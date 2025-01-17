@@ -385,10 +385,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                         tabLabel = 'અરબી';
                         break;
                       case 'transliteration' || 'Transliteration':
-                        tabLabel = 'લિવ્યંતરણ';
+                        tabLabel = 'ગુજરાતી';
                         break;
                       case 'translation' || 'Translation':
-                        tabLabel = 'અનુવાદ';
+                        tabLabel = 'તરજુમા';
                         break;
                     }
                   }

@@ -5,6 +5,8 @@ import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
+import 'package:get_ip_address/get_ip_address.dart';
+import 'package:intl/intl.dart';
 
 class CategoryProvider {
   final String token;
@@ -16,11 +18,37 @@ class CategoryProvider {
   Future<ApiResponseHandler> fetchApiResponse(String endpoint,
       [String? day]) async {
     try {
+      Future<dynamic> getIpAddress() async {
+        try {
+          var ipAddress = IpAddress(type: RequestType.json);
+          dynamic data = await ipAddress.getIpAddress();
+          return data['ip'];
+        } on IpAddressException catch (exception) {
+          log(exception.message);
+        }
+      }
+
+      final ipAddress = await getIpAddress();
+      // log("IP Address: $ipAddress");
+
+      DateTime now = DateTime.now().toLocal();
+
+      final date = DateFormat('yyyy-MM-dd').format(now);
+      final time = DateFormat('HH:mm:ss').format(now);
+
+      // log("Date going $date");
+      // log("Time going $time");
+
       // Construct the URL with query parameters
       String url = '$baseurl$endpoint';
       if (day != null) {
         url = '$url&day=$day';
+      } else if (endpoint == 'amaal-namaz?lang=english' ||
+          endpoint == 'amaal-namaz?lang=gujarati') {
+        url = '$url&ip=$ipAddress&date=$date&time=$time';
+        // log("hehe boi ----> $url");
       }
+      // log(url);
 
       final response = await _dio.post(
         url,

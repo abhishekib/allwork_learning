@@ -73,8 +73,7 @@ class DailyDateProvider {
 
       if (response.statusCode == 200) {
         final data = response.data;
-        // log("Daily Date ---->$data");
-        log("response from daily date: $data");
+        // log("response from daily date: $data");
         // Parse the JSON response into a DailyDate object
         DailyDate dailyDate = DailyDate.fromJson(data);
 
