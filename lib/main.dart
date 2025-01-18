@@ -9,7 +9,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'views/category_detail_view.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 // Define the instance of the plugin
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -18,7 +17,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   WidgetsFlutterBinding
       .ensureInitialized(); // Ensure widgets are initialized before running the app
-  tz.initializeTimeZones(); // Initialize timezones
 
   // Initialize notifications
   await initNotifications();
@@ -31,27 +29,6 @@ Future<void> main() async {
 
 // Initialize the plugin with platform-specific settings
 Future<void> initNotifications() async {
-  const AndroidNotificationDetails androidPlatformChannelSpecifics =
-      AndroidNotificationDetails(
-    'general_notifications', // Channel ID (used to reference the notification channel)
-    'General Notifications', // Channel Name (used to display the channel name in the system)
-    channelDescription:
-        'Notifications for reminders', // Channel description (helpful for understanding the purpose of this channel)
-    importance: Importance
-        .high, // Set the importance level of the notification (options: low, default, high)
-    priority: Priority
-        .high, // Set the priority of the notification (options: low, default, high)
-    ticker:
-        'ticker', // Optional: Ticker text (this text is shown briefly when the notification is delivered)
-    playSound:
-        true, // Optional: To play a sound when the notification is triggered
-    sound: RawResourceAndroidNotificationSound(
-        'notification_sound'), // Optional: Custom sound from the app's raw resources
-    largeIcon: DrawableResourceAndroidBitmap(
-        'app_icon'), // Optional: Add a large icon to the notification
-    // Other customizations (e.g., vibration pattern, lights) can be set here as well
-  );
-
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings(
           'app_icon'); // 'app_icon' is your app's icon file
