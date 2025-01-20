@@ -59,6 +59,7 @@ flutter:
     - assets/images/start_popup_image.jpeg
     - assets/images/default_popup.jfif
     - assets/images/azadar_media.webp
+    - assets/images/azadar_media_text.png
 
 
 
@@ -71,4 +72,8 @@ flutter:
     - family: MUHAMMADI
       fonts:
         - asset: assets/font/MUHAMMADI_QURANIC.ttf
+
+    - family: Baskervville-Regular
+      fonts:
+        - asset: assets/font/Baskervville-Regular.ttf
 

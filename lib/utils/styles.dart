@@ -36,4 +36,11 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 30.0,
   );
+
+  static const TextStyle whiteBoldCreditText = TextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.bold,
+    fontSize: 25.0,
+    fontFamily: "Baskervville-Regular",
+  );
 }
