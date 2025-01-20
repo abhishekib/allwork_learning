@@ -47,8 +47,10 @@ class CreditsView extends StatelessWidget {
             ],
           ),
           SizedBox(height: 20),
-          Image.asset(
-            "assets/images/azadar_media_text.png",
+          Flexible(
+            child: Image.asset(
+              "assets/images/azadar_media_text.png",
+            ),
           )
         ],
       ),

@@ -54,6 +54,7 @@ flutter:
     - assets/icons/image_5.png
     - assets/icons/image_7.png
     - assets/icons/Maghrib.png
+    - assets/icons/credit.png
     - assets/app_icon.png
     - assets/icons/google_login.png
     - assets/images/start_popup_image.jpeg
