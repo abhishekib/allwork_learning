@@ -238,6 +238,19 @@ class CustomDrawer extends StatelessWidget {
                   ),
                   ListTile(
                     leading: const Icon(
+                      Icons.info_rounded,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Credits',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.to(() => CreditsView());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
                       Icons.apps,
                       color: Colors.white,
                     ),
