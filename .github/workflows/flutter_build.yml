@@ -7,11 +7,29 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: "Choose build type (debug or release)"
+        required: true
+        type: choice
+        default: "release"
+        options:
+          - "release"
+          - "debug"
+      runner:
+        description: "Choose runner (self-hosted or ubuntu-latest)"
+        required: true
+        type: choice
+        default: "ubuntu-latest"
+        options:
+          - "ubuntu-latest"
+          - "self-hosted"
 
 jobs:
   build-and-release:
-    name: Build and Release APK
-    runs-on: ubuntu-latest
+    name: Build and Upload APK
+    runs-on: ${{ github.event.inputs.runner }}
 
     steps:
       # Step 1: Checkout the repository
@@ -53,9 +71,9 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: flutter test
 
-      # Step 8: Build APK
+      # Step 8: Build APK (based on input)
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --${{ github.event.inputs.build_type }}
 
       # Step 9: Extract Tag Name (for release builds)
       - name: Extract Tag Name
@@ -65,7 +83,7 @@ jobs:
 
       # Step 10: Create GitHub Release (for tagged commits)
       - name: Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') && github.event.inputs.build_type == 'release'
         id: create_release
         uses: softprops/action-gh-release@v2.2.0
         with:
@@ -80,12 +98,19 @@ jobs:
 
       # Step 11: Upload APK to Release (for tagged commits)
       - name: Upload APK to Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: startsWith(github.ref, 'refs/tags/') && github.event.inputs.build_type == 'release'
         uses: actions/upload-release-asset@v1.0.2
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/app/outputs/flutter-apk/app-release.apk
-          asset_name: app-release.apk
+          asset_path: build/app/outputs/flutter-apk/app-${{ github.event.inputs.build_type }}.apk
+          asset_name: app-${{ github.event.inputs.build_type }}.apk
           asset_content_type: application/vnd.android.package-archive
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 12: Upload artifact
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-${{ github.event.inputs.build_type }}.apk
+          path: build/app/outputs/flutter-apk/app-${{ github.event.inputs.build_type }}.apk

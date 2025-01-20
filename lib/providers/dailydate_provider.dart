@@ -1,10 +1,7 @@
-import 'dart:convert';
 import 'dart:developer';
-// import 'dart:developer';
-import 'package:allwork/services/db_services.dart';
-import 'package:allwork/utils/helpers.dart';
-import 'package:dio/dio.dart';
 import 'package:allwork/modals/daily_date.dart';
+import 'package:allwork/services/db_services.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get_ip_address/get_ip_address.dart';
@@ -78,18 +75,13 @@ class DailyDateProvider {
     log("Position lat ${position.latitude}");
     log("Position long ${position.longitude}");
 
-  return position;
+    return position;
   }
-
 
   Future<DailyDate> fetchDailyDate() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final ipAddress = await getIpAddress();
-    log("IP Address: $ipAddress");
-
     final position = await getUserLocation();
-    
 
     DateTime now = DateTime.now().toLocal();
 
@@ -104,9 +96,8 @@ class DailyDateProvider {
       final response = await _dio.post(
         ApiConstants.dailyDateEndpoint,
         queryParameters: {
-          'lat': position?.latitude??'',
-          'long':  position?.longitude??'',
-          'ip': ipAddress,
+          'lat': position?.latitude ?? '',
+          'long': position?.longitude ?? '',
           'date': date,
           'time': time,
           'dd': prefs.getString('hijri_date_adjustment') ?? '0',

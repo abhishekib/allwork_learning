@@ -1,9 +1,6 @@
 import 'dart:developer';
-import 'package:allwork/main.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:timezone/timezone.dart';
 
 class CategoryDetailController extends GetxController {
   // Audio Player Instance
@@ -48,10 +45,8 @@ class CategoryDetailController extends GetxController {
 
   // Method to toggle visibility
   void toggleArabicVisibility() => showArabic.value = !showArabic.value;
-  void toggleTransliterationVisibility() =>
-      showTransliteration.value = !showTransliteration.value;
-  void toggleTranslationVisibility() =>
-      showTranslation.value = !showTranslation.value;
+  void toggleTransliterationVisibility() => showTransliteration.value = !showTransliteration.value;
+  void toggleTranslationVisibility() => showTranslation.value = !showTranslation.value;
 
   // Method to play or pause the audio
   void playPauseAudio() {
@@ -130,53 +125,10 @@ class CategoryDetailController extends GetxController {
     log("Changed selected type to: $type");
   }
 
-  Future<void> scheduleNotification(DateTime date, String title) async {
+  void scheduleNotification(DateTime date, String title) {
     log("Scheduling notification for: $date with title: $title");
-
-    final DateTime scheduledDateTime =
-        DateTime.now().add(Duration(seconds: 10)); // 10 seconds later
-
-    final TZDateTime timezoneScheduledDateTime = TZDateTime.local(
-        scheduledDateTime.year,
-        scheduledDateTime.month,
-        scheduledDateTime.day,
-        scheduledDateTime.hour,
-        scheduledDateTime.minute);
-
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'general_notifications', // Channel ID (used to reference the notification channel)
-      'General Notifications', // Channel Name (used to display the channel name in the system)
-      channelDescription:
-          'Notifications for reminders', // Channel description (helpful for understanding the purpose of this channel)
-      importance: Importance
-          .high, // Set the importance level of the notification (options: low, default, high)
-      priority: Priority
-          .high, // Set the priority of the notification (options: low, default, high)
-      ticker:
-          'ticker', // Optional: Ticker text (this text is shown briefly when the notification is delivered)
-      playSound:
-          true, // Optional: To play a sound when the notification is triggered
-      largeIcon: DrawableResourceAndroidBitmap(
-          'app_icon'), // Optional: Add a large icon to the notification
-      // Other customizations (e.g., vibration pattern, lights) can be set here as well
-    );
-
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-
-    // Scheduling a notification to be triggered in 10 seconds
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      0, // notification ID
-      'Scheduled Notification', // Title
-      'This notification was scheduled!', // Body
-      timezoneScheduledDateTime, // Time to show the notification
-      platformChannelSpecifics,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.wallClockTime,
-      androidScheduleMode: AndroidScheduleMode.inexact,
-    );
-
-    log('Notification scheduled at: ${scheduledDateTime.toString()}');
+    
   }
+
+
 }

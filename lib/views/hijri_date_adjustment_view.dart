@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:allwork/controllers/daily_date_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';

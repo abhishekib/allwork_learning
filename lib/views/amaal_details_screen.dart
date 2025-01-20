@@ -35,7 +35,19 @@ class AmaalDetailsScreen extends StatelessWidget {
               // Make content scrollable
               child: Html(
                 data: item.data!,
-                // onLinkTap:
+                onLinkTap: (String? url, _, __) async {
+                  if (url != null) {
+                    final uri = Uri.parse(url);
+                    try {
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } catch (e) {
+                      debugPrint('Could not launch $url: $e');
+                    }
+                  }
+                },
                 style: {
                   "p": Style(
                     fontSize: FontSize(16.0),

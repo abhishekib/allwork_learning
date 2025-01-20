@@ -1,12 +1,12 @@
 import 'dart:developer';
 import 'dart:isolate';
-
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:get_ip_address/get_ip_address.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CategoryProvider {
   final String token;
@@ -18,18 +18,11 @@ class CategoryProvider {
   Future<ApiResponseHandler> fetchApiResponse(String endpoint,
       [String? day]) async {
     try {
-      Future<dynamic> getIpAddress() async {
-        try {
-          var ipAddress = IpAddress(type: RequestType.json);
-          dynamic data = await ipAddress.getIpAddress();
-          return data['ip'];
-        } on IpAddressException catch (exception) {
-          log(exception.message);
-        }
-      }
-
-      final ipAddress = await getIpAddress();
-      // log("IP Address: $ipAddress");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final setHijiriDate = prefs.getString('hijri_date_adjustment') ?? '0';
+      final position = await getUserLocation();
+      final lat = position?.latitude ?? '';
+      final long = position?.longitude ?? '';
 
       DateTime now = DateTime.now().toLocal();
 
@@ -45,7 +38,8 @@ class CategoryProvider {
         url = '$url&day=$day';
       } else if (endpoint == 'amaal-namaz?lang=english' ||
           endpoint == 'amaal-namaz?lang=gujarati') {
-        url = '$url&ip=$ipAddress&date=$date&time=$time';
+        url =
+            '$url&dd=$setHijiriDate&date=$date&time=$time&lat=$lat&long=$long';
         // log("hehe boi ----> $url");
       }
       // log(url);
@@ -68,13 +62,13 @@ class CategoryProvider {
         await Isolate.spawn((SendPort sendPort) async {
           DbServices.instance
               .writeApiResponseHandler(endpoint, apiResponseHandler);
-              sendPort.send('Data saved in DB');
+          sendPort.send('Data saved in DB');
         }, receivePort.sendPort);
 
         receivePort.listen((message) {
           log(message);
         });
-        
+
         return apiResponseHandler;
       } else {
         throw Exception('Failed to fetch data from $endpoint');
@@ -83,5 +77,43 @@ class CategoryProvider {
       log("Error: $e");
       rethrow;
     }
+  }
+
+  Future<Position?> getUserLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      log('Location services are disabled.');
+
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        log('Location permission denied');
+
+        return null;
+      }
+    }
+
+    LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 10,
+      timeLimit: Duration(seconds: 30),
+    );
+
+    Position position = await Geolocator.getCurrentPosition(
+      locationSettings: locationSettings,
+    );
+
+    // log("Position lat ${position.latitude}");
+    // log("Position long ${position.longitude}");
+
+    return position;
   }
 }
