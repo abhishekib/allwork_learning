@@ -55,6 +55,9 @@ class CategoryListController extends GetxController {
           }, receivePort.sendPort);
 
           receivePort.listen((response) {
+            if (response.data['data'].length == 1) {
+              isItemSingle(true);
+            }
             isLoading(false);
             categoryData(response);
           });
