@@ -1,6 +1,7 @@
 import 'package:realm/realm.dart';
 part 'bookmark_data_entity.realm.dart';
 
+
 @RealmModel()
 class _BookmarkDataEntity {
   @PrimaryKey()
