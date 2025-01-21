@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
@@ -14,7 +15,10 @@ class LyricsTab extends StatefulWidget {
   final Category categoryDetails;
 
   const LyricsTab(
-      {super.key, required this.lyricsList, required this.selectedLanguage, required this.categoryDetails});
+      {super.key,
+      required this.lyricsList,
+      required this.selectedLanguage,
+      required this.categoryDetails});
 
   @override
   LyricsTabState createState() => LyricsTabState();
@@ -132,7 +136,8 @@ class LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          _getBookmarkWidget()
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
+              controller.selectedType.value.toLowerCase())
         ]);
         break;
       case "transliteration":
@@ -143,7 +148,8 @@ class LyricsTabState extends State<LyricsTab> {
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          _getBookmarkWidget()
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
+              controller.selectedType.value.toLowerCase())
         ]);
         break;
       case "translation":
@@ -154,7 +160,8 @@ class LyricsTabState extends State<LyricsTab> {
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
-          _getBookmarkWidget()
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
+              controller.selectedType.value.toLowerCase())
         ]);
         break;
       default:
@@ -164,7 +171,8 @@ class LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          _getBookmarkWidget()
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
+              controller.selectedType.value.toLowerCase())
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
@@ -294,7 +302,7 @@ class LyricsTabState extends State<LyricsTab> {
     return 0;
   }
 
-  Widget _getBookmarkWidget() {
+  Widget _getBookmarkWidget(int index, String lyricType) {
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
@@ -308,7 +316,11 @@ class LyricsTabState extends State<LyricsTab> {
           size: 16,
         ),
         onTap: () {
-          // categoryListController.saveCategoryListDetail(category);
+          CategoryListController categoryListController =
+              CategoryListController();
+          categoryListController.saveCategoryListDetail(
+              widget.categoryDetails, lyricType, index);             
+          Get.back();
           // log(category.toString());
         },
       ),
