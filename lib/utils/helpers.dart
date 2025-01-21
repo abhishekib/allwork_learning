@@ -212,8 +212,8 @@ class MenuDetailsHelpers {
 }
 
 class BookmarkDataHelpers {
-  static BookmarkDataEntity toBookmarkDataEntity(Category category) {
-    BookmarkDataEntity bookmarkDataEntity = BookmarkDataEntity(category.title);
+  static BookmarkDataEntity toBookmarkDataEntity(Category category, String lyricsType, int index) {
+    BookmarkDataEntity bookmarkDataEntity = BookmarkDataEntity(category.title, lyricsType, index);
     bookmarkDataEntity.category = _toCategoryEntity(category);
     return bookmarkDataEntity;
   }

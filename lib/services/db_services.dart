@@ -169,11 +169,11 @@ class DbServices {
     return null;
   }
 
-  Future<void> writeBookmark(Category category) async {
+  Future<void> writeBookmark(Category category, String lyricsType, int index) async {
     realm.write(() {
       // Add the new object
       realm.add(BookmarkEntity(category.title));
-      realm.add(BookmarkDataHelpers.toBookmarkDataEntity(category));
+      realm.add(BookmarkDataHelpers.toBookmarkDataEntity(category, lyricsType, index));
     });
     log("written bookmark in db");
   }

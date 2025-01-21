@@ -10,11 +10,15 @@ part of 'bookmark_data_entity.dart';
 class BookmarkDataEntity extends _BookmarkDataEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   BookmarkDataEntity(
-    String title, {
+    String title,
+    String lyricsType,
+    int lyricsIndex, {
     CategoryEntity? category,
   }) {
     RealmObjectBase.set(this, 'title', title);
     RealmObjectBase.set(this, 'category', category);
+    RealmObjectBase.set(this, 'lyricsType', lyricsType);
+    RealmObjectBase.set(this, 'lyricsIndex', lyricsIndex);
   }
 
   BookmarkDataEntity._();
@@ -30,6 +34,18 @@ class BookmarkDataEntity extends _BookmarkDataEntity
   @override
   set category(covariant CategoryEntity? value) =>
       RealmObjectBase.set(this, 'category', value);
+
+  @override
+  String get lyricsType =>
+      RealmObjectBase.get<String>(this, 'lyricsType') as String;
+  @override
+  set lyricsType(String value) =>
+      RealmObjectBase.set(this, 'lyricsType', value);
+
+  @override
+  int get lyricsIndex => RealmObjectBase.get<int>(this, 'lyricsIndex') as int;
+  @override
+  set lyricsIndex(int value) => RealmObjectBase.set(this, 'lyricsIndex', value);
 
   @override
   Stream<RealmObjectChanges<BookmarkDataEntity>> get changes =>
@@ -48,6 +64,8 @@ class BookmarkDataEntity extends _BookmarkDataEntity
     return <String, dynamic>{
       'title': title.toEJson(),
       'category': category.toEJson(),
+      'lyricsType': lyricsType.toEJson(),
+      'lyricsIndex': lyricsIndex.toEJson(),
     };
   }
 
@@ -57,9 +75,13 @@ class BookmarkDataEntity extends _BookmarkDataEntity
     return switch (ejson) {
       {
         'title': EJsonValue title,
+        'lyricsType': EJsonValue lyricsType,
+        'lyricsIndex': EJsonValue lyricsIndex,
       } =>
         BookmarkDataEntity(
           fromEJson(title),
+          fromEJson(lyricsType),
+          fromEJson(lyricsIndex),
           category: fromEJson(ejson['category']),
         ),
       _ => raiseInvalidEJson(ejson),
@@ -74,6 +96,8 @@ class BookmarkDataEntity extends _BookmarkDataEntity
       SchemaProperty('title', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('category', RealmPropertyType.object,
           optional: true, linkTarget: 'CategoryEntity'),
+      SchemaProperty('lyricsType', RealmPropertyType.string),
+      SchemaProperty('lyricsIndex', RealmPropertyType.int),
     ]);
   }();
 

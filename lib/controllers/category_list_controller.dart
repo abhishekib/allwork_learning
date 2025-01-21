@@ -136,7 +136,7 @@ class CategoryListController extends GetxController {
     }
   }
 
-  void saveCategoryListDetail(Category category) {
-    DbServices.instance.writeBookmark(category);
+  void saveCategoryListDetail(Category category, String lyricsType, int index) {
+    DbServices.instance.writeBookmark(category, lyricsType, index);
   }
 }

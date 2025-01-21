@@ -1,5 +1,7 @@
 import 'package:allwork/controllers/text_cleaner_controller.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
+import 'package:allwork/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
@@ -9,9 +11,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
   final String selectedLanguage;
+  final Category categoryDetails;
 
   const LyricsTab(
-      {super.key, required this.lyricsList, required this.selectedLanguage});
+      {super.key, required this.lyricsList, required this.selectedLanguage, required this.categoryDetails});
 
   @override
   LyricsTabState createState() => LyricsTabState();
@@ -129,6 +132,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
+          _getBookmarkWidget()
         ]);
         break;
       case "transliteration":
@@ -139,6 +143,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
+          _getBookmarkWidget()
         ]);
         break;
       case "translation":
@@ -149,6 +154,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
+          _getBookmarkWidget()
         ]);
         break;
       default:
@@ -158,6 +164,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
+          _getBookmarkWidget()
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
@@ -285,5 +292,26 @@ class LyricsTabState extends State<LyricsTab> {
       debugPrint('Error parsing timestamp: $e');
     }
     return 0;
+  }
+
+  Widget _getBookmarkWidget() {
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: AppColors.backgroundBlue,
+        shape: BoxShape.circle,
+      ),
+      child: GestureDetector(
+        child: Icon(
+          Icons.bookmark_border,
+          color: Colors.white,
+          size: 16,
+        ),
+        onTap: () {
+          // categoryListController.saveCategoryListDetail(category);
+          // log(category.toString());
+        },
+      ),
+    );
   }
 }

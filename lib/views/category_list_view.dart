@@ -101,27 +101,7 @@ class CategoryListView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               spacing: 10,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.all(6),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.backgroundBlue,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: GestureDetector(
-                                    child: Icon(
-                                      Icons.bookmark_border,
-                                      color: Colors.white,
-                                      size: 16,
-                                    ),
-                                    onTap: () {
-                                      final Category category =
-                                          Category.fromJson(item);
-                                      categoryListController
-                                          .saveCategoryListDetail(category);
-                                      log(category.toString());
-                                    },
-                                  ),
-                                ),
+                                
                                 Container(
                                   decoration: BoxDecoration(
                                     color: AppColors.backgroundBlue,
