@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:allwork/services/local_notifications.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
@@ -10,6 +11,10 @@ import 'package:keep_screen_on/keep_screen_on.dart';
 import 'views/category_detail_view.dart';
 
 void main() {
+
+   WidgetsFlutterBinding.ensureInitialized();
+  LocalNotifications.init();
+
   runApp(const MyApp());
   if (Platform.isAndroid || Platform.isIOS) {
     KeepScreenOn.turnOn();
