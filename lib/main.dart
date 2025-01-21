@@ -12,7 +12,7 @@ import 'views/category_detail_view.dart';
 
 void main() {
 
-   WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   LocalNotifications.init();
 
   runApp(const MyApp());

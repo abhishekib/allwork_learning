@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:allwork/services/local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -45,8 +46,10 @@ class CategoryDetailController extends GetxController {
 
   // Method to toggle visibility
   void toggleArabicVisibility() => showArabic.value = !showArabic.value;
-  void toggleTransliterationVisibility() => showTransliteration.value = !showTransliteration.value;
-  void toggleTranslationVisibility() => showTranslation.value = !showTranslation.value;
+  void toggleTransliterationVisibility() =>
+      showTransliteration.value = !showTransliteration.value;
+  void toggleTranslationVisibility() =>
+      showTranslation.value = !showTranslation.value;
 
   // Method to play or pause the audio
   void playPauseAudio() {
@@ -127,8 +130,7 @@ class CategoryDetailController extends GetxController {
 
   void scheduleNotification(DateTime date, String title) {
     log("Scheduling notification for: $date with title: $title");
-    
+    LocalNotifications.showScheduleNotification(
+        title: title, body: "body", payload: "payload");
   }
-
-
 }
