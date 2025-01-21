@@ -15,7 +15,7 @@ class CategoryProvider {
 
   CategoryProvider(this.token);
 
-  Future<ApiResponseHandler> fetchApiResponse(String endpoint,
+  Future<ApiResponseHandler> fetchApiResponse(String endpoint, bool save,
       [String? day]) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,16 +59,17 @@ class CategoryProvider {
             ApiResponseHandler.fromJson(response.data);
 
         final receivePort = ReceivePort();
-        await Isolate.spawn((SendPort sendPort) async {
-          DbServices.instance
-              .writeApiResponseHandler(endpoint, apiResponseHandler);
-          sendPort.send('Data saved in DB');
-        }, receivePort.sendPort);
+        if (save) {
+          await Isolate.spawn((SendPort sendPort) async {
+            DbServices.instance
+                .writeApiResponseHandler(endpoint, apiResponseHandler);
+            sendPort.send('Data saved in DB');
+          }, receivePort.sendPort);
 
-        receivePort.listen((message) {
-          log(message);
-        });
-
+          receivePort.listen((message) {
+            log(message);
+          });
+        }
         return apiResponseHandler;
       } else {
         throw Exception('Failed to fetch data from $endpoint');

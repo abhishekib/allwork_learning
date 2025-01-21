@@ -32,7 +32,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
   void initState() {
     super.initState();
     //if the menu detail view is called with screen repetation then no need to fetch the data again
-    controller.fetchCategoryData(widget.menuItem);
+    controller.fetchCategoryData(widget.menuItem, false);
   }
 
   @override
@@ -43,7 +43,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
 
     Future<void> refreshCategoryData() async {
       // Fetch the latest category data
-      await controller.fetchCategoryData(widget.menuItem);
+      await controller.fetchCategoryData(widget.menuItem, false);
     }
 
     return Obx(

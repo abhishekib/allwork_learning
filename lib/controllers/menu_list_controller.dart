@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/providers/menu_provider.dart';
 import 'package:allwork/services/db_services.dart';
@@ -10,6 +11,7 @@ class MenuListController extends GetxController {
   var menuList = MenuList(items: []).obs;
   var gujaratiMenuList = MenuList(items: []).obs;
   var isLoading = true.obs;
+  CategoryListController categoryListController = CategoryListController();
 
   final MenuService _menuService = MenuService(ApiConstants.token);
 
@@ -33,10 +35,26 @@ class MenuListController extends GetxController {
       // Make sure the fetch method returns MenuList, not just List<String>
       menuList.value = await _menuService.fetchMenuList();
       gujaratiMenuList.value = await _menuService.fetchGujaratiMenuList();
+      
+      fetchAllDataFromAPI();
     } catch (e) {
       log("Error fetching menu list: $e");
     } finally {
       isLoading(false);
+    }
+  }
+
+  void fetchAllDataFromAPI() {
+    try {
+      for (var menuItem in menuList.value.items) {
+        categoryListController.fetchCategoryData(menuItem, true);
+      }
+
+      for (var gujaratiMenuItem in gujaratiMenuList.value.items) {
+        categoryListController.fetchCategoryData(gujaratiMenuItem, true);
+      }
+    } catch (e) {
+      log("Error fetchnig all data");
     }
   }
 

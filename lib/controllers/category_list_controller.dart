@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:isolate';
 
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/modals/category.dart';
@@ -27,7 +28,7 @@ class CategoryListController extends GetxController {
     super.onInit();
   }
 
-  Future<void> fetchCategoryData(String menuItem) async {
+  Future<void> fetchCategoryData(String menuItem, bool save) async {
     isLoading(true);
     categoryData(ApiResponseHandler(data: {}));
     log("menu item =$menuItem");
@@ -44,28 +45,40 @@ class CategoryListController extends GetxController {
         }
 
         ApiResponseHandler? response;
-        if (await Helpers.hasActiveInternetConnection()) {
-          log("Active internet connection present");
-          response =
-              await _categoryProvider.fetchApiResponse(endpoint, dayOfWeek);
 
-          if (response.data['data'].length == 1) {
-            isItemSingle(true);
-          }
+        if (DbServices.instance.endpointExists(endpoint) && !save) {
+          ReceivePort receivePort = ReceivePort();
+          await Isolate.spawn((SendPort sendPort) {
+            ApiResponseHandler? response =
+                DbServices.instance.getApiResponseHandler(endpoint);
+            sendPort.send(response);
+          }, receivePort.sendPort);
 
-          //log("Api Response Handler successfully converted \n ${response.toString()}");
-          categoryData(response);
-          log("Response getting successfully saved in controller");
+          receivePort.listen((response) {
+            isLoading(false);
+            categoryData(response);
+          });
         } else {
-          log("Active internet connection not present");
-          log(endpoint);
-          response = DbServices.instance.getApiResponseHandler(endpoint);
-          categoryData(response);
+          if (await Helpers.hasActiveInternetConnection()) {
+            log("Active internet connection present");
+            response = await _categoryProvider.fetchApiResponse(
+                endpoint, save, dayOfWeek);
+
+            if (!save) {
+              if (response.data['data'].length == 1) {
+                isItemSingle(true);
+              }
+
+              //log("Api Response Handler successfully converted \n ${response.toString()}");
+
+              categoryData(response);
+              isLoading(false);
+              log("Response getting successfully saved in controller");
+            }
+          }
         }
       } catch (e) {
         log("Error fetching category data for $endpoint: $e");
-      } finally {
-        isLoading(false);
       }
     } else {
       log("No endpoint found for $menuItem");
@@ -123,7 +136,7 @@ class CategoryListController extends GetxController {
     }
   }
 
-  void saveCategoryListDetail(Category category){
+  void saveCategoryListDetail(Category category) {
     DbServices.instance.writeBookmark(category);
   }
 }

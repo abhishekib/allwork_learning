@@ -152,6 +152,14 @@ class DbServices {
     });
   }
 
+  bool endpointExists(String endpoint) {
+    MenuDetailEntity? menuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
+    if (menuDetailEntity != null) {
+      return true;
+    }
+    return false;
+  }
+
   ApiResponseHandler? getApiResponseHandler(String endpoint) {
     MenuDetailEntity? menuDetailEntity = realm.find<MenuDetailEntity>(endpoint);
     final apiResponseEntity = menuDetailEntity?.apiResponseEntity;
