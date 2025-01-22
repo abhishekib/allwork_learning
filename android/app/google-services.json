@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "284263985070",
+    "project_id": "mafatih-ul-jinan",
+    "storage_bucket": "mafatih-ul-jinan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284263985070:android:7ce20aa69f2ec9ca86e23f",
+        "android_client_info": {
+          "package_name": "com.mafatihuljinan.org"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284263985070-nnpb9k5l0oc9v3008ot15m9aka74v6dn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mafatihuljinan.org",
+            "certificate_hash": "1de2711804c4e00a7721565805dda20c1b4248b4"
+          }
+        },
+        {
+          "client_id": "284263985070-8m04hjv7vkrr1focmi45tr8l5mk8kihi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAzO7NVpBbzduYw6hfqYAX9aisuK4Ey3vc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284263985070-8m04hjv7vkrr1focmi45tr8l5mk8kihi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "284263985070-555qs2aqse6g03rh0cf13bmlv6r51u0j.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mafatihuljinan.online",
+                "app_store_id": "6499578974"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
