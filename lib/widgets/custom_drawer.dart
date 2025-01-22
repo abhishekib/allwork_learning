@@ -238,7 +238,7 @@ class CustomDrawer extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: Image.asset("assets/icons/credit.png", width: 40, height: 40),
+                    leading: Image.asset("assets/icons/credit.png", width: 20, height: 20),
                     title: const Text(
                       'Credit',
                       style: AppTextStyles.whiteBoldText,
