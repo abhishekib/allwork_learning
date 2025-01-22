@@ -35,6 +35,19 @@ class CustomDrawer extends StatelessWidget {
                   if (!loginController.isLoggedIn.value) ...[
                     ListTile(
                       leading: const Icon(
+                        Icons.home_outlined,
+                        color: Colors.white,
+                      ),
+                      title: const Text(
+                        'Home',
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                      onTap: () {
+                        Get.back();
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(
                         Icons.person_add,
                         color: Colors.white,
                       ),
