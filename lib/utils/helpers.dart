@@ -31,7 +31,7 @@ Future<String> getUserTimeZone() async {
 class MenuDetailsHelpers {
   static MenuDetailEntity toMenuDetailEntity(
       String endpoint, ApiResponseHandler apiResponsehandler) {
-    developer.log("Converting to MenuDetailEntity");
+    //developer.log("Converting to MenuDetailEntity");
     return MenuDetailEntity(endpoint,
         apiResponseEntity: _convertToApiResponseEntity(apiResponsehandler));
   }
@@ -39,13 +39,13 @@ class MenuDetailsHelpers {
   // Helper function to convert ApiResponseHandler to _ApiResponseEntity
   static ApiResponseEntity _convertToApiResponseEntity(
       ApiResponseHandler handler) {
-    developer.log("Converting to ApiResponseEntity");
+    //developer.log("Converting to ApiResponseEntity");
     return ApiResponseEntity(data: _convertMapToKeyValueEntities(handler.data));
   }
 
   static List<KeyValueEntity> _convertMapToKeyValueEntities(
       Map<String, dynamic> map) {
-    developer.log("converting map to key value entities");
+    // developer.log("converting map to key value entities");
     List<KeyValueEntity> entities = [];
 
     map.forEach((key, value) {
@@ -63,11 +63,11 @@ class MenuDetailsHelpers {
         nestedValues = _convertMapToKeyValueEntities(value);
       } else if (value is List) {
         //entity.listValues = _convertListToKeyValueEntities(value);
-        log("====================================");
-        log("converting list to key value entities");
-        log(key);
-        log(value.toString());
-        log("====================================");
+        // log("====================================");
+        // log("converting list to key value entities");
+        // log(key);
+        // log(value.toString());
+        // log("====================================");
         listValues = _convertListToKeyValueEntities(value);
       } else {
         // Assign primitive values to the corresponding fields
@@ -101,7 +101,7 @@ class MenuDetailsHelpers {
 
   static List<KeyValueEntity> _convertListToKeyValueEntities(
       List<dynamic> list) {
-    developer.log("converting list to key value entities");
+    // developer.log("converting list to key value entities");
     List<KeyValueEntity> entities = [];
     for (var item in list) {
       //KeyValueEntity entity = KeyValueEntity();
@@ -150,14 +150,14 @@ class MenuDetailsHelpers {
       ApiResponseEntity entity) {
     Map<String, dynamic> dataMap = _convertKeyValueEntitiesToMap(entity.data);
     //before this line, exception is coming
-    developer.log("data map: $dataMap");
+    // developer.log("data map: $dataMap");
     return ApiResponseHandler(data: dataMap);
   }
 
 //exception is coming here
   static Map<String, dynamic> _convertKeyValueEntitiesToMap(
       RealmList<KeyValueEntity> entities) {
-    log("Converting key value entities to map");
+    // log("Converting key value entities to map");
     Map<String, dynamic> map = {};
     for (KeyValueEntity entity in entities) {
       dynamic value;
@@ -187,7 +187,7 @@ class MenuDetailsHelpers {
 
   static List<dynamic> _convertKeyValueEntitiesToList(
       RealmList<KeyValueEntity> entities) {
-    log("Converting key value entities to map");
+    // log("Converting key value entities to map");
     List<dynamic> list = [];
     for (KeyValueEntity entity in entities) {
       if (entity.nestedValues.isNotEmpty) {
