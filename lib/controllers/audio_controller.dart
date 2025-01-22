@@ -14,12 +14,9 @@ class AudioController extends GetxController {
   Rx<Duration> currentTime = Duration.zero.obs;
   RxDouble playbackSpeed = 1.0.obs;
   RxBool isCompactView = true.obs;
-  String audioUrl;
   RxDouble volume = 1.0.obs;
-
+  var audioUrl = ''.obs;
   var isDownloading = false.obs;
-
-  AudioController(this.audioUrl);
 
   AudioPlayer get audioplayer => _audioPlayer;
 
@@ -30,7 +27,7 @@ class AudioController extends GetxController {
       // Load playback speed before setting the source to ensure it applies correctly
       await loadPlaybackSpeed();
 
-      await _audioPlayer.setSource(UrlSource(audioUrl));
+      await _audioPlayer.setSource(UrlSource(audioUrl.value));
 
       await Future.delayed(const Duration(milliseconds: 500));
 

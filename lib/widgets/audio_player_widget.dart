@@ -50,7 +50,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   void initState() {
     super.initState();
-    _controller = Get.put(AudioController(widget.audioUrl));
+    _controller = Get.put(AudioController());
     _audioPlayer = _controller.audioplayer;
     if (widget.downloaded) {
       downloaded = true;
@@ -204,7 +204,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               ),
               const SizedBox(height: 8),
               ElevatedButton(
-                onPressed: _controller.retryLoadingAudio,
+                onPressed: () => _controller.retryLoadingAudio(),
                 child: const Text("Retry"),
               ),
             ],
