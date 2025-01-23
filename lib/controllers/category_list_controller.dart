@@ -80,6 +80,10 @@ class CategoryListController extends GetxController {
               log("Response getting successfully saved in controller");
             }
           }
+          else{
+            isLoading(false);
+            log("Data is not in the DB and there is no internet connection");
+          }
         }
       } catch (e) {
         log("Error fetching category data for $endpoint: $e");
@@ -107,6 +111,7 @@ class CategoryListController extends GetxController {
       case "Travel Ziyarat":
         return ApiConstants.travelZiyaratEndpoint;
       case "Amaal & Namaz":
+      case "Rajab Days & Night Namaz and  Duas":
         return ApiConstants.amalAndNamazEndpoint;
 
       case "રોજની દોઆઓ":
