@@ -141,11 +141,16 @@ class LoginController extends GetxController {
     errorMessage.value = '';
 
     try {
-      final firebase_auth.UserCredential? userCredential =
-          await _model.signInWithGoogle();
-      if (userCredential != null) {
-        final firebase_auth.User? user = userCredential.user;
-        if (user != null) {
+      final result = await _model.signInWithGoogle();
+      if (result != null) {
+        final firebase_auth.UserCredential? userCredential =
+            result['userCredential'];
+        final String? idToken = result['idToken'];
+        final firebase_auth.User? user = userCredential?.user;
+
+        if (idToken != null && user != null) {
+          // log('idToken--------->$idToken');
+          await _loginProvider.loginWithGoogle(idToken);
           isLoggedIn.value = true;
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
