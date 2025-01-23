@@ -1,13 +1,12 @@
 import 'dart:developer';
 
-import 'package:allwork/utils/constants.dart';
+// import 'package:allwork/utils/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class GoogleSignInModel {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: ApiConstants.googleClientId,
     scopes: ['email', 'profile'],
   );
 
@@ -22,16 +21,6 @@ class GoogleSignInModel {
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
-
-        // log('Access Token: ${googleAuth.accessToken}');
-        // log('ID Token: ${googleAuth.idToken}');
-        // return {
-        //   'displayName': googleUser.displayName,
-        //   'email': googleUser.email,
-        //   'photoUrl': googleUser.photoUrl,
-        //   'idToken': googleAuth.idToken,
-        //   'accessToken': googleAuth.accessToken,
-        // };
         return await _auth.signInWithCredential(credential);
       }
     } catch (e) {

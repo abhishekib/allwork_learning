@@ -5,7 +5,7 @@ import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -141,9 +141,10 @@ class LoginController extends GetxController {
     errorMessage.value = '';
 
     try {
-      final UserCredential? userCredential = await _model.signInWithGoogle();
+      final firebase_auth.UserCredential? userCredential =
+          await _model.signInWithGoogle();
       if (userCredential != null) {
-        final User? user = userCredential.user;
+        final firebase_auth.User? user = userCredential.user;
         if (user != null) {
           isLoggedIn.value = true;
           final prefs = await SharedPreferences.getInstance();

@@ -6,6 +6,7 @@ import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:allwork/views/splash_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -14,11 +15,11 @@ import 'views/category_detail_view.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-    
-Future<void> main() async {
 
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalNotifications.init();
+  await Firebase.initializeApp();
 
   //  handle in terminated state
   var initialNotification =
@@ -26,7 +27,7 @@ Future<void> main() async {
   if (initialNotification?.didNotificationLaunchApp == true) {
     // LocalNotifications.onClickNotification.stream.listen((event) {
     Future.delayed(Duration(seconds: 1), () {
-       log("Message incoming");
+      log("Message incoming");
     });
   }
 
