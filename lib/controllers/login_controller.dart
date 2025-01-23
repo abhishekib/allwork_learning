@@ -5,6 +5,7 @@ import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -136,36 +137,36 @@ class LoginController extends GetxController {
   }
 
   Future<void> loginWithGoogle() async {
+    isLoading(true);
+    errorMessage.value = '';
+
     try {
-      isLoading(true);
-      errorMessage.value = '';
-
-      final userData = await _model.signInWithGoogle();
-
-      if (userData != null) {
-        final idToken = userData['idToken'];
-        final response = await _loginProvider.loginWithGoogle(idToken);
-
-        if (response.status == 'success') {
-          loginResponse.value = response;
+      final firebase_auth.UserCredential? userCredential =
+          await _model.signInWithGoogle();
+      if (userCredential != null) {
+        final firebase_auth.User? user = userCredential.user;
+        if (user != null) {
           isLoggedIn.value = true;
-
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
-          prefs.setString('userEmail', userData['email']);
-          prefs.setString('displayName', userData['displayName']);
-        } else {
-          errorMessage.value = 'Failed to authenticate with backend.';
+          prefs.setString('userId', user.uid);
+          prefs.setString('userEmail', user.email ?? '');
+          prefs.setString('displayName', user.displayName ?? '');
+
+          // Update loginResponse as needed
+          loginResponse.value = LoginResponse(
+            user: User(
+              userId: user.uid,
+              email: user.email ?? '',
+              name: user.displayName ?? '',
+            ),
+            status: 'success',
+          );
         }
-        isLoggedIn.value = true;
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setBool('isLoggedIn', true);
-        prefs.setString('userId', loginResponse.value!.user!.userId);
       } else {
         errorMessage.value = 'Google login failed. Please try again.';
       }
     } catch (e) {
-      // log('LoginResponse or User object is null: ${loginResponse.value}');
       errorMessage.value = 'An error occurred while logging in with Google: $e';
       log(errorMessage.value);
     } finally {
