@@ -20,16 +20,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocalNotifications.init();
 
-  //  handle in terminated state
-  var initialNotification =
-      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  if (initialNotification?.didNotificationLaunchApp == true) {
-    // LocalNotifications.onClickNotification.stream.listen((event) {
-    Future.delayed(Duration(seconds: 1), () {
-       log("Message incoming");
-    });
-  }
-
   runApp(const MyApp());
   if (Platform.isAndroid || Platform.isIOS) {
     KeepScreenOn.turnOn();

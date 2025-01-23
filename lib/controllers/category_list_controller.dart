@@ -52,6 +52,7 @@ class CategoryListController extends GetxController {
             ApiResponseHandler? response =
                 DbServices.instance.getApiResponseHandler(endpoint);
             sendPort.send(response);
+            Isolate.exit();
           }, receivePort.sendPort);
 
           receivePort.listen((response) {

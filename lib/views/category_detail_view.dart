@@ -405,7 +405,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                     return LyricsTab(
                         lyricsList: lyricsList,
-                        selectedLanguage: selectedLanguage, categoryDetails: categoryDetails);
+                        selectedLanguage: selectedLanguage,
+                        categoryDetails: categoryDetails);
                   }).toList(),
                 ),
               ),
