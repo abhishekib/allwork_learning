@@ -192,6 +192,7 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.arabic.isNotEmpty && showArabic,
       child: Text(
         _textCleanerController.cleanText(lyrics.arabic),
+        softWrap: true,
         textDirection: TextDirection.rtl,
         textAlign: TextAlign.start,
         style: TextStyle(
@@ -216,16 +217,17 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.translitration.isNotEmpty && showTransliteration,
       child: Text(
         _textCleanerController.cleanText(lyrics.translitration),
+        softWrap: true,
         style: TextStyle(
-            fontSize: isTransliterationHighlighted
-                ? transliterationFontSize + 4
-                : transliterationFontSize,
-            fontWeight: isTransliterationHighlighted
-                ? FontWeight.bold
-                : FontWeight.normal,
-            color:
-                isTransliterationHighlighted ? Colors.black87 : Colors.black54,
-            fontFamily: fontFamily),
+          fontSize: isTransliterationHighlighted
+              ? transliterationFontSize + 4
+              : transliterationFontSize,
+          fontWeight: isTransliterationHighlighted
+              ? FontWeight.bold
+              : FontWeight.normal,
+          color: isTransliterationHighlighted ? Colors.black87 : Colors.black54,
+          fontFamily: fontFamily,
+        ),
       ),
     );
   }
@@ -242,6 +244,7 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.translation.isNotEmpty && showTranslation,
       child: Text(
         _textCleanerController.cleanText(lyrics.translation),
+        softWrap: true,
         style: TextStyle(
             fontSize: isTranslationHighlighted
                 ? translationFontSize + 4
@@ -319,7 +322,7 @@ class LyricsTabState extends State<LyricsTab> {
           CategoryListController categoryListController =
               CategoryListController();
           categoryListController.saveCategoryListDetail(
-              widget.categoryDetails, lyricType, index);             
+              widget.categoryDetails, lyricType, index);
           Get.back();
           // log(category.toString());
         },
