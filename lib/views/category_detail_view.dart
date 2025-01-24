@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
@@ -33,6 +34,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   bool isAudioDownloaded = false;
   final TextCleanerController _textCleanerController = TextCleanerController();
   final LoginController _loginController = Get.put(LoginController());
+  final AudioController _audioController = Get.put(AudioController());
 
   late Category categoryDetails;
   late List<String> availableTypes;
@@ -355,6 +357,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
+                    controller: _audioController,
                     downloaded: isAudioDownloaded,
                     audioUrl: currentAudioUrl!,
                     cDataId: currentContentDataId,

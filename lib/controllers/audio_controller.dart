@@ -20,14 +20,14 @@ class AudioController extends GetxController {
 
   AudioPlayer get audioplayer => _audioPlayer;
 
-  Future<void> setupAudio() async {
+  Future<void> setupAudio(String audioUrl) async {
     try {
       isLoading.value = true;
 
       // Load playback speed before setting the source to ensure it applies correctly
       await loadPlaybackSpeed();
 
-      await _audioPlayer.setSource(UrlSource(audioUrl.value));
+      await _audioPlayer.setSource(UrlSource(audioUrl));
 
       await Future.delayed(const Duration(milliseconds: 500));
 
@@ -83,16 +83,16 @@ class AudioController extends GetxController {
     isCompactView.value = prefs.getBool('isCompactView') ?? true;
   }
 
-  Future<void> retryLoadingAudio() async {
+  Future<void> retryLoadingAudio(String audioUrl) async {
     hasError.value = false;
     currentTime.value = Duration.zero;
     isPlaying.value = false;
     isCompleted.value = false;
 
-    await setupAudio();
+    await setupAudio(audioUrl);
   }
 
-  String _formatDuration(Duration duration) {
+  String formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
@@ -102,7 +102,7 @@ class AudioController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    setupAudio(); // Load audio when controller is initialized
+    setupAudio(audioUrl.value);
   }
 
   @override
