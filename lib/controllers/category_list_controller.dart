@@ -112,6 +112,7 @@ class CategoryListController extends GetxController {
         return ApiConstants.travelZiyaratEndpoint;
       case "Amaal & Namaz":
       case "Rajab Days & Night Namaz and  Duas":
+      case "saban Days & Night Namaz and  Duas":
         return ApiConstants.amalAndNamazEndpoint;
 
       case "રોજની દોઆઓ":
@@ -138,6 +139,7 @@ class CategoryListController extends GetxController {
       case "મુકદ્દસ મઝારાતની ઝિયારાત":
         return ApiConstants.gujaratiTravelZiyaratEndpoint;
       case "અમલ અને નમાઝ":
+      case "રજબ દિવસ અને રાત દુઆ અને નમાઝ":
         return ApiConstants.gujaratiAmalAndNamazEndpoint;
       default:
         log("No match found of endpoint for the given menu item");
