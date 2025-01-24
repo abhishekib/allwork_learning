@@ -131,6 +131,8 @@ class LyricsTabState extends State<LyricsTab> {
       case "arabic":
       case "અરબી":
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
+          const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
@@ -143,6 +145,8 @@ class LyricsTabState extends State<LyricsTab> {
       case "transliteration":
       case "તરજુમા":
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
+          const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
@@ -155,6 +159,8 @@ class LyricsTabState extends State<LyricsTab> {
       case "translation":
       case "ગુજરાતી":
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
+          const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
@@ -166,6 +172,8 @@ class LyricsTabState extends State<LyricsTab> {
         break;
       default:
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
+          const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
@@ -177,6 +185,27 @@ class LyricsTabState extends State<LyricsTab> {
     }
     contentWidgets.add(const SizedBox(height: 10));
     return contentWidgets;
+  }
+
+  Widget _buildEnglishText(Lyrics lyrics) {
+    if (lyrics.english!.isEmpty || lyrics.english! == "&nbsp;") {
+      return Visibility(visible: false, child: SizedBox.shrink());
+    }
+
+    return Visibility(
+      visible: lyrics.english!.isNotEmpty,
+      child: Text(
+        _textCleanerController.cleanText(lyrics.english!),
+        softWrap: true,
+        textDirection: TextDirection.rtl,
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          fontSize: 20,
+          // fontWeight: FontWeight.bold,
+          color: Colors.black54,
+        ),
+      ),
+    );
   }
 
   Widget _buildArabicText(Lyrics lyrics, bool showArabic) {

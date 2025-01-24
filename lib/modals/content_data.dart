@@ -34,12 +34,14 @@ class Lyrics {
   final String arabic;
   final String translitration;
   final String translation;
+  String? english;
 
   Lyrics({
     required this.time,
     required this.arabic,
     required this.translitration,
     required this.translation,
+    this.english,
   });
 
   factory Lyrics.fromJson(Map<String, dynamic> json) {
@@ -53,6 +55,7 @@ class Lyrics {
           isGujarati ? json['તરજુમા'] ?? '' : json['translitration'] ?? '',
       translation:
           isGujarati ? json['ગુજરાતી'] ?? '' : json['translation'] ?? '',
+      english: json['english'] ?? '',
     );
   }
 
