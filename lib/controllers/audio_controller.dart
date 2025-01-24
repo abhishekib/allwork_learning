@@ -99,6 +99,11 @@ class AudioController extends GetxController {
     return "$minutes:$seconds";
   }
 
+  Future<void> seekTo(Duration position) async {
+    await _audioPlayer.seek(position);
+    currentTime.value = position;
+  }
+
   @override
   void onInit() {
     super.onInit();

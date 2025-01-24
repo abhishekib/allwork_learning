@@ -126,40 +126,76 @@ class LyricsTabState extends State<LyricsTab> {
       case "arabic":
       case "અરબી":
         contentWidgets.addAll([
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildArabicText(lyrics, showArabic),
+          ),
           const SizedBox(height: 8),
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
           const SizedBox(height: 8),
-          _buildTranslationText(lyrics, showTranslation),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTranslationText(lyrics, showTranslation),
+          ),
         ]);
         break;
       case "transliteration":
       case "તરજુમા":
         contentWidgets.addAll([
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
           const SizedBox(height: 8),
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildArabicText(lyrics, showArabic),
+          ),
           const SizedBox(height: 8),
-          _buildTranslationText(lyrics, showTranslation),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTranslationText(lyrics, showTranslation),
+          ),
         ]);
         break;
       case "translation":
       case "ગુજરાતી":
         contentWidgets.addAll([
-          _buildTranslationText(lyrics, showTranslation),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTranslationText(lyrics, showTranslation),
+          ),
           const SizedBox(height: 8),
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildArabicText(lyrics, showArabic),
+          ),
           const SizedBox(height: 8),
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
         ]);
         break;
       default:
         contentWidgets.addAll([
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildArabicText(lyrics, showArabic),
+          ),
           const SizedBox(height: 8),
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
           const SizedBox(height: 8),
-          _buildTranslationText(lyrics, showTranslation),
+          GestureDetector(
+        onTap: () => _seekToLyricsTime(lyrics.time),
+        child: _buildTranslationText(lyrics, showTranslation),
+          ),
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
@@ -215,6 +251,14 @@ class LyricsTabState extends State<LyricsTab> {
             fontFamily: fontFamily),
       ),
     );
+  }
+
+  void _seekToLyricsTime(String time) {
+    Duration? seekPosition = _parseTimestamp(time);
+    if (seekPosition != null) {
+      audioController.seekTo(seekPosition);
+      _isUserInteraction = true;
+    }
   }
 
   Widget _buildTranslationText(Lyrics lyrics, bool showTranslation) {
