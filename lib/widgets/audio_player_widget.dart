@@ -249,7 +249,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ),
                   ),
                   Text(
-                    _formatDuration(widget.controller.totalTime.value),
+                    _formatDuration(widget.controller.totalTime.value -
+                        widget.controller.currentTime.value),
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
