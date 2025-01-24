@@ -4,6 +4,7 @@ import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -188,22 +189,23 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _buildEnglishText(Lyrics lyrics) {
-    if (lyrics.english!.isEmpty || lyrics.english! == "&nbsp;") {
+    if (lyrics.english!.isEmpty || lyrics.english!.trim() == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
 
     return Visibility(
       visible: lyrics.english!.isNotEmpty,
-      child: Text(
-        _textCleanerController.cleanText(lyrics.english!),
-        softWrap: true,
-        textDirection: TextDirection.rtl,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          fontSize: 20,
-          // fontWeight: FontWeight.bold,
-          color: Colors.black54,
-        ),
+      child: Html(
+        data: _textCleanerController.cleanText(lyrics.english!),
+        style: {
+          "html": Style(
+            fontSize: FontSize(20),
+            textAlign: TextAlign.start,
+            direction: TextDirection.rtl,
+            color: Colors.black54,
+            // fontWeight: FontWeight.bold,
+          ),
+        },
       ),
     );
   }
@@ -213,23 +215,26 @@ class LyricsTabState extends State<LyricsTab> {
         controller.selectedType.value.toLowerCase() == "arabic" ||
             controller.selectedType.value == "અરબી";
 
-    if (lyrics.arabic.isEmpty || lyrics.arabic == "&nbsp;") {
+    if (lyrics.arabic.isEmpty || lyrics.arabic.trim() == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
 
     return Visibility(
       visible: lyrics.arabic.isNotEmpty && showArabic,
-      child: Text(
-        _textCleanerController.cleanText(lyrics.arabic),
-        softWrap: true,
-        textDirection: TextDirection.rtl,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-            fontSize: isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize,
+      child: Html(
+        data: _textCleanerController.cleanText(lyrics.arabic),
+        style: {
+          "html": Style(
+            fontSize: FontSize(
+                isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize),
             fontWeight:
                 isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
-            fontFamily: "MUHAMMADI"),
+            textAlign: TextAlign.start,
+            direction: TextDirection.rtl,
+            fontFamily: "MUHAMMADI",
+          ),
+        },
       ),
     );
   }
@@ -238,25 +243,29 @@ class LyricsTabState extends State<LyricsTab> {
     final isTransliterationHighlighted =
         controller.selectedType.value.toLowerCase() == "transliteration" ||
             controller.selectedType.value == "તરજુમા";
-    if (lyrics.translitration.isEmpty || lyrics.translitration == "&nbsp;") {
+
+    if (lyrics.translitration.isEmpty ||
+        lyrics.translitration.trim() == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
 
     return Visibility(
       visible: lyrics.translitration.isNotEmpty && showTransliteration,
-      child: Text(
-        _textCleanerController.cleanText(lyrics.translitration),
-        softWrap: true,
-        style: TextStyle(
-          fontSize: isTransliterationHighlighted
-              ? transliterationFontSize + 4
-              : transliterationFontSize,
-          fontWeight: isTransliterationHighlighted
-              ? FontWeight.bold
-              : FontWeight.normal,
-          color: isTransliterationHighlighted ? Colors.black87 : Colors.black54,
-          fontFamily: fontFamily,
-        ),
+      child: Html(
+        data: _textCleanerController.cleanText(lyrics.translitration),
+        style: {
+          "html": Style(
+            fontSize: FontSize(isTransliterationHighlighted
+                ? transliterationFontSize + 4
+                : transliterationFontSize),
+            fontWeight: isTransliterationHighlighted
+                ? FontWeight.bold
+                : FontWeight.normal,
+            color:
+                isTransliterationHighlighted ? Colors.black87 : Colors.black54,
+            fontFamily: fontFamily,
+          ),
+        },
       ),
     );
   }
@@ -266,22 +275,25 @@ class LyricsTabState extends State<LyricsTab> {
         controller.selectedType.value.toLowerCase() == "translation" ||
             controller.selectedType.value == "ગુજરાતી";
 
-    if (lyrics.translation.isEmpty || lyrics.translation == "&nbsp;") {
+    if (lyrics.translation.isEmpty) {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
+
     return Visibility(
       visible: lyrics.translation.isNotEmpty && showTranslation,
-      child: Text(
-        _textCleanerController.cleanText(lyrics.translation),
-        softWrap: true,
-        style: TextStyle(
-            fontSize: isTranslationHighlighted
+      child: Html(
+        data: lyrics.translation,
+        style: {
+          "html": Style(
+            fontSize: FontSize(isTranslationHighlighted
                 ? translationFontSize + 4
-                : translationFontSize,
+                : translationFontSize),
             fontWeight:
                 isTranslationHighlighted ? FontWeight.bold : FontWeight.normal,
             color: isTranslationHighlighted ? Colors.black87 : Colors.black54,
-            fontFamily: fontFamily),
+            fontFamily: fontFamily,
+          ),
+        },
       ),
     );
   }
