@@ -31,7 +31,7 @@ class CategoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     TextCleanerController textCleanerController = TextCleanerController();
-    Get.lazyPut(() => AudioController());
+    // Get.lazyPut(() => AudioController());
     //log(categoryItems.toString());
 
     return BackgroundWrapper(

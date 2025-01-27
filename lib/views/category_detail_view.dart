@@ -34,7 +34,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   bool isAudioDownloaded = false;
   final TextCleanerController _textCleanerController = TextCleanerController();
   final LoginController _loginController = Get.put(LoginController());
-  final AudioController _audioController = Get.find<AudioController>();
+  // final AudioController _audioController = Get.find<AudioController>();
+  final AudioController _audioController = Get.put(AudioController());
 
   late Category categoryDetails;
   late List<String> availableTypes;
@@ -354,7 +355,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           ],
         ),
         body: DefaultTabController(
-
           length: availableTypes.length,
           child: Column(
             children: [
@@ -411,7 +411,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   controller: _tabController,
                   children: availableTypes.map((type) {
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
-                    return LyricsTab(lyricsIndex: lyricsIndex??0,
+                    return LyricsTab(
+                        lyricsIndex: lyricsIndex ?? 0,
                         lyricsList: lyricsList,
                         selectedLanguage: selectedLanguage,
                         categoryDetails: categoryDetails);
