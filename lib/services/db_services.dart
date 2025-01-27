@@ -169,7 +169,7 @@ class DbServices {
     return null;
   }
 
-  Future<void> writeBookmark(Category category, String lyricsType, int index) async {
+  Future<void> writeBookmark(Category category, int lyricsType, int index) async {
     realm.write(() {
       // Add the new object
       realm.add(BookmarkEntity(category.title));
@@ -182,13 +182,11 @@ class DbServices {
     return realm.all<BookmarkEntity>().map((e) => e.title).toList();
   }
 
-  Category getBookmarkData(String title) {
+  BookmarkDataEntity? getBookmarkData(String title) {
     log(title);
     BookmarkDataEntity? bookmarkDataEntity =
         realm.find<BookmarkDataEntity>(title);
 
-    log(bookmarkDataEntity.toEJson().toString());
-    log(BookmarkDataHelpers.toCategory(bookmarkDataEntity!.category!).toString());
-    return BookmarkDataHelpers.toCategory(bookmarkDataEntity!.category!);
+    return bookmarkDataEntity;
   }
 }

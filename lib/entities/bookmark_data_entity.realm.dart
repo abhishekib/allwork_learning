@@ -11,7 +11,7 @@ class BookmarkDataEntity extends _BookmarkDataEntity
     with RealmEntity, RealmObjectBase, RealmObject {
   BookmarkDataEntity(
     String title,
-    String lyricsType,
+    int lyricsType,
     int lyricsIndex, {
     CategoryEntity? category,
   }) {
@@ -36,11 +36,9 @@ class BookmarkDataEntity extends _BookmarkDataEntity
       RealmObjectBase.set(this, 'category', value);
 
   @override
-  String get lyricsType =>
-      RealmObjectBase.get<String>(this, 'lyricsType') as String;
+  int get lyricsType => RealmObjectBase.get<int>(this, 'lyricsType') as int;
   @override
-  set lyricsType(String value) =>
-      RealmObjectBase.set(this, 'lyricsType', value);
+  set lyricsType(int value) => RealmObjectBase.set(this, 'lyricsType', value);
 
   @override
   int get lyricsIndex => RealmObjectBase.get<int>(this, 'lyricsIndex') as int;
@@ -96,7 +94,7 @@ class BookmarkDataEntity extends _BookmarkDataEntity
       SchemaProperty('title', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('category', RealmPropertyType.object,
           optional: true, linkTarget: 'CategoryEntity'),
-      SchemaProperty('lyricsType', RealmPropertyType.string),
+      SchemaProperty('lyricsType', RealmPropertyType.int),
       SchemaProperty('lyricsIndex', RealmPropertyType.int),
     ]);
   }();

@@ -149,7 +149,7 @@ class CategoryListController extends GetxController {
     }
   }
 
-  void saveCategoryListDetail(Category category, String lyricsType, int index) {
+  void saveCategoryListDetail(Category category, int lyricsType, int index) {
     DbServices.instance.writeBookmark(category, lyricsType, index);
   }
 }

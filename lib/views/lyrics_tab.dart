@@ -92,6 +92,7 @@ class LyricsTabState extends State<LyricsTab> {
   @override
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
+      
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionsListener,
       itemCount: widget.lyricsList.length,
@@ -140,7 +141,7 @@ class LyricsTabState extends State<LyricsTab> {
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              controller.selectedType.value.toLowerCase())
+              0)
         ]);
         break;
       case "transliteration":
@@ -154,7 +155,7 @@ class LyricsTabState extends State<LyricsTab> {
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              controller.selectedType.value.toLowerCase())
+              1)
         ]);
         break;
       case "translation":
@@ -168,7 +169,7 @@ class LyricsTabState extends State<LyricsTab> {
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              controller.selectedType.value.toLowerCase())
+              2)
         ]);
         break;
       default:
@@ -181,7 +182,7 @@ class LyricsTabState extends State<LyricsTab> {
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              controller.selectedType.value.toLowerCase())
+              0)
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
@@ -346,7 +347,7 @@ class LyricsTabState extends State<LyricsTab> {
     return 0;
   }
 
-  Widget _getBookmarkWidget(int index, String lyricType) {
+  Widget _getBookmarkWidget(int index, int lyricType) {
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(

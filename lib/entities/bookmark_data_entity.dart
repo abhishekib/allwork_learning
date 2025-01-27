@@ -7,7 +7,7 @@ class _BookmarkDataEntity {
   @PrimaryKey()
   late String title;
   _CategoryEntity? category;
-  late String lyricsType;
+  late int lyricsType;
   late int lyricsIndex;
 }
 

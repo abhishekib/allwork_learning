@@ -40,7 +40,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
   late String menuItem;
-
+  int? bookmarkedTab;
   @override
   void initState() {
     super.initState();
@@ -50,6 +50,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       categoryDetails = data['category'] as Category;
       selectedLanguage = data['language'] as String;
       menuItem = data['menuItem'] as String;
+      bookmarkedTab = data['bookmarkedTab'];
     } else if (data is FavouriteModel) {
       categoryDetails = Category(
         category: "",
@@ -83,6 +84,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     };
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
+    _tabController.index = bookmarkedTab ?? 0;
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
@@ -348,6 +350,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           ],
         ),
         body: DefaultTabController(
+
           length: availableTypes.length,
           child: Column(
             children: [
