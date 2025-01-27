@@ -14,12 +14,14 @@ class ContentData {
   });
 
   factory ContentData.fromJson(Map<String, dynamic> json) {
+    List<dynamic> lyricsList = [];
+    if (json.containsKey('lyrics') && json['lyrics'] != null) {
+      lyricsList = json['lyrics'] as List;
+    }
     return ContentData(
       type: json['type'] ?? '',
       audiourl: json['audiourl'] ?? '',
-      lyrics: (json['lyrics'] as List)
-          .map((data) => Lyrics.fromJson(data))
-          .toList(),
+      lyrics: lyricsList.map((data) => Lyrics.fromJson(data)).toList(),
     );
   }
 
