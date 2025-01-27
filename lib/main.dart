@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:allwork/services/local_notifications.dart';
+import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
@@ -18,6 +19,7 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocationService.getUserLocation();
   await LocalNotifications.init();
   await Firebase.initializeApp();
 

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/services/location_services.dart';
 import 'package:dio/dio.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:geolocator/geolocator.dart';
@@ -27,7 +28,7 @@ class MenuService {
   Future<MenuList> fetchMenuList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final position = await getUserLocation();
+    final position = await LocationService.getUserLocation();
 
     DateTime now = DateTime.now().toLocal();
 
@@ -56,44 +57,11 @@ class MenuService {
     }
   }
 
-  Future<Position?> getUserLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      log('Location services are disabled.');
-
-      return null;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        log('Location permission denied');
-        return null;
-      }
-    }
-
-    LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 10,
-      timeLimit: Duration(seconds: 30),
-    );
-
-    Position position = await Geolocator.getCurrentPosition(
-      locationSettings: locationSettings,
-    );
-
-    return position;
-  }
 
   Future<MenuList> fetchGujaratiMenuList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final position = await getUserLocation();
+    final position = await LocationService.getUserLocation();
 
     DateTime now = DateTime.now().toLocal();
 
