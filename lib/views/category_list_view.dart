@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/utils/colors.dart';
@@ -30,6 +31,7 @@ class CategoryListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     TextCleanerController textCleanerController = TextCleanerController();
+    Get.lazyPut(() => AudioController());
     //log(categoryItems.toString());
 
     return BackgroundWrapper(

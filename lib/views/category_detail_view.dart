@@ -34,7 +34,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   bool isAudioDownloaded = false;
   final TextCleanerController _textCleanerController = TextCleanerController();
   final LoginController _loginController = Get.put(LoginController());
-  final AudioController _audioController = Get.put(AudioController());
+  final AudioController _audioController = Get.find<AudioController>();
 
   late Category categoryDetails;
   late List<String> availableTypes;

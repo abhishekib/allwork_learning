@@ -168,8 +168,9 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   void dispose() {
-    Get.delete<AudioController>();
-    widget.controller.dispose();
+    // Get.delete<AudioController>();
+    widget.controller.audioUrl.value = '';
+    // widget.controller.dispose();
     super.dispose();
   }
 
@@ -445,7 +446,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
         ),
         Text(
-          _formatDuration(widget.controller.totalTime.value),
+          _formatDuration(widget.controller.totalTime.value -
+              widget.controller.currentTime.value),
           style: const TextStyle(color: Colors.black, fontSize: 12),
         ),
         IconButton(
