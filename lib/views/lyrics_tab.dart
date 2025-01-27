@@ -135,51 +135,51 @@ class LyricsTabState extends State<LyricsTab> {
       case "arabic":
       case "અરબી":
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
           _buildArabicText(lyrics, showArabic),
           // const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           // const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           // const SizedBox(height: 8),
-          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
         break;
       case "transliteration":
       case "તરજુમા":
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
           _buildTransliterationText(lyrics, showTransliteration),
           // const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           // const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           // const SizedBox(height: 8),
-          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 1)
         ]);
         break;
       case "translation":
       case "ગુજરાતી":
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
           _buildTranslationText(lyrics, showTranslation),
           // const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           // const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           // const SizedBox(height: 8),
-          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 2)
         ]);
         break;
       default:
         contentWidgets.addAll([
+          _buildEnglishText(lyrics),
           _buildArabicText(lyrics, showArabic),
           // const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           // const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           // const SizedBox(height: 8),
-          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
     }
@@ -199,12 +199,12 @@ class LyricsTabState extends State<LyricsTab> {
         data: lyrics.english ?? '',
         style: {
           "html": Style(
-            alignment: Alignment.center,
+            // alignment: Alignment.lef,
             fontSize: FontSize(20),
-            textAlign: TextAlign.center,
+            textAlign: TextAlign.right,
             direction: TextDirection.ltr,
-            color: Colors.black54,
-            // fontWeight: FontWeight.bold,
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
           ),
         },
       ),
