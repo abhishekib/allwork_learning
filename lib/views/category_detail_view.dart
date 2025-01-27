@@ -41,6 +41,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   String selectedLanguage = 'English';
   late String menuItem;
   int? bookmarkedTab;
+  int? lyricsIndex;
   @override
   void initState() {
     super.initState();
@@ -51,6 +52,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       selectedLanguage = data['language'] as String;
       menuItem = data['menuItem'] as String;
       bookmarkedTab = data['bookmarkedTab'];
+      lyricsIndex = data['lyricsIndex'];
     } else if (data is FavouriteModel) {
       categoryDetails = Category(
         category: "",
@@ -406,7 +408,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   controller: _tabController,
                   children: availableTypes.map((type) {
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
-                    return LyricsTab(
+                    return LyricsTab(lyricsIndex: lyricsIndex??0,
                         lyricsList: lyricsList,
                         selectedLanguage: selectedLanguage,
                         categoryDetails: categoryDetails);

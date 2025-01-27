@@ -30,7 +30,8 @@ class BookmarkController extends GetxController {
         'category': category,
         'language': 'English',
         'menuItem': '',
-        'bookmarkedTab': bookmarkData.lyricsType
+        'bookmarkedTab': bookmarkData.lyricsType,
+        'lyricsIndex': bookmarkData.lyricsIndex
       },
     );
   }

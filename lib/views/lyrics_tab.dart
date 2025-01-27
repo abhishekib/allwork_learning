@@ -14,9 +14,11 @@ class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
   final String selectedLanguage;
   final Category categoryDetails;
+  final int lyricsIndex;
 
   const LyricsTab(
       {super.key,
+      required this.lyricsIndex,
       required this.lyricsList,
       required this.selectedLanguage,
       required this.categoryDetails});
@@ -92,7 +94,7 @@ class LyricsTabState extends State<LyricsTab> {
   @override
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
-      
+      initialScrollIndex: widget.lyricsIndex,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionsListener,
       itemCount: widget.lyricsList.length,
@@ -140,8 +142,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              0)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
         break;
       case "transliteration":
@@ -154,8 +155,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              1)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 1)
         ]);
         break;
       case "translation":
@@ -168,8 +168,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              2)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 2)
         ]);
         break;
       default:
@@ -181,8 +180,7 @@ class LyricsTabState extends State<LyricsTab> {
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics),
-              0)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
@@ -190,14 +188,15 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _buildEnglishText(Lyrics lyrics) {
-    if (lyrics.english!=null && (lyrics.english!.isEmpty || lyrics.english?.trim() == "&nbsp;")) {
+    if (lyrics.english != null &&
+        (lyrics.english!.isEmpty || lyrics.english?.trim() == "&nbsp;")) {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
 
     return Visibility(
-      visible: lyrics.english !=null && lyrics.english!.isNotEmpty,
+      visible: lyrics.english != null && lyrics.english!.isNotEmpty,
       child: Html(
-        data: _textCleanerController.cleanText(lyrics.english??''),
+        data: _textCleanerController.cleanText(lyrics.english ?? ''),
         style: {
           "html": Style(
             fontSize: FontSize(20),
