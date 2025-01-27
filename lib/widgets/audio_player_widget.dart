@@ -1,11 +1,13 @@
 import 'dart:developer';
 import 'dart:math' as math;
+import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
@@ -13,6 +15,7 @@ class AudioPlayerWidget extends StatefulWidget {
   String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
   final int cDataId;
+  final AudioController controller;
 
   AudioPlayerWidget({
     super.key,
@@ -20,6 +23,7 @@ class AudioPlayerWidget extends StatefulWidget {
     required this.audioUrl,
     required this.onPositionChanged,
     required this.cDataId,
+    required this.controller,
   });
 
   @override
@@ -30,139 +34,142 @@ const String playbackSpeedKey = 'playback_speed';
 
 class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
-  bool isPlaying = false;
-  bool isCompleted = false;
-  bool isDownloading = false;
-  bool hasError = false;
-  bool isLoading = true;
-  Duration currentTime = Duration.zero;
-  Duration totalTime = Duration.zero;
-  double volume = 1.0;
-  double playbackSpeed = 1.0;
-  bool isCompactView = true;
+  // bool isPlaying = false;
+  // bool isCompleted = false;
+  // bool isDownloading = false;
+  // bool hasError = false;
+  // bool isLoading = true;
+  // Duration currentTime = Duration.zero;
+  // Duration totalTime = Duration.zero;
+  // double volume = 1.0;
+  // double playbackSpeed = 1.0;
+  // bool isCompactView = true;
   bool downloaded = false;
 
   final AudioProvider audioProvider = AudioProvider(ApiConstants.token);
+  // late AudioController widget.controller;
 
   @override
   void initState() {
     super.initState();
+    _audioPlayer = widget.controller.audioplayer;
     if (widget.downloaded) {
       downloaded = true;
     }
-    _audioPlayer = AudioPlayer();
-    _setupAudio();
-    _loadViewPreference();
-    _loadPlaybackSpeed();
+
+    widget.controller.setupAudio(widget.audioUrl);
+    widget.controller.loadViewPreference();
+    widget.controller.loadPlaybackSpeed();
   }
 
   @override
   void didUpdateWidget(covariant AudioPlayerWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.audioUrl != oldWidget.audioUrl) {
-      _setupAudio();
+      widget.controller.setupAudio(widget.audioUrl);
     }
   }
 
-  Future<void> _loadPlaybackSpeed() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      playbackSpeed = prefs.getDouble(playbackSpeedKey) ?? 1.0;
-    });
-    _audioPlayer.setPlaybackRate(playbackSpeed); // Apply saved speed
-  }
+  // Future<void> _loadPlaybackSpeed() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     playbackSpeed = prefs.getDouble(playbackSpeedKey) ?? 1.0;
+  //   });
+  //   _audioPlayer.setPlaybackRate(playbackSpeed); // Apply saved speed
+  // }
 
-  Future<void> _savePlaybackSpeed(double speed) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setDouble(playbackSpeedKey, speed);
-  }
+  // Future<void> _savePlaybackSpeed(double speed) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setDouble(playbackSpeedKey, speed);
+  // }
 
-  Future<void> _setupAudio() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
+  // Future<void> _setupAudio() async {
+  //   try {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
 
-      await _audioPlayer.setSource(UrlSource(widget.audioUrl));
+  //     await _audioPlayer.setSource(UrlSource(widget.audioUrl));
 
-      await Future.delayed(const Duration(milliseconds: 500));
+  //     await Future.delayed(const Duration(milliseconds: 500));
 
-      final duration = await _audioPlayer.getDuration();
-      if (duration != null && mounted) {
-        setState(() {
-          totalTime = duration;
-        });
-      }
+  //     final duration = await _audioPlayer.getDuration();
+  //     if (duration != null && mounted) {
+  //       setState(() {
+  //         totalTime = duration;
+  //       });
+  //     }
 
-      _audioPlayer.onDurationChanged.listen((duration) {
-        if (mounted) {
-          setState(() {
-            totalTime = duration;
-          });
-        }
-      });
+  //     _audioPlayer.onDurationChanged.listen((duration) {
+  //       if (mounted) {
+  //         setState(() {
+  //           totalTime = duration;
+  //         });
+  //       }
+  //     });
 
-      _audioPlayer.onPositionChanged.listen((position) {
-        if (mounted) {
-          setState(() {
-            currentTime = Duration(
-              seconds: math.min(position.inSeconds, totalTime.inSeconds),
-            );
-          });
+  //     _audioPlayer.onPositionChanged.listen((position) {
+  //       if (mounted) {
+  //         setState(() {
+  //           currentTime = Duration(
+  //             seconds: math.min(position.inSeconds, totalTime.inSeconds),
+  //           );
+  //         });
 
-          widget.onPositionChanged(position);
-        }
-      });
+  //         widget.onPositionChanged(position);
+  //       }
+  //     });
 
-      _audioPlayer.onPlayerComplete.listen((event) {
-        if (mounted) {
-          setState(() {
-            currentTime = Duration.zero;
-            isPlaying = false;
-            isCompleted = true;
-          });
-        }
-      });
+  //     _audioPlayer.onPlayerComplete.listen((event) {
+  //       if (mounted) {
+  //         setState(() {
+  //           currentTime = Duration.zero;
+  //           isPlaying = false;
+  //           isCompleted = true;
+  //         });
+  //       }
+  //     });
 
-      setState(() {
-        isLoading = false;
-        hasError = false;
-      });
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-          hasError = true;
-        });
-      }
-      if (kDebugMode) {
-        print("Error loading audio: $e");
-      }
-    }
-  }
+  //     setState(() {
+  //       isLoading = false;
+  //       hasError = false;
+  //     });
+  //   } catch (e) {
+  //     if (mounted) {
+  //       setState(() {
+  //         isLoading = false;
+  //         hasError = true;
+  //       });
+  //     }
+  //     if (kDebugMode) {
+  //       print("Error loading audio: $e");
+  //     }
+  //   }
+  // }
 
-  Future<void> _loadViewPreference() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      isCompactView = prefs.getBool('isCompactView') ?? true;
-    });
-  }
+  // Future<void> _loadViewPreference() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     isCompactView = prefs.getBool('isCompactView') ?? true;
+  //   });
+  // }
 
-  Future<void> _retryLoadingAudio() async {
-    if (!mounted) return;
+  // Future<void> _retryLoadingAudio() async {
+  //   if (!mounted) return;
 
-    setState(() {
-      hasError = false;
-      currentTime = Duration.zero;
-      isPlaying = false;
-      isCompleted = false;
-    });
-    await _setupAudio();
-  }
+  //   setState(() {
+  //     hasError = false;
+  //     currentTime = Duration.zero;
+  //     isPlaying = false;
+  //     isCompleted = false;
+  //   });
+  //   await _setupAudio();
+  // }
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
+    Get.delete<AudioController>();
+    widget.controller.dispose();
     super.dispose();
   }
 
@@ -175,7 +182,9 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white),
       ),
-      child: isCompactView ? _buildCompactView() : _buildNormalView(),
+      child: Obx(() => widget.controller.isCompactView.value
+          ? _buildCompactView()
+          : _buildNormalView()),
     );
   }
 
@@ -183,11 +192,13 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        if (isLoading)
+        if (widget.controller.isLoading.value)
           const Center(
-            child: CircularProgressIndicator(color: Colors.white),
+            child: CircularProgressIndicator(
+              color: AppColors.backgroundBlue,
+            ),
           )
-        else if (hasError)
+        else if (widget.controller.hasError.value)
           Column(
             children: [
               const Text(
@@ -196,7 +207,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               ),
               const SizedBox(height: 8),
               ElevatedButton(
-                onPressed: _retryLoadingAudio,
+                onPressed: () =>
+                    widget.controller.retryLoadingAudio(widget.audioUrl),
                 child: const Text("Retry"),
               ),
             ],
@@ -207,7 +219,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               Row(
                 children: [
                   Text(
-                    _formatDuration(currentTime),
+                    widget.controller
+                        .formatDuration(widget.controller.currentTime.value),
                     style: const TextStyle(
                         color: Colors.black,
                         fontSize: 16,
@@ -215,16 +228,18 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   ),
                   Expanded(
                     child: Slider(
-                      value: currentTime.inSeconds.toDouble(),
+                      value: widget.controller.currentTime.value.inSeconds
+                          .toDouble(),
                       min: 0,
-                      max: totalTime.inSeconds.toDouble(),
+                      max: widget.controller.totalTime.value.inSeconds
+                          .toDouble(),
                       onChanged: (value) async {
                         await _audioPlayer
                             .seek(Duration(seconds: value.toInt()));
                         if (value == 0) {
                           if (mounted) {
                             setState(() {
-                              isPlaying = false;
+                              widget.controller.isPlaying.value = false;
                             });
                           }
                         }
@@ -234,7 +249,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ),
                   ),
                   Text(
-                    _formatDuration(totalTime),
+                    _formatDuration(widget.controller.totalTime.value -
+                        widget.controller.currentTime.value),
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -250,43 +266,48 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   IconButton(
                     onPressed: () {
                       setState(() {
-                        volume = volume == 0 ? 1.0 : 0.0;
-                        _audioPlayer.setVolume(volume);
+                        widget.controller.volume.value =
+                            widget.controller.volume.value == 0.0 ? 1.0 : 0.0;
+                        _audioPlayer.setVolume(widget.controller.volume.value);
                       });
                     },
                     icon: Icon(
-                      volume == 0 ? Icons.volume_off : Icons.volume_up,
+                      widget.controller.volume.value == 0
+                          ? Icons.volume_off
+                          : Icons.volume_up,
                       color: AppColors.backgroundBlue,
                     ),
                   ),
                   IconButton(
                     onPressed: () async {
-                      if (isPlaying) {
+                      if (widget.controller.isPlaying.value) {
                         await _audioPlayer.pause();
                         if (mounted) {
                           setState(() {
-                            isPlaying = false;
+                            widget.controller.isPlaying.value = false;
                           });
                         }
                       } else {
-                        if (isCompleted) {
+                        if (widget.controller.isCompleted.value) {
                           await _audioPlayer.seek(Duration.zero);
                           if (mounted) {
                             setState(() {
-                              isCompleted = false;
+                              widget.controller.isCompleted.value = false;
                             });
                           }
                         }
                         await _audioPlayer.resume();
                         if (mounted) {
                           setState(() {
-                            isPlaying = true;
+                            widget.controller.isPlaying.value = true;
                           });
                         }
                       }
                     },
                     icon: Icon(
-                      isPlaying ? Icons.pause : Icons.play_arrow,
+                      widget.controller.isPlaying.value
+                          ? Icons.pause
+                          : Icons.play_arrow,
                       color: AppColors.backgroundBlue,
                       size: 40,
                     ),
@@ -300,7 +321,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                           borderRadius: BorderRadius.circular(5),
                           color: AppColors.backgroundBlue),
                       child: Center(
-                        child: Text('${playbackSpeed.toStringAsFixed(2)}x',
+                        child: Text(
+                            '${widget.controller.playbackSpeed.value.toStringAsFixed(2)}x',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12,
@@ -310,10 +332,12 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ),
                     onSelected: (value) {
                       setState(() {
-                        playbackSpeed = value;
+                        widget.controller.playbackSpeed.value = value;
                       });
-                      _audioPlayer.setPlaybackRate(playbackSpeed);
-                      _savePlaybackSpeed(playbackSpeed);
+                      _audioPlayer.setPlaybackRate(
+                          widget.controller.playbackSpeed.value);
+                      widget.controller.savePlaybackSpeed(
+                          widget.controller.playbackSpeed.value);
                     },
                     itemBuilder: (context) => [
                       const PopupMenuItem(
@@ -352,14 +376,15 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   ),
                   downloaded
                       ? const SizedBox.shrink()
-                      : isDownloading
+                      : widget.controller.isDownloading.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : IconButton(
                               onPressed: () {
                                 if (!downloaded) {
                                   setState(() {
                                     log("Changing the state: Starting download");
-                                    isDownloading = true;
+                                    widget.controller.isDownloading.value =
+                                        true;
                                   });
                                   log("Let us download the audio");
 
@@ -369,13 +394,15 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                                       .then((savedPath) {
                                     setState(() {
                                       downloaded = true;
-                                      isDownloading = false;
+                                      widget.controller.isDownloading.value =
+                                          false;
                                       widget.audioUrl = savedPath!;
                                     });
                                     log("Download complete");
                                   }).catchError((error) {
                                     setState(() {
-                                      isDownloading = false;
+                                      widget.controller.isDownloading.value =
+                                          false;
                                     });
                                     log("Download failed: $error");
                                   });
@@ -397,19 +424,19 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     return Row(
       children: [
         Text(
-          _formatDuration(currentTime),
+          _formatDuration(widget.controller.currentTime.value),
           style: const TextStyle(color: Colors.black, fontSize: 12),
         ),
         Expanded(
           child: Slider(
-            value: currentTime.inSeconds.toDouble(),
+            value: widget.controller.currentTime.value.inSeconds.toDouble(),
             min: 0,
-            max: totalTime.inSeconds.toDouble(),
+            max: widget.controller.totalTime.value.inSeconds.toDouble(),
             onChanged: (value) async {
               await _audioPlayer.seek(Duration(seconds: value.toInt()));
               if (value == 0) {
                 setState(() {
-                  isPlaying = false;
+                  widget.controller.isPlaying.value = false;
                 });
               }
             },
@@ -418,25 +445,25 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
         ),
         Text(
-          _formatDuration(totalTime),
+          _formatDuration(widget.controller.totalTime.value),
           style: const TextStyle(color: Colors.black, fontSize: 12),
         ),
         IconButton(
           onPressed: () async {
-            if (isPlaying) {
+            if (widget.controller.isPlaying.value) {
               await _audioPlayer.pause();
               setState(() {
-                isPlaying = false;
+                widget.controller.isPlaying.value = false;
               });
             } else {
               await _audioPlayer.resume();
               setState(() {
-                isPlaying = true;
+                widget.controller.isPlaying.value = true;
               });
             }
           },
           icon: Icon(
-            isPlaying ? Icons.pause : Icons.play_arrow,
+            widget.controller.isPlaying.value ? Icons.pause : Icons.play_arrow,
             color: AppColors.backgroundBlue,
             size: 30,
           ),
@@ -444,12 +471,15 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         IconButton(
           onPressed: () {
             setState(() {
-              volume = volume == 0 ? 1.0 : 0.0;
-              _audioPlayer.setVolume(volume);
+              widget.controller.volume.value =
+                  widget.controller.volume.value == 0 ? 1.0 : 0.0;
+              _audioPlayer.setVolume(widget.controller.volume.value);
             });
           },
           icon: Icon(
-            volume == 0 ? Icons.volume_off : Icons.volume_up,
+            widget.controller.volume.value == 0
+                ? Icons.volume_off
+                : Icons.volume_up,
             color: AppColors.backgroundBlue,
           ),
         ),
@@ -462,7 +492,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                 borderRadius: BorderRadius.circular(5),
                 color: AppColors.backgroundBlue),
             child: Center(
-              child: Text('${playbackSpeed.toStringAsFixed(2)}x',
+              child: Text(
+                  '${widget.controller.playbackSpeed.value.toStringAsFixed(2)}x',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12,
@@ -472,10 +503,11 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
           onSelected: (value) {
             setState(() {
-              playbackSpeed = value;
+              widget.controller.playbackSpeed.value = value;
             });
-            _audioPlayer.setPlaybackRate(playbackSpeed);
-            _savePlaybackSpeed(playbackSpeed);
+            _audioPlayer.setPlaybackRate(widget.controller.playbackSpeed.value);
+            widget.controller
+                .savePlaybackSpeed(widget.controller.playbackSpeed.value);
           },
           itemBuilder: (context) => [
             const PopupMenuItem(
@@ -514,14 +546,14 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         ),
         downloaded
             ? const SizedBox.shrink()
-            : isDownloading
+            : widget.controller.isDownloading.value
                 ? const CircularProgressIndicator(color: Colors.white)
                 : IconButton(
                     onPressed: () {
                       if (!downloaded) {
                         setState(() {
                           log("Changing the state: Starting download");
-                          isDownloading = true;
+                          widget.controller.isDownloading.value = true;
                         });
                         log("Let us download the audio");
 
@@ -530,13 +562,13 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                             .then((savedPath) {
                           setState(() {
                             downloaded = true;
-                            isDownloading = false;
+                            widget.controller.isDownloading.value = false;
                             widget.audioUrl = savedPath!;
                           });
                           log("Download complete");
                         }).catchError((error) {
                           setState(() {
-                            isDownloading = false;
+                            widget.controller.isDownloading.value = false;
                           });
                           log("Download failed: $error");
                         });

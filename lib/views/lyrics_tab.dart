@@ -1,4 +1,5 @@
 import 'package:allwork/controllers/category_list_controller.dart';
+import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
@@ -34,6 +35,7 @@ class LyricsTabState extends State<LyricsTab> {
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
   final TextCleanerController _textCleanerController = TextCleanerController();
+  final AudioController audioController = Get.find<AudioController>();
 
   double arabicFontSize = 18.0;
   double transliterationFontSize = 16.0;
@@ -54,14 +56,14 @@ class LyricsTabState extends State<LyricsTab> {
     debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
-    ever(controller.currentTime, (currentTimeValue) {
+    ever(audioController.currentTime, (currentTimeValue) {
       if (_isUserInteraction) {
         // Skip the scrolling if it was caused by user interaction
         _isUserInteraction = false;
         return;
       }
 
-      int newIndex = _findLyricsIndex(currentTimeValue.toInt());
+      int newIndex = _findLyricsIndex(currentTimeValue);
 
       if (newIndex != -1 && newIndex != _currentHighlightedIndex) {
         if (mounted) {
@@ -136,12 +138,21 @@ class LyricsTabState extends State<LyricsTab> {
       case "અરબી":
         contentWidgets.addAll([
           _buildEnglishText(lyrics),
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildArabicText(lyrics, showArabic),
+          ),
           // const SizedBox(height: 8),
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
           // const SizedBox(height: 8),
-          _buildTranslationText(lyrics, showTranslation),
-          // const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTranslationText(lyrics, showTranslation),
+            // const SizedBox(height: 8),
+          ),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
         break;
@@ -149,12 +160,21 @@ class LyricsTabState extends State<LyricsTab> {
       case "તરજુમા":
         contentWidgets.addAll([
           _buildEnglishText(lyrics),
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
           // const SizedBox(height: 8),
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildArabicText(lyrics, showArabic),
+          ),
           // const SizedBox(height: 8),
-          _buildTranslationText(lyrics, showTranslation),
-          // const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTranslationText(lyrics, showTranslation),
+            // const SizedBox(height: 8),
+          ),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 1)
         ]);
         break;
@@ -162,24 +182,42 @@ class LyricsTabState extends State<LyricsTab> {
       case "ગુજરાતી":
         contentWidgets.addAll([
           _buildEnglishText(lyrics),
-          _buildTranslationText(lyrics, showTranslation),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTranslationText(lyrics, showTranslation),
+          ),
           // const SizedBox(height: 8),
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildArabicText(lyrics, showArabic),
+          ),
           // const SizedBox(height: 8),
-          _buildTransliterationText(lyrics, showTransliteration),
-          // const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTransliterationText(lyrics, showTransliteration),
+            // const SizedBox(height: 8),
+          ),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 2)
         ]);
         break;
       default:
         contentWidgets.addAll([
           _buildEnglishText(lyrics),
-          _buildArabicText(lyrics, showArabic),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildArabicText(lyrics, showArabic),
+          ),
           // const SizedBox(height: 8),
-          _buildTransliterationText(lyrics, showTransliteration),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTransliterationText(lyrics, showTransliteration),
+          ),
           // const SizedBox(height: 8),
-          _buildTranslationText(lyrics, showTranslation),
-          // const SizedBox(height: 8),
+          GestureDetector(
+            onTap: () => _seekToLyricsTime(lyrics.time),
+            child: _buildTranslationText(lyrics, showTranslation),
+            // const SizedBox(height: 8),
+          ),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
     }
@@ -271,6 +309,14 @@ class LyricsTabState extends State<LyricsTab> {
     );
   }
 
+  void _seekToLyricsTime(String time) {
+    Duration? seekPosition = _parseTimestamp(time);
+    if (seekPosition != null) {
+      audioController.seekTo(seekPosition);
+      _isUserInteraction = true;
+    }
+  }
+
   Widget _buildTranslationText(Lyrics lyrics, bool showTranslation) {
     final isTranslationHighlighted =
         controller.selectedType.value.toLowerCase() == "translation" ||
@@ -299,52 +345,57 @@ class LyricsTabState extends State<LyricsTab> {
     );
   }
 
-  int _findLyricsIndex(int currentPosition) {
+  int _findLyricsIndex(Duration currentPosition) {
     for (int i = 0; i < widget.lyricsList.length; i++) {
       final lyrics = widget.lyricsList[i];
-      final timeInMilliseconds = _parseTimestamp(lyrics.time);
-      final nextTimeInMilliseconds = i < widget.lyricsList.length - 1
-          ? _parseTimestamp(widget.lyricsList[i + 1].time)
-          : 9223372036854775807;
+      Duration? timeInMilliseconds = _parseTimestamp(lyrics.time);
 
-      // Skip highlighting if the timestamp is empty or invalid
       if (timeInMilliseconds == null) {
-        continue;
+        continue; // Skip this loop iteration if timestamp is invalid
       }
 
-      // Ensure time is valid before scrolling
+      Duration nextTimeInMilliseconds = i < widget.lyricsList.length - 1
+          ? _parseTimestamp(widget.lyricsList[i + 1].time) ??
+              Duration(days: 100000) // Use a very large duration if null
+          : Duration(days: 100000); // Use a fallback large duration
+
+      // Highlighting logic as before
       if (currentPosition >= timeInMilliseconds &&
-          currentPosition < nextTimeInMilliseconds!) {
+          currentPosition < nextTimeInMilliseconds) {
         return i;
       }
     }
     return -1;
   }
 
-  int? _parseTimestamp(String time) {
+  Duration? _parseTimestamp(String time) {
     try {
-      if (!time.startsWith('[') || !time.endsWith(']')) {
-        return null;
+      // Strip off the square brackets if present
+      if (time.startsWith('[') && time.endsWith(']')) {
+        time = time.substring(1, time.length - 1);
       }
 
-      final cleanedTime = time.replaceAll('[', '').replaceAll(']', '');
-      final parts = cleanedTime.split(':');
+      // Split into minutes and seconds.milliseconds
+      var parts = time.split(':');
       if (parts.length == 2) {
-        final minutes = int.tryParse(parts[0]) ?? 0;
-        final secondsAndMilliseconds = parts[1].split('.');
-        final seconds = int.tryParse(secondsAndMilliseconds[0]) ?? 0;
-        final milliseconds = secondsAndMilliseconds.length > 1
-            ? (double.parse('0.${secondsAndMilliseconds[1]}') * 1000).toInt()
-            : 0;
+        int minutes = int.tryParse(parts[0]) ?? 0;
+        var secondsParts = parts[1].split('.');
+        int seconds = int.tryParse(secondsParts[0]) ?? 0;
+        int milliseconds = 0;
 
-        final parsedTime =
-            (minutes * 60 * 1000) + (seconds * 1000) + milliseconds;
-        return parsedTime;
+        // Check if there are milliseconds
+        if (secondsParts.length > 1) {
+          milliseconds = int.tryParse(secondsParts[1].padRight(3, '0')) ??
+              0; // Pad to ensure milliseconds are correctly interpreted
+        }
+
+        return Duration(
+            minutes: minutes, seconds: seconds, milliseconds: milliseconds);
       }
     } catch (e) {
       debugPrint('Error parsing timestamp: $e');
     }
-    return 0;
+    return null;
   }
 
   Widget _getBookmarkWidget(int index, int lyricType) {
