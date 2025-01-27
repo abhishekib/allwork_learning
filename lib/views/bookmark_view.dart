@@ -68,11 +68,6 @@ class BookmarkView extends StatelessWidget {
                                         size: 16,
                                       ),
                                       onTap: () {
-                                        // final Category category =
-                                        //     Category.fromJson(item);
-                                        // CategoryListController
-                                        //     .saveCategoryListDetail(category);
-                                        // log(category.toString());
                                       },
                                     ),
                                   ),

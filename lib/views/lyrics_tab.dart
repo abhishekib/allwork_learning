@@ -189,14 +189,14 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _buildEnglishText(Lyrics lyrics) {
-    if (lyrics.english!.isEmpty || lyrics.english!.trim() == "&nbsp;") {
+    if (lyrics.english!=null && (lyrics.english!.isEmpty || lyrics.english?.trim() == "&nbsp;")) {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
 
     return Visibility(
-      visible: lyrics.english!.isNotEmpty,
+      visible: lyrics.english !=null && lyrics.english!.isNotEmpty,
       child: Html(
-        data: _textCleanerController.cleanText(lyrics.english!),
+        data: _textCleanerController.cleanText(lyrics.english??''),
         style: {
           "html": Style(
             fontSize: FontSize(20),

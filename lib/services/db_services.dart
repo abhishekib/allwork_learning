@@ -188,6 +188,7 @@ class DbServices {
         realm.find<BookmarkDataEntity>(title);
 
     log(bookmarkDataEntity.toEJson().toString());
+    log(BookmarkDataHelpers.toCategory(bookmarkDataEntity!.category!).toString());
     return BookmarkDataHelpers.toCategory(bookmarkDataEntity!.category!);
   }
 }
