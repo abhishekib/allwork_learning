@@ -196,7 +196,7 @@ class LyricsTabState extends State<LyricsTab> {
     return Visibility(
       visible: lyrics.english != null && lyrics.english!.isNotEmpty,
       child: Html(
-        data: _textCleanerController.cleanText(lyrics.english ?? ''),
+        data: lyrics.english ?? '',
         style: {
           "html": Style(
             alignment: Alignment.center,
@@ -223,7 +223,7 @@ class LyricsTabState extends State<LyricsTab> {
     return Visibility(
       visible: lyrics.arabic.isNotEmpty && showArabic,
       child: Html(
-        data: _textCleanerController.cleanText(lyrics.arabic),
+        data: lyrics.arabic,
         style: {
           "html": Style(
             fontSize: FontSize(
@@ -253,7 +253,7 @@ class LyricsTabState extends State<LyricsTab> {
     return Visibility(
       visible: lyrics.translitration.isNotEmpty && showTransliteration,
       child: Html(
-        data: _textCleanerController.cleanText(lyrics.translitration),
+        data: lyrics.translitration,
         style: {
           "html": Style(
             fontSize: FontSize(isTransliterationHighlighted
