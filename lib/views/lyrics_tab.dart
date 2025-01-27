@@ -135,51 +135,51 @@ class LyricsTabState extends State<LyricsTab> {
       case "arabic":
       case "અરબી":
         contentWidgets.addAll([
-          _buildEnglishText(lyrics),
-          const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
+          const SizedBox(height: 8),
+          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
         break;
       case "transliteration":
       case "તરજુમા":
         contentWidgets.addAll([
-          _buildEnglishText(lyrics),
-          const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
+          const SizedBox(height: 8),
+          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 1)
         ]);
         break;
       case "translation":
       case "ગુજરાતી":
         contentWidgets.addAll([
-          _buildEnglishText(lyrics),
-          const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
           const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
+          const SizedBox(height: 8),
+          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 2)
         ]);
         break;
       default:
         contentWidgets.addAll([
-          _buildEnglishText(lyrics),
-          const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
           const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
           const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
+          const SizedBox(height: 8),
+          _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
     }
@@ -199,9 +199,10 @@ class LyricsTabState extends State<LyricsTab> {
         data: _textCleanerController.cleanText(lyrics.english ?? ''),
         style: {
           "html": Style(
+            alignment: Alignment.center,
             fontSize: FontSize(20),
-            textAlign: TextAlign.start,
-            direction: TextDirection.rtl,
+            textAlign: TextAlign.center,
+            direction: TextDirection.ltr,
             color: Colors.black54,
             // fontWeight: FontWeight.bold,
           ),
