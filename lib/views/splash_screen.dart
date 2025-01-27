@@ -35,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen>
     // Precache images only once.
     if (!_imagesPreCached) {
       precacheImage(
-          const AssetImage('assets/images/azadar_media.webp'), context);
+          const AssetImage('assets/images/azadar_media.png'), context);
       precacheImage(const AssetImage('assets/app_icon.png'), context);
       _imagesPreCached = true;
     }
@@ -49,10 +49,7 @@ class _SplashScreenState extends State<SplashScreen>
     final isLandscape = screenWidth > screenHeight;
 
     // Dynamic sizes
-    final imageSize = isLandscape
-        ? screenHeight * 0.3
-        : screenWidth *
-            0.4;
+    final imageSize = isLandscape ? screenHeight * 0.2 : screenWidth * 0.3;
     final fontSize = screenWidth * 0.05;
     final spacing = screenHeight * 0.03;
 
@@ -61,10 +58,13 @@ class _SplashScreenState extends State<SplashScreen>
         body: AnimatedOpacity(
           duration: const Duration(seconds: 1),
           opacity: _opacity,
-          child: Center(
-            child: isLandscape
-                ? buildLandscapeContent(imageSize, spacing, fontSize)
-                : buildPortraitContent(imageSize, spacing, fontSize),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Center(
+              child: isLandscape
+                  ? buildLandscapeContent(imageSize, spacing, fontSize)
+                  : buildPortraitContent(imageSize, spacing, fontSize),
+            ),
           ),
         ),
       ),
@@ -121,7 +121,7 @@ class _SplashScreenState extends State<SplashScreen>
         ],
       ),
       child: Image(
-        image: const AssetImage('assets/images/azadar_media.webp'),
+        image: const AssetImage('assets/images/azadar_media.png'),
         fit: BoxFit.cover,
         colorBlendMode: BlendMode.colorBurn,
       ),
