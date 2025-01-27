@@ -136,11 +136,11 @@ class LyricsTabState extends State<LyricsTab> {
       case "અરબી":
         contentWidgets.addAll([
           _buildArabicText(lyrics, showArabic),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
@@ -149,11 +149,11 @@ class LyricsTabState extends State<LyricsTab> {
       case "તરજુમા":
         contentWidgets.addAll([
           _buildTransliterationText(lyrics, showTransliteration),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 1)
         ]);
@@ -162,11 +162,11 @@ class LyricsTabState extends State<LyricsTab> {
       case "ગુજરાતી":
         contentWidgets.addAll([
           _buildTranslationText(lyrics, showTranslation),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildArabicText(lyrics, showArabic),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 2)
         ]);
@@ -174,11 +174,11 @@ class LyricsTabState extends State<LyricsTab> {
       default:
         contentWidgets.addAll([
           _buildArabicText(lyrics, showArabic),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildTransliterationText(lyrics, showTransliteration),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildTranslationText(lyrics, showTranslation),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
           _buildEnglishText(lyrics),
           _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
@@ -276,7 +276,7 @@ class LyricsTabState extends State<LyricsTab> {
         controller.selectedType.value.toLowerCase() == "translation" ||
             controller.selectedType.value == "ગુજરાતી";
 
-    if (lyrics.translation.isEmpty) {
+    if (lyrics.translation.isEmpty || lyrics.translation.trim() == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
 
