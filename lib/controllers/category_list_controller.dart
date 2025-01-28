@@ -150,6 +150,7 @@ class CategoryListController extends GetxController {
   }
 
   void saveCategoryListDetail(Category category, int lyricsType, int index) {
+    log("Write bookmark");
     DbServices.instance.writeBookmark(category, lyricsType, index);
   }
 }

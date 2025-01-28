@@ -65,4 +65,6 @@ class AmaalDetailsScreen extends StatelessWidget {
       ),
     );
   }
+
+  
 }

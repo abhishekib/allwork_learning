@@ -43,19 +43,24 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
   late String menuItem;
-  int? bookmarkedTab;
-  int? lyricsIndex;
+  bool fromBookmark = false;
+  int bookmarkedTab = 0;
+  int lyricsIndex = 0;
   @override
   void initState() {
     super.initState();
     Get.put(FavouriteController());
     final dynamic data = Get.arguments;
+
     if (data is Map<String, dynamic>) {
       categoryDetails = data['category'] as Category;
       selectedLanguage = data['language'] as String;
       menuItem = data['menuItem'] as String;
-      bookmarkedTab = data['bookmarkedTab'];
-      lyricsIndex = data['lyricsIndex'];
+      if (data['fromBookmark'] == true) {
+        bookmarkedTab = data['bookmarkedTab'];
+        lyricsIndex = data['lyricsIndex'];
+        fromBookmark = data['fromBookmark'];
+      }
     } else if (data is FavouriteModel) {
       categoryDetails = Category(
         category: "",
@@ -412,7 +417,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   children: availableTypes.map((type) {
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                     return LyricsTab(
-                        lyricsIndex: lyricsIndex ?? 0,
+                        fromBookmark: fromBookmark,
+                        lyricsIndex: lyricsIndex,
                         lyricsList: lyricsList,
                         selectedLanguage: selectedLanguage,
                         categoryDetails: categoryDetails);
