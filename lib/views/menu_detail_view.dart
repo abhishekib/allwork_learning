@@ -10,7 +10,6 @@ import 'package:allwork/widgets/daily_date_widget.dart';
 import 'package:allwork/widgets/prayer_time_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class MenuDetailView extends StatefulWidget {
   final String menuItem;
@@ -37,7 +36,7 @@ class _MenuDetailViewState extends State<MenuDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    String dayOfWeek = DateFormat('EEEE').format(DateTime.now());
+    // String dayOfWeek = DateFormat('EEEE').format(DateTime.now());
     final fontFamily =
         widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 

@@ -1,11 +1,11 @@
 import 'dart:developer';
 import 'dart:isolate';
+
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

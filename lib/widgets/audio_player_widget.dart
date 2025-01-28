@@ -1,14 +1,12 @@
 import 'dart:developer';
-import 'dart:math' as math;
+
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/constants.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   final bool downloaded;

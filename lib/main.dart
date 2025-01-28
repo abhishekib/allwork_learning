@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:allwork/services/local_notifications.dart';
@@ -12,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
+
 import 'views/category_detail_view.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =

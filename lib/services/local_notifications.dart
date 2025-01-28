@@ -1,12 +1,10 @@
-import 'dart:async';
 import 'dart:core';
 import 'dart:developer';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
-
-import 'package:flutter/services.dart';
 
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin

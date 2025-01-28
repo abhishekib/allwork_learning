@@ -1,12 +1,10 @@
-import 'dart:developer';
-
+import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:dio/dio.dart';
-import 'package:allwork/modals/menu_list.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../utils/constants.dart';
 
 class MenuService {

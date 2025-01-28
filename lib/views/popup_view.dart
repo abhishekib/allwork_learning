@@ -3,7 +3,6 @@ import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/popupEnums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class PopupView extends StatelessWidget {
   final PopupController eventPopupController = Get.put(PopupController());

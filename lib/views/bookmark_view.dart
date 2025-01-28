@@ -1,21 +1,15 @@
-import 'dart:developer';
-
 import 'package:allwork/controllers/bookmark_controller.dart';
-import 'package:allwork/controllers/category_list_controller.dart';
-import 'package:allwork/controllers/text_cleaner_controller.dart';
-import 'package:allwork/modals/category.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class BookmarkView extends StatelessWidget {
   BookmarkView({super.key});
 
   var controller = Get.put(BookmarkController());
-  final TextCleanerController _textCleanerController = TextCleanerController();
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +42,7 @@ class BookmarkView extends StatelessWidget {
                                   controller.openBookmark(index);
                                 },
                                 title: Text(
-                                    _textCleanerController.cleanText(
+                                    TextCleanerService.cleanText(
                                         controller.bookmarks[index]),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,

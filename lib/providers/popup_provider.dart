@@ -3,9 +3,8 @@ import 'dart:developer';
 import 'package:allwork/modals/amal_namaz_popup_model.dart';
 import 'package:allwork/modals/event_popup_model.dart';
 import 'package:allwork/services/location_services.dart';
-import 'package:dio/dio.dart';
 import 'package:allwork/utils/constants.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

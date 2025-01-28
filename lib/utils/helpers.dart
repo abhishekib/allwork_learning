@@ -6,27 +6,25 @@ import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
-import 'dart:developer' as developer;
-
 import 'package:realm/realm.dart';
 
-Future<String> getUserTimeZone() async {
-  try {
-    final now = DateTime.now();
-    final timeZoneOffset = now.timeZoneOffset;
-    final hours = timeZoneOffset.inHours.abs().toString().padLeft(2, '0');
-    final minutes =
-        (timeZoneOffset.inMinutes % 60).abs().toString().padLeft(2, '0');
-    final sign = timeZoneOffset.isNegative ? '-' : '+';
-    final formattedTimeZone = 'UTC$sign$hours:$minutes';
+// Future<String> getUserTimeZone() async {
+//   try {
+//     final now = DateTime.now();
+//     final timeZoneOffset = now.timeZoneOffset;
+//     final hours = timeZoneOffset.inHours.abs().toString().padLeft(2, '0');
+//     final minutes =
+//         (timeZoneOffset.inMinutes % 60).abs().toString().padLeft(2, '0');
+//     final sign = timeZoneOffset.isNegative ? '-' : '+';
+//     final formattedTimeZone = 'UTC$sign$hours:$minutes';
 
-    final timeZoneName = now.timeZoneName;
+//     final timeZoneName = now.timeZoneName;
 
-    return timeZoneName;
-  } catch (e) {
-    throw Exception('Error fetching user timezone: $e');
-  }
-}
+//     return timeZoneName;
+//   } catch (e) {
+//     throw Exception('Error fetching user timezone: $e');
+//   }
+// }
 
 class MenuDetailsHelpers {
   static MenuDetailEntity toMenuDetailEntity(
