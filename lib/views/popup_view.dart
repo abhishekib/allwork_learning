@@ -84,7 +84,7 @@ class PopupView extends StatelessWidget {
                                   (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return const Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(color: Colors.white)
                                 );
                               },
                               errorBuilder: (context, error, stackTrace) {

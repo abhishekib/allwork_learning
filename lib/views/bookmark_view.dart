@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/controllers/bookmark_controller.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/modals/category.dart';
@@ -23,77 +25,80 @@ class BookmarkView extends StatelessWidget {
             style: AppTextStyles.whiteBoldTitleText,
           ),
         ),
-        body: Center(
-          child: controller.bookmarks.isEmpty
-              ? Text("No bookmarks saved", style: AppTextStyles.whiteBoldText)
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: ListView.builder(
-                    itemCount: controller.bookmarks.length,
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(9.5),
-                            ),
-                            child: ListTile(
-                              onTap: () {
-                                controller.openBookmark(index);
-                              },
-                              title: Text(controller.bookmarks[index],
-                                  maxLines: 3,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: AppTextStyles.customStyle(
-                                    fontFamily: 'Roboto',
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.backgroundBlue,
-                                  )),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: 10,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.all(6),
-                                    decoration: BoxDecoration(
+        body: Obx(
+          ()=>Center(
+            child: controller.bookmarks.isEmpty
+                ? Text("No bookmarks saved", style: AppTextStyles.whiteBoldText)
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ListView.builder(
+                      itemCount: controller.bookmarks.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(9.5),
+                              ),
+                              child: ListTile(
+                                onTap: () {
+                                  controller.openBookmark(index);
+                                },
+                                title: Text(controller.bookmarks[index],
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.customStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
                                       color: AppColors.backgroundBlue,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: GestureDetector(
-                                      child: Icon(
-                                        Icons.bookmark_border,
-                                        color: Colors.white,
-                                        size: 16,
+                                    )),
+                                trailing: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: 10,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.backgroundBlue,
+                                        shape: BoxShape.circle,
                                       ),
-                                      onTap: () {
-                                      },
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      color: AppColors.backgroundBlue,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Icon(
-                                        Icons.arrow_forward_ios_rounded,
-                                        color: Colors.white,
+                                      child: GestureDetector(
+                                        child: Icon(
+                                          Icons.bookmark_border,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                        onTap: () {
+                                         controller.removeBookmark(index);
+                                        },
                                       ),
                                     ),
-                                  ),
-                                ],
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: AppColors.backgroundBlue,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(height: 10)
-                        ],
-                      );
-                    },
+                            const SizedBox(height: 10)
+                          ],
+                        );
+                      },
+                    ),
                   ),
-                ),
+          ),
         ),
       ),
     );

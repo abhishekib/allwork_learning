@@ -35,4 +35,10 @@ class BookmarkController extends GetxController {
       },
     );
   }
+
+  void removeBookmark(int index) {
+    DbServices.instance.deleteBookmark(bookmarks[index]);
+    bookmarks.removeAt(index);
+    Get.snackbar("Deleted", "Deleted the bookmark");
+  }
 }
