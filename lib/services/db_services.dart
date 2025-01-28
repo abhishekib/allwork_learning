@@ -195,8 +195,8 @@ class DbServices {
   Future<void> deleteBookmark(String title) async {
     log("title: $title");
     realm.write(() {
+      realm.delete<BookmarkEntity>(realm.all<BookmarkEntity>().query("title == '$title'").first);
       realm.delete<BookmarkDataEntity>(getBookmarkData(title)!);
-      //realm.delete<BookmarkEntity>(realm.find<BookmarkEntity>(title)!);
     });
   }
 }
