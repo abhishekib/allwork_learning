@@ -423,7 +423,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     return Row(
       children: [
         Text(
-          _formatDuration(widget.controller.currentTime.value),
+          _formatDuration(widget.controller.currentTime.value,
+              showHours: widget.controller.currentTime.value.inHours > 0),
           style: const TextStyle(color: Colors.black, fontSize: 12),
         ),
         Expanded(
@@ -444,8 +445,10 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
         ),
         Text(
-          _formatDuration(widget.controller.totalTime.value -
-              widget.controller.currentTime.value),
+          _formatDuration(
+              widget.controller.totalTime.value -
+                  widget.controller.currentTime.value,
+              showHours: widget.controller.totalTime.value.inHours > 0),
           style: const TextStyle(color: Colors.black, fontSize: 12),
         ),
         IconButton(
@@ -582,10 +585,11 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     );
   }
 
-  String _formatDuration(Duration duration) {
+  String _formatDuration(Duration duration, {bool showHours = true}) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$minutes:$seconds";
+    return showHours ? "$hours:$minutes:$seconds" : "$minutes:$seconds";
   }
 }
