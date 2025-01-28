@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:allwork/controllers/bookmark_controller.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
+import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
@@ -14,6 +15,7 @@ class BookmarkView extends StatelessWidget {
   BookmarkView({super.key});
 
   var controller = Get.put(BookmarkController());
+  final TextCleanerController _textCleanerController = TextCleanerController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class BookmarkView extends StatelessWidget {
           ),
         ),
         body: Obx(
-          ()=>Center(
+          () => Center(
             child: controller.bookmarks.isEmpty
                 ? Text("No bookmarks saved", style: AppTextStyles.whiteBoldText)
                 : Padding(
@@ -45,7 +47,9 @@ class BookmarkView extends StatelessWidget {
                                 onTap: () {
                                   controller.openBookmark(index);
                                 },
-                                title: Text(controller.bookmarks[index],
+                                title: Text(
+                                    _textCleanerController.cleanText(
+                                        controller.bookmarks[index]),
                                     maxLines: 3,
                                     overflow: TextOverflow.ellipsis,
                                     style: AppTextStyles.customStyle(
@@ -71,7 +75,7 @@ class BookmarkView extends StatelessWidget {
                                           size: 16,
                                         ),
                                         onTap: () {
-                                         controller.removeBookmark(index);
+                                          controller.removeBookmark(index);
                                         },
                                       ),
                                     ),

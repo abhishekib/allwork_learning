@@ -14,10 +14,12 @@ class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
   final String selectedLanguage;
   final Category categoryDetails;
-  final int lyricsIndex;
+  int lyricsIndex;
+  final bool fromBookmark;
 
-  const LyricsTab(
+   LyricsTab(
       {super.key,
+      required this.fromBookmark,
       required this.lyricsIndex,
       required this.lyricsList,
       required this.selectedLanguage,
@@ -94,7 +96,7 @@ class LyricsTabState extends State<LyricsTab> {
   @override
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
-      initialScrollIndex: widget.lyricsIndex,
+      initialScrollIndex: widget.fromBookmark ? widget.lyricsIndex: 0,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionsListener,
       itemCount: widget.lyricsList.length,
@@ -400,7 +402,7 @@ class LyricsTabState extends State<LyricsTab> {
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: AppColors.backgroundBlue,
+        color:index==widget.lyricsIndex?Colors.red: AppColors.backgroundBlue,
         shape: BoxShape.circle,
       ),
       child: GestureDetector(
@@ -414,7 +416,9 @@ class LyricsTabState extends State<LyricsTab> {
               CategoryListController();
           categoryListController.saveCategoryListDetail(
               widget.categoryDetails, lyricType, index);
-          Get.back();
+          setState(() {
+            widget.lyricsIndex=index;
+          });
           // log(category.toString());
         },
       ),

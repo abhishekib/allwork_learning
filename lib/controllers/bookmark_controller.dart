@@ -27,11 +27,12 @@ class BookmarkController extends GetxController {
     Get.to(
       () => const CategoryDetailView(),
       arguments: {
+        'fromBookmark': true,
         'category': category,
         'language': 'English',
         'menuItem': '',
         'bookmarkedTab': bookmarkData.lyricsType,
-        'lyricsIndex': bookmarkData.lyricsIndex
+        'lyricsIndex': bookmarkData.lyricsIndex,
       },
     );
   }
@@ -40,5 +41,24 @@ class BookmarkController extends GetxController {
     DbServices.instance.deleteBookmark(bookmarks[index]);
     bookmarks.removeAt(index);
     Get.snackbar("Deleted", "Deleted the bookmark");
+  }
+
+  int getBookmarkedLyric(String title) {
+    if (bookmarks.contains(title)) {
+      return bookmarks.indexOf(title);
+    } else {
+      return -1;
+    }
+  }
+
+  int getBookmarkedTab(String title) {
+    if (bookmarks.contains(title)) {
+      BookmarkDataEntity? bookmarkData = DbServices.instance
+          .getBookmarkData(bookmarks[bookmarks.indexOf(title)]);
+
+      return bookmarkData!.lyricsType;
+    } else {
+      return -1;
+    }
   }
 }

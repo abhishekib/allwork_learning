@@ -171,6 +171,14 @@ class DbServices {
 
   Future<void> writeBookmark(
       Category category, int lyricsType, int index) async {
+    
+      //if object is already present delete it and then update it
+      if (getBookmarkData(category.title) != null) {
+        log("Bookmark with this title already exists");
+        deleteBookmark(category.title);
+        log("Deleted bookmark first ");
+      }
+    
     realm.write(() {
       // Add the new object
       realm.add(BookmarkEntity(category.title));
@@ -195,7 +203,8 @@ class DbServices {
   Future<void> deleteBookmark(String title) async {
     log("title: $title");
     realm.write(() {
-      realm.delete<BookmarkEntity>(realm.all<BookmarkEntity>().query("title == '$title'").first);
+      realm.delete<BookmarkEntity>(
+          realm.all<BookmarkEntity>().query("title == '$title'").first);
       realm.delete<BookmarkDataEntity>(getBookmarkData(title)!);
     });
   }
