@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
-import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
@@ -32,7 +32,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late TabController _tabController;
   String? currentAudioUrl;
   bool isAudioDownloaded = false;
-  final TextCleanerController _textCleanerController = TextCleanerController();
   final LoginController _loginController = Get.put(LoginController());
   // final AudioController _audioController = Get.find<AudioController>();
   final AudioController _audioController = Get.put(AudioController());
@@ -204,7 +203,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       return Scaffold(
         appBar: AppBar(
           title: Text(
-            _textCleanerController.cleanText(categoryDetails.title),
+            TextCleanerService.cleanText(categoryDetails.title),
             style: TextStyle(
               fontFamily: fontFamily,
             ),
@@ -222,7 +221,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             size: 30,
           ),
           title: Text(
-            _textCleanerController.cleanText(categoryDetails.title),
+            TextCleanerService.cleanText(categoryDetails.title),
             style: AppTextStyles.customStyle(
               fontFamily: fontFamily,
               fontSize: 30,
@@ -438,14 +437,14 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     }
 
     String combinedLyrics =
-        '${_textCleanerController.cleanText(categoryTitle)}\n\n';
+        '${TextCleanerService.cleanText(categoryTitle)}\n\n';
 
     for (var lyrics in uniqueLyricsSet) {
-      combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
+      combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
       combinedLyrics +=
-          '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
+          '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
       combinedLyrics +=
-          '${_textCleanerController.cleanText(lyrics.translation)}\n';
+          '${TextCleanerService.cleanText(lyrics.translation)}\n';
     }
 
     Clipboard.setData(ClipboardData(text: combinedLyrics));
@@ -467,14 +466,14 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     }
 
     String combinedLyrics =
-        '${_textCleanerController.cleanText(categoryTitle)}\n\n';
+        '${TextCleanerService.cleanText(categoryTitle)}\n\n';
 
     for (var lyrics in uniqueLyricsSet) {
-      combinedLyrics += '${_textCleanerController.cleanText(lyrics.arabic)}\n';
+      combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
       combinedLyrics +=
-          '${_textCleanerController.cleanText(lyrics.translitration)}\n\n';
+          '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
       combinedLyrics +=
-          '${_textCleanerController.cleanText(lyrics.translation)}\n\n';
+          '${TextCleanerService.cleanText(lyrics.translation)}\n\n';
     }
 
     Share.share(combinedLyrics, subject: categoryTitle);

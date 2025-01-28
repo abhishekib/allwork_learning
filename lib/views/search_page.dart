@@ -1,6 +1,6 @@
 import 'package:allwork/controllers/search_custom_controller.dart';
-import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_detail_view.dart';
@@ -14,8 +14,6 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextEditingController searchControllerInput = TextEditingController();
-    final TextCleanerController textCleanerController =
-        Get.put(TextCleanerController());
 
     return Scaffold(
       appBar: AppBar(
@@ -126,9 +124,8 @@ class SearchPage extends StatelessWidget {
                     return Card(
                       margin: const EdgeInsets.symmetric(vertical: 5),
                       child: ListTile(
-                        title: Text(textCleanerController.cleanText(title)),
-                        subtitle:
-                            Text(textCleanerController.cleanText(postType)),
+                        title: Text(TextCleanerService.cleanText(title)),
+                        subtitle: Text(TextCleanerService.cleanText(postType)),
                         onTap: () {
                           // Navigate to CategoryDetailView with required arguments
                           Get.to(

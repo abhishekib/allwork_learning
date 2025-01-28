@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:allwork/controllers/text_cleaner_controller.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_list_view.dart';
@@ -23,14 +23,13 @@ class DynamicScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextCleanerController textCleanerController = TextCleanerController();
     // final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     return BackgroundWrapper(
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: Text(textCleanerController.cleanText(title),
+            title: Text(TextCleanerService.cleanText(title),
                 style: AppTextStyles.customStyle(
                   fontFamily: 'Roboto',
                   fontSize: 30,
@@ -57,7 +56,7 @@ class DynamicScreen extends StatelessWidget {
                     ),
                     child: ListTile(
                       tileColor: AppColors.backgroundBlue,
-                      title: Text(textCleanerController.cleanText(key),
+                      title: Text(TextCleanerService.cleanText(key),
                           style: AppTextStyles.customStyle(
                             fontFamily: 'Roboto',
                             fontSize: 20,

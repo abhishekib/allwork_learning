@@ -1,6 +1,5 @@
 import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/audio_controller.dart';
-import 'package:allwork/controllers/text_cleaner_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
@@ -34,7 +33,6 @@ class LyricsTabState extends State<LyricsTab> {
   final ItemScrollController _itemScrollController = ItemScrollController();
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
-  final TextCleanerController _textCleanerController = TextCleanerController();
   final AudioController audioController = Get.find<AudioController>();
 
   double arabicFontSize = 18.0;

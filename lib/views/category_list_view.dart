@@ -1,8 +1,7 @@
 import 'dart:developer';
 
-import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
-import 'package:allwork/controllers/text_cleaner_controller.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/amaal_details_screen.dart';
@@ -30,7 +29,6 @@ class CategoryListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
-    TextCleanerController textCleanerController = TextCleanerController();
     // Get.lazyPut(() => AudioController());
     //log(categoryItems.toString());
 
@@ -43,7 +41,7 @@ class CategoryListView extends StatelessWidget {
                   size: 30,
                 ),
                 title: Text(
-                  textCleanerController.cleanText(argument),
+                  TextCleanerService.cleanText(argument),
                   style: AppTextStyles.customStyle(
                     fontFamily: fontFamily,
                     fontSize: 30,
@@ -68,7 +66,7 @@ class CategoryListView extends StatelessWidget {
                           child: ListTile(
                             focusColor: Colors.purple,
                             title: Text(
-                              textCleanerController.cleanText(item['title']),
+                              TextCleanerService.cleanText(item['title']),
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               style: AppTextStyles.customStyle(
@@ -103,7 +101,6 @@ class CategoryListView extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               spacing: 10,
                               children: [
-                                
                                 Container(
                                   decoration: BoxDecoration(
                                     color: AppColors.backgroundBlue,

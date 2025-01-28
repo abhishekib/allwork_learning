@@ -1,7 +1,5 @@
-import 'package:get/get.dart';
-
-class TextCleanerController extends GetxController {
-  String cleanText(String input) {
+class TextCleanerService {
+  static String cleanText(String input) {
     String cleanedText = input.replaceAll(RegExp(r'<[^>]*>'), '');
     cleanedText = cleanedText.replaceAll(RegExp(r'&[#\w\d]+;'), '');
     cleanedText = cleanedText.replaceAll('&nbsp;', '');
