@@ -17,7 +17,7 @@ class BookmarkView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "BookMark Screen",
+            "Bookmark",
             style: AppTextStyles.whiteBoldTitleText,
           ),
         ),
@@ -59,7 +59,7 @@ class BookmarkView extends StatelessWidget {
                                     Container(
                                       padding: EdgeInsets.all(6),
                                       decoration: BoxDecoration(
-                                        color: AppColors.backgroundBlue,
+                                        color: Colors.red,
                                         shape: BoxShape.circle,
                                       ),
                                       child: GestureDetector(
