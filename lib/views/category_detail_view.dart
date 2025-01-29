@@ -44,7 +44,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late String menuItem;
   bool fromBookmark = false;
   int bookmarkedTab = 0;
-  int lyricsIndex = 0;
+  int bookmarkedLyricsIndex = 0;
   @override
   void initState() {
     super.initState();
@@ -57,7 +57,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       menuItem = data['menuItem'] as String;
       if (data['fromBookmark'] == true) {
         bookmarkedTab = data['bookmarkedTab'];
-        lyricsIndex = data['lyricsIndex'];
+        bookmarkedLyricsIndex = data['lyricsIndex'];
         fromBookmark = data['fromBookmark'];
       }
     } else if (data is FavouriteModel) {
@@ -417,8 +417,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                     return LyricsTab(
                         fromBookmark: fromBookmark,
-                        lyricsIndex: lyricsIndex,
+                        bookmarkedTab: bookmarkedTab,
+                        bookmarkedLyricsIndex: bookmarkedLyricsIndex,
                         lyricsList: lyricsList,
+                        tabIndex: availableTypes.indexOf(type),
                         selectedLanguage: selectedLanguage,
                         categoryDetails: categoryDetails);
                   }).toList(),
@@ -449,8 +451,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
       combinedLyrics +=
           '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
-      combinedLyrics +=
-          '${TextCleanerService.cleanText(lyrics.translation)}\n';
+      combinedLyrics += '${TextCleanerService.cleanText(lyrics.translation)}\n';
     }
 
     Clipboard.setData(ClipboardData(text: combinedLyrics));

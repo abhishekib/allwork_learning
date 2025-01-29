@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/modals/category.dart';
@@ -14,16 +16,27 @@ class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
   final String selectedLanguage;
   final Category categoryDetails;
-  int lyricsIndex;
+  final int tabIndex;
   final bool fromBookmark;
+  int bookmarkedLyricsIndex;
+  int bookmarkedTab;
 
    LyricsTab(
       {super.key,
-      required this.fromBookmark,
-      required this.lyricsIndex,
       required this.lyricsList,
       required this.selectedLanguage,
-      required this.categoryDetails});
+      required this.categoryDetails,
+      //tabIndex to keep track of the tab the lyrics list is in 
+      required this.tabIndex,
+      //fromBookmark - whether the navigation is coming from bookmark or not
+      required this.fromBookmark,
+      //bookmarkedTab to keep the bookmarked tab
+      required this.bookmarkedTab,
+      //lyrics index for bookmark lyric
+      required this.bookmarkedLyricsIndex,
+    }){log("Lyrics Tab created for tab index $tabIndex");
+    
+    log("bookmarked lyric number: $bookmarkedLyricsIndex");}
 
   @override
   LyricsTabState createState() => LyricsTabState();
@@ -96,7 +109,7 @@ class LyricsTabState extends State<LyricsTab> {
   @override
   Widget build(BuildContext context) {
     return ScrollablePositionedList.builder(
-      initialScrollIndex: widget.fromBookmark ? widget.lyricsIndex: 0,
+      initialScrollIndex: widget.fromBookmark ? widget.bookmarkedLyricsIndex: 0,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionsListener,
       itemCount: widget.lyricsList.length,
@@ -399,10 +412,13 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _getBookmarkWidget(int index, int lyricType) {
+    log("Lyric index : $index");
+    log("Tab number : $lyricType");
+    log("Tab number coming from bookmark : ${widget.bookmarkedTab}");
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color:index==widget.lyricsIndex?Colors.red: AppColors.backgroundBlue,
+        color:index==widget.bookmarkedLyricsIndex && lyricType==widget.bookmarkedTab?Colors.red: AppColors.backgroundBlue,
         shape: BoxShape.circle,
       ),
       child: GestureDetector(
@@ -417,7 +433,7 @@ class LyricsTabState extends State<LyricsTab> {
           categoryListController.saveCategoryListDetail(
               widget.categoryDetails, lyricType, index);
           setState(() {
-            widget.lyricsIndex=index;
+            widget.bookmarkedLyricsIndex=index;
           });
           // log(category.toString());
         },
