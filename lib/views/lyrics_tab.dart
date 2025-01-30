@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
@@ -248,6 +249,19 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.english != null && lyrics.english!.isNotEmpty,
       child: Html(
         data: lyrics.english ?? '',
+        onLinkTap: (String? url, _, __) async {
+          if (url != null) {
+            final uri = Uri.parse(url);
+            try {
+              await launchUrl(
+                uri,
+                mode: LaunchMode.externalApplication,
+              );
+            } catch (e) {
+              debugPrint('Could not launch $url: $e');
+            }
+          }
+        },
         style: {
           "html": Style(
             // alignment: Alignment.lef,
@@ -275,6 +289,19 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.arabic.isNotEmpty && showArabic,
       child: Html(
         data: lyrics.arabic,
+        onLinkTap: (String? url, _, __) async {
+          if (url != null) {
+            final uri = Uri.parse(url);
+            try {
+              await launchUrl(
+                uri,
+                mode: LaunchMode.externalApplication,
+              );
+            } catch (e) {
+              debugPrint('Could not launch $url: $e');
+            }
+          }
+        },
         style: {
           "html": Style(
             fontSize: FontSize(
@@ -305,6 +332,19 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.translitration.isNotEmpty && showTransliteration,
       child: Html(
         data: lyrics.translitration,
+        onLinkTap: (String? url, _, __) async {
+          if (url != null) {
+            final uri = Uri.parse(url);
+            try {
+              await launchUrl(
+                uri,
+                mode: LaunchMode.externalApplication,
+              );
+            } catch (e) {
+              debugPrint('Could not launch $url: $e');
+            }
+          }
+        },
         style: {
           "html": Style(
             fontSize: FontSize(isTransliterationHighlighted
@@ -343,6 +383,19 @@ class LyricsTabState extends State<LyricsTab> {
       visible: lyrics.translation.isNotEmpty && showTranslation,
       child: Html(
         data: lyrics.translation,
+        onLinkTap: (String? url, _, __) async {
+          if (url != null) {
+            final uri = Uri.parse(url);
+            try {
+              await launchUrl(
+                uri,
+                mode: LaunchMode.externalApplication,
+              );
+            } catch (e) {
+              debugPrint('Could not launch $url: $e');
+            }
+          }
+        },
         style: {
           "html": Style(
             fontSize: FontSize(isTranslationHighlighted
