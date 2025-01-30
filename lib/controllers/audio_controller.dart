@@ -17,6 +17,7 @@ class AudioController extends GetxController {
   RxDouble volume = 1.0.obs;
   var audioUrl = ''.obs;
   var isDownloading = false.obs;
+  var downloaded = false.obs;
 
   AudioPlayer get audioplayer => _audioPlayer;
 
@@ -92,16 +93,24 @@ class AudioController extends GetxController {
     await setupAudio(audioUrl);
   }
 
-  String formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$minutes:$seconds";
-  }
+  // String formatDuration(Duration duration) {
+  //   String twoDigits(int n) => n.toString().padLeft(2, '0');
+  //   final minutes = twoDigits(duration.inMinutes.remainder(60));
+  //   final seconds = twoDigits(duration.inSeconds.remainder(60));
+  //   return "$minutes:$seconds";
+  // }
 
   Future<void> seekTo(Duration position) async {
     await _audioPlayer.seek(position);
     currentTime.value = position;
+  }
+
+    String formatDuration(Duration duration, {bool showHours = true}) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return showHours ? "$hours:$minutes:$seconds" : "$minutes:$seconds";
   }
 
   @override
