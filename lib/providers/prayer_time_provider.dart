@@ -19,8 +19,8 @@ class PrayerTimeProvider {
         );
 
   Future<PrayerTimeModel> fetchPrayerTimes({
-    required double latitude,
-    required double longitude,
+    required latitude,
+    required longitude,
   }) async {
     try {
       // Send the POST request with lat and long as body parameters
