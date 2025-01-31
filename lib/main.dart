@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:allwork/firebase_options.dart';
 import 'package:allwork/services/local_notifications.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
@@ -21,7 +22,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
   await LocalNotifications.init();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   runApp(const MyApp());
   if (Platform.isAndroid || Platform.isIOS) {
