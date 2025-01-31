@@ -1,5 +1,7 @@
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:allwork/modals/apple_signin_model.dart';
 import 'package:allwork/modals/google_sign_in_model.dart';
 import 'package:allwork/modals/login_response.dart';
 import 'package:allwork/providers/login_provider.dart';
@@ -17,6 +19,7 @@ class LoginController extends GetxController {
   final loginResponse = Rx<LoginResponse?>(null);
   final LoginProvider _loginProvider = LoginProvider(ApiConstants.token);
   final GoogleSignInModel _model = GoogleSignInModel();
+  final AppleSignInModel _appleSignInModel = AppleSignInModel();
 
   @override
   void onInit() {
@@ -179,11 +182,61 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<void> loginWithApple() async {
+    if (!Platform.isIOS) {
+      Get.snackbar("Error", "Apple Sign-In is only supported on iOS.");
+      return;
+    }
+
+    isLoading(true);
+    errorMessage.value = '';
+
+    try {
+      final result = await _appleSignInModel.signInWithApple();
+      if (result != null) {
+        final firebase_auth.UserCredential? userCredential =
+            result['userCredential'];
+        final String? idToken = result['idToken'];
+        final String? email = result['email'];
+        final String? name = result['name'];
+
+        if (idToken != null && userCredential != null) {
+          await _loginProvider.loginWithApple(idToken);
+          isLoggedIn.value = true;
+
+          final prefs = await SharedPreferences.getInstance();
+          prefs.setBool('isLoggedIn', true);
+          prefs.setString('userId', userCredential.user!.uid);
+          prefs.setString(
+              'userEmail', email ?? userCredential.user?.email ?? '');
+          prefs.setString('displayName',
+              name ?? userCredential.user?.displayName ?? 'Anonymous');
+
+          loginResponse.value = LoginResponse(
+            user: User(
+              userId: userCredential.user!.uid,
+              email: email ?? userCredential.user?.email ?? '',
+              name: name ?? userCredential.user?.displayName ?? 'Anonymous',
+            ),
+            status: 'success',
+          );
+        }
+      } else {
+        errorMessage.value = 'Apple login failed. Please try again.';
+      }
+    } catch (e) {
+      errorMessage.value = 'An error occurred while logging in with Apple: $e';
+    } finally {
+      isLoading(false);
+    }
+  }
+
   Future<void> logoutUser() async {
     final prefs = await SharedPreferences.getInstance();
 
     try {
       await _model.signOutFromGoogle();
+      await _appleSignInModel.signOutFromApple();
       if (kDebugMode) {
         log('Google Sign-Out successful');
       }

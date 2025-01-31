@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
@@ -85,31 +87,65 @@ class LoginView extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (!loginController.isLoading.value) {
-                              _onGoogleLogin();
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: const CircleBorder(),
-                            backgroundColor: Colors.white,
-                            elevation: 20,
-                          ),
-                          child: Container(
-                            width: 50,
-                            height: 50,
-                            margin: const EdgeInsets.all(5),
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image:
-                                    AssetImage('assets/icons/google_login.png'),
-                                fit: BoxFit.cover,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                if (!loginController.isLoading.value) {
+                                  _onGoogleLogin();
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: const CircleBorder(),
+                                backgroundColor: Colors.white,
+                                elevation: 20,
+                              ),
+                              child: Container(
+                                width: 50,
+                                height: 50,
+                                margin: const EdgeInsets.all(5),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/icons/google_login.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            if (Platform.isIOS)
+                              Text('or', style: TextStyle(color: Colors.white)),
+                            if (Platform.isIOS)
+                              ElevatedButton(
+                                onPressed: () {
+                                  if (!loginController.isLoading.value) {
+                                    // _onGoogleLogin();
+                                  }
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: const CircleBorder(),
+                                  backgroundColor: Colors.white,
+                                  elevation: 20,
+                                ),
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  margin: const EdgeInsets.all(5),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'assets/icons/apple_login.png'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         )
                       ],
                     );

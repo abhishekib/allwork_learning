@@ -72,4 +72,6 @@ class LoginProvider {
       throw Exception('Error logging in with Google: $e');
     }
   }
+
+  loginWithApple(String idToken) {}
 }
