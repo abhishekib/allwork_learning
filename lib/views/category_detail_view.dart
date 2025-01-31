@@ -69,7 +69,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           isBookmarked = true;
           log("Is not navigating from bookmark but is bookmarked");
           BookmarkDataEntity bookmarkData =
-          DbServices.instance.getBookmarkData(categoryDetails.title)!;
+              DbServices.instance.getBookmarkData(categoryDetails.title)!;
           bookmarkedTab = bookmarkData.lyricsType;
           bookmarkedLyricsIndex = bookmarkData.lyricsIndex;
         } else {
@@ -113,7 +113,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     };
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
-
+    if (fromBookmark) {
+      //_tabController.animateTo(bookmarkedTab);
+      _tabController.index = bookmarkedTab;
+    }
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
@@ -379,6 +382,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           ],
         ),
         body: DefaultTabController(
+          initialIndex: fromBookmark ? bookmarkedTab : 0,
           length: availableTypes.length,
           child: Column(
             children: [
