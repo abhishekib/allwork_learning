@@ -60,11 +60,12 @@ class LoginProvider {
         ApiConstants.googleLoginEndpoint,
         data: {
           'provider': 'google',
+          'access_token': "dummy_access_token",
           'firstname': firstname,
           'lastname': lastname,
           'email': email,
-          // 'access_token': accessToken,
         },
+        options: Options(responseType: ResponseType.json),
       );
       if (response.statusCode == 200) {
         return LoginResponse.fromJson(response.data);
@@ -75,5 +76,4 @@ class LoginProvider {
       throw Exception('Error logging in with Google: $e');
     }
   }
-
 }

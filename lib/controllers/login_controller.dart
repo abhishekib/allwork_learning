@@ -157,27 +157,16 @@ class LoginController extends GetxController {
           final firstName = names.isNotEmpty ? names.first : '';
           final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
 
-          await _loginProvider.socialLogin(
+          final response = await _loginProvider.socialLogin(
             firstName,
             lastName,
             user.email,
           );
+
           isLoggedIn.value = true;
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
-          prefs.setString('userId', user.uid);
-          // prefs.setString('userEmail', user.email ?? '');
-          // prefs.setString('displayName', user.displayName ?? '');
-
-          // Update loginResponse as needed
-          loginResponse.value = LoginResponse(
-            user: User(
-              userId: user.uid,
-              email: user.email ?? '',
-              name: user.displayName ?? '',
-            ),
-            status: 'success',
-          );
+          prefs.setString('userId', response.user!.userId);
         }
       } else {
         errorMessage.value = 'Google login failed. Please try again.';
@@ -204,8 +193,6 @@ class LoginController extends GetxController {
       if (result != null) {
         final firebase_auth.UserCredential? userCredential =
             result['userCredential'];
-        final String? email = result['email'];
-        final String? name = result['name'];
         final firebase_auth.User? user = userCredential?.user;
 
         if (userCredential != null && user != null) {
@@ -213,7 +200,7 @@ class LoginController extends GetxController {
           final firstName = names.isNotEmpty ? names.first : '';
           final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
 
-          await _loginProvider.socialLogin(
+          final response = await _loginProvider.socialLogin(
             firstName,
             lastName,
             user.email,
@@ -222,20 +209,7 @@ class LoginController extends GetxController {
 
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
-          prefs.setString('userId', userCredential.user!.uid);
-          // prefs.setString(
-          //     'userEmail', email ?? userCredential.user?.email ?? '');
-          // prefs.setString('displayName',
-          //     name ?? userCredential.user?.displayName ?? 'Anonymous');
-
-          loginResponse.value = LoginResponse(
-            user: User(
-              userId: userCredential.user!.uid,
-              email: email ?? userCredential.user?.email ?? '',
-              name: name ?? userCredential.user?.displayName ?? 'Anonymous',
-            ),
-            status: 'success',
-          );
+          prefs.setString('userId', response.user!.userId);
         }
       } else {
         errorMessage.value = 'Apple login failed. Please try again.';
