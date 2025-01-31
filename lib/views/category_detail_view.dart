@@ -114,8 +114,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
     if (fromBookmark) {
-      //_tabController.animateTo(bookmarkedTab);
-      _tabController.index = bookmarkedTab;
+      _tabController.animateTo(bookmarkedTab);
+     _tabController.index = bookmarkedTab;
     }
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
@@ -241,7 +241,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       );
     }
 
-    _tabController.index = fromBookmark ? bookmarkedTab : 0;
+   // _tabController.index = fromBookmark ? bookmarkedTab : 0;
+
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -439,7 +440,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: availableTypes.map((type) {
-                    final List<Lyrics> lyricsList = availableLyrics[type] ?? [];                   
+                    final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                     return LyricsTab(
                         isBookmarked: isBookmarked,
                         fromBookmark: fromBookmark,
