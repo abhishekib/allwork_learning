@@ -241,6 +241,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       );
     }
 
+    _tabController.index = fromBookmark ? bookmarkedTab : 0;
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -438,7 +439,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   physics: NeverScrollableScrollPhysics(),
                   controller: _tabController,
                   children: availableTypes.map((type) {
-                    final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
+                    final List<Lyrics> lyricsList = availableLyrics[type] ?? [];                   
                     return LyricsTab(
                         isBookmarked: isBookmarked,
                         fromBookmark: fromBookmark,
