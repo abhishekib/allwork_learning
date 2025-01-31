@@ -24,10 +24,10 @@ class LocalNotifications {
             iOS: initializationSettingsDarwin);
 
     // request notification permissions
-    _flutterLocalNotificationsPlugin
+    final androidImplementation = _flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>()!
-        .requestNotificationsPermission();
+            AndroidFlutterLocalNotificationsPlugin>();
+        androidImplementation?.requestNotificationsPermission();
 
     _flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
