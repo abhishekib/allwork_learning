@@ -54,13 +54,16 @@ class LoginProvider {
     }
   }
 
-  Future<LoginResponse> loginWithGoogle(String accessToken) async {
+  Future<LoginResponse> socialLogin(firstname, lastname, email) async {
     try {
       final response = await _dio.post(
         ApiConstants.googleLoginEndpoint,
         data: {
           'provider': 'google',
-          'access_token': accessToken,
+          'firstname': firstname,
+          'lastname': lastname,
+          'email': email,
+          // 'access_token': accessToken,
         },
       );
       if (response.statusCode == 200) {
@@ -73,5 +76,4 @@ class LoginProvider {
     }
   }
 
-  loginWithApple(String idToken) {}
 }

@@ -148,18 +148,26 @@ class LoginController extends GetxController {
       if (result != null) {
         final firebase_auth.UserCredential? userCredential =
             result['userCredential'];
-        final String? idToken = result['idToken'];
+        // final String? idToken = result['idToken'];
         final firebase_auth.User? user = userCredential?.user;
 
-        if (idToken != null && user != null) {
+        if (/* idToken != null && */ user != null) {
           // log('idToken--------->$idToken');
-          await _loginProvider.loginWithGoogle(idToken);
+          final names = user.displayName?.split(' ') ?? [''];
+          final firstName = names.isNotEmpty ? names.first : '';
+          final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
+
+          await _loginProvider.socialLogin(
+            firstName,
+            lastName,
+            user.email,
+          );
           isLoggedIn.value = true;
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
           prefs.setString('userId', user.uid);
-          prefs.setString('userEmail', user.email ?? '');
-          prefs.setString('displayName', user.displayName ?? '');
+          // prefs.setString('userEmail', user.email ?? '');
+          // prefs.setString('displayName', user.displayName ?? '');
 
           // Update loginResponse as needed
           loginResponse.value = LoginResponse(
@@ -196,21 +204,29 @@ class LoginController extends GetxController {
       if (result != null) {
         final firebase_auth.UserCredential? userCredential =
             result['userCredential'];
-        final String? idToken = result['idToken'];
         final String? email = result['email'];
         final String? name = result['name'];
+        final firebase_auth.User? user = userCredential?.user;
 
-        if (idToken != null && userCredential != null) {
-          await _loginProvider.loginWithApple(idToken);
+        if (userCredential != null && user != null) {
+          final names = user.displayName?.split(' ') ?? [''];
+          final firstName = names.isNotEmpty ? names.first : '';
+          final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
+
+          await _loginProvider.socialLogin(
+            firstName,
+            lastName,
+            user.email,
+          );
           isLoggedIn.value = true;
 
           final prefs = await SharedPreferences.getInstance();
           prefs.setBool('isLoggedIn', true);
           prefs.setString('userId', userCredential.user!.uid);
-          prefs.setString(
-              'userEmail', email ?? userCredential.user?.email ?? '');
-          prefs.setString('displayName',
-              name ?? userCredential.user?.displayName ?? 'Anonymous');
+          // prefs.setString(
+          //     'userEmail', email ?? userCredential.user?.email ?? '');
+          // prefs.setString('displayName',
+          //     name ?? userCredential.user?.displayName ?? 'Anonymous');
 
           loginResponse.value = LoginResponse(
             user: User(
@@ -238,7 +254,7 @@ class LoginController extends GetxController {
       await _model.signOutFromGoogle();
       await _appleSignInModel.signOutFromApple();
       if (kDebugMode) {
-        log('Google Sign-Out successful');
+        log('Google & Apple Sign-Out successful');
       }
     } catch (e) {
       if (kDebugMode) {
