@@ -113,10 +113,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     };
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
-    if (fromBookmark) {
-      //_tabController.animateTo(bookmarkedTab);
-      _tabController.index = bookmarkedTab;
-    }
+    // if (fromBookmark) {
+    //   _tabController.animateTo(bookmarkedTab);
+    //   _tabController.index = bookmarkedTab;
+    // }
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
