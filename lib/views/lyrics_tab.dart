@@ -18,26 +18,31 @@ class LyricsTab extends StatefulWidget {
   final String selectedLanguage;
   final Category categoryDetails;
   final int tabIndex;
+  bool isBookmarked;
   final bool fromBookmark;
-  int bookmarkedLyricsIndex;
-  int bookmarkedTab;
+  int? bookmarkedLyricsIndex;
+  int? bookmarkedTab;
 
-   LyricsTab(
-      {super.key,
-      required this.lyricsList,
-      required this.selectedLanguage,
-      required this.categoryDetails,
-      //tabIndex to keep track of the tab the lyrics list is in 
-      required this.tabIndex,
-      //fromBookmark - whether the navigation is coming from bookmark or not
-      required this.fromBookmark,
-      //bookmarkedTab to keep the bookmarked tab
-      required this.bookmarkedTab,
-      //lyrics index for bookmark lyric
-      required this.bookmarkedLyricsIndex,
-    }){log("Lyrics Tab created for tab index $tabIndex");
-    
-    log("bookmarked lyric number: $bookmarkedLyricsIndex");}
+  LyricsTab({
+    super.key,
+    required this.lyricsList,
+    required this.selectedLanguage,
+    required this.categoryDetails,
+    //tabIndex to keep track of the tab the lyrics list is in
+    required this.tabIndex,
+    //isBookmarked - whether the lyrics is bookmarked or not
+    required this.isBookmarked,
+    //fromBookmark - whether the navigation is coming from bookmark or not
+    required this.fromBookmark,
+    //bookmarkedTab to keep the bookmarked tab
+    this.bookmarkedTab,
+    //lyrics index for bookmark lyric
+    this.bookmarkedLyricsIndex,
+  }) {
+    log("Lyrics Tab created for tab index $tabIndex");
+
+    log("bookmarked lyric number: $bookmarkedLyricsIndex");
+  }
 
   @override
   LyricsTabState createState() => LyricsTabState();
@@ -109,8 +114,10 @@ class LyricsTabState extends State<LyricsTab> {
 
   @override
   Widget build(BuildContext context) {
+    log("bookmark coming in lyrics tab widget ${widget.fromBookmark}");
     return ScrollablePositionedList.builder(
-      initialScrollIndex: widget.fromBookmark ? widget.bookmarkedLyricsIndex: 0,
+      initialScrollIndex:
+          widget.fromBookmark ? widget.bookmarkedLyricsIndex! : 0,
       itemScrollController: _itemScrollController,
       itemPositionsListener: _itemPositionsListener,
       itemCount: widget.lyricsList.length,
@@ -471,7 +478,11 @@ class LyricsTabState extends State<LyricsTab> {
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color:index==widget.bookmarkedLyricsIndex && lyricType==widget.bookmarkedTab?Colors.red: AppColors.backgroundBlue,
+        color: widget.isBookmarked &&
+                index == widget.bookmarkedLyricsIndex &&
+                lyricType == widget.bookmarkedTab
+            ? Colors.red
+            : AppColors.backgroundBlue,
         shape: BoxShape.circle,
       ),
       child: GestureDetector(
@@ -486,7 +497,9 @@ class LyricsTabState extends State<LyricsTab> {
           categoryListController.saveCategoryListDetail(
               widget.categoryDetails, lyricType, index);
           setState(() {
-            widget.bookmarkedLyricsIndex=index;
+            widget.bookmarkedLyricsIndex = index;
+            widget.isBookmarked = true;
+            widget.bookmarkedTab = lyricType;
           });
           // log(category.toString());
         },

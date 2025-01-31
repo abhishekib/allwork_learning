@@ -1,10 +1,12 @@
 import 'dart:developer';
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
+import 'package:allwork/entities/bookmark_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/services/TextCleanerService.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
@@ -42,9 +44,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
   late String menuItem;
+  late bool isBookmarked;
   bool fromBookmark = false;
   int bookmarkedTab = 0;
-  int bookmarkedLyricsIndex = 0;
+  int bookmarkedLyricsIndex = -1;
   @override
   void initState() {
     super.initState();
@@ -56,9 +59,25 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       selectedLanguage = data['language'] as String;
       menuItem = data['menuItem'] as String;
       if (data['fromBookmark'] == true) {
+        log("Navigating from bookmark");
+        isBookmarked = true;
         bookmarkedTab = data['bookmarkedTab'];
         bookmarkedLyricsIndex = data['lyricsIndex'];
         fromBookmark = data['fromBookmark'];
+      } else {
+        if (DbServices.instance.isBookmarked(categoryDetails.title)) {
+          isBookmarked = true;
+          log("Is not navigating from bookmark but is bookmarked");
+          BookmarkDataEntity bookmarkData =
+          DbServices.instance.getBookmarkData(categoryDetails.title)!;
+          bookmarkedTab = bookmarkData.lyricsType;
+          bookmarkedLyricsIndex = bookmarkData.lyricsIndex;
+        } else {
+          log("No bookmarks present here");
+          isBookmarked = false;
+        }
+
+        log(isBookmarked.toString());
       }
     } else if (data is FavouriteModel) {
       categoryDetails = Category(
@@ -69,6 +88,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         cdata: data.cdata,
       );
     } else {
+      log("From unknown");
       categoryDetails = Category(
         category: '',
         id: 0,
@@ -93,7 +113,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     };
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
-    _tabController.index = bookmarkedTab ?? 0;
+
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
@@ -416,6 +436,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   children: availableTypes.map((type) {
                     final List<Lyrics> lyricsList = availableLyrics[type] ?? [];
                     return LyricsTab(
+                        isBookmarked: isBookmarked,
                         fromBookmark: fromBookmark,
                         bookmarkedTab: bookmarkedTab,
                         bookmarkedLyricsIndex: bookmarkedLyricsIndex,
