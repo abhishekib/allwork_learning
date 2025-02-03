@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class BookmarkView extends StatelessWidget {
   BookmarkView({super.key});
 
-  var controller = Get.put(BookmarkController());
+  final controller = Get.put(BookmarkController());
 
   @override
   Widget build(BuildContext context) {

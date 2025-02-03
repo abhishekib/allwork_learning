@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'dart:isolate';
 
 import 'package:allwork/modals/api_response_handler.dart';
-import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/category_provider.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';

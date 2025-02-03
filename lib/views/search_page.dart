@@ -11,6 +11,8 @@ class SearchPage extends StatelessWidget {
   final SearchCustomController searchController =
       Get.put(SearchCustomController());
 
+  SearchPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final TextEditingController searchControllerInput = TextEditingController();

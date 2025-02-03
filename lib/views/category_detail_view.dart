@@ -489,32 +489,32 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     );
   }
 
-  void _shareAllLyrics(BuildContext context,
-      Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
-    final allLyrics =
-        availableLyrics.values.expand((lyricsList) => lyricsList).toList();
+  // void _shareAllLyrics(BuildContext context,
+  //     Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+  //   final allLyrics =
+  //       availableLyrics.values.expand((lyricsList) => lyricsList).toList();
 
-    Set<Lyrics> uniqueLyricsSet = {};
+  //   Set<Lyrics> uniqueLyricsSet = {};
 
-    for (var lyrics in allLyrics) {
-      uniqueLyricsSet.add(lyrics);
-    }
+  //   for (var lyrics in allLyrics) {
+  //     uniqueLyricsSet.add(lyrics);
+  //   }
 
-    String combinedLyrics =
-        '${TextCleanerService.cleanText(categoryTitle)}\n\n';
+  //   String combinedLyrics =
+  //       '${TextCleanerService.cleanText(categoryTitle)}\n\n';
 
-    for (var lyrics in uniqueLyricsSet) {
-      combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
-      combinedLyrics +=
-          '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
-      combinedLyrics +=
-          '${TextCleanerService.cleanText(lyrics.translation)}\n\n';
-    }
+  //   for (var lyrics in uniqueLyricsSet) {
+  //     combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
+  //     combinedLyrics +=
+  //         '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
+  //     combinedLyrics +=
+  //         '${TextCleanerService.cleanText(lyrics.translation)}\n\n';
+  //   }
 
-    Share.share(combinedLyrics, subject: categoryTitle);
+  //   Share.share(combinedLyrics, subject: categoryTitle);
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Sharing lyrics...")),
-    );
-  }
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text("Sharing lyrics...")),
+  //   );
+  // }
 }

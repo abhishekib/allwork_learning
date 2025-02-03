@@ -26,7 +26,7 @@ class PopupController extends GetxController {
   Future<void> fetchAmalNamazPopup() async {
     try {
       final response = await _popupProvider.getAmalNamazPopup();
-      if (response?.data?.isNotEmpty == true) {
+      if (response?.data.isNotEmpty == true) {
         amalNamazPopupModel.value = response;
         await Get.dialog(
           PopupView(PopupType.AMAL_NAMAZ_POPUP),

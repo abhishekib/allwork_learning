@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
