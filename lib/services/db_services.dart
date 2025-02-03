@@ -8,15 +8,18 @@ import 'package:allwork/entities/menu_entities/daily_date_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
+import 'package:allwork/entities/reminder_entity.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/daily_date.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
+import 'package:allwork/modals/reminder_model.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:realm/realm.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DbServices {
   static final DbServices _instance = DbServices._internal();
@@ -171,14 +174,13 @@ class DbServices {
 
   Future<void> writeBookmark(
       Category category, int lyricsType, int index) async {
-    
-      //if object is already present delete it and then update it
-      if (getBookmarkData(category.title) != null) {
-        log("Bookmark with this title already exists");
-        deleteBookmark(category.title);
-        log("Deleted bookmark first ");
-      }
-    
+    //if object is already present delete it and then update it
+    if (getBookmarkData(category.title) != null) {
+      log("Bookmark with this title already exists");
+      deleteBookmark(category.title);
+      log("Deleted bookmark first ");
+    }
+
     realm.write(() {
       // Add the new object
       realm.add(BookmarkEntity(category.title));
@@ -209,7 +211,27 @@ class DbServices {
     });
   }
 
-  bool isBookmarked(String title){
+  bool isBookmarked(String title) {
     return realm.find<BookmarkDataEntity>(title) != null;
   }
+
+  Future<void> writeReminder(
+      Category category, String scheduledTimeZone, DateTime scheduledDateTime) async {
+    SharedPreferences _prefs = await SharedPreferences.getInstance();
+
+    realm.write(() {
+      // Add the new object
+      realm.add(ReminderEntity((_prefs.getInt('totalNotifications') ?? 0) + 1,
+          category.title, DateTime.now(), scheduledTimeZone, scheduledDateTime));
+    });
+    log("written reminder in db");
+  }
+
+List<ReminderModel> getSavedReminders() {
+    return realm.all<ReminderEntity>().map((e) => ReminderModel(e.id, e.title, e.scheduledAt)).toList();
+  }
+
+
+
 }
+

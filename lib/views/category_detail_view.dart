@@ -116,7 +116,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     if (fromBookmark) {
       _tabController.animateTo(bookmarkedTab);
-     _tabController.index = bookmarkedTab;
+      _tabController.index = bookmarkedTab;
     }
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
@@ -242,7 +242,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       );
     }
 
-   // _tabController.index = fromBookmark ? bookmarkedTab : 0;
+    // _tabController.index = fromBookmark ? bookmarkedTab : 0;
 
     return BackgroundWrapper(
       child: Scaffold(
@@ -363,8 +363,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   ),
                   onSubmit: (date) {
                     log(date.toString());
-                    controller.scheduleNotification(
-                        date, categoryDetails.title);
+                    controller.scheduleNotification(date,
+                        TextCleanerService.cleanText(categoryDetails.title));
                   },
                   onClose: () {
                     Navigator.pop(context);

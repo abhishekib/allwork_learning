@@ -5,6 +5,7 @@ import 'package:allwork/views/bookmark_view.dart';
 import 'package:allwork/views/credits_view.dart';
 import 'package:allwork/views/fav_menu_list_view.dart';
 import 'package:allwork/views/more_app_view.dart';
+import 'package:allwork/views/reminder_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/views/signup_or_login_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
@@ -71,6 +72,19 @@ class CustomDrawer extends StatelessWidget {
                     ),
                     onTap: () {
                       Get.to(() => BookmarkView());
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.lock_clock,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Reminder',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.to(() => ReminderView());
                     },
                   ),
                   if (loginController.isLoggedIn.value) ...[

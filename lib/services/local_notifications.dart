@@ -21,7 +21,7 @@ class LocalNotifications {
     tz.initializeTimeZones();
 
     log(await FlutterTimezone.getLocalTimezone());
-    
+
     tz.setLocalLocation(tz.getLocation(
         await FlutterTimezone.getLocalTimezone())); // Set your local time zone
 
@@ -79,6 +79,7 @@ class LocalNotifications {
 
   /// Schedules a notification to be shown after a specific delay
   static Future<void> showScheduleNotification({
+    required DateTime dateTime,
     required String title,
     required String body,
     required String payload,
@@ -102,14 +103,13 @@ class LocalNotifications {
     );
 
     // Calculate the schedule time
-    final scheduledTime =
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10));
+    final scheduledTime = tz.TZDateTime.from(dateTime, tz.local);
 
     try {
       await _notificationsPlugin.zonedSchedule(
         i,
         title,
-        i.toString(),
+        body,
         scheduledTime,
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
