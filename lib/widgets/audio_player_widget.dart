@@ -321,13 +321,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         ),
         IconButton(
           onPressed: () async {
-            if (widget.controller.isPlaying.value) {
-              await _audioPlayer.pause();
-              widget.controller.isPlaying.value = false;
-            } else {
-              await _audioPlayer.resume();
-              widget.controller.isPlaying.value = true;
-            }
+            widget.controller.playPause();
           },
           icon: Icon(
             widget.controller.isPlaying.value ? Icons.pause : Icons.play_arrow,
@@ -336,10 +330,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
         ),
         IconButton(
-          onPressed: () {
-            widget.controller.volume.value =
-                widget.controller.volume.value == 0 ? 1.0 : 0.0;
-            _audioPlayer.setVolume(widget.controller.volume.value);
+          onPressed: () async {
+            widget.controller.muteUnmute();
           },
           icon: Icon(
             widget.controller.volume.value == 0

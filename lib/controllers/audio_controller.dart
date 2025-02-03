@@ -64,6 +64,24 @@ class AudioController extends GetxController {
     }
   }
 
+  Future<void> playPause() async {
+    if (isPlaying.value) {
+      await _audioPlayer.pause();
+    } else {
+      await _audioPlayer.resume();
+    }
+    isPlaying.value = !isPlaying.value;
+  }
+
+  Future<void> muteUnmute() async {
+    if (volume.value > 0) {
+      await _audioPlayer.setVolume(0);
+    } else {
+      await _audioPlayer.setVolume(1);
+    }
+    volume.value = 1 - volume.value;
+  }
+
   Future<void> savePlaybackSpeed(double speed) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('playbackSpeedKey', speed);
