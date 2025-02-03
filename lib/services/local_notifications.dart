@@ -2,27 +2,31 @@ import 'dart:core';
 import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 /// Handles local notifications functionality for the application.
 class LocalNotifications {
-  static final FlutterLocalNotificationsPlugin _notificationsPlugin = 
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
-      
+  static int i = 1;
   // Channel IDs for different notification types
   static const String _simpleChannelId = 'simple_channel';
-  static const String _periodicChannelId = 'periodic_channel';
   static const String _scheduledChannelId = 'scheduled_channel';
-  
+
   /// Initializes the local notifications plugin and requests necessary permissions.
   static Future<void> init() async {
     // Initialize timezone data first
     tz.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Asia/Kolkata')); // Set your local time zone
 
+    log(await FlutterTimezone.getLocalTimezone());
     
-    final InitializationSettings initializationSettings = InitializationSettings(
+    tz.setLocalLocation(tz.getLocation(
+        await FlutterTimezone.getLocalTimezone())); // Set your local time zone
+
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
       android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
       iOS: DarwinInitializationSettings(
         requestAlertPermission: true,
@@ -32,8 +36,9 @@ class LocalNotifications {
     );
 
     // Request Android notification permissions
-    final androidImplementation = _notificationsPlugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    final androidImplementation =
+        _notificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
     await androidImplementation?.requestNotificationsPermission();
 
     // Initialize with callback for handling notification taps
@@ -72,34 +77,6 @@ class LocalNotifications {
     );
   }
 
-  /// Shows a periodic notification
-  static Future<void> showPeriodicNotifications({
-    required String title,
-    required String body,
-    required String payload,
-  }) async {
-    const notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-        _periodicChannelId,
-        'Periodic Notifications',
-        channelDescription: 'Channel for recurring notifications',
-        importance: Importance.max,
-        priority: Priority.high,
-        enableVibration: true,
-        playSound: true,
-      ),
-    );
-
-    await _notificationsPlugin.periodicallyShow(
-      1,
-      title,
-      body,
-      RepeatInterval.everyMinute,
-      notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-    );
-  }
-
   /// Schedules a notification to be shown after a specific delay
   static Future<void> showScheduleNotification({
     required String title,
@@ -108,7 +85,7 @@ class LocalNotifications {
   }) async {
     // Cancel any existing scheduled notifications first
     //await _notificationsPlugin.cancel(1);
-    
+
     final notificationDetails = const NotificationDetails(
       android: AndroidNotificationDetails(
         _scheduledChannelId,
@@ -125,13 +102,14 @@ class LocalNotifications {
     );
 
     // Calculate the schedule time
-    final scheduledTime = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 50));
-    
+    final scheduledTime =
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 10));
+
     try {
       await _notificationsPlugin.zonedSchedule(
-        1,
+        i,
         title,
-        body,
+        i.toString(),
         scheduledTime,
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -139,12 +117,14 @@ class LocalNotifications {
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: payload,
       );
-      
+
       log("Notification scheduled for: $scheduledTime");
-      
-      final pendingNotifications = 
+
+      ++i;
+
+      final pendingNotifications =
           await _notificationsPlugin.pendingNotificationRequests();
-      log("Pending notifications count: ${pendingNotifications.length}"); 
+      log("Pending notifications count: ${pendingNotifications.length}");
     } catch (e) {
       log("Error scheduling notification: $e");
     }
