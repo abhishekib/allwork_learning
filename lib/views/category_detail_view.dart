@@ -363,7 +363,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   ),
                   onSubmit: (date) {
                     log(date.toString());
-                    controller.scheduleNotification(date,
+                    controller.scheduleNotification(categoryDetails, date,
                         TextCleanerService.cleanText(categoryDetails.title));
                   },
                   onClose: () {

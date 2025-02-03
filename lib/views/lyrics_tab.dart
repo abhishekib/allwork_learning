@@ -492,9 +492,7 @@ class LyricsTabState extends State<LyricsTab> {
           size: 16,
         ),
         onTap: () {
-          CategoryListController categoryListController =
-              CategoryListController();
-          categoryListController.saveCategoryListDetail(
+          controller.bookmarkCategoryListDetail(
               widget.categoryDetails, lyricType, index);
           setState(() {
             widget.bookmarkedLyricsIndex = index;

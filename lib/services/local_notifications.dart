@@ -1,8 +1,12 @@
 import 'dart:core';
 import 'dart:developer';
+import 'package:allwork/modals/category.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
@@ -79,9 +83,8 @@ class LocalNotifications {
 
   /// Schedules a notification to be shown after a specific delay
   static Future<void> showScheduleNotification({
+    required Category category,
     required DateTime dateTime,
-    required String title,
-    required String body,
     required String payload,
   }) async {
     // Cancel any existing scheduled notifications first
@@ -108,8 +111,8 @@ class LocalNotifications {
     try {
       await _notificationsPlugin.zonedSchedule(
         i,
-        title,
-        body,
+        category.title,
+        "reminder for ${category.title}",
         scheduledTime,
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
@@ -120,11 +123,16 @@ class LocalNotifications {
 
       log("Notification scheduled for: $scheduledTime");
 
-      ++i;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setInt(
+          'totalNotifications', (prefs.getInt('totalNotifications') ?? 0) + 1);
 
-      final pendingNotifications =
-          await _notificationsPlugin.pendingNotificationRequests();
-      log("Pending notifications count: ${pendingNotifications.length}");
+      DbServices.instance
+          .writeReminder(category, tz.local.toString(), scheduledTime);
+
+      // final pendingNotifications =
+      //     await _notificationsPlugin.pendingNotificationRequests();
+      // log("Pending notifications count: ${pendingNotifications.length}");
     } catch (e) {
       log("Error scheduling notification: $e");
     }

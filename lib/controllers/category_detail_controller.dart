@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:allwork/modals/category.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/services/local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
@@ -128,11 +130,16 @@ class CategoryDetailController extends GetxController {
     log("Changed selected type to: $type");
   }
 
-  void scheduleNotification(DateTime dateTime, String title) {
+  void scheduleNotification(Category category, DateTime dateTime, String title) {
     //log("Scheduling notification for: $date with title: $title");
-    LocalNotifications.showScheduleNotification(
-        dateTime: dateTime, title: title, body: "Reminder", payload: "payload");
+    LocalNotifications.showScheduleNotification(category: category,
+        dateTime: dateTime, payload: "payload");
     // LocalNotifications.showPeriodicNotifications(
     //     title: title, body: "Body", payload: "payload");
+  }
+
+  void bookmarkCategoryListDetail(Category category, int lyricsType, int index) {
+    log("Write bookmark");
+    DbServices.instance.writeBookmark(category, lyricsType, index);
   }
 }

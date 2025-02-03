@@ -43,7 +43,8 @@ class DbServices {
       BookmarkDataEntity.schema,
       CategoryEntity.schema,
       ContentDataEntity.schema,
-      LyricsEntity.schema
+      LyricsEntity.schema,
+      ReminderEntity.schema
     ]);
     realm = Realm(config);
   }
