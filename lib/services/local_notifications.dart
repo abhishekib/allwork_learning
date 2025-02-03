@@ -26,8 +26,11 @@ class LocalNotifications {
 
     log(await FlutterTimezone.getLocalTimezone());
 
-    tz.setLocalLocation(tz.getLocation(
-        await FlutterTimezone.getLocalTimezone())); // Set your local time zone
+    String timeZone = await FlutterTimezone.getLocalTimezone();
+    if (timeZone == 'Asia/Calcutta') {
+      timeZone = 'Asia/Kolkata';
+    }
+    tz.setLocalLocation(tz.getLocation(timeZone)); // Set your local time zone
 
     final InitializationSettings initializationSettings =
         InitializationSettings(
