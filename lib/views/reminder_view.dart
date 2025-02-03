@@ -22,8 +22,44 @@ class ReminderView extends StatelessWidget {
                 style: AppTextStyles.whiteBoldTitleText,
               ),
             ),
-            body: Center(
-                child: Text("Reminders under construction",
-                    style: AppTextStyles.whiteBoldText))));
+            body: Obx(
+          () => Center(
+            child: controller.reminders.isEmpty
+                ? Text("No reminders activated", style: AppTextStyles.whiteBoldText)
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: ListView.builder(
+                      itemCount: controller.reminders.length,
+                      itemBuilder: (context, index) {
+                        return Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(9.5),
+                              ),
+                              child: ListTile(                               
+                                title: Text(
+                                    TextCleanerService.cleanText(
+                                        controller.reminders[index].title),
+                                    maxLines: 3,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: AppTextStyles.customStyle(
+                                      fontFamily: 'Roboto',
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.backgroundBlue,
+                                    )),
+                               
+                              ),
+                            ),
+                            const SizedBox(height: 10)
+                          ],
+                        );
+                      },
+                    ),
+                  ),
+          ),
+        )));
   }
 }

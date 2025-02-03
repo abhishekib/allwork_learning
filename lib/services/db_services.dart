@@ -228,11 +228,9 @@ class DbServices {
     log("written reminder in db");
   }
 
-List<ReminderModel> getSavedReminders() {
+List<ReminderModel> getReminders() {
     return realm.all<ReminderEntity>().map((e) => ReminderModel(e.id, e.title, e.scheduledAt)).toList();
   }
-
-
 
 }
 
