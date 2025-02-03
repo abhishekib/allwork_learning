@@ -59,7 +59,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   @override
   void dispose() {
     widget.controller.audioUrl.value = '';
-    widget.controller.dispose();
+    // widget.controller.dispose();
     super.dispose();
   }
 
@@ -135,8 +135,9 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ),
                   ),
                   Text(
-                    widget.controller.formatDuration(widget.controller.totalTime.value -
-                        widget.controller.currentTime.value),
+                    widget.controller.formatDuration(
+                        widget.controller.totalTime.value -
+                            widget.controller.currentTime.value),
                     style: const TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -441,6 +442,4 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       ],
     );
   }
-
-
 }
