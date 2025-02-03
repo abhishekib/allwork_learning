@@ -1,71 +1,96 @@
 import 'dart:core';
 import 'dart:developer';
-
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
+/// Handles local notifications functionality for the application.
 class LocalNotifications {
-  static final FlutterLocalNotificationsPlugin
-      _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin = 
+      FlutterLocalNotificationsPlugin();
+      
+  // Channel IDs for different notification types
+  static const String _simpleChannelId = 'simple_channel';
+  static const String _periodicChannelId = 'periodic_channel';
+  static const String _scheduledChannelId = 'scheduled_channel';
+  
+  /// Initializes the local notifications plugin and requests necessary permissions.
+  static Future<void> init() async {
+    // Initialize timezone data first
+    tz.initializeTimeZones();
+    tz.setLocalLocation(tz.getLocation('Asia/Kolkata')); // Set your local time zone
 
-// initialize the local notifications
-  static init() async {
-    // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-    final DarwinInitializationSettings initializationSettingsDarwin =
-        DarwinInitializationSettings();
+    
+    final InitializationSettings initializationSettings = InitializationSettings(
+      android: const AndroidInitializationSettings('@mipmap/ic_launcher'),
+      iOS: DarwinInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true,
+      ),
+    );
 
-    final InitializationSettings initializationSettings =
-        InitializationSettings(
-            android: initializationSettingsAndroid,
-            iOS: initializationSettingsDarwin);
+    // Request Android notification permissions
+    final androidImplementation = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    await androidImplementation?.requestNotificationsPermission();
 
-    // request notification permissions
-    final androidImplementation = _flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-        androidImplementation?.requestNotificationsPermission();
-
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    // Initialize with callback for handling notification taps
+    await _notificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (NotificationResponse response) {
+        log('Notification clicked with payload: ${response.payload}');
+      },
+    );
   }
 
-  // show a simple notification
-  static Future showSimpleNotification({
+  /// Shows an immediate notification
+  static Future<void> showSimpleNotification({
     required String title,
     required String body,
     required String payload,
   }) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('your channel id', 'your channel name',
-            channelDescription: 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
-    await _flutterLocalNotificationsPlugin
-        .show(0, title, body, notificationDetails, payload: payload);
+    const notificationDetails = NotificationDetails(
+      android: AndroidNotificationDetails(
+        _simpleChannelId,
+        'Simple Notifications',
+        channelDescription: 'Channel for immediate notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        enableVibration: true,
+        playSound: true,
+      ),
+    );
+
+    await _notificationsPlugin.show(
+      0,
+      title,
+      body,
+      notificationDetails,
+      payload: payload,
+    );
   }
 
-//show Periodic notification
-  static Future showPeriodicNotifications({
+  /// Shows a periodic notification
+  static Future<void> showPeriodicNotifications({
     required String title,
     required String body,
     required String payload,
   }) async {
-    const AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails('channel 2', 'your channel name',
-            channelDescription: 'your channel description',
-            importance: Importance.max,
-            priority: Priority.high,
-            ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-        NotificationDetails(android: androidNotificationDetails);
+    const notificationDetails = NotificationDetails(
+      android: AndroidNotificationDetails(
+        _periodicChannelId,
+        'Periodic Notifications',
+        channelDescription: 'Channel for recurring notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        enableVibration: true,
+        playSound: true,
+      ),
+    );
 
-    await _flutterLocalNotificationsPlugin.periodicallyShow(
+    await _notificationsPlugin.periodicallyShow(
       1,
       title,
       body,
@@ -75,35 +100,58 @@ class LocalNotifications {
     );
   }
 
-  static Future showScheduleNotification({
+  /// Schedules a notification to be shown after a specific delay
+  static Future<void> showScheduleNotification({
     required String title,
     required String body,
     required String payload,
   }) async {
-    tz.initializeTimeZones();
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
-        2,
+    // Cancel any existing scheduled notifications first
+    //await _notificationsPlugin.cancel(1);
+    
+    final notificationDetails = const NotificationDetails(
+      android: AndroidNotificationDetails(
+        _scheduledChannelId,
+        'Scheduled Notifications',
+        channelDescription: 'Channel for scheduled notifications',
+        importance: Importance.max,
+        priority: Priority.high,
+        enableVibration: true,
+        playSound: true,
+        // Add these to ensure the notification shows up
+        fullScreenIntent: true,
+        category: AndroidNotificationCategory.alarm,
+      ),
+    );
+
+    // Calculate the schedule time
+    final scheduledTime = tz.TZDateTime.now(tz.local).add(const Duration(seconds: 50));
+    
+    try {
+      await _notificationsPlugin.zonedSchedule(
+        1,
         title,
         body,
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                'channel 3', 'your channel name',
-                channelDescription: 'your channel description',
-                importance: Importance.max,
-                priority: Priority.high,
-                ticker: 'ticker')),
+        scheduledTime,
+        notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-        payload: payload);
-
-    final x =
-        await _flutterLocalNotificationsPlugin.pendingNotificationRequests();
-    log("SIZE: ${x.length}");
+        payload: payload,
+      );
+      
+      log("Notification scheduled for: $scheduledTime");
+      
+      final pendingNotifications = 
+          await _notificationsPlugin.pendingNotificationRequests();
+      log("Pending notifications count: ${pendingNotifications.length}"); 
+    } catch (e) {
+      log("Error scheduling notification: $e");
+    }
   }
 }
 
+/// Handles platform-specific method channel calls
 class PlatformChannel {
   static const MethodChannel _channel =
       MethodChannel('com.mafatihuljinan/settings');

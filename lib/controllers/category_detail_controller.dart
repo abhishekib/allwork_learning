@@ -129,9 +129,9 @@ class CategoryDetailController extends GetxController {
   }
 
   void scheduleNotification(DateTime date, String title) {
-    log("Scheduling notification for: $date with title: $title");
-    //LocalNotifications.showScheduleNotification(title: title, body: "body", payload: "payload");
-    LocalNotifications.showPeriodicNotifications(
-        title: title, body: "Body", payload: "payload");
+    //log("Scheduling notification for: $date with title: $title");
+    LocalNotifications.showScheduleNotification(title: title, body: "body", payload: "payload");
+    // LocalNotifications.showPeriodicNotifications(
+    //     title: title, body: "Body", payload: "payload");
   }
 }
