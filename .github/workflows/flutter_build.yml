@@ -71,17 +71,22 @@ jobs:
         if: ${{ github.event_name == 'pull_request' }}
         run: flutter test
 
-      # Step 8: Build APK (based on input)
+      # Step 8: Adding Keys
+      - name: Create key.properties file
+        run: |
+          echo "${{ secrets.KEY_PROPERTIES }}" > android/key.properties
+
+      # Step 9: Build APK (based on input)
       - name: Build APK
         run: flutter build apk --${{ github.event.inputs.build_type }}
 
-      # Step 9: Extract Tag Name (for release builds)
+      # Step 10: Extract Tag Name (for release builds)
       - name: Extract Tag Name
         if: startsWith(github.ref, 'refs/tags/')
         id: extract_tag
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-      # Step 10: Create GitHub Release (for tagged commits)
+      # Step 11: Create GitHub Release (for tagged commits)
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/') && github.event.inputs.build_type == 'release'
         id: create_release
@@ -96,7 +101,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 11: Upload APK to Release (for tagged commits)
+      # Step 12: Upload APK to Release (for tagged commits)
       - name: Upload APK to Release
         if: startsWith(github.ref, 'refs/tags/') && github.event.inputs.build_type == 'release'
         uses: actions/upload-release-asset@v1.0.2
@@ -108,7 +113,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 12: Upload artifact
+      # Step 13: Upload artifact
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
