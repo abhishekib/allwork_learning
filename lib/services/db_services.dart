@@ -216,21 +216,34 @@ class DbServices {
     return realm.find<BookmarkDataEntity>(title) != null;
   }
 
-  Future<void> writeReminder(
-      Category category, String scheduledTimeZone, DateTime scheduledDateTime) async {
+  Future<void> writeReminder(Category category, String scheduledTimeZone,
+      DateTime scheduledDateTime) async {
     SharedPreferences _prefs = await SharedPreferences.getInstance();
 
     realm.write(() {
       // Add the new object
-      realm.add(ReminderEntity((_prefs.getInt('totalNotifications') ?? 0) + 1,
-          category.title, DateTime.now(), scheduledTimeZone, scheduledDateTime));
+      log(getNextReminderId().toString());
+      realm.add(ReminderEntity((getNextReminderId()), category.title,
+          DateTime.now(), scheduledTimeZone, scheduledDateTime));
     });
     log("written reminder in db");
   }
 
-List<ReminderModel> getReminders() {
-    return realm.all<ReminderEntity>().map((e) => ReminderModel(e.id, e.title, e.scheduledAt)).toList();
+  List<ReminderModel> getReminders() {
+    return realm
+        .all<ReminderEntity>()
+        .map((e) => ReminderModel(e.id, e.title, e.scheduledTimeZone, e.scheduledAt))
+        .toList();
   }
 
-}
+  int getNextReminderId() {
+    final lastReminder = realm.all<ReminderEntity>().isEmpty ? 0 : realm.all<ReminderEntity>().last.id;
+    return lastReminder + 1;
+  }
 
+  Future<void> deleteReminder(int id) async {
+    realm.write(() {
+      realm.delete<ReminderEntity>(realm.find<ReminderEntity>(id)!);
+    });
+  }
+}

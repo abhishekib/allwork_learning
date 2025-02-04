@@ -13,7 +13,7 @@ import 'package:timezone/timezone.dart' as tz;
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  static int i = 1;
+
   // Channel IDs for different notification types
   static const String _simpleChannelId = 'simple_channel';
   static const String _scheduledChannelId = 'scheduled_channel';
@@ -112,7 +112,7 @@ class LocalNotifications {
 
     try {
       await _notificationsPlugin.zonedSchedule(
-        i,
+       1,
         category.title,
         "reminder for ${category.title}",
         scheduledTime,
@@ -129,6 +129,8 @@ class LocalNotifications {
       prefs.setInt(
           'totalNotifications', (prefs.getInt('totalNotifications') ?? 0) + 1);
 
+
+
       DbServices.instance
           .writeReminder(category, tz.local.toString(), scheduledTime);
 
@@ -139,6 +141,11 @@ class LocalNotifications {
       log("Error scheduling notification: $e");
     }
   }
+
+  static Future<void> cancelNotification(int notificationId) async {
+    await _notificationsPlugin.cancel(notificationId);
+  }
+
 }
 
 /// Handles platform-specific method channel calls
