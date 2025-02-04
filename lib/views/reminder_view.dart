@@ -32,6 +32,7 @@ class ReminderView extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: controller.reminders.length,
                           itemBuilder: (context, index) {
+                            DateTime localDateTime = controller.reminders[index].scheduledDateTime.toLocal();
                             return Column(
                               children: [
                                 Container(
@@ -60,9 +61,7 @@ class ReminderView extends StatelessWidget {
                                             children: [
                                               Text(
                                                   DateFormat('yyyy-MM-dd')
-                                                      .format(controller
-                                                          .reminders[index]
-                                                          .scheduledDateTime)
+                                                      .format(localDateTime)
                                                       .toString(),
                                                   style:
                                                       AppTextStyles.customStyle(
@@ -73,31 +72,18 @@ class ReminderView extends StatelessWidget {
                                                         .backgroundBlue,
                                                   )),
                                               Text(
-                                                  DateFormat('HH:mm')
-                                                      .format(controller
-                                                          .reminders[index]
-                                                          .scheduledDateTime)
-                                                      .toString(),
-                                                  style:
-                                                      AppTextStyles.customStyle(
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors
-                                                        .backgroundBlue,
-                                                  ),),
-                                                  Text(
-                                                    controller
-                                                          .reminders[index]
-                                                          .scheduledTimeZone,
-                                                  style:
-                                                      AppTextStyles.customStyle(
-                                                    fontFamily: 'Roboto',
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: AppColors
-                                                        .backgroundBlue,
-                                                  ))
+                                                DateFormat('HH:mm')
+                                                    .format(localDateTime)
+                                                    .toString(),
+                                                style:
+                                                    AppTextStyles.customStyle(
+                                                  fontFamily: 'Roboto',
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      AppColors.backgroundBlue,
+                                                ),
+                                              )
                                             ],
                                           )
                                         ],
@@ -111,8 +97,7 @@ class ReminderView extends StatelessWidget {
                                           padding: const EdgeInsets.all(3.0),
                                           child: GestureDetector(
                                             onTap: () {
-                                              controller.removeReminder(
-                                                  index);
+                                              controller.removeReminder(index);
                                             },
                                             child: Icon(
                                               Icons.remove,

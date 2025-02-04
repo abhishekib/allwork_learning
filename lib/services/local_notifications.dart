@@ -112,7 +112,7 @@ class LocalNotifications {
 
     try {
       await _notificationsPlugin.zonedSchedule(
-       1,
+       DbServices.instance.getNextReminderId(),
         category.title,
         "reminder for ${category.title}",
         scheduledTime,
