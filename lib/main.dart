@@ -15,9 +15,6 @@ import 'package:keep_screen_on/keep_screen_on.dart';
 
 import 'views/category_detail_view.dart';
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
