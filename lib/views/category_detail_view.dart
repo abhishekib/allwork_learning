@@ -361,7 +361,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                       color: Colors.black,
                     ),
                   ),
-                  onSubmit: (date) {
+                  onSubmit: (date) {                    
                     log(date.toString());
                     controller.scheduleNotification(categoryDetails, date,
                         TextCleanerService.cleanText(categoryDetails.title));
@@ -369,8 +369,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   onClose: () {
                     Navigator.pop(context);
                   },
-                  minDateTime: DateTime.now(),
-                  initialDateTime: DateTime.now(),
+                  minDateTime: DateTime.now().add(Duration(minutes: 1)),
+                  initialDateTime: DateTime.now().add(Duration(minutes: 1)),
                   buttonSingleColor: Colors.pink,
                 ).show(context);
               },
