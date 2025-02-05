@@ -38,6 +38,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   // final AudioController _audioController = Get.find<AudioController>();
   final AudioController _audioController = Get.put(AudioController());
 
+  late final CategoryDetailController controller;
   late Category categoryDetails;
   late List<String> availableTypes;
   late int currentContentDataId;
@@ -52,6 +53,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   void initState() {
     super.initState();
     Get.put(FavouriteController());
+
+     controller =
+        Get.put(CategoryDetailController());
+
     final dynamic data = Get.arguments;
 
     if (data is Map<String, dynamic>) {
@@ -117,6 +122,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     if (fromBookmark) {
       _tabController.animateTo(bookmarkedTab);
       _tabController.index = bookmarkedTab;
+      controller.changeType(availableTypes[bookmarkedTab]);
     }
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
@@ -224,9 +230,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   @override
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
-
-    final CategoryDetailController controller =
-        Get.put(CategoryDetailController());
 
     if (availableTypes.isEmpty) {
       return Scaffold(
@@ -361,7 +364,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                       color: Colors.black,
                     ),
                   ),
-                  onSubmit: (date) {                    
+                  onSubmit: (date) {
                     log(date.toString());
                     controller.scheduleNotification(categoryDetails, date,
                         TextCleanerService.cleanText(categoryDetails.title));
@@ -385,7 +388,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           ],
         ),
         body: DefaultTabController(
-          initialIndex: fromBookmark ? bookmarkedTab : 0,
+          //initialIndex: fromBookmark ? bookmarkedTab : 0,
           length: availableTypes.length,
           child: Column(
             children: [
