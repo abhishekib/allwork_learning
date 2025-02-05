@@ -54,8 +54,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     super.initState();
     Get.put(FavouriteController());
 
-     controller =
-        Get.put(CategoryDetailController());
+    controller = Get.put(CategoryDetailController());
 
     final dynamic data = Get.arguments;
 
@@ -93,7 +92,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         cdata: data.cdata,
       );
     } else {
-      log("From unknown");
       categoryDetails = Category(
         category: '',
         id: 0,
@@ -127,9 +125,12 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
-    if (cdata!.isNotEmpty && cdata[0].offlineAudioPath != null) {
+    if (cdata!.isNotEmpty &&
+        cdata[0].offlineAudioPath != null &&
+        cdata[0].offlineAudioPath!.isNotEmpty) {
       isAudioDownloaded = true;
       log("Audio is already downloaded");
+      log("Audio path is ${cdata[0].offlineAudioPath}");
     }
 
     final String? initialAudioUrl = isAudioDownloaded
@@ -146,17 +147,18 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
+      log("selected index $selectedIndex");
       final String? newAudioUrl = cdata![selectedIndex].offlineAudioPath != null
           ? cdata[selectedIndex].offlineAudioPath!
           : cdata[selectedIndex].audiourl.isNotEmpty
               ? cdata[selectedIndex].audiourl
               : null;
 
-      if (newAudioUrl != currentAudioUrl) {
+      if (newAudioUrl != currentAudioUrl && newAudioUrl!.isNotEmpty) {
         setState(() {
           currentAudioUrl = newAudioUrl;
         });
-        Get.find<CategoryDetailController>().initializeAudio(newAudioUrl ?? "");
+        Get.find<CategoryDetailController>().initializeAudio(newAudioUrl);
       }
     });
     log("---You are in CategoryDetailView---");
@@ -247,6 +249,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     // _tabController.index = fromBookmark ? bookmarkedTab : 0;
 
+    log("Current audio url $currentAudioUrl");
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
