@@ -173,7 +173,7 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       case "transliteration":
@@ -195,7 +195,7 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 1)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       case "translation":
@@ -217,7 +217,7 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTransliterationText(lyrics, showTransliteration),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 2)
+          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       default:

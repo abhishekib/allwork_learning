@@ -117,8 +117,12 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
+
+
     if (fromBookmark) {
-      _tabController.animateTo(bookmarkedTab);
+      log("bookmarkedTab $bookmarkedTab");
+      //_tabController.animateTo(bookmarkedTab);
+      log("availableTypes length ${availableTypes.length}");
       _tabController.index = bookmarkedTab;
       controller.changeType(availableTypes[bookmarkedTab]);
     }
