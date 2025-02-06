@@ -495,9 +495,7 @@ class LyricsTabState extends State<LyricsTab> {
               lyricType == widget.bookmarkedTab) {
             controller.removeBookmark(widget.categoryDetails);
             setState(() {
-              widget.bookmarkedLyricsIndex = null;
               widget.isBookmarked = false;
-              widget.bookmarkedTab = null;
             });
           } else {
             controller.bookmarkLyric(widget.categoryDetails, lyricType, index);
