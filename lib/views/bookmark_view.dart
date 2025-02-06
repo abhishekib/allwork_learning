@@ -9,8 +9,9 @@ import 'package:get/get.dart';
 class BookmarkView extends StatelessWidget {
   BookmarkView({super.key});
 
-  final controller = Get.put(BookmarkController());
+  final instance = Get.lazyPut(() => BookmarkController(), fenix: true);
 
+  final controller = Get.find<BookmarkController>();
   @override
   Widget build(BuildContext context) {
     return BackgroundWrapper(
@@ -55,24 +56,7 @@ class BookmarkView extends StatelessWidget {
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   spacing: 10,
-                                  children: [
-                                    Container(
-                                      padding: EdgeInsets.all(6),
-                                      decoration: BoxDecoration(
-                                        color: Colors.red,
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: GestureDetector(
-                                        child: Icon(
-                                          Icons.bookmark_border,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                        onTap: () {
-                                          controller.removeBookmark(index);
-                                        },
-                                      ),
-                                    ),
+                                  children: [                                    
                                     Container(
                                       decoration: BoxDecoration(
                                         color: AppColors.backgroundBlue,

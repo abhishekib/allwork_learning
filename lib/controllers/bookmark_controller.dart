@@ -12,6 +12,7 @@ class BookmarkController extends GetxController {
 
   @override
   void onInit() {
+    log("on init bookmark controller called");
     bookmarks(DbServices.instance.getSavedBookmarks());
     super.onInit();
   }
@@ -21,9 +22,7 @@ class BookmarkController extends GetxController {
         DbServices.instance.getBookmarkData(bookmarks[index]);
 
     Category category = BookmarkDataHelpers.toCategory(bookmarkData!.category!);
-
-    log(category.toString());
-    log('tab number ${bookmarkData.lyricsType.toString()}');
+    
     Get.to(
       () => const CategoryDetailView(),
       arguments: {

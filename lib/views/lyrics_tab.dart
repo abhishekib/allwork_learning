@@ -481,9 +481,9 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _getBookmarkWidget(int index, int lyricType) {
-    log("Lyric index : $index");
-    log("Tab number : $lyricType");
-    log("Tab number coming from bookmark : ${widget.bookmarkedTab}");
+    // log("Lyric index : $index");
+    // log("Tab number : $lyricType");
+    // log("Tab number coming from bookmark : ${widget.bookmarkedTab}");
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
