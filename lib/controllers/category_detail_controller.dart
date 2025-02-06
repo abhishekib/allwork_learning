@@ -130,16 +130,22 @@ class CategoryDetailController extends GetxController {
     log("Changed selected type to: $type");
   }
 
-  void scheduleNotification(Category category, DateTime dateTime, String title) {
+  void scheduleNotification(
+      Category category, DateTime dateTime, String title) {
     //log("Scheduling notification for: $date with title: $title");
-    LocalNotifications.showScheduleNotification(category: category,
-        dateTime: dateTime, payload: "payload");
+    LocalNotifications.showScheduleNotification(
+        category: category, dateTime: dateTime, payload: "payload");
     // LocalNotifications.showPeriodicNotifications(
     //     title: title, body: "Body", payload: "payload");
   }
 
-  void bookmarkCategoryListDetail(Category category, int lyricsType, int index) {
+  void bookmarkLyric(Category category, int lyricsType, int index) {
     log("Write bookmark");
     DbServices.instance.writeBookmark(category, lyricsType, index);
+  }
+
+  void removeBookmark(Category category) {
+    log("remove bookmark");
+    DbServices.instance.deleteBookmark(category.title);
   }
 }

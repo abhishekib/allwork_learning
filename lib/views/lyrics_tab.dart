@@ -491,13 +491,23 @@ class LyricsTabState extends State<LyricsTab> {
           size: 16,
         ),
         onTap: () {
-          controller.bookmarkCategoryListDetail(
-              widget.categoryDetails, lyricType, index);
-          setState(() {
-            widget.bookmarkedLyricsIndex = index;
-            widget.isBookmarked = true;
-            widget.bookmarkedTab = lyricType;
-          });
+          if (index == widget.bookmarkedLyricsIndex &&
+              lyricType == widget.bookmarkedTab) {
+            controller.removeBookmark(widget.categoryDetails);
+            setState(() {
+              widget.bookmarkedLyricsIndex = null;
+              widget.isBookmarked = false;
+              widget.bookmarkedTab = null;
+            });
+          } else {
+            controller.bookmarkLyric(widget.categoryDetails, lyricType, index);
+            setState(() {
+              widget.bookmarkedLyricsIndex = index;
+              widget.isBookmarked = true;
+              widget.bookmarkedTab = lyricType;
+            });
+          }
+
           // log(category.toString());
         },
       ),

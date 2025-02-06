@@ -212,6 +212,8 @@ class DbServices {
     });
   }
 
+
+
   bool isBookmarked(String title) {
     return realm.find<BookmarkDataEntity>(title) != null;
   }

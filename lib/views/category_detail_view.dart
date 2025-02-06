@@ -251,8 +251,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       );
     }
 
-    // _tabController.index = fromBookmark ? bookmarkedTab : 0;
-
     log("Current audio url $currentAudioUrl");
     return BackgroundWrapper(
       child: Scaffold(
@@ -395,7 +393,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           ],
         ),
         body: DefaultTabController(
-          //initialIndex: fromBookmark ? bookmarkedTab : 0,
           length: availableTypes.length,
           child: Column(
             children: [
