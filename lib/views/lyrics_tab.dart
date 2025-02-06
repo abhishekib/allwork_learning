@@ -123,6 +123,11 @@ class LyricsTabState extends State<LyricsTab> {
       itemBuilder: (context, index) {
         final lyrics = widget.lyricsList[index];
         final isCurrentHighlighted = index == _currentHighlightedIndex;
+        if (lyrics.arabic == "&nbsp;" &&
+            lyrics.translation == "&nbsp;" &&
+            lyrics.translitration == "&nbsp;") {
+          return Visibility(visible: false, child: Container());
+        }
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(
@@ -173,7 +178,8 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
+            _getBookmarkWidget(
+                widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       case "transliteration":
@@ -195,7 +201,9 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
+
+            _getBookmarkWidget(
+                widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       case "translation":
@@ -217,7 +225,9 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTransliterationText(lyrics, showTransliteration),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
+
+            _getBookmarkWidget(
+                widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       default:
@@ -238,7 +248,7 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
+            _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
