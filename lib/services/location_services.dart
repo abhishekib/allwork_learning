@@ -27,7 +27,6 @@ static Future<Position?> getUserLocation() async {
     LocationSettings locationSettings = LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 10,
-      timeLimit: Duration(seconds: 30),
     );
 
     Position position = await Geolocator.getCurrentPosition(
