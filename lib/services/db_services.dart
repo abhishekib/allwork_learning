@@ -213,16 +213,19 @@ class DbServices {
     });
   }
 
-
-
   bool isBookmarked(String title) {
     return realm.find<BookmarkDataEntity>(title) != null;
   }
 
   Future<void> writeReminder(Category category, String scheduledTimeZone,
       DateTime scheduledDateTime) async {
+    ReminderDataEntity? reminderDataEntity =
+        realm.find<ReminderDataEntity>(category.title);
 
     realm.write(() {
+      if (reminderDataEntity != null) {
+        realm.delete<ReminderDataEntity>(reminderDataEntity);
+      }
       // Add the new object
       log(getNextReminderId().toString());
       realm.add(ReminderEntity((getNextReminderId()), category.title,
@@ -232,15 +235,20 @@ class DbServices {
     log("written reminder in db");
   }
 
+  Future<void> getReminderData(String title) async {}
+
   List<ReminderModel> getReminders() {
     return realm
         .all<ReminderEntity>()
-        .map((e) => ReminderModel(e.id, e.title, e.scheduledTimeZone, e.scheduledAt))
+        .map((e) =>
+            ReminderModel(e.id, e.title, e.scheduledTimeZone, e.scheduledAt))
         .toList();
   }
 
   int getNextReminderId() {
-    final lastReminder = realm.all<ReminderEntity>().isEmpty ? 0 : realm.all<ReminderEntity>().last.id;
+    final lastReminder = realm.all<ReminderEntity>().isEmpty
+        ? 0
+        : realm.all<ReminderEntity>().last.id;
     return lastReminder + 1;
   }
 
