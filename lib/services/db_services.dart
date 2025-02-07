@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/bookmark_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
@@ -44,7 +44,8 @@ class DbServices {
       CategoryEntity.schema,
       ContentDataEntity.schema,
       LyricsEntity.schema,
-      ReminderEntity.schema
+      ReminderEntity.schema,
+      ReminderDataEntity.schema
     ]);
     realm = Realm(config);
   }
@@ -220,13 +221,13 @@ class DbServices {
 
   Future<void> writeReminder(Category category, String scheduledTimeZone,
       DateTime scheduledDateTime) async {
-    SharedPreferences _prefs = await SharedPreferences.getInstance();
 
     realm.write(() {
       // Add the new object
       log(getNextReminderId().toString());
       realm.add(ReminderEntity((getNextReminderId()), category.title,
           DateTime.now(), scheduledTimeZone, scheduledDateTime));
+      realm.add(ReminderDataHelpers.toReminderDataEntity(category));
     });
     log("written reminder in db");
   }

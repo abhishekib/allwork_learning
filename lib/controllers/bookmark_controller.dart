@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/bookmark_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/helpers.dart';
@@ -21,7 +21,7 @@ class BookmarkController extends GetxController {
     BookmarkDataEntity? bookmarkData =
         DbServices.instance.getBookmarkData(bookmarks[index]);
 
-    Category category = BookmarkDataHelpers.toCategory(bookmarkData!.category!);
+    Category category = CategoryHelpers.toCategory(bookmarkData!.category!);
     
     Get.to(
       () => const CategoryDetailView(),

@@ -41,6 +41,9 @@ class ReminderView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(9.5),
                                   ),
                                   child: ListTile(
+                                    onTap: () {
+                                      controller.openReminder(index);
+                                    },
                                       title: Column(
                                         children: [
                                           Text(
@@ -88,23 +91,47 @@ class ReminderView extends StatelessWidget {
                                           )
                                         ],
                                       ),
-                                      trailing: Container(
-                                        decoration: BoxDecoration(
-                                          color: AppColors.backgroundBlue,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(3.0),
-                                          child: GestureDetector(
-                                            onTap: () {
-                                              controller.removeReminder(index);
-                                            },
-                                            child: Icon(
-                                              Icons.remove,
-                                              color: Colors.white,
+                                      trailing: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        spacing: 10,
+                                        children: [
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(3.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  controller.removeReminder(index);
+                                                },
+                                                child: Icon(
+                                                  Icons.remove,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                        ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                              color: AppColors.backgroundBlue,
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(3.0),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  controller.removeReminder(index);
+                                                },
+                                                child: Icon(
+                                                  Icons.arrow_forward_ios_rounded,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
                                       )),
                                 ),
                                 const SizedBox(height: 10)

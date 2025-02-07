@@ -21,4 +21,8 @@ class ReminderController extends GetxController {
     reminders.removeAt(index);
     Get.snackbar("Deleted", "Deleted the reminder");
   }
+
+  void openReminder(int index) {
+    
+  }
 }

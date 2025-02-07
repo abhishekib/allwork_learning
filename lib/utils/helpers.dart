@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/bookmark_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
@@ -210,19 +210,41 @@ class MenuDetailsHelpers {
 }
 
 class BookmarkDataHelpers {
-  static BookmarkDataEntity toBookmarkDataEntity(Category category, int lyricsType, int index) {
-    BookmarkDataEntity bookmarkDataEntity = BookmarkDataEntity(category.title, lyricsType, index);
-    bookmarkDataEntity.category = _toCategoryEntity(category);
+  static BookmarkDataEntity toBookmarkDataEntity(
+      Category category, int lyricsType, int index) {
+    BookmarkDataEntity bookmarkDataEntity =
+        BookmarkDataEntity(category.title, lyricsType, index);
+    bookmarkDataEntity.category = CategoryHelpers.toCategoryEntity(category);
     return bookmarkDataEntity;
   }
+}
 
-  static CategoryEntity _toCategoryEntity(Category category) {
+class BookmarkHelpers {
+  static List<String> toBookmarkTitles(List<BookmarkEntity> bookmarks) {
+    List<String> titles = [];
+    for (BookmarkEntity bookmark in bookmarks) {
+      titles.add(bookmark.title);
+    }
+    return titles;
+  }
+}
+
+class ReminderDataHelpers {
+  static ReminderDataEntity toReminderDataEntity(Category category) {
+    ReminderDataEntity reminderDataEntity = ReminderDataEntity(category.title);
+    reminderDataEntity.category = CategoryHelpers.toCategoryEntity(category);
+    return reminderDataEntity;
+  }
+}
+
+class CategoryHelpers {
+  static CategoryEntity toCategoryEntity(Category category) {
     log("Category data in helpers ${category.toString()}");
 
     List<ContentDataEntity> contentDataEntities = [];
 
     for (ContentData contentData in category.cdata!) {
-      contentDataEntities.add(_convertToContentDataEntity(contentData));
+      contentDataEntities.add(convertToContentDataEntity(contentData));
     }
 
     return CategoryEntity(
@@ -236,11 +258,11 @@ class BookmarkDataHelpers {
         category.data ?? '');
   }
 
-  static ContentDataEntity _convertToContentDataEntity(ContentData cdata) {
+  static ContentDataEntity convertToContentDataEntity(ContentData cdata) {
     List<LyricsEntity> lyricsEntities = [];
 
     for (Lyrics lyrics in cdata.lyrics) {
-      lyricsEntities.add(_convertToLyricsEntity(lyrics));
+      lyricsEntities.add(convertToLyricsEntity(lyrics));
     }
 
     return ContentDataEntity(
@@ -248,7 +270,7 @@ class BookmarkDataHelpers {
         lyrics: lyricsEntities);
   }
 
-  static LyricsEntity _convertToLyricsEntity(Lyrics lyrics) {
+  static LyricsEntity convertToLyricsEntity(Lyrics lyrics) {
     return LyricsEntity(
         lyrics.time, lyrics.arabic, lyrics.translitration, lyrics.translation);
   }
@@ -258,7 +280,7 @@ class BookmarkDataHelpers {
     List<ContentData> contentData = [];
 
     for (ContentDataEntity contentDataEntity in contentDataEntities) {
-      contentData.add(_convertToContentData(contentDataEntity));
+      contentData.add(convertToContentData(contentDataEntity));
     }
 
     Category category = Category(
@@ -273,11 +295,10 @@ class BookmarkDataHelpers {
     return category;
   }
 
-  static ContentData _convertToContentData(
-      ContentDataEntity contentDataEntity) {
+  static ContentData convertToContentData(ContentDataEntity contentDataEntity) {
     List<Lyrics> lyrics = [];
     for (LyricsEntity lyricsEntity in contentDataEntity.lyrics) {
-      lyrics.add(_convertToLyrics(lyricsEntity));
+      lyrics.add(convertToLyrics(lyricsEntity));
     }
     return ContentData(
         type: contentDataEntity.type,
@@ -286,21 +307,11 @@ class BookmarkDataHelpers {
         lyrics: lyrics);
   }
 
-  static Lyrics _convertToLyrics(LyricsEntity lyricsEntity) {
+  static Lyrics convertToLyrics(LyricsEntity lyricsEntity) {
     return Lyrics(
         time: lyricsEntity.time,
         arabic: lyricsEntity.arabic,
         translitration: lyricsEntity.translitration,
         translation: lyricsEntity.translation);
-  }
-}
-
-class BookmarkHelpers {
-  static List<String> toBookmarkTitles(List<BookmarkEntity> bookmarks) {
-    List<String> titles = [];
-    for (BookmarkEntity bookmark in bookmarks) {
-      titles.add(bookmark.title);
-    }
-    return titles;
   }
 }

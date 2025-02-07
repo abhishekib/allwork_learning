@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'bookmark_data_entity.dart';
+part of 'bookmark_reminder_data_entity.dart';
 
 // **************************************************************************
 // RealmObjectGenerator
@@ -96,6 +96,80 @@ class BookmarkDataEntity extends _BookmarkDataEntity
           optional: true, linkTarget: 'CategoryEntity'),
       SchemaProperty('lyricsType', RealmPropertyType.int),
       SchemaProperty('lyricsIndex', RealmPropertyType.int),
+    ]);
+  }();
+
+  @override
+  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
+}
+
+class ReminderDataEntity extends _ReminderDataEntity
+    with RealmEntity, RealmObjectBase, RealmObject {
+  ReminderDataEntity(
+    String title, {
+    CategoryEntity? category,
+  }) {
+    RealmObjectBase.set(this, 'title', title);
+    RealmObjectBase.set(this, 'category', category);
+  }
+
+  ReminderDataEntity._();
+
+  @override
+  String get title => RealmObjectBase.get<String>(this, 'title') as String;
+  @override
+  set title(String value) => RealmObjectBase.set(this, 'title', value);
+
+  @override
+  CategoryEntity? get category =>
+      RealmObjectBase.get<CategoryEntity>(this, 'category') as CategoryEntity?;
+  @override
+  set category(covariant CategoryEntity? value) =>
+      RealmObjectBase.set(this, 'category', value);
+
+  @override
+  Stream<RealmObjectChanges<ReminderDataEntity>> get changes =>
+      RealmObjectBase.getChanges<ReminderDataEntity>(this);
+
+  @override
+  Stream<RealmObjectChanges<ReminderDataEntity>> changesFor(
+          [List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<ReminderDataEntity>(this, keyPaths);
+
+  @override
+  ReminderDataEntity freeze() =>
+      RealmObjectBase.freezeObject<ReminderDataEntity>(this);
+
+  EJsonValue toEJson() {
+    return <String, dynamic>{
+      'title': title.toEJson(),
+      'category': category.toEJson(),
+    };
+  }
+
+  static EJsonValue _toEJson(ReminderDataEntity value) => value.toEJson();
+  static ReminderDataEntity _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
+    return switch (ejson) {
+      {
+        'title': EJsonValue title,
+      } =>
+        ReminderDataEntity(
+          fromEJson(title),
+          category: fromEJson(ejson['category']),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
+  }
+
+  static final schema = () {
+    RealmObjectBase.registerFactory(ReminderDataEntity._);
+    register(_toEJson, _fromEJson);
+    return const SchemaObject(
+        ObjectType.realmObject, ReminderDataEntity, 'ReminderDataEntity', [
+      SchemaProperty('title', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('category', RealmPropertyType.object,
+          optional: true, linkTarget: 'CategoryEntity'),
     ]);
   }();
 

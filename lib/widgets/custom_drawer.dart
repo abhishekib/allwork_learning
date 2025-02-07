@@ -67,7 +67,7 @@ class CustomDrawer extends StatelessWidget {
                       color: Colors.white,
                     ),
                     title: const Text(
-                      'Bookmark',
+                      'Bookmarks',
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
@@ -80,7 +80,7 @@ class CustomDrawer extends StatelessWidget {
                       color: Colors.white,
                     ),
                     title: const Text(
-                      'Reminder',
+                      'Reminders',
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {

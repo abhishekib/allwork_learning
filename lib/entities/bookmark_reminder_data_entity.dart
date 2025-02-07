@@ -1,7 +1,7 @@
 import 'package:realm/realm.dart';
-part 'bookmark_data_entity.realm.dart';
+    part 'bookmark_reminder_data_entity.realm.dart';
 
-
+    
 @RealmModel()
 class _BookmarkDataEntity {
   @PrimaryKey()
@@ -9,6 +9,14 @@ class _BookmarkDataEntity {
   _CategoryEntity? category;
   late int lyricsType;
   late int lyricsIndex;
+}
+
+
+@RealmModel()
+class _ReminderDataEntity {
+  @PrimaryKey()
+  late String title;
+  _CategoryEntity? category;
 }
 
 @RealmModel()

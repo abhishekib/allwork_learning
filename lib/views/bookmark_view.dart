@@ -18,7 +18,7 @@ class BookmarkView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-            "Bookmark",
+            "Bookmarks",
             style: AppTextStyles.whiteBoldTitleText,
           ),
         ),
