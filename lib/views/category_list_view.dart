@@ -40,13 +40,16 @@ class CategoryListView extends StatelessWidget {
                   color: Colors.white,
                   size: 30,
                 ),
-                title: Text(
-                  TextCleanerService.cleanText(argument),
-                  style: AppTextStyles.customStyle(
-                    fontFamily: fontFamily,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                title: FittedBox(
+            fit: BoxFit.scaleDown,
+                  child: Text(
+                    TextCleanerService.cleanText(argument),
+                    style: AppTextStyles.customStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),

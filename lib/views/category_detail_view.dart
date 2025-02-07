@@ -117,8 +117,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
 
     _tabController = TabController(length: availableTypes.length, vsync: this);
 
-
-
     if (fromBookmark) {
       log("bookmarkedTab $bookmarkedTab");
       //_tabController.animateTo(bookmarkedTab);
@@ -259,13 +257,16 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             color: Colors.white,
             size: 30,
           ),
-          title: Text(
-            TextCleanerService.cleanText(categoryDetails.title),
-            style: AppTextStyles.customStyle(
-              fontFamily: fontFamily,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              TextCleanerService.cleanText(categoryDetails.title),
+              style: AppTextStyles.customStyle(
+                fontFamily: fontFamily,
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
             ),
           ),
           actions: [

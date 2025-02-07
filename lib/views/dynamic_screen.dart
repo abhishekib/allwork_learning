@@ -29,13 +29,16 @@ class DynamicScreen extends StatelessWidget {
         extendBodyBehindAppBar: true,
         appBar: AppBar(
             centerTitle: true,
-            title: Text(TextCleanerService.cleanText(title),
-                style: AppTextStyles.customStyle(
-                  fontFamily: 'Roboto',
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                )),
+            title: FittedBox(
+            fit: BoxFit.scaleDown,
+              child: Text(TextCleanerService.cleanText(title),
+                  style: AppTextStyles.customStyle(
+                    fontFamily: 'Roboto',
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  )),
+            ),
             iconTheme: const IconThemeData(
               color: Colors.white,
               size: 30,
