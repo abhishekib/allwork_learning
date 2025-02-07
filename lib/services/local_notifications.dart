@@ -1,6 +1,7 @@
 import 'dart:core';
 import 'dart:developer';
 import 'package:allwork/modals/category.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -113,8 +114,8 @@ class LocalNotifications {
     try {
       await _notificationsPlugin.zonedSchedule(
        DbServices.instance.getNextReminderId(),
-        category.title,
-        "reminder for ${category.title}",
+        TextCleanerService.cleanText(category.title) ,
+        TextCleanerService.cleanText("reminder for ${category.title}"),
         scheduledTime,
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
