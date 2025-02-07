@@ -235,7 +235,12 @@ class DbServices {
     log("written reminder in db");
   }
 
-  Future<void> getReminderData(String title) async {}
+  ReminderDataEntity? getReminderData(String title) {
+    log(title);
+    ReminderDataEntity? reminderDataEntity =
+        realm.find<ReminderDataEntity>(title);
+    return reminderDataEntity;
+  }
 
   List<ReminderModel> getReminders() {
     return realm
