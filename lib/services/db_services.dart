@@ -259,7 +259,18 @@ class DbServices {
 
   Future<void> deleteReminder(int id) async {
     realm.write(() {
-      realm.delete<ReminderEntity>(realm.find<ReminderEntity>(id)!);
+      ReminderEntity? reminderEntity = realm.find<ReminderEntity>(id);
+
+      if (reminderEntity != null) {
+        if (getReminderTitleCount(reminderEntity.title) == 1) {
+          realm.delete<ReminderDataEntity>(getReminderData(reminderEntity.title)!);
+        }
+        realm.delete<ReminderEntity>(reminderEntity);        
+      }
     });
+  }
+
+  int getReminderTitleCount(String title) {
+    return realm.all<ReminderEntity>().query("title == '$title'").length;
   }
 }

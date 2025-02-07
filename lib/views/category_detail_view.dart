@@ -150,7 +150,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     _tabController.addListener(() {
       final selectedIndex = _tabController.index;
       log("selected index $selectedIndex");
-      final String? newAudioUrl = cdata![selectedIndex].offlineAudioPath != null
+      final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
           ? cdata[selectedIndex].offlineAudioPath!
           : cdata[selectedIndex].audiourl.isNotEmpty
               ? cdata[selectedIndex].audiourl
