@@ -1,7 +1,14 @@
 import 'dart:developer';
+import 'package:allwork/controllers/favourite_controller.dart';
+import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/modals/category.dart';
+import 'package:allwork/modals/content_data.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/services/local_notifications.dart';
+import 'package:allwork/views/login_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 
@@ -24,6 +31,8 @@ class CategoryDetailController extends GetxController {
   var showTransliteration = true.obs;
   var showTranslation = true.obs;
 
+  final LoginController _loginController = Get.put(LoginController());
+  
   get audioPlayer => _audioPlayer;
 
   @override
@@ -134,8 +143,8 @@ class CategoryDetailController extends GetxController {
       Category category, DateTime dateTime, String title) {
     //log("Scheduling notification for: $date with title: $title");
     LocalNotifications.showScheduleNotification(
-        category: category, dateTime: dateTime, payload: "payload");
-    
+        category: category, dateTime: dateTime);
+
     // LocalNotifications.showPeriodicNotifications(
     //     title: title, body: "Body", payload: "payload");
   }
@@ -148,5 +157,93 @@ class CategoryDetailController extends GetxController {
   void removeBookmark(Category category) {
     log("remove bookmark");
     DbServices.instance.deleteBookmark(category.title);
+  }
+
+  void copyAllLyricsToClipboard(BuildContext context,
+      Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+    final allLyrics =
+        availableLyrics.values.expand((lyricsList) => lyricsList).toList();
+
+    Set<Lyrics> uniqueLyricsSet = {};
+
+    for (var lyrics in allLyrics) {
+      uniqueLyricsSet.add(lyrics);
+    }
+
+    String combinedLyrics =
+        '${TextCleanerService.cleanText(categoryTitle)}\n\n';
+
+    for (var lyrics in uniqueLyricsSet) {
+      combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
+      combinedLyrics +=
+          '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
+      combinedLyrics += '${TextCleanerService.cleanText(lyrics.translation)}\n';
+    }
+
+    Clipboard.setData(ClipboardData(text: combinedLyrics));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("All lyrics copied to clipboard!")),
+    );
+  }
+
+void showLoginPrompt(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Login Required"),
+          content: const Text("Please log in to add this item to favorites."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                Get.to(() => LoginView()); // Navigate to login screen
+              },
+              child: const Text("Login"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void addToFavourite(BuildContext context, Category categoryDetails, String menuItem) async {
+    try {
+      final favouriteController = Get.find<FavouriteController>();
+
+      int itemId = categoryDetails.id;
+      log("$itemId");
+
+      await favouriteController.addToFavourite(menuItem, itemId);
+
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Added to favorites!")),
+        );
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Error adding to favorites: $e")),
+        );
+      }
+      log("$e");
+    }
+  }
+
+
+void handleAddToFavourite(BuildContext context, Category categoryDetails, String menuItem) {
+    if (_loginController.isLoggedIn.value) {
+      addToFavourite(context, categoryDetails, menuItem);
+    } else {
+      showLoginPrompt(context);
+    }
   }
 }

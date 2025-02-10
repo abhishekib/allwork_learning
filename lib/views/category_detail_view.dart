@@ -34,7 +34,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late TabController _tabController;
   String? currentAudioUrl;
   bool isAudioDownloaded = false;
-  final LoginController _loginController = Get.put(LoginController());
   // final AudioController _audioController = Get.find<AudioController>();
   final AudioController _audioController = Get.put(AudioController());
 
@@ -125,106 +124,48 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       controller.changeType(availableTypes[bookmarkedTab]);
     }
 
-    log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
+    //log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
-    if (cdata!.isNotEmpty &&
-        cdata[0].offlineAudioPath != null &&
-        cdata[0].offlineAudioPath!.isNotEmpty) {
-      isAudioDownloaded = true;
-      log("Audio is already downloaded");
-      log("Audio path is ${cdata[0].offlineAudioPath}");
-    }
-
-    final String? initialAudioUrl = isAudioDownloaded
-        ? cdata[0].offlineAudioPath!
-        : cdata[0].audiourl.isNotEmpty
-            ? cdata[0].audiourl
-            : null;
-
-    currentContentDataId = cdata![0].id ?? 0;
-
-    currentAudioUrl = initialAudioUrl;
-
-    log("initial Audio Url $currentAudioUrl");
-
-    _tabController.addListener(() {
-      final selectedIndex = _tabController.index;
-      log("selected index $selectedIndex");
-      final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
-          ? cdata[selectedIndex].offlineAudioPath!
-          : cdata[selectedIndex].audiourl.isNotEmpty
-              ? cdata[selectedIndex].audiourl
-              : null;
-
-      if (newAudioUrl != currentAudioUrl && newAudioUrl!.isNotEmpty) {
-        setState(() {
-          currentAudioUrl = newAudioUrl;
-        });
-        Get.find<CategoryDetailController>().initializeAudio(newAudioUrl);
-      }
-    });
-    log("---You are in CategoryDetailView---");
+    // if (cdata!.isNotEmpty &&
+    //     cdata[0].offlineAudioPath != null &&
+    //     cdata[0].offlineAudioPath!.isNotEmpty) {
+    //   isAudioDownloaded = true;
+    //   log("Audio is already downloaded");
+    //   log("Audio path is ${cdata[0].offlineAudioPath}");
   }
 
-  void addToFavourite() async {
-    try {
-      final favouriteController = Get.find<FavouriteController>();
+  // final String? initialAudioUrl = isAudioDownloaded
+  //     ? cdata[0].offlineAudioPath!
+  //     : cdata[0].audiourl.isNotEmpty
+  //         ? cdata[0].audiourl
+  //         : null;
 
-      int itemId = categoryDetails.id;
-      log("$itemId");
+  //   currentContentDataId = cdata![0].id ?? 0;
 
-      await favouriteController.addToFavourite(menuItem, itemId);
+  //   currentAudioUrl = initialAudioUrl;
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Added to favorites!")),
-        );
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error adding to favorites: $e")),
-        );
-      }
-      log("$e");
-    }
-  }
+  //   log("initial Audio Url $currentAudioUrl");
 
-  void _handleAddToFavourite() {
-    if (_loginController.isLoggedIn.value) {
-      addToFavourite();
-    } else {
-      _showLoginPrompt();
-    }
-  }
+  //   _tabController.addListener(() {
+  //     final selectedIndex = _tabController.index;
+  //     log("selected index $selectedIndex");
+  //     final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
+  //         ? cdata[selectedIndex].offlineAudioPath!
+  //         : cdata[selectedIndex].audiourl.isNotEmpty
+  //             ? cdata[selectedIndex].audiourl
+  //             : null;
 
-  void _showLoginPrompt() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Login Required"),
-          content: const Text("Please log in to add this item to favorites."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-                Get.to(() => LoginView()); // Navigate to login screen
-              },
-              child: const Text("Login"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  //     if (newAudioUrl != currentAudioUrl && newAudioUrl!.isNotEmpty) {
+  //       setState(() {
+  //         currentAudioUrl = newAudioUrl;
+  //       });
+  //       Get.find<CategoryDetailController>().initializeAudio(newAudioUrl);
+  //     }
+  //   });
+  //   log("---You are in CategoryDetailView---");
+  // }
 
+  
   @override
   void dispose() {
     _tabController.dispose();
@@ -347,13 +288,13 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               child: const Icon(Icons.copy),
               onPressed: () {
                 // Call the copy functionality from LyricsTab
-                _copyAllLyricsToClipboard(
+                controller.copyAllLyricsToClipboard(
                     context, availableLyrics, categoryDetails.title);
               },
             ),
             FloatingActionButton.small(
               heroTag: null,
-              onPressed: _handleAddToFavourite,
+              onPressed: ()=>controller.handleAddToFavourite,
               child: const Icon(Icons.favorite),
             ),
             FloatingActionButton.small(
@@ -466,34 +407,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           ),
         ),
       ),
-    );
-  }
-
-  void _copyAllLyricsToClipboard(BuildContext context,
-      Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
-    final allLyrics =
-        availableLyrics.values.expand((lyricsList) => lyricsList).toList();
-
-    Set<Lyrics> uniqueLyricsSet = {};
-
-    for (var lyrics in allLyrics) {
-      uniqueLyricsSet.add(lyrics);
-    }
-
-    String combinedLyrics =
-        '${TextCleanerService.cleanText(categoryTitle)}\n\n';
-
-    for (var lyrics in uniqueLyricsSet) {
-      combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
-      combinedLyrics +=
-          '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
-      combinedLyrics += '${TextCleanerService.cleanText(lyrics.translation)}\n';
-    }
-
-    Clipboard.setData(ClipboardData(text: combinedLyrics));
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("All lyrics copied to clipboard!")),
     );
   }
 
