@@ -4,7 +4,7 @@ import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/reminder_model.dart';
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/services/local_notifications.dart';
+import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/views/category_detail_view.dart';
 import 'package:get/get.dart';
@@ -21,7 +21,7 @@ class ReminderController extends GetxController {
   void removeReminder(int index) {
     log("index to be removed and cancelled ${index.toString()}");
     DbServices.instance.deleteReminder(reminders[index].id);
-    LocalNotifications.cancelNotification(reminders[index].id);
+    LocalNotificationServices.cancelNotification(reminders[index].id);
     reminders.removeAt(index);
     Get.snackbar("Deleted", "Deleted the reminder");
   }

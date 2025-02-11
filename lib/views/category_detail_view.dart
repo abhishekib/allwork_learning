@@ -122,9 +122,30 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       log("availableTypes length ${availableTypes.length}");
       _tabController.index = bookmarkedTab;
       controller.changeType(availableTypes[bookmarkedTab]);
+
+      currentAudioUrl = cdata[bookmarkedTab].audiourl;
+      currentContentDataId = bookmarkedTab;
+    } else {
+      currentAudioUrl = cdata[0].audiourl;
+      currentContentDataId = 0;
     }
 
-    //log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
+    _tabController.addListener(() {
+      final selectedIndex = _tabController.index;
+      log("Tab changed to $selectedIndex");
+      final String newAudioUrl = cdata[selectedIndex].audiourl;
+      log("New audio url is $newAudioUrl");
+      log("boolean values ${newAudioUrl.isNotEmpty.toString()}");
+      // if (newAudioUrl != currentAudioUrl && newAudioUrl.isNotEmpty) {
+      //   log("Setting state");
+      setState(() {
+        currentAudioUrl = newAudioUrl;
+      });
+      controller.initializeAudio(newAudioUrl);
+    });
+    //});
+
+    // log("Let's check the audio offline path ${cdata[0].offlineAudioPath}");
 
     // if (cdata!.isNotEmpty &&
     //     cdata[0].offlineAudioPath != null &&
@@ -132,40 +153,9 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     //   isAudioDownloaded = true;
     //   log("Audio is already downloaded");
     //   log("Audio path is ${cdata[0].offlineAudioPath}");
+    // }
   }
 
-  // final String? initialAudioUrl = isAudioDownloaded
-  //     ? cdata[0].offlineAudioPath!
-  //     : cdata[0].audiourl.isNotEmpty
-  //         ? cdata[0].audiourl
-  //         : null;
-
-  //   currentContentDataId = cdata![0].id ?? 0;
-
-  //   currentAudioUrl = initialAudioUrl;
-
-  //   log("initial Audio Url $currentAudioUrl");
-
-  //   _tabController.addListener(() {
-  //     final selectedIndex = _tabController.index;
-  //     log("selected index $selectedIndex");
-  //     final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
-  //         ? cdata[selectedIndex].offlineAudioPath!
-  //         : cdata[selectedIndex].audiourl.isNotEmpty
-  //             ? cdata[selectedIndex].audiourl
-  //             : null;
-
-  //     if (newAudioUrl != currentAudioUrl && newAudioUrl!.isNotEmpty) {
-  //       setState(() {
-  //         currentAudioUrl = newAudioUrl;
-  //       });
-  //       Get.find<CategoryDetailController>().initializeAudio(newAudioUrl);
-  //     }
-  //   });
-  //   log("---You are in CategoryDetailView---");
-  // }
-
-  
   @override
   void dispose() {
     _tabController.dispose();
@@ -190,7 +180,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       );
     }
 
-    log("Current audio url $currentAudioUrl");
+    log("Re build Screen");
+    log("Current audio url is ${currentAudioUrl?.isNotEmpty}");
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -294,7 +285,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             ),
             FloatingActionButton.small(
               heroTag: null,
-              onPressed: ()=>controller.handleAddToFavourite,
+              onPressed: () => controller.handleAddToFavourite(
+                  context, categoryDetails, menuItem),
               child: const Icon(Icons.favorite),
             ),
             FloatingActionButton.small(
@@ -409,33 +401,4 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       ),
     );
   }
-
-  // void _shareAllLyrics(BuildContext context,
-  //     Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
-  //   final allLyrics =
-  //       availableLyrics.values.expand((lyricsList) => lyricsList).toList();
-
-  //   Set<Lyrics> uniqueLyricsSet = {};
-
-  //   for (var lyrics in allLyrics) {
-  //     uniqueLyricsSet.add(lyrics);
-  //   }
-
-  //   String combinedLyrics =
-  //       '${TextCleanerService.cleanText(categoryTitle)}\n\n';
-
-  //   for (var lyrics in uniqueLyricsSet) {
-  //     combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
-  //     combinedLyrics +=
-  //         '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
-  //     combinedLyrics +=
-  //         '${TextCleanerService.cleanText(lyrics.translation)}\n\n';
-  //   }
-
-  //   Share.share(combinedLyrics, subject: categoryTitle);
-
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //     const SnackBar(content: Text("Sharing lyrics...")),
-  //   );
-  // }
 }

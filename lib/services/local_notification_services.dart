@@ -13,7 +13,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 /// Handles local notifications functionality for the application.
-class LocalNotifications {
+class LocalNotificationServices {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static final onClickNotification = BehaviorSubject<String>();

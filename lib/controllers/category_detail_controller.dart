@@ -5,7 +5,7 @@ import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/services/local_notifications.dart';
+import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -142,7 +142,7 @@ class CategoryDetailController extends GetxController {
   void scheduleNotification(
       Category category, DateTime dateTime, String title) {
     //log("Scheduling notification for: $date with title: $title");
-    LocalNotifications.showScheduleNotification(
+    LocalNotificationServices.showScheduleNotification(
         category: category, dateTime: dateTime);
 
     // LocalNotifications.showPeriodicNotifications(
@@ -246,4 +246,67 @@ void handleAddToFavourite(BuildContext context, Category categoryDetails, String
       showLoginPrompt(context);
     }
   }
+
+
+
+  // final String? initialAudioUrl = isAudioDownloaded
+  //     ? cdata[0].offlineAudioPath!
+  //     : cdata[0].audiourl.isNotEmpty
+  //         ? cdata[0].audiourl
+  //         : null;
+
+  //   currentContentDataId = cdata![0].id ?? 0;
+
+  //   currentAudioUrl = initialAudioUrl;
+
+  //   log("initial Audio Url $currentAudioUrl");
+
+  //   _tabController.addListener(() {
+  //     final selectedIndex = _tabController.index;
+  //     log("selected index $selectedIndex");
+  //     final String? newAudioUrl = cdata[selectedIndex].offlineAudioPath != null
+  //         ? cdata[selectedIndex].offlineAudioPath!
+  //         : cdata[selectedIndex].audiourl.isNotEmpty
+  //             ? cdata[selectedIndex].audiourl
+  //             : null;
+
+  //     if (newAudioUrl != currentAudioUrl && newAudioUrl!.isNotEmpty) {
+  //       setState(() {
+  //         currentAudioUrl = newAudioUrl;
+  //       });
+  //       Get.find<CategoryDetailController>().initializeAudio(newAudioUrl);
+  //     }
+  //   });
+  //   log("---You are in CategoryDetailView---");
+  // }
+
+  // void _shareAllLyrics(BuildContext context,
+  //     Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+  //   final allLyrics =
+  //       availableLyrics.values.expand((lyricsList) => lyricsList).toList();
+
+  //   Set<Lyrics> uniqueLyricsSet = {};
+
+  //   for (var lyrics in allLyrics) {
+  //     uniqueLyricsSet.add(lyrics);
+  //   }
+
+  //   String combinedLyrics =
+  //       '${TextCleanerService.cleanText(categoryTitle)}\n\n';
+
+  //   for (var lyrics in uniqueLyricsSet) {
+  //     combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
+  //     combinedLyrics +=
+  //         '${TextCleanerService.cleanText(lyrics.translitration)}\n\n';
+  //     combinedLyrics +=
+  //         '${TextCleanerService.cleanText(lyrics.translation)}\n\n';
+  //   }
+
+  //   Share.share(combinedLyrics, subject: categoryTitle);
+
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(content: Text("Sharing lyrics...")),
+  //   );
+  // }
+
 }

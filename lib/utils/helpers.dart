@@ -239,7 +239,7 @@ class ReminderDataHelpers {
 
 class CategoryHelpers {
   static CategoryEntity toCategoryEntity(Category category) {
-    log("Category data in helpers ${category.toString()}");
+    //log("Category data in helpers ${category.toString()}");
 
     List<ContentDataEntity> contentDataEntities = [];
 
