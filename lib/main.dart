@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:allwork/firebase_options.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/services/local_notifications.dart';
+import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/helpers.dart';
@@ -24,18 +24,35 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
+
+  bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
-  await LocalNotifications.init();
+  await LocalNotificationServices.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // var initialNotification =
-  //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
-  // if (initialNotification?.didNotificationLaunchApp == true) {
-  //   log("Notification clicked ");
-  LocalNotifications.onClickNotification.stream.listen((event) {
+  var initialNotification =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+
+  if (initialNotification?.didNotificationLaunchApp == true) {
+    fromNotification = true;
+    Future.delayed(Duration(seconds: 1), () {
+      Get.to(() => CategoryDetailView(), arguments: {
+        'fromBookmark': false,
+        'category': CategoryHelpers.toCategory(DbServices.instance
+            .getReminderData(
+                initialNotification!.notificationResponse!.payload!)!
+            .category!),
+        'language': 'English',
+        'menuItem': ''
+      });
+    });
+  }
+
+//listen to the stream of notification click event when the app is running
+  LocalNotificationServices.onClickNotification.stream.listen((event) {
     log("Notification clicked");
     log(event);
 
@@ -48,14 +65,16 @@ Future<void> main() async {
     });
   });
 
-  runApp(const MyApp());
+  runApp(MyApp(fromNotification: fromNotification));
+
   if (Platform.isAndroid || Platform.isIOS) {
     KeepScreenOn.turnOn();
   }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  bool fromNotification = false;
+  MyApp({super.key, required this.fromNotification});
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +101,7 @@ class MyApp extends StatelessWidget {
       ),
       getPages: [
         GetPage(name: '/', page: () => const MainMenuView()),
-        GetPage(name: '/splash', page: () => const SplashScreen()),
+        GetPage(name: '/splash', page: () => SplashScreen(fromNotification: fromNotification)),
         GetPage(
             name: '/menu-detail',
             page: () => MenuDetailView(

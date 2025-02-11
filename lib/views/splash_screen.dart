@@ -4,7 +4,8 @@ import 'package:allwork/utils/colors.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  bool fromNotification = false;
+  SplashScreen({super.key, required this.fromNotification});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -24,9 +25,11 @@ class _SplashScreenState extends State<SplashScreen>
       });
     });
 
-    Future.delayed(const Duration(seconds: 3), () {
-      Get.offAllNamed('/');
-    });
+    if (widget.fromNotification==false) {
+      Future.delayed(const Duration(seconds: 3), () {
+        Get.offAllNamed('/');
+      });
+    }
   }
 
   @override
