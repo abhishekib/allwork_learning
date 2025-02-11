@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:core';
 import 'dart:developer';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:flutter/services.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,6 +16,16 @@ import 'package:timezone/timezone.dart' as tz;
 class LocalNotifications {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
+  static final onClickNotification = BehaviorSubject<String>();
+
+  static void onNotificationTap(
+      NotificationResponse notificationResponse) async {
+    log("In on Notification ");
+    log(notificationResponse.toString());
+    log(notificationResponse.payload.toString());
+    
+    onClickNotification.add(notificationResponse.payload!);
+  }
 
   // Channel IDs for different notification types
   static const String _simpleChannelId = 'simple_channel';
@@ -49,46 +61,43 @@ class LocalNotifications {
     await androidImplementation?.requestNotificationsPermission();
 
     // Initialize with callback for handling notification taps
-    await _notificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        log('Notification clicked with payload: ${response.payload}');
-      },
-    );
+
+    await _notificationsPlugin.initialize(initializationSettings,
+        onDidReceiveNotificationResponse: onNotificationTap,
+        onDidReceiveBackgroundNotificationResponse: onNotificationTap);
   }
 
   /// Shows an immediate notification
-  static Future<void> showSimpleNotification({
-    required String title,
-    required String body,
-    required String payload,
-  }) async {
-    const notificationDetails = NotificationDetails(
-      android: AndroidNotificationDetails(
-        _simpleChannelId,
-        'Simple Notifications',
-        channelDescription: 'Channel for immediate notifications',
-        importance: Importance.max,
-        priority: Priority.high,
-        enableVibration: true,
-        playSound: true,
-      ),
-    );
+  // static Future<void> showSimpleNotification({
+  //   required String title,
+  //   required String body,
+  //   required Category categoryPayload,
+  // }) async {
+  //   const notificationDetails = NotificationDetails(
+  //     android: AndroidNotificationDetails(
+  //       _simpleChannelId,
+  //       'Simple Notifications',
+  //       channelDescription: 'Channel for immediate notifications',
+  //       importance: Importance.max,
+  //       priority: Priority.high,
+  //       enableVibration: true,
+  //       playSound: true,
+  //     ),
+  //   );
 
-    await _notificationsPlugin.show(
-      0,
-      title,
-      body,
-      notificationDetails,
-      payload: payload,
-    );
-  }
+  //   await _notificationsPlugin.show(
+  //     0,
+  //     title,
+  //     body,
+  //     notificationDetails,
+  //     payload: categoryPayload.toString(),
+  //   );
+  // }
 
   /// Schedules a notification to be shown after a specific delay
   static Future<void> showScheduleNotification({
     required Category category,
     required DateTime dateTime,
-    required String payload,
   }) async {
     // Cancel any existing scheduled notifications first
     //await _notificationsPlugin.cancel(1);
@@ -112,16 +121,17 @@ class LocalNotifications {
     final scheduledTime = tz.TZDateTime.from(dateTime, tz.local);
 
     try {
+      log("Scheduling local notification with payload: ${category.title}");
       await _notificationsPlugin.zonedSchedule(
-       DbServices.instance.getNextReminderId(),
-        TextCleanerService.cleanText(category.title) ,
+        DbServices.instance.getNextReminderId(),
+        TextCleanerService.cleanText(category.title),
         TextCleanerService.cleanText("reminder for ${category.title}"),
         scheduledTime,
         notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
-        payload: payload,
+        payload: category.title,
       );
 
       log("Notification scheduled for: $scheduledTime");
@@ -129,8 +139,6 @@ class LocalNotifications {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt(
           'totalNotifications', (prefs.getInt('totalNotifications') ?? 0) + 1);
-
-
 
       DbServices.instance
           .writeReminder(category, tz.local.toString(), scheduledTime);
@@ -146,7 +154,6 @@ class LocalNotifications {
   static Future<void> cancelNotification(int notificationId) async {
     await _notificationsPlugin.cancel(notificationId);
   }
-
 }
 
 /// Handles platform-specific method channel calls
