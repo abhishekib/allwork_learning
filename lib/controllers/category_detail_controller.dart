@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:allwork/controllers/bookmark_controller.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/modals/category.dart';
@@ -157,6 +158,7 @@ class CategoryDetailController extends GetxController {
   void removeBookmark(Category category) {
     log("remove bookmark");
     DbServices.instance.deleteBookmark(category.title);
+    Get.find<BookmarkController>().onInit();
   }
 
   void copyAllLyricsToClipboard(BuildContext context,

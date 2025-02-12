@@ -36,6 +36,7 @@ Future<void> main() async {
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
+//if the app starts with click on notification
   if (initialNotification?.didNotificationLaunchApp == true) {
     fromNotification = true;
     Future.delayed(Duration(seconds: 1), () {
