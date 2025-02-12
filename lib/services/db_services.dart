@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/entities/audio_download_mapping.dart';
 import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
@@ -45,7 +46,8 @@ class DbServices {
       ContentDataEntity.schema,
       LyricsEntity.schema,
       ReminderEntity.schema,
-      ReminderDataEntity.schema
+      ReminderDataEntity.schema,
+      AudioDownloadMapping.schema
     ]);
     realm = Realm(config);
   }
@@ -263,14 +265,35 @@ class DbServices {
 
       if (reminderEntity != null) {
         if (getReminderTitleCount(reminderEntity.title) == 1) {
-          realm.delete<ReminderDataEntity>(getReminderData(reminderEntity.title)!);
+          realm.delete<ReminderDataEntity>(
+              getReminderData(reminderEntity.title)!);
         }
-        realm.delete<ReminderEntity>(reminderEntity);        
+        realm.delete<ReminderEntity>(reminderEntity);
       }
     });
   }
 
   int getReminderTitleCount(String title) {
     return realm.all<ReminderEntity>().query("title == '$title'").length;
+  }
+
+  Future<void> writeAudioDownloadPath(
+      String audioUrl, String audioDownloadPath) async {
+    realm.write(() {
+      realm.add(AudioDownloadMapping(audioUrl, audioDownloadPath));
+    });
+  }
+
+  String? getAudioDownloadPath(String audioUrl) {
+    try{
+    return realm
+        .all<AudioDownloadMapping>()
+        .query("audioUrl == '$audioUrl'")
+        .first
+        .audioDownloadPath;
+    }
+    catch(e){
+      return null;
+    }
   }
 }

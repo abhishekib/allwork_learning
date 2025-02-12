@@ -249,7 +249,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   widget.controller.downloaded.value
                       ? const SizedBox.shrink()
                       : widget.controller.isDownloading.value
-                          ? const CircularProgressIndicator(color: Colors.white)
+                          ? const CircularProgressIndicator(color: Colors.blue)
                           : IconButton(
                               onPressed: () {
                                 if (!widget.controller.downloaded.value) {
@@ -262,13 +262,13 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                                       .downloadAudio(
                                           widget.audioUrl, widget.cDataId)
                                       .then((savedPath) {
+                                    log("Download complete");
                                     setState(() {
                                       widget.controller.downloaded.value = true;
                                       widget.controller.isDownloading.value =
                                           false;
                                       widget.audioUrl = savedPath!;
                                     });
-                                    log("Download complete");
                                   }).catchError((error) {
                                     widget.controller.isDownloading.value =
                                         false;

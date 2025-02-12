@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
@@ -24,8 +25,9 @@ class AudioProvider {
         }
       });
 
-      //DbServices.instance.saveOfflineCategoryDataAudio(savePath, contentDataId);
-
+      // Save the audio file to the database
+      DbServices.instance.writeAudioDownloadPath(url, savePath);
+      
       return savePath;
     } catch (e) {
       log(e.toString());

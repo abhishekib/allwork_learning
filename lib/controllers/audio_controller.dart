@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:allwork/services/db_services.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
 import 'package:audioplayers/audioplayers.dart';
@@ -22,13 +25,26 @@ class AudioController extends GetxController {
   AudioPlayer get audioplayer => _audioPlayer;
 
   Future<void> setupAudio(String audioUrl) async {
+    log("Setup audio called with url: $audioUrl");
     try {
       isLoading.value = true;
 
       // Load playback speed before setting the source to ensure it applies correctly
       await loadPlaybackSpeed();
 
-      await _audioPlayer.setSource(UrlSource(audioUrl));
+      //check if audio is already downloaded or not
+      String? audioDownloadPath =
+          DbServices.instance.getAudioDownloadPath(audioUrl);
+      log("Audio download path: $audioDownloadPath");
+
+      
+      if (audioDownloadPath != null) {
+        log("Audio already downloaded in path: $audioDownloadPath");
+        downloaded.value = true;
+        await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
+      } else {
+        await _audioPlayer.setSource(UrlSource(audioUrl));
+      }
 
       await Future.delayed(const Duration(milliseconds: 500));
 
@@ -123,7 +139,7 @@ class AudioController extends GetxController {
     currentTime.value = position;
   }
 
-    String formatDuration(Duration duration, {bool showHours = true}) {
+  String formatDuration(Duration duration, {bool showHours = true}) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     final hours = twoDigits(duration.inHours);
     final minutes = twoDigits(duration.inMinutes.remainder(60));
