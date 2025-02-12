@@ -403,7 +403,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         widget.controller.downloaded.value
             ? const SizedBox.shrink()
             : widget.controller.isDownloading.value
-                ? const CircularProgressIndicator(color: Colors.white)
+                ? const CircularProgressIndicator(color: Colors.blue)
                 : IconButton(
                     onPressed: () {
                       if (!widget.controller.downloaded.value) {
