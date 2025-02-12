@@ -17,6 +17,7 @@ class LyricsTab extends StatefulWidget {
   final String selectedLanguage;
   final Category categoryDetails;
   final int tabIndex;
+  final String menuItem;
   bool isBookmarked;
   final bool fromBookmark;
   int? bookmarkedLyricsIndex;
@@ -29,6 +30,8 @@ class LyricsTab extends StatefulWidget {
     required this.categoryDetails,
     //tabIndex to keep track of the tab the lyrics list is in
     required this.tabIndex,
+    //menuItem to keep track of the menu item
+    required this.menuItem,
     //isBookmarked - whether the lyrics is bookmarked or not
     required this.isBookmarked,
     //fromBookmark - whether the navigation is coming from bookmark or not
@@ -256,6 +259,8 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _buildEnglishText(Lyrics lyrics) {
+    log("--------------widget.menuItem : ${widget.menuItem}-------------");
+
     if (lyrics.english != null &&
         (lyrics.english!.isEmpty || lyrics.english?.trim() == "&nbsp;")) {
       return Visibility(visible: false, child: SizedBox.shrink());
@@ -282,8 +287,8 @@ class LyricsTabState extends State<LyricsTab> {
           "html": Style(
             // alignment: Alignment.lef,
             fontSize: FontSize(20),
-            textAlign: TextAlign.right,
-            direction: TextDirection.ltr,
+            textAlign: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah" ?  TextAlign.right : TextAlign.left,
+            direction: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah" ? TextDirection.rtl :  TextDirection.ltr,
             color: Colors.red,
             fontWeight: FontWeight.bold,
           ),

@@ -390,6 +390,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                         bookmarkedLyricsIndex: bookmarkedLyricsIndex,
                         lyricsList: lyricsList,
                         tabIndex: availableTypes.indexOf(type),
+                        menuItem: menuItem,
                         selectedLanguage: selectedLanguage,
                         categoryDetails: categoryDetails);
                   }).toList(),
