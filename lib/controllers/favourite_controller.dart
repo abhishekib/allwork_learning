@@ -71,6 +71,7 @@ class FavouriteController extends GetxController {
       favouriteItems.value = fetchedItems;
 
       log("Mapped Favourite Items: ${favouriteItems.length}");
+      log(favouriteItems.toString());
     } catch (e) {
       log("Error fetching favourite items: $e");
       hasError.value = true;

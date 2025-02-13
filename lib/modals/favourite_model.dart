@@ -20,4 +20,9 @@ class FavouriteModel {
           .toList(),
     );
   }
+
+  @override
+  String toString() {
+    return 'FavouriteModel{id: $id, title: $title, cdata: $cdata}';
+  }
 }

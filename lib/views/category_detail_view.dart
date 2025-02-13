@@ -43,8 +43,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late int currentContentDataId;
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
-  late String menuItem;
-  late bool isBookmarked;
+  String menuItem ='';
+  bool isBookmarked = false;
   bool fromBookmark = false;
   int bookmarkedTab = 0;
   int bookmarkedLyricsIndex = -1;
@@ -90,6 +90,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         isFav: "",
         cdata: data.cdata,
       );
+
     } else {
       categoryDetails = Category(
         category: '',
