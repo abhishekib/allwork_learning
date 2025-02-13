@@ -338,7 +338,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     controller: _audioController,
                     downloaded: isAudioDownloaded,
                     audioUrl: currentAudioUrl!,
-                    cDataId: currentContentDataId,
+                    
                     onPositionChanged: (currentPosition) {
                       controller.currentTime.value =
                           currentPosition.inMilliseconds.toDouble();

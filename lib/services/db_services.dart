@@ -312,4 +312,16 @@ class DbServices {
       return null;
     }
   }
+
+  List<String> getAudioDownloadPaths() {
+    return realm.all<AudioDownloadMapping>().map((e) => e.audioDownloadPath).toList();
+  }
+
+  Future<void> deleteAudioDownloadPath(String audioDownloadPath) async {
+    realm.write(() {
+      realm.delete<AudioDownloadMapping>(
+          realm.all<AudioDownloadMapping>().query("audioDownloadPath == '$audioDownloadPath'").first);
+    });
+  }
+
 }

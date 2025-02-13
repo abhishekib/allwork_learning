@@ -8,10 +8,7 @@ import 'package:get/get.dart';
 
 class BookmarkView extends StatelessWidget {
   BookmarkView({super.key});
-
-  final instance = Get.lazyPut(() => BookmarkController(), fenix: true);
-
-  final controller = Get.find<BookmarkController>();
+  final controller = Get.put(BookmarkController());
   @override
   Widget build(BuildContext context) {
     return BackgroundWrapper(
@@ -56,7 +53,7 @@ class BookmarkView extends StatelessWidget {
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   spacing: 10,
-                                  children: [                                    
+                                  children: [
                                     Container(
                                       decoration: BoxDecoration(
                                         color: AppColors.backgroundBlue,

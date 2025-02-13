@@ -12,7 +12,7 @@ class AudioProvider {
 
   AudioProvider(this.token);
 
-  Future<String?> downloadAudio(String url, int contentDataId) async {
+  Future<String?> downloadAudio(String url) async {
     try {
       final directory = await getTemporaryDirectory();
       final filePath = Uri.parse(url).path;
