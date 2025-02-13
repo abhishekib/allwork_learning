@@ -33,20 +33,20 @@ class CustomDrawer extends StatelessWidget {
               child: ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  if (!loginController.isLoggedIn.value) ...[
-                    ListTile(
-                      leading: const Icon(
-                        Icons.home_outlined,
-                        color: Colors.white,
-                      ),
-                      title: const Text(
-                        'Home',
-                        style: AppTextStyles.whiteBoldText,
-                      ),
-                      onTap: () {
-                        Get.back();
-                      },
+                  ListTile(
+                    leading: const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
                     ),
+                    title: const Text(
+                      'Home',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.back();
+                    },
+                  ),
+                  if (!loginController.isLoggedIn.value) ...[
                     ListTile(
                       leading: const Icon(
                         Icons.person_add,
@@ -235,7 +235,7 @@ class CustomDrawer extends StatelessWidget {
                       style: AppTextStyles.whiteBoldText,
                     ),
                     onTap: () {
-                      Get.to(()=>HijriDateAdjustmentView());
+                      Get.to(() => HijriDateAdjustmentView());
                     },
                   ),
                   ListTile(
@@ -265,7 +265,8 @@ class CustomDrawer extends StatelessWidget {
                     },
                   ),
                   ListTile(
-                    leading: Image.asset("assets/icons/credit.png", width: 20, height: 20),
+                    leading: Image.asset("assets/icons/credit.png",
+                        width: 20, height: 20),
                     title: const Text(
                       'Credit',
                       style: AppTextStyles.whiteBoldText,
