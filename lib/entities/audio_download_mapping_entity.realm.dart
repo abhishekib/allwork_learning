@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'audio_download_mapping.dart';
+part of 'audio_download_mapping_entity.dart';
 
 // **************************************************************************
 // RealmObjectGenerator

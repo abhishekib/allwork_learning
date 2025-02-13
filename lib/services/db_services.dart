@@ -1,6 +1,7 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/audio_download_mapping.dart';
+import 'package:allwork/entities/about_us_entity.dart';
+import 'package:allwork/entities/audio_download_mapping_entity.dart';
 import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
@@ -10,6 +11,7 @@ import 'package:allwork/entities/menu_entities/menu_list_entity.dart';
 import 'package:allwork/entities/menu_entities/menu_list_gujrati_entity.dart';
 import 'package:allwork/entities/menu_entities/prayer_time_entity.dart';
 import 'package:allwork/entities/reminder_entity.dart';
+import 'package:allwork/modals/about_us_response.dart';
 import 'package:allwork/modals/animated_text.dart';
 import 'package:allwork/modals/api_response_handler.dart';
 import 'package:allwork/modals/category.dart';
@@ -47,9 +49,24 @@ class DbServices {
       LyricsEntity.schema,
       ReminderEntity.schema,
       ReminderDataEntity.schema,
-      AudioDownloadMapping.schema
+      AudioDownloadMapping.schema,
+      AboutUsEntity.schema
     ]);
     realm = Realm(config);
+  }
+
+  Future<void> writeAboutUs(AboutUsResponse aboutUsResponse) async {
+    realm.write(() {
+      // Delete all existing `AboutUsEntity` objects
+      realm.deleteAll<AboutUsEntity>();
+      // Add the new object
+      return realm.add(AboutUsEntity(aboutUsResponse.data));
+    });
+    log("written about us in db");
+  }
+
+  AboutUsResponse getAboutUs() {
+    return AboutUsResponse(data: realm.all<AboutUsEntity>().first.data);
   }
 
 //save the message model in db
@@ -285,14 +302,13 @@ class DbServices {
   }
 
   String? getAudioDownloadPath(String audioUrl) {
-    try{
-    return realm
-        .all<AudioDownloadMapping>()
-        .query("audioUrl == '$audioUrl'")
-        .first
-        .audioDownloadPath;
-    }
-    catch(e){
+    try {
+      return realm
+          .all<AudioDownloadMapping>()
+          .query("audioUrl == '$audioUrl'")
+          .first
+          .audioDownloadPath;
+    } catch (e) {
       return null;
     }
   }

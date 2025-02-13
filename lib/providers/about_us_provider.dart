@@ -1,4 +1,8 @@
+import 'dart:developer';
+import 'dart:isolate';
+
 import 'package:allwork/modals/about_us_response.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 
@@ -24,7 +28,20 @@ class AboutUsProvider {
       );
 
       if (response.statusCode == 200) {
-        return AboutUsResponse.fromJson(response.data);
+        AboutUsResponse responseModel = AboutUsResponse.fromJson(response.data);
+
+        final receivePort = ReceivePort();
+        await Isolate.spawn((SendPort sendPort) {
+          DbServices.instance.writeAboutUs(responseModel);
+          sendPort.send('Data saved in DB of About Us');
+          Isolate.exit();
+        }, receivePort.sendPort);
+
+        receivePort.listen((message) {
+          log(message);
+        });
+        
+        return responseModel;
       } else {
         throw Exception('Failed to get Our About Us Data');
       }

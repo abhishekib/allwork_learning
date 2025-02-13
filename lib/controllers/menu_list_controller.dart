@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/about_us_controller.dart';
 import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/modals/menu_list.dart';
 import 'package:allwork/providers/menu_provider.dart';
@@ -53,6 +54,8 @@ class MenuListController extends GetxController {
       for (var gujaratiMenuItem in gujaratiMenuList.value.items) {
         categoryListController.fetchCategoryData(gujaratiMenuItem, true);
       }
+
+      AboutUsController().fetchTextData();
     } catch (e) {
       log("Error fetchnig all data");
     }
