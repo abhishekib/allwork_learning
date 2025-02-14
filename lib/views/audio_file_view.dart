@@ -21,31 +21,55 @@ class AudioFileView extends StatelessWidget {
                 style: AppTextStyles.whiteBoldTitleText,
               ),
             ),
-            body: controller.audioFiles.isEmpty
-                ? Center(
-                    child: Text(
-                      "No audio files found",
-                      style: AppTextStyles.whiteBoldText,
+            body: Obx(()=>
+               controller.audioFiles.isEmpty
+                  ? Center(
+                      child: Text(
+                        "No audio files found",
+                        style: AppTextStyles.whiteBoldText,
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView.builder(
+                            itemCount: controller.audioFiles.length,
+                            itemBuilder: (context, index) {
+                              AudioController audioController = AudioController();
+                              return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: ListTile(
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        FittedBox(fit: BoxFit.scaleDown,
+                                          child: Text(
+                                              controller.extractAudioName(
+                                                  controller.audioFiles[index]),
+                                              style: AppTextStyles.whiteText),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            controller.deleteAudioFile(
+                                                controller.audioFiles[index]);
+                                          },
+                                          child: Icon(Icons.delete,
+                                              color: Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                    subtitle: AudioPlayerWidget(
+                                        downloaded: true,
+                                        audioUrl: controller.audioFiles[index],
+                                        onPositionChanged: (currentPosition) {
+                                          audioController.currentTime.value =
+                                              currentPosition;
+                                        },
+                                        controller: audioController),
+                                  ));
+                            }),
+                      
                     ),
-                  )
-                : Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                        itemCount: controller.audioFiles.length,
-                        itemBuilder: (context, index) {
-                          AudioController audioController = AudioController();
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: AudioPlayerWidget(
-                                downloaded: true,
-                                audioUrl: controller.audioFiles[index],
-                                onPositionChanged: (currentPosition) {
-                                  audioController.currentTime.value =
-                                      currentPosition;
-                                },
-                                controller: audioController),
-                          );
-                        }),
-                  )));
+            )));
   }
 }
