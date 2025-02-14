@@ -21,24 +21,31 @@ class AudioFileView extends StatelessWidget {
                 style: AppTextStyles.whiteBoldTitleText,
               ),
             ),
-            body: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView.builder(
-                  itemCount: controller.audioFiles.length,
-                  itemBuilder: (context, index) {
-                    AudioController audioController = AudioController();
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: AudioPlayerWidget(
-                          downloaded: true,
-                          audioUrl: controller.audioFiles[index],
-                          onPositionChanged:(currentPosition) {
-                      audioController.currentTime.value =
-                          currentPosition;
-                    },
-                          controller: audioController),
-                    );
-                  }),
-            )));
+            body: controller.audioFiles.isEmpty
+                ? Center(
+                    child: Text(
+                      "No audio files found",
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                  )
+                : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                        itemCount: controller.audioFiles.length,
+                        itemBuilder: (context, index) {
+                          AudioController audioController = AudioController();
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: AudioPlayerWidget(
+                                downloaded: true,
+                                audioUrl: controller.audioFiles[index],
+                                onPositionChanged: (currentPosition) {
+                                  audioController.currentTime.value =
+                                      currentPosition;
+                                },
+                                controller: audioController),
+                          );
+                        }),
+                  )));
   }
 }
