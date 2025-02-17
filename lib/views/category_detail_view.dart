@@ -7,12 +7,14 @@ import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:bottom_picker/bottom_picker.dart';
+import 'package:day_picker/day_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -43,7 +45,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   late int currentContentDataId;
   late Map<String, List<Lyrics>> availableLyrics;
   String selectedLanguage = 'English';
-  String menuItem ='';
+  String menuItem = '';
   bool isBookmarked = false;
   bool fromBookmark = false;
   int bookmarkedTab = 0;
@@ -90,7 +92,17 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         isFav: "",
         cdata: data.cdata,
       );
-
+      if (DbServices.instance.isBookmarked(categoryDetails.title)) {
+        isBookmarked = true;
+        log("Is not navigating from bookmark but is bookmarked");
+        BookmarkDataEntity bookmarkData =
+            DbServices.instance.getBookmarkData(categoryDetails.title)!;
+        bookmarkedTab = bookmarkData.lyricsType;
+        bookmarkedLyricsIndex = bookmarkData.lyricsIndex;
+      } else {
+        log("No bookmarks present here");
+        isBookmarked = false;
+      }
     } else {
       categoryDetails = Category(
         category: '',
@@ -135,6 +147,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       final selectedIndex = _tabController.index;
       log("Tab changed to $selectedIndex");
       final String newAudioUrl = cdata[selectedIndex].audiourl;
+      
       log("New audio url is $newAudioUrl");
       log("boolean values ${newAudioUrl.isNotEmpty.toString()}");
       // if (newAudioUrl != currentAudioUrl && newAudioUrl.isNotEmpty) {
@@ -293,28 +306,75 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.access_alarm),
-              onPressed: () {
+              onPressed: () async {
                 // Implement favorite functionality
-                BottomPicker.dateTime(
+                // BottomPicker.dateTime(
+                //   pickerTitle: Text(
+                //     'Set the event exact time and date',
+                //     style: TextStyle(
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 15,
+                //       color: Colors.black,
+                //     ),
+                //   ),
+                //   onSubmit: (date) {
+                //     log(date.toString());
+                //     controller.scheduleNotification(categoryDetails, date,
+                //         TextCleanerService.cleanText(categoryDetails.title));
+                //   },
+                //   onClose: () {
+                //     Navigator.pop(context);
+                //   },
+                //   minDateTime: DateTime.now().add(Duration(minutes: 1)),
+                //   initialDateTime: DateTime.now().add(Duration(minutes: 1)),
+                //   buttonSingleColor: Colors.pink,
+                // ).show(context);
+
+                BottomPicker(
+                  onSubmit: (value) async {
+                    log("Days set for the event");
+
+                    TimeOfDay? selectedTime24Hour = await Future.delayed(
+                        Duration(milliseconds: 300), () async {
+                      return await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                    });
+
+                    log("dialogue closed");
+                    if (selectedTime24Hour != null) {
+                      controller
+                          .setSelectedTimeForReminders(selectedTime24Hour, categoryDetails);
+                    }
+                  },
                   pickerTitle: Text(
-                    'Set the event exact time and date',
+                    'Set the Days for the event',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
                       color: Colors.black,
                     ),
                   ),
-                  onSubmit: (date) {
-                    log(date.toString());
-                    controller.scheduleNotification(categoryDetails, date,
-                        TextCleanerService.cleanText(categoryDetails.title));
-                  },
-                  onClose: () {
-                    Navigator.pop(context);
-                  },
-                  minDateTime: DateTime.now().add(Duration(minutes: 1)),
-                  initialDateTime: DateTime.now().add(Duration(minutes: 1)),
-                  buttonSingleColor: Colors.pink,
+                  items: [
+                    //const Placeholder());
+                    SelectWeekDays(
+                      onSelect: (List<String> values) {
+                        log("Days List: $values");
+                        controller.selectedDaysForReminder = values;
+                      },
+                      days: controller.days,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      backgroundColor: Colors.white,
+                      selectedDayTextColor: Colors.black,
+                      selectedDaysFillColor: Colors.white,
+                      unselectedDaysFillColor: AppColors.backgroundBlue,
+                      selectedDaysBorderColor: AppColors.backgroundBlue,
+                      unselectedDaysBorderColor: AppColors.backgroundBlue,
+                      unSelectedDayTextColor: Colors.white,
+                    )
+                  ],
                 ).show(context);
               },
             ),
@@ -338,7 +398,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     controller: _audioController,
                     downloaded: isAudioDownloaded,
                     audioUrl: currentAudioUrl!,
-                    
                     onPositionChanged: (currentPosition) {
                       controller.currentTime.value =
                           currentPosition.inMilliseconds.toDouble();

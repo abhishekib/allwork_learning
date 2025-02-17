@@ -8,6 +8,7 @@ import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/views/login_view.dart';
+import 'package:day_picker/model/day_in_week.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,18 @@ class CategoryDetailController extends GetxController {
   var showTranslation = true.obs;
 
   final LoginController _loginController = Get.put(LoginController());
-  
+
+  List<String> selectedDaysForReminder = [];
+
+  final List<DayInWeek> days = [
+    DayInWeek("Mo", dayKey: "monday"),
+    DayInWeek("Tu", dayKey: "tuesday"),
+    DayInWeek("We", dayKey: "wednesday"),
+    DayInWeek("Th", dayKey: "thursday"),
+    DayInWeek("Fr", dayKey: "friday"),
+    DayInWeek("Sa", dayKey: "saturday"),
+    DayInWeek("Su", dayKey: "sunday"),
+  ];
   get audioPlayer => _audioPlayer;
 
   @override
@@ -189,7 +201,7 @@ class CategoryDetailController extends GetxController {
     );
   }
 
-void showLoginPrompt(BuildContext context) {
+  void showLoginPrompt(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -216,7 +228,8 @@ void showLoginPrompt(BuildContext context) {
     );
   }
 
-  void addToFavourite(BuildContext context, Category categoryDetails, String menuItem) async {
+  void addToFavourite(
+      BuildContext context, Category categoryDetails, String menuItem) async {
     try {
       final favouriteController = Get.find<FavouriteController>();
 
@@ -240,8 +253,8 @@ void showLoginPrompt(BuildContext context) {
     }
   }
 
-
-void handleAddToFavourite(BuildContext context, Category categoryDetails, String menuItem) {
+  void handleAddToFavourite(
+      BuildContext context, Category categoryDetails, String menuItem) {
     if (_loginController.isLoggedIn.value) {
       addToFavourite(context, categoryDetails, menuItem);
     } else {
@@ -249,7 +262,57 @@ void handleAddToFavourite(BuildContext context, Category categoryDetails, String
     }
   }
 
+  void setSelectedTimeForReminders(TimeOfDay timeOfDay, Category categoryDetails) {
+    DateTime baseDateTime = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day, timeOfDay.hour, timeOfDay.minute);
 
+//schedule notifications for the selected days
+    for (String day in selectedDaysForReminder) {
+      //get the exact dates and time when the reminders will be set
+      DateTime nextDay = _getNextDay(day, baseDateTime);
+     LocalNotificationServices.showScheduleNotification(
+          category:categoryDetails, dateTime: nextDay);
+    }
+  }
+
+//method to get the next Date of the week of the given day
+  DateTime _getNextDay(String day, DateTime baseDateTime) {
+    DateTime now = DateTime.timestamp();
+    int daysUntilSameDay = 0;
+
+    switch (day) {
+      case "monday":
+        daysUntilSameDay = DateTime.monday - now.weekday;
+        break;
+      case "tuesday":
+        daysUntilSameDay = DateTime.tuesday - now.weekday;
+        break;
+      case "wednesday":
+        daysUntilSameDay = DateTime.wednesday - now.weekday;
+        break;
+      case "thursday":
+        daysUntilSameDay = DateTime.thursday - now.weekday;
+        break;
+      case "friday":
+        daysUntilSameDay = DateTime.friday - now.weekday;
+        break;
+      case "saturday":
+        daysUntilSameDay = DateTime.saturday - now.weekday;
+        break;
+      case "sunday":
+        daysUntilSameDay = DateTime.sunday - now.weekday;
+        break;
+      default:
+        log("Error day value");
+        return now;
+    }
+
+    if (daysUntilSameDay <= 0) {
+      daysUntilSameDay += 7;
+    }
+
+    return now.add(Duration(days: daysUntilSameDay));
+  }
 
   // final String? initialAudioUrl = isAudioDownloaded
   //     ? cdata[0].offlineAudioPath!
@@ -310,5 +373,4 @@ void handleAddToFavourite(BuildContext context, Category categoryDetails, String
   //     const SnackBar(content: Text("Sharing lyrics...")),
   //   );
   // }
-
 }

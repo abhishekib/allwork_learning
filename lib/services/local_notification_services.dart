@@ -23,7 +23,7 @@ class LocalNotificationServices {
     log("In on Notification ");
     log(notificationResponse.toString());
     log(notificationResponse.payload.toString());
-    
+
     onClickNotification.add(notificationResponse.payload!);
   }
 
@@ -132,6 +132,7 @@ class LocalNotificationServices {
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
         payload: category.title,
+        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime
       );
 
       log("Notification scheduled for: $scheduledTime");
