@@ -429,11 +429,13 @@ class LyricsEntity extends _LyricsEntity
     String arabic,
     String translitration,
     String translation,
+    String english,
   ) {
     RealmObjectBase.set(this, 'time', time);
     RealmObjectBase.set(this, 'arabic', arabic);
     RealmObjectBase.set(this, 'translitration', translitration);
     RealmObjectBase.set(this, 'translation', translation);
+    RealmObjectBase.set(this, 'english', english);
   }
 
   LyricsEntity._();
@@ -463,6 +465,11 @@ class LyricsEntity extends _LyricsEntity
       RealmObjectBase.set(this, 'translation', value);
 
   @override
+  String get english => RealmObjectBase.get<String>(this, 'english') as String;
+  @override
+  set english(String value) => RealmObjectBase.set(this, 'english', value);
+
+  @override
   Stream<RealmObjectChanges<LyricsEntity>> get changes =>
       RealmObjectBase.getChanges<LyricsEntity>(this);
 
@@ -480,6 +487,7 @@ class LyricsEntity extends _LyricsEntity
       'arabic': arabic.toEJson(),
       'translitration': translitration.toEJson(),
       'translation': translation.toEJson(),
+      'english': english.toEJson(),
     };
   }
 
@@ -492,12 +500,14 @@ class LyricsEntity extends _LyricsEntity
         'arabic': EJsonValue arabic,
         'translitration': EJsonValue translitration,
         'translation': EJsonValue translation,
+        'english': EJsonValue english,
       } =>
         LyricsEntity(
           fromEJson(time),
           fromEJson(arabic),
           fromEJson(translitration),
           fromEJson(translation),
+          fromEJson(english),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -512,6 +522,7 @@ class LyricsEntity extends _LyricsEntity
       SchemaProperty('arabic', RealmPropertyType.string),
       SchemaProperty('translitration', RealmPropertyType.string),
       SchemaProperty('translation', RealmPropertyType.string),
+      SchemaProperty('english', RealmPropertyType.string),
     ]);
   }();
 

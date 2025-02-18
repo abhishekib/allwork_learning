@@ -272,7 +272,7 @@ class CategoryHelpers {
 
   static LyricsEntity convertToLyricsEntity(Lyrics lyrics) {
     return LyricsEntity(
-        lyrics.time, lyrics.arabic, lyrics.translitration, lyrics.translation);
+        lyrics.time, lyrics.arabic, lyrics.translitration, lyrics.translation, lyrics.english ?? '');
   }
 
   static Category toCategory(CategoryEntity categoryEntity) {

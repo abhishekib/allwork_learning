@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/controllers/audio_controller.dart';
+import 'package:allwork/controllers/bookmark_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
@@ -287,8 +288,12 @@ class LyricsTabState extends State<LyricsTab> {
           "html": Style(
             // alignment: Alignment.lef,
             fontSize: FontSize(20),
-            textAlign: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah" ?  TextAlign.right : TextAlign.left,
-            direction: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah" ? TextDirection.rtl :  TextDirection.ltr,
+            textAlign: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah"
+                ? TextAlign.right
+                : TextAlign.left,
+            direction: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah"
+                ? TextDirection.rtl
+                : TextDirection.ltr,
             color: Colors.red,
             fontWeight: FontWeight.bold,
           ),
@@ -508,9 +513,12 @@ class LyricsTabState extends State<LyricsTab> {
         onTap: () {
           if (index == widget.bookmarkedLyricsIndex &&
               lyricType == widget.bookmarkedTab) {
-            controller.removeBookmark(widget.categoryDetails);
+            controller.removeBookmark(widget.categoryDetails, widget.fromBookmark);
             setState(() {
+              widget.bookmarkedLyricsIndex = -1;
+              widget.bookmarkedTab = -1;
               widget.isBookmarked = false;
+              log("On bookmarked lyric");
             });
           } else {
             controller.bookmarkLyric(widget.categoryDetails, lyricType, index);
@@ -518,6 +526,7 @@ class LyricsTabState extends State<LyricsTab> {
               widget.bookmarkedLyricsIndex = index;
               widget.isBookmarked = true;
               widget.bookmarkedTab = lyricType;
+              log("on not bookmarked lyric");
             });
           }
 

@@ -167,10 +167,12 @@ class CategoryDetailController extends GetxController {
     DbServices.instance.writeBookmark(category, lyricsType, index);
   }
 
-  void removeBookmark(Category category) {
+  void removeBookmark(Category category, bool fromBookmark) {
     log("remove bookmark");
     DbServices.instance.deleteBookmark(category.title);
-    Get.find<BookmarkController>().onInit();
+    if (fromBookmark) {
+      Get.find<BookmarkController>().onInit();
+    }
   }
 
   void copyAllLyricsToClipboard(BuildContext context,
@@ -262,7 +264,8 @@ class CategoryDetailController extends GetxController {
     }
   }
 
-  void setSelectedTimeForReminders(TimeOfDay timeOfDay, Category categoryDetails) {
+  void setSelectedTimeForReminders(
+      TimeOfDay timeOfDay, Category categoryDetails) {
     DateTime baseDateTime = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day, timeOfDay.hour, timeOfDay.minute);
 
@@ -270,8 +273,8 @@ class CategoryDetailController extends GetxController {
     for (String day in selectedDaysForReminder) {
       //get the exact dates and time when the reminders will be set
       DateTime nextDay = _getNextDay(day, baseDateTime);
-     LocalNotificationServices.showScheduleNotification(
-          category:categoryDetails, dateTime: nextDay);
+      LocalNotificationServices.showScheduleNotification(
+          category: categoryDetails, dateTime: nextDay);
     }
   }
 
