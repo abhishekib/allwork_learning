@@ -39,7 +39,7 @@ class ReminderController extends GetxController {
       arguments: {
         'category': category,
         'language': 'English',
-        'menuItem': '',
+        'menuItem': category.category,
       },
     );
   }

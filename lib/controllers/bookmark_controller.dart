@@ -29,7 +29,7 @@ class BookmarkController extends GetxController {
         'fromBookmark': true,
         'category': category,
         'language': 'English',
-        'menuItem': '',
+        'menuItem': category.category,
         'bookmarkedTab': bookmarkData.lyricsType,
         'lyricsIndex': bookmarkData.lyricsIndex,
       },

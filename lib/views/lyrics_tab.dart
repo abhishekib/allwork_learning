@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:allwork/controllers/audio_controller.dart';
-import 'package:allwork/controllers/bookmark_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
@@ -260,15 +259,16 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _buildEnglishText(Lyrics lyrics) {
+
     log("--------------widget.menuItem : ${widget.menuItem}-------------");
 
     if (lyrics.english != null &&
         (lyrics.english!.isEmpty || lyrics.english?.trim() == "&nbsp;")) {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
-
+    log("lyrics.english : ${lyrics.english}");
     return Visibility(
-      visible: lyrics.english != null && lyrics.english!.isNotEmpty,
+      //visible: lyrics.english != null && lyrics.english!.isNotEmpty,
       child: Html(
         data: lyrics.english ?? '',
         onLinkTap: (String? url, _, __) async {

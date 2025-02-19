@@ -312,6 +312,7 @@ class CategoryHelpers {
         time: lyricsEntity.time,
         arabic: lyricsEntity.arabic,
         translitration: lyricsEntity.translitration,
-        translation: lyricsEntity.translation);
+        translation: lyricsEntity.translation,
+        english:lyricsEntity.english);
   }
 }
