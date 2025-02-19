@@ -36,6 +36,15 @@ class MoreAppsView extends StatelessWidget {
       'text':
           'Check out this app: Mafatihuljinan\nhttps://mafatihuljinan.org/app'
     },
+    {
+      'name': 'Royal Islamic Calendar',
+      'imagePath':
+          'https://play-lh.googleusercontent.com/cyWQOkmrLVBFlYQbgUB6qq_sz-GsKTIpedbgPWnORCdZe0HOJ-Q4-k90q9KV2RumoSMb=w240-h480-rw',
+       'url': 'https://qr-codes.io/rviBb4', 
+      'text':
+          'Check out this app: Mafatihuljinan\nhttps://mafatihuljinan.org/app'
+    },
+    
   ];
 
   @override
