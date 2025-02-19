@@ -46,6 +46,20 @@ class AboutUsView extends StatelessWidget {
                         children: [
                           InkWell(
                               onTap: () async {
+                                final uri =
+                                    Uri.parse('https://azadar.media/whatsapp');
+                                ;
+                                log("Launching $uri");
+                                if (!await launchUrl(uri)) {
+                                  throw 'Could not launch $uri';
+                                }
+                              },
+                              child: Image.network(
+                                  width: 60,
+                                  height: 60,
+                                  'https://mafatihuljinan.org/wp-content/uploads/2025/01/download.jpg')),
+                          InkWell(
+                              onTap: () async {
                                 final uri = Uri.parse(
                                     'https://azadar.media/whatsappchannel');
                                 ;
@@ -54,8 +68,10 @@ class AboutUsView extends StatelessWidget {
                                   throw 'Could not launch $uri';
                                 }
                               },
-                              child: Image.network(width: 60, height: 60,
-                                  'https://mafatihuljinan.org/wp-content/uploads/2025/01/download.jpg'))
+                              child: Image.network(
+                                  width: 60,
+                                  height: 60,
+                                  'http://mafatihuljinan.org/wp-content/uploads/2025/01/Whatsapp-channels-1__f0f9c5635d0decb233ffe939d7691c06-300x200.webp'))
                         ],
                       ),
                     ],

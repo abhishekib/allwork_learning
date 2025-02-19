@@ -9,14 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  final bool downloaded;
+  
   String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
   final AudioController controller;
 
   AudioPlayerWidget({
     super.key,
-    required this.downloaded,
     required this.audioUrl,
     required this.onPositionChanged,
     required this.controller,
@@ -37,9 +36,9 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   void initState() {
     super.initState();
     _audioPlayer = widget.controller.audioplayer;
-    if (widget.downloaded) {
-      widget.controller.downloaded.value = true;
-    }
+    // if (widget.downloaded) {
+    //   widget.controller.downloaded.value = true;
+    // }
 
     widget.controller.setupAudio(widget.audioUrl);
     widget.controller.loadViewPreference();

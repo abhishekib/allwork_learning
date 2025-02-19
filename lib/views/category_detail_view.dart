@@ -396,7 +396,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
                     controller: _audioController,
-                    downloaded: isAudioDownloaded,
                     audioUrl: currentAudioUrl!,
                     onPositionChanged: (currentPosition) {
                       controller.currentTime.value =
