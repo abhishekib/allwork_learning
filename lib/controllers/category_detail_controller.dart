@@ -152,16 +152,6 @@ class CategoryDetailController extends GetxController {
     log("Changed selected type to: $type");
   }
 
-  void scheduleNotification(
-      Category category, DateTime dateTime, String title) {
-    //log("Scheduling notification for: $date with title: $title");
-    LocalNotificationServices.showScheduleNotification(
-        category: category, dateTime: dateTime);
-
-    // LocalNotifications.showPeriodicNotifications(
-    //     title: title, body: "Body", payload: "payload");
-  }
-
   void bookmarkLyric(Category category, int lyricsType, int index) {
     log("Write bookmark");
     DbServices.instance.writeBookmark(category, lyricsType, index);
@@ -264,23 +254,38 @@ class CategoryDetailController extends GetxController {
     }
   }
 
-  void setSelectedTimeForReminders(
-      TimeOfDay timeOfDay, Category categoryDetails) {
-    DateTime baseDateTime = DateTime(DateTime.now().year, DateTime.now().month,
-        DateTime.now().day, timeOfDay.hour, timeOfDay.minute);
+  void scheduleNotification(Category category, Duration timeOfDay) {
+    //log("Scheduling notification for: $date with title: $title");
+    if (selectedDaysForReminder.isEmpty) {
+      Get.dialog(AlertDialog(
+        title: const Text("Error"),
+        content: const Text("Please select at least one day for the reminder"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: const Text("OK"),
+          ),
+        ],
+      ));
+      return;
+    }
 
 //schedule notifications for the selected days
     for (String day in selectedDaysForReminder) {
       //get the exact dates and time when the reminders will be set
-      DateTime nextDay = _getNextDay(day, baseDateTime);
+      DateTime nextDay = _getNextDay(day, timeOfDay);
+      log("next day $nextDay");
+      nextDay.add(timeOfDay);
       LocalNotificationServices.showScheduleNotification(
-          category: categoryDetails, dateTime: nextDay);
+          category: category, dateTime: nextDay);
     }
   }
 
 //method to get the next Date of the week of the given day
-  DateTime _getNextDay(String day, DateTime baseDateTime) {
-    DateTime now = DateTime.timestamp();
+  DateTime _getNextDay(String day, Duration timeOfDay) {
+    DateTime now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     int daysUntilSameDay = 0;
 
     switch (day) {
@@ -314,10 +319,11 @@ class CategoryDetailController extends GetxController {
       daysUntilSameDay += 7;
     }
 
-    return now.add(Duration(days: daysUntilSameDay));
+    return now.add(Duration(days: daysUntilSameDay, minutes: timeOfDay.inMinutes));
   }
+}
 
-  // final String? initialAudioUrl = isAudioDownloaded
+ // final String? initialAudioUrl = isAudioDownloaded
   //     ? cdata[0].offlineAudioPath!
   //     : cdata[0].audiourl.isNotEmpty
   //         ? cdata[0].audiourl
@@ -376,4 +382,3 @@ class CategoryDetailController extends GetxController {
   //     const SnackBar(content: Text("Sharing lyrics...")),
   //   );
   // }
-}

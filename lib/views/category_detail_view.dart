@@ -24,7 +24,6 @@ import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:weekday_selector/weekday_selector.dart';
 
 class CategoryDetailView extends StatefulWidget {
   const CategoryDetailView({super.key});
@@ -309,6 +308,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.access_alarm),
               onPressed: () async {
+                Duration duration = Duration(hours: 0, minutes: 0);
                 showModalBottomSheet(
                     backgroundColor: Colors.white,
                     constraints: BoxConstraints.tight(Size.fromHeight(
@@ -316,11 +316,13 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     context: context,
                     builder: (context) => Column(
                           children: [
-                            CupertinoTimerPicker(
+                            
+                            CupertinoTimerPicker(  
                               backgroundColor: CupertinoColors.white,
                               mode: CupertinoTimerPickerMode.hm,
                               onTimerDurationChanged: (value) {
                                 log("Time selected: $value");
+                                duration = value;
                               },
                             ),
                             //SizedBox(height: 20),
@@ -335,23 +337,28 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               backgroundColor: Colors.white,
-                              selectedDayTextColor: Colors.black,
-                              selectedDaysFillColor: Colors.white,
-                              unselectedDaysFillColor: AppColors.backgroundBlue,
-                              selectedDaysBorderColor: Colors.blueAccent,
+                              selectedDayTextColor: Colors.white,
+                              selectedDaysFillColor: AppColors.backgroundBlue,
+                              unselectedDaysFillColor: Colors.white,
+                              selectedDaysBorderColor: AppColors.backgroundBlue,
                               unselectedDaysBorderColor:
                                   AppColors.backgroundBlue,
-                              unSelectedDayTextColor: Colors.white,
+                              unSelectedDayTextColor: AppColors.backgroundBlue,
                             ),
 
                             ElevatedButton(
                               style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(
-                                      AppColors.backgroundBlue),
-                                  ),
+                                backgroundColor: WidgetStateProperty.all(
+                                    AppColors.backgroundBlue),
+                              ),
                               onPressed: () {
-                                // controller.scheduleReminder(
-                                //     categoryDetails.title, menuItem);
+                                Get.back();
+                                Get.snackbar(
+                                    "Reminder", "Reminder set up successfully");
+                                controller.scheduleNotification(
+                                  categoryDetails,
+                                  duration
+                                );
                               },
                               child: const Text(
                                 "Set Reminder",
