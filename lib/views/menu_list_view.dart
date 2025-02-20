@@ -61,7 +61,10 @@ class _MenuListViewState extends State<MenuListView> {
           widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
       if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator(color: Colors.white,));
+        return const Center(
+            child: CircularProgressIndicator(
+          color: Colors.white,
+        ));
       } else if (menuList.items.isEmpty) {
         return Center(
             child: Column(
@@ -87,7 +90,12 @@ class _MenuListViewState extends State<MenuListView> {
             children: List.generate(
               menuList.items.length,
               (index) {
-                final menuItem = menuList.items[index];
+                String menuItem = menuList.items[index];
+                if (menuItem == 'Surah') {
+                  menuItem = 'The Holy Quran';
+                } else if (menuItem == 'સુરાહ') {
+                  menuItem = 'કુરાન';
+                }
                 return ListTile(
                   title: Center(
                     child: Text(
@@ -102,6 +110,11 @@ class _MenuListViewState extends State<MenuListView> {
                   ),
                   onTap: () async {
                     log("selected ----> $menuItem");
+                    if (menuItem == 'The Holy Quran') {
+                      menuItem = 'Surah';
+                    } else if (menuItem == 'કુરાન') {
+                      menuItem = 'સુરાહ';
+                    }
                     categoryListController.categoryData;
                     Get.to(() => MenuDetailView(
                         menuItem: menuItem,

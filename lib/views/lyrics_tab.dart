@@ -288,7 +288,7 @@ class LyricsTabState extends State<LyricsTab> {
           "html": Style(
             // alignment: Alignment.lef,
             fontSize: FontSize(20),
-            textAlign: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah"
+            textAlign: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah" || widget.menuItem == "Juzz / Siparah" 
                 ? TextAlign.right
                 : TextAlign.left,
             direction: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah"
