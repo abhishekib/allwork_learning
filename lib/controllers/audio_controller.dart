@@ -148,9 +148,9 @@ class AudioController extends GetxController {
   }
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
-    setupAudio(audioUrl.value);
+    await setupAudio(audioUrl.value);
   }
 
   @override

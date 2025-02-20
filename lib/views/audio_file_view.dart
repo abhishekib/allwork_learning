@@ -74,7 +74,7 @@ class AudioFileView extends StatelessWidget {
                                           .categoryType,
                                       audioUrl: controller
                                           .audioDownloadMappings[index]
-                                          .audioDownloadPath,
+                                          .audioUrl,
                                       onPositionChanged: (currentPosition) {
                                         audioController.currentTime.value =
                                             currentPosition;
