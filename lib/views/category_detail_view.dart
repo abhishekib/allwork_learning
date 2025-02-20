@@ -15,6 +15,7 @@ import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:bottom_picker/bottom_picker.dart';
 import 'package:day_picker/day_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -147,7 +148,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       final selectedIndex = _tabController.index;
       log("Tab changed to $selectedIndex");
       final String newAudioUrl = cdata[selectedIndex].audiourl;
-      
+
       log("New audio url is $newAudioUrl");
       log("boolean values ${newAudioUrl.isNotEmpty.toString()}");
       // if (newAudioUrl != currentAudioUrl && newAudioUrl.isNotEmpty) {
@@ -307,75 +308,57 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.access_alarm),
               onPressed: () async {
-                // Implement favorite functionality
-                // BottomPicker.dateTime(
-                //   pickerTitle: Text(
-                //     'Set the event exact time and date',
-                //     style: TextStyle(
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 15,
-                //       color: Colors.black,
-                //     ),
-                //   ),
-                //   onSubmit: (date) {
-                //     log(date.toString());
-                //     controller.scheduleNotification(categoryDetails, date,
-                //         TextCleanerService.cleanText(categoryDetails.title));
-                //   },
-                //   onClose: () {
-                //     Navigator.pop(context);
-                //   },
-                //   minDateTime: DateTime.now().add(Duration(minutes: 1)),
-                //   initialDateTime: DateTime.now().add(Duration(minutes: 1)),
-                //   buttonSingleColor: Colors.pink,
-                // ).show(context);
+                showModalBottomSheet(
+                    backgroundColor: Colors.white,
+                    constraints: BoxConstraints.tight(Size.fromHeight(
+                        MediaQuery.of(context).size.height * 0.40)),
+                    context: context,
+                    builder: (context) => Column(
+                          children: [
+                            CupertinoTimerPicker(
+                              backgroundColor: CupertinoColors.white,
+                              mode: CupertinoTimerPickerMode.hm,
+                              onTimerDurationChanged: (value) {
+                                log("Time selected: $value");
+                              },
+                            ),
+                            //SizedBox(height: 20),
+                            // Select Week Days with improved UI
+                            SelectWeekDays(
+                              onSelect: (List<String> values) {
+                                log("Days List: $values");
+                                controller.selectedDaysForReminder = values;
+                              },
+                              width: 320,
+                              days: controller.days,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                              backgroundColor: Colors.white,
+                              selectedDayTextColor: Colors.black,
+                              selectedDaysFillColor: Colors.white,
+                              unselectedDaysFillColor: AppColors.backgroundBlue,
+                              selectedDaysBorderColor: Colors.blueAccent,
+                              unselectedDaysBorderColor:
+                                  AppColors.backgroundBlue,
+                              unSelectedDayTextColor: Colors.white,
+                            ),
 
-                BottomPicker(
-                  onSubmit: (value) async {
-                    log("Days set for the event");
-
-                    TimeOfDay? selectedTime24Hour = await Future.delayed(
-                        Duration(milliseconds: 300), () async {
-                      return await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                    });
-
-                    log("dialogue closed");
-                    if (selectedTime24Hour != null) {
-                      controller
-                          .setSelectedTimeForReminders(selectedTime24Hour, categoryDetails);
-                    }
-                  },
-                  pickerTitle: Text(
-                    'Set the Days for the event',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  items: [
-                    //const Placeholder());
-                    SelectWeekDays(
-                      onSelect: (List<String> values) {
-                        log("Days List: $values");
-                        controller.selectedDaysForReminder = values;
-                      },
-                      days: controller.days,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      backgroundColor: Colors.white,
-                      selectedDayTextColor: Colors.black,
-                      selectedDaysFillColor: Colors.white,
-                      unselectedDaysFillColor: AppColors.backgroundBlue,
-                      selectedDaysBorderColor: AppColors.backgroundBlue,
-                      unselectedDaysBorderColor: AppColors.backgroundBlue,
-                      unSelectedDayTextColor: Colors.white,
-                    )
-                  ],
-                ).show(context);
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: WidgetStateProperty.all(
+                                      AppColors.backgroundBlue),
+                                  ),
+                              onPressed: () {
+                                // controller.scheduleReminder(
+                                //     categoryDetails.title, menuItem);
+                              },
+                              child: const Text(
+                                "Set Reminder",
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ));
               },
             ),
             FloatingActionButton.small(
