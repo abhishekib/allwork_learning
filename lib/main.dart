@@ -24,7 +24,6 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
-
   bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
@@ -39,15 +38,18 @@ Future<void> main() async {
 //if the app starts with click on notification
   if (initialNotification?.didNotificationLaunchApp == true) {
     fromNotification = true;
+    
+    Category category = CategoryHelpers.toCategory(DbServices.instance
+            .getReminderData(
+                initialNotification!.notificationResponse!.payload!)!
+            .category!);
+
     Future.delayed(Duration(seconds: 1), () {
       Get.to(() => CategoryDetailView(), arguments: {
         'fromBookmark': false,
-        'category': CategoryHelpers.toCategory(DbServices.instance
-            .getReminderData(
-                initialNotification!.notificationResponse!.payload!)!
-            .category!),
+        'category': category,
         'language': 'English',
-        'menuItem': ''
+        'menuItem': category.category
       });
     });
   }
@@ -56,13 +58,14 @@ Future<void> main() async {
   LocalNotificationServices.onClickNotification.stream.listen((event) {
     log("Notification clicked");
     log(event);
+    Category category = CategoryHelpers.toCategory(
+        DbServices.instance.getReminderData(event)!.category!);
 
     Get.to(() => CategoryDetailView(), arguments: {
       'fromBookmark': false,
-      'category': CategoryHelpers.toCategory(
-          DbServices.instance.getReminderData(event)!.category!),
+      'category': category,
       'language': 'English',
-      'menuItem': ''
+      'menuItem': category.category
     });
   });
 
@@ -102,7 +105,9 @@ class MyApp extends StatelessWidget {
       ),
       getPages: [
         GetPage(name: '/', page: () => const MainMenuView()),
-        GetPage(name: '/splash', page: () => SplashScreen(fromNotification: fromNotification)),
+        GetPage(
+            name: '/splash',
+            page: () => SplashScreen(fromNotification: fromNotification)),
         GetPage(
             name: '/menu-detail',
             page: () => MenuDetailView(
