@@ -23,6 +23,7 @@ import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:weekday_selector/weekday_selector.dart';
 
 class CategoryDetailView extends StatefulWidget {
   const CategoryDetailView({super.key});
@@ -147,7 +148,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       final selectedIndex = _tabController.index;
       log("Tab changed to $selectedIndex");
       final String newAudioUrl = cdata[selectedIndex].audiourl;
-      
+
       log("New audio url is $newAudioUrl");
       log("boolean values ${newAudioUrl.isNotEmpty.toString()}");
       // if (newAudioUrl != currentAudioUrl && newAudioUrl.isNotEmpty) {
@@ -330,52 +331,63 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 //   buttonSingleColor: Colors.pink,
                 // ).show(context);
 
+                // BottomPicker(
+                //       onSubmit: (value) async {
+                //         log("Days set for the event");
+
+                //         TimeOfDay? selectedTime24Hour = await Future.delayed(
+                //             Duration(milliseconds: 300), () async {
+                //           return await showTimePicker(
+                //             context: context,
+                //             initialTime: TimeOfDay.now(),
+                //           );
+                //         });
+
+                //         log("dialogue closed");
+                //         if (selectedTime24Hour != null) {
+                //           controller
+                //               .setSelectedTimeForReminders(selectedTime24Hour, categoryDetails);
+                //         }
+                //       },
+                //       pickerTitle: Text(
+                //         'Set the Days for the event',
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.bold,
+                //           fontSize: 15,
+                //           color: Colors.black,
+                //         ),
+                //       ),
+                //       items: [
+                //         //const Placeholder());
+                //         SelectWeekDays(
+                //           onSelect: (List<String> values) {
+                //             log("Days List: $values");
+                //             controller.selectedDaysForReminder = values;
+                //           },
+                //           days: controller.days,
+                //           fontWeight: FontWeight.bold,
+                //           fontSize: 18,
+                //           backgroundColor: Colors.white,
+                //           selectedDayTextColor: Colors.black,
+                //           selectedDaysFillColor: Colors.white,
+                //           unselectedDaysFillColor: AppColors.backgroundBlue,
+                //           selectedDaysBorderColor: AppColors.backgroundBlue,
+                //           unselectedDaysBorderColor: AppColors.backgroundBlue,
+                //           unSelectedDayTextColor: Colors.white,
+                //         )
+                //       ],
+                //     ).show(context);
+                final values = List.filled(7, false);
                 BottomPicker(
-                  onSubmit: (value) async {
-                    log("Days set for the event");
-
-                    TimeOfDay? selectedTime24Hour = await Future.delayed(
-                        Duration(milliseconds: 300), () async {
-                      return await showTimePicker(
-                        context: context,
-                        initialTime: TimeOfDay.now(),
-                      );
-                    });
-
-                    log("dialogue closed");
-                    if (selectedTime24Hour != null) {
-                      controller
-                          .setSelectedTimeForReminders(selectedTime24Hour, categoryDetails);
-                    }
-                  },
-                  pickerTitle: Text(
-                    'Set the Days for the event',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  items: [
-                    //const Placeholder());
-                    SelectWeekDays(
-                      onSelect: (List<String> values) {
-                        log("Days List: $values");
-                        controller.selectedDaysForReminder = values;
-                      },
-                      days: controller.days,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      backgroundColor: Colors.white,
-                      selectedDayTextColor: Colors.black,
-                      selectedDaysFillColor: Colors.white,
-                      unselectedDaysFillColor: AppColors.backgroundBlue,
-                      selectedDaysBorderColor: AppColors.backgroundBlue,
-                      unselectedDaysBorderColor: AppColors.backgroundBlue,
-                      unSelectedDayTextColor: Colors.white,
-                    )
-                  ],
-                ).show(context);
+                        onSubmit: (p0) => log("Selected"),
+                        items: [
+                          WeekdaySelector(
+                            onChanged: (int value) {},
+                            values: values,
+                          )
+                        ],
+                        pickerTitle: Text('Day Time Picker'))
+                    .show(context);
               },
             ),
             FloatingActionButton.small(
