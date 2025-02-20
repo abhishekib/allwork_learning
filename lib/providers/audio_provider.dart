@@ -12,7 +12,7 @@ class AudioProvider {
 
   AudioProvider(this.token);
 
-  Future<String?> downloadAudio(String url) async {
+  Future<String?> downloadAudio(String url, String categoryName, String categoryType) async {
     try {
       final directory = await getTemporaryDirectory();
       final filePath = Uri.parse(url).path;
@@ -26,7 +26,7 @@ class AudioProvider {
       });
 
       // Save the audio file to the database
-      DbServices.instance.writeAudioDownloadPath(url, savePath);
+      DbServices.instance.writeAudioDownloadPath(url, savePath, categoryName, categoryType);
       
       return savePath;
     } catch (e) {

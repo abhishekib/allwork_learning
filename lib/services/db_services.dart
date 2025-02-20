@@ -295,9 +295,9 @@ class DbServices {
   }
 
   Future<void> writeAudioDownloadPath(
-      String audioUrl, String audioDownloadPath) async {
+      String audioUrl, String audioDownloadPath, String categoryName, String categoryType) async {
     realm.write(() {
-      realm.add(AudioDownloadMapping(audioUrl, audioDownloadPath));
+      realm.add(AudioDownloadMapping(audioUrl, audioDownloadPath, categoryName, categoryType));
     });
   }
 
@@ -313,8 +313,8 @@ class DbServices {
     }
   }
 
-  List<String> getAudioDownloadPaths() {
-    return realm.all<AudioDownloadMapping>().map((e) => e.audioDownloadPath).toList();
+  List<AudioDownloadMapping> getAudioDownloadMappings() {
+    return realm.all<AudioDownloadMapping>().toList();
   }
 
   Future<void> deleteAudioDownloadPath(String audioDownloadPath) async {

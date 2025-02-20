@@ -13,10 +13,14 @@ class AudioPlayerWidget extends StatefulWidget {
   String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
   final AudioController controller;
+  String categoryName;
+  String categoryType;
 
   AudioPlayerWidget({
     super.key,
     required this.audioUrl,
+    required this.categoryName,
+    required this.categoryType,
     required this.onPositionChanged,
     required this.controller,
   });
@@ -257,7 +261,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
                                   audioProvider
                                       .downloadAudio(
-                                          widget.audioUrl)
+                                          widget.audioUrl, widget.categoryName, widget.categoryType)
                                       .then((savedPath) {
                                     log("Download complete");
                                     setState(() {
@@ -410,7 +414,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                         log("Let us download the audio");
 
                         audioProvider
-                            .downloadAudio(widget.audioUrl)
+                            .downloadAudio(widget.audioUrl, widget.categoryName, widget.categoryType)
                             .then((savedPath) {
                           widget.controller.downloaded.value = true;
                           widget.controller.isDownloading.value = false;

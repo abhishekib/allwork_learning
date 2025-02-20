@@ -1,5 +1,6 @@
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/audio_file_controller.dart';
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
@@ -21,8 +22,8 @@ class AudioFileView extends StatelessWidget {
                 style: AppTextStyles.whiteBoldTitleText,
               ),
             ),
-            body: Obx(()=>
-               controller.audioFiles.isEmpty
+            body: Obx(
+              () => controller.audioDownloadMappings.isEmpty
                   ? Center(
                       child: Text(
                         "No audio files found",
@@ -32,42 +33,55 @@ class AudioFileView extends StatelessWidget {
                   : Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: ListView.builder(
-                            itemCount: controller.audioFiles.length,
-                            itemBuilder: (context, index) {
-                              AudioController audioController = AudioController();
-                              return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: ListTile(
-                                    title: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        FittedBox(fit: BoxFit.scaleDown,
-                                          child: Text(
-                                              controller.extractAudioName(
-                                                  controller.audioFiles[index]),
-                                              style: AppTextStyles.whiteText),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            controller.deleteAudioFile(
-                                                controller.audioFiles[index]);
-                                          },
-                                          child: Icon(Icons.delete,
-                                              color: Colors.white),
-                                        )
-                                      ],
-                                    ),
-                                    subtitle: AudioPlayerWidget(
-                                        audioUrl: controller.audioFiles[index],
-                                        onPositionChanged: (currentPosition) {
-                                          audioController.currentTime.value =
-                                              currentPosition;
+                          itemCount: controller.audioDownloadMappings.length,
+                          itemBuilder: (context, index) {
+                            AudioController audioController = AudioController();
+                            return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                            "${TextCleanerService.cleanText(
+                                                controller
+                                                    .audioDownloadMappings[
+                                                        index]
+                                                    .categoryName)} - ${controller
+                                                    .audioDownloadMappings[
+                                                        index]
+                                                    .categoryType}",
+                                            style: AppTextStyles.whiteText),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          controller.deleteAudioFile(
+                                              controller.audioDownloadMappings[index].audioDownloadPath);
                                         },
-                                        controller: audioController),
-                                  ));
-                            }),
-                      
+                                        child: Icon(Icons.delete,
+                                            color: Colors.white),
+                                      )
+                                    ],
+                                  ),
+                                  subtitle: AudioPlayerWidget(
+                                      categoryName: controller
+                                          .audioDownloadMappings[index]
+                                          .categoryName,
+                                      categoryType: controller
+                                          .audioDownloadMappings[index]
+                                          .categoryType,
+                                      audioUrl: controller
+                                          .audioDownloadMappings[index]
+                                          .audioDownloadPath,
+                                      onPositionChanged: (currentPosition) {
+                                        audioController.currentTime.value =
+                                            currentPosition;
+                                      },
+                                      controller: audioController),
+                                ));
+                          }),
                     ),
             )));
   }

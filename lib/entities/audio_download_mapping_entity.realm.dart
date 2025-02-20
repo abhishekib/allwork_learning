@@ -12,9 +12,13 @@ class AudioDownloadMapping extends _AudioDownloadMapping
   AudioDownloadMapping(
     String audioUrl,
     String audioDownloadPath,
+    String categoryName,
+    String categoryType,
   ) {
     RealmObjectBase.set(this, 'audioUrl', audioUrl);
     RealmObjectBase.set(this, 'audioDownloadPath', audioDownloadPath);
+    RealmObjectBase.set(this, 'categoryName', categoryName);
+    RealmObjectBase.set(this, 'categoryType', categoryType);
   }
 
   AudioDownloadMapping._();
@@ -33,6 +37,20 @@ class AudioDownloadMapping extends _AudioDownloadMapping
       RealmObjectBase.set(this, 'audioDownloadPath', value);
 
   @override
+  String get categoryName =>
+      RealmObjectBase.get<String>(this, 'categoryName') as String;
+  @override
+  set categoryName(String value) =>
+      RealmObjectBase.set(this, 'categoryName', value);
+
+  @override
+  String get categoryType =>
+      RealmObjectBase.get<String>(this, 'categoryType') as String;
+  @override
+  set categoryType(String value) =>
+      RealmObjectBase.set(this, 'categoryType', value);
+
+  @override
   Stream<RealmObjectChanges<AudioDownloadMapping>> get changes =>
       RealmObjectBase.getChanges<AudioDownloadMapping>(this);
 
@@ -49,6 +67,8 @@ class AudioDownloadMapping extends _AudioDownloadMapping
     return <String, dynamic>{
       'audioUrl': audioUrl.toEJson(),
       'audioDownloadPath': audioDownloadPath.toEJson(),
+      'categoryName': categoryName.toEJson(),
+      'categoryType': categoryType.toEJson(),
     };
   }
 
@@ -59,10 +79,14 @@ class AudioDownloadMapping extends _AudioDownloadMapping
       {
         'audioUrl': EJsonValue audioUrl,
         'audioDownloadPath': EJsonValue audioDownloadPath,
+        'categoryName': EJsonValue categoryName,
+        'categoryType': EJsonValue categoryType,
       } =>
         AudioDownloadMapping(
           fromEJson(audioUrl),
           fromEJson(audioDownloadPath),
+          fromEJson(categoryName),
+          fromEJson(categoryType),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -75,6 +99,8 @@ class AudioDownloadMapping extends _AudioDownloadMapping
         ObjectType.realmObject, AudioDownloadMapping, 'AudioDownloadMapping', [
       SchemaProperty('audioUrl', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('audioDownloadPath', RealmPropertyType.string),
+      SchemaProperty('categoryName', RealmPropertyType.string),
+      SchemaProperty('categoryType', RealmPropertyType.string),
     ]);
   }();
 

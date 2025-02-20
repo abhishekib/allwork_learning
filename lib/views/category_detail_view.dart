@@ -386,6 +386,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
+                    categoryName: categoryDetails.title,
+                    categoryType: categoryDetails.cdata![_tabController.index].type,
                     controller: _audioController,
                     audioUrl: currentAudioUrl!,
                     onPositionChanged: (currentPosition) {
