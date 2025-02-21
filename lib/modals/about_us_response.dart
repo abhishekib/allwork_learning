@@ -8,4 +8,8 @@ class AboutUsResponse {
       data: json['data'] ?? '',
     );
   }
+  @override
+  String toString() {
+    return data;
+  }
 }

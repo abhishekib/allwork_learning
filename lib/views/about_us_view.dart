@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:linkable/linkable.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/about_us_controller.dart';
@@ -32,47 +33,32 @@ class AboutUsView extends StatelessWidget {
                 return const Center(
                     child: CircularProgressIndicator(color: Colors.white));
               } else {
+                log("About us text:  ${_controller.aboutUsText.value}");
                 return SingleChildScrollView(
                   child: Column(
                     children: [
-                      Linkable(
-                        text: _controller.aboutUsText.value,
-                        textColor: Colors.white,
-                        style: AppTextStyles.whiteBoldText,
-                        linkColor: Colors.blue,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          InkWell(
-                              onTap: () async {
-                                final uri =
-                                    Uri.parse('https://azadar.media/whatsapp');
-                                ;
-                                log("Launching $uri");
-                                if (!await launchUrl(uri)) {
-                                  throw 'Could not launch $uri';
-                                }
-                              },
-                              child: Image.network(
-                                  width: 60,
-                                  height: 60,
-                                  'https://mafatihuljinan.org/wp-content/uploads/2025/01/download.jpg')),
-                          InkWell(
-                              onTap: () async {
-                                final uri = Uri.parse(
-                                    'https://azadar.media/whatsappchannel');
-                                ;
-                                log("Launching $uri");
-                                if (!await launchUrl(uri)) {
-                                  throw 'Could not launch $uri';
-                                }
-                              },
-                              child: Image.network(
-                                  width: 60,
-                                  height: 60,
-                                  'http://mafatihuljinan.org/wp-content/uploads/2025/01/Whatsapp-channels-1__f0f9c5635d0decb233ffe939d7691c06-300x200.webp'))
-                        ],
+                      Html(
+                        data: _controller.aboutUsText.value,
+                        onLinkTap: (String? url, _, __) async {
+                          log("Tapped on url");
+                          if (url != null) {
+                            final uri = Uri.parse(url);
+                            try {
+                              await launchUrl(
+                                uri,
+                                mode: LaunchMode.externalApplication,
+                              );
+                            } catch (e) {
+                              debugPrint('Could not launch $url: $e');
+                            }
+                          }
+                        },
+                        style: {
+                          "p": Style(
+                              fontSize: FontSize(16),
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal)
+                        },
                       ),
                     ],
                   ),

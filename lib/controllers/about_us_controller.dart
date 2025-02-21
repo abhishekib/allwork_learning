@@ -38,9 +38,9 @@ class AboutUsController extends GetxController {
         fetchedResponse = await receivePort.first;
       }
 
-      String cleanedText = removeHtmlTags(fetchedResponse.data);
+      //String cleanedText = removeHtmlTags(fetchedResponse.data);
 
-      aboutUsText.value = cleanedText;
+      aboutUsText.value = fetchedResponse.data;
     } catch (e) {
       if (kDebugMode) {
         print('Error fetching About Us data: $e');

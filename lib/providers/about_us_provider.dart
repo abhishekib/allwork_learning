@@ -40,7 +40,6 @@ class AboutUsProvider {
         receivePort.listen((message) {
           log(message);
         });
-        
         return responseModel;
       } else {
         throw Exception('Failed to get Our About Us Data');
