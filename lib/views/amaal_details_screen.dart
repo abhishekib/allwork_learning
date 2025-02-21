@@ -50,10 +50,20 @@ class AmaalDetailsScreen extends StatelessWidget {
                   if (url != null) {
                     final uri = Uri.parse(url);
                     try {
-                      
-                      final response = deepLinkingProvider.getDeepLinkingResponse(url);
-                      log(response.toString());
-                      
+                      final response =
+                          await deepLinkingProvider.getDeepLinkingResponse(url);
+
+                      Category category = Category.fromJson(response.data['data']);
+                      log(category.toString());
+
+                      Get.to(() => CategoryDetailView(), arguments: {
+                        'fromBookmark': false,
+                        'category': category,
+                        'language': 'English',
+                        'menuItem': '',
+                        //'bookmarkedTab': bookmarkData.lyricsType,
+                        //'lyricsIndex': bookmarkData.lyricsIndex,
+                      });
 
                       //Get.to(() => CategoryDetailView(), arguments: );
                       // await launchUrl(
