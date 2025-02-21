@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/controllers/search_custom_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/services/TextCleanerService.dart';
@@ -130,6 +132,7 @@ class SearchPage extends StatelessWidget {
                         subtitle: Text(TextCleanerService.cleanText(postType)),
                         onTap: () {
                           // Navigate to CategoryDetailView with required arguments
+                          log("postType in search page ${postType}");
                           Get.to(
                             () => const CategoryDetailView(),
                             arguments: {

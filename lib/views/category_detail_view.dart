@@ -63,9 +63,13 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     final dynamic data = Get.arguments;
 
     if (data is Map<String, dynamic>) {
+      log("Data coming in the format of map");
       categoryDetails = data['category'] as Category;
       selectedLanguage = data['language'] as String;
       menuItem = data['menuItem'] as String;
+      if (menuItem.isEmpty) {
+        menuItem = categoryDetails.category;
+      }
       if (data['fromBookmark'] == true) {
         log("Navigating from bookmark");
         isBookmarked = true;
@@ -88,6 +92,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         log(isBookmarked.toString());
       }
     } else if (data is FavouriteModel) {
+      log("Data coming in the format of favourite model");
       categoryDetails = Category(
         category: "",
         id: 0,
@@ -107,6 +112,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         isBookmarked = false;
       }
     } else {
+      log("Data coming in unknown format");
       categoryDetails = Category(
         category: '',
         id: 0,
@@ -318,8 +324,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     context: context,
                     builder: (context) => Column(
                           children: [
-                            
-                            CupertinoTimerPicker(  
+                            CupertinoTimerPicker(
                               backgroundColor: CupertinoColors.white,
                               mode: CupertinoTimerPickerMode.hm,
                               onTimerDurationChanged: (value) {
@@ -358,9 +363,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                                 Get.snackbar(
                                     "Reminder", "Reminder set up successfully");
                                 controller.scheduleNotification(
-                                  categoryDetails,
-                                  duration
-                                );
+                                    categoryDetails, duration);
                               },
                               child: const Text(
                                 "Set Reminder",
@@ -389,7 +392,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
                     categoryName: categoryDetails.title,
-                    categoryType: categoryDetails.cdata![_tabController.index].type,
+                    categoryType:
+                        categoryDetails.cdata![_tabController.index].type,
                     controller: _audioController,
                     audioUrl: currentAudioUrl!,
                     onPositionChanged: (currentPosition) {

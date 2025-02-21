@@ -259,7 +259,6 @@ class LyricsTabState extends State<LyricsTab> {
   }
 
   Widget _buildEnglishText(Lyrics lyrics) {
-
     log("--------------widget.menuItem : ${widget.menuItem}-------------");
 
     if (lyrics.english != null &&
@@ -288,7 +287,11 @@ class LyricsTabState extends State<LyricsTab> {
           "html": Style(
             // alignment: Alignment.lef,
             fontSize: FontSize(20),
-            textAlign: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah" || widget.menuItem == "Juzz / Siparah" 
+            textAlign: widget.menuItem == "સુરાહ" ||
+                    widget.menuItem == "Surah" ||
+                    widget.menuItem == "Juzz / Siparah" ||
+                    widget.menuItem == "surah-english" ||
+                    widget.menuItem == "surah-gujarati"
                 ? TextAlign.right
                 : TextAlign.left,
             direction: widget.menuItem == "સુરાહ" || widget.menuItem == "Surah"
@@ -513,7 +516,8 @@ class LyricsTabState extends State<LyricsTab> {
         onTap: () {
           if (index == widget.bookmarkedLyricsIndex &&
               lyricType == widget.bookmarkedTab) {
-            controller.removeBookmark(widget.categoryDetails, widget.fromBookmark);
+            controller.removeBookmark(
+                widget.categoryDetails, widget.fromBookmark);
             setState(() {
               widget.bookmarkedLyricsIndex = -1;
               widget.bookmarkedTab = -1;
