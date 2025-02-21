@@ -1,19 +1,28 @@
+import 'dart:developer';
+
 import 'package:allwork/modals/category.dart';
+import 'package:allwork/providers/deep_linking_provider.dart';
 import 'package:allwork/services/TextCleanerService.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/styles.dart';
+import 'package:allwork/views/category_detail_view.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AmaalDetailsScreen extends StatelessWidget {
   final Category item;
 
-  const AmaalDetailsScreen({super.key, required this.item});
+  final DeepLinkingProvider deepLinkingProvider =
+      DeepLinkingProvider(ApiConstants.token);
+
+  AmaalDetailsScreen({super.key, required this.item});
 
   @override
   Widget build(BuildContext context) {
-
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -41,10 +50,16 @@ class AmaalDetailsScreen extends StatelessWidget {
                   if (url != null) {
                     final uri = Uri.parse(url);
                     try {
-                      await launchUrl(
-                        uri,
-                        mode: LaunchMode.externalApplication,
-                      );
+                      
+                      final response = deepLinkingProvider.getDeepLinkingResponse(url);
+                      log(response.toString());
+                      
+
+                      //Get.to(() => CategoryDetailView(), arguments: );
+                      // await launchUrl(
+                      //   uri,
+                      //   mode: LaunchMode.externalApplication,
+                      // );
                     } catch (e) {
                       debugPrint('Could not launch $url: $e');
                     }
@@ -67,6 +82,4 @@ class AmaalDetailsScreen extends StatelessWidget {
       ),
     );
   }
-
-  
 }
