@@ -143,7 +143,7 @@ class SearchPage extends StatelessWidget {
                                 isFav: "No",
                                 cdata: post.cdata,
                               ),
-                              'language': 'English',
+                              'language': postType.endsWith('-gujarati')?'ગુજરાતી':'English',
                               'menuItem': postType,
                             },
                           );
