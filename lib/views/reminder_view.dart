@@ -1,6 +1,8 @@
+import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/controllers/reminder_controller.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
 import 'package:flutter/material.dart';
@@ -63,9 +65,7 @@ class ReminderView extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                  DateFormat('yyyy-MM-dd')
-                                                      .format(localDateTime)
-                                                      .toString(),
+                                                ApiConstants.days[localDateTime.weekday].dayKey,
                                                   style:
                                                       AppTextStyles.customStyle(
                                                     fontFamily: 'Roboto',

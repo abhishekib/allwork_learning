@@ -8,6 +8,7 @@ import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/settings_page_view.dart';
@@ -23,6 +24,7 @@ import 'package:get/get.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
+import 'package:get_ip_address/get_ip_address.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CategoryDetailView extends StatefulWidget {
@@ -333,7 +335,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                                 controller.selectedDaysForReminder = values;
                               },
                               width: 320,
-                              days: controller.days,
+                              days: ApiConstants.days,
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               backgroundColor: Colors.white,

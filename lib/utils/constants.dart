@@ -1,3 +1,5 @@
+import 'package:day_picker/model/day_in_week.dart';
+
 class ApiConstants {
   static const String baseUrl =
       'https://www.mafatihuljinan.org/wp-json/customapi/v1/';
@@ -78,4 +80,16 @@ class ApiConstants {
   static const String addFavTravelZiyarat = 'favtravelziyarat';
 
   static const String searchEndpoint = 'search';
+
+
+  static final List<DayInWeek> days = [
+    DayInWeek("Mo", dayKey: "monday"),
+    DayInWeek("Tu", dayKey: "tuesday"),
+    DayInWeek("We", dayKey: "wednesday"),
+    DayInWeek("Th", dayKey: "thursday"),
+    DayInWeek("Fr", dayKey: "friday"),
+    DayInWeek("Sa", dayKey: "saturday"),
+    DayInWeek("Su", dayKey: "sunday"),
+  ];
+
 }

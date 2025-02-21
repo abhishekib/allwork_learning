@@ -37,15 +37,6 @@ class CategoryDetailController extends GetxController {
 
   List<String> selectedDaysForReminder = [];
 
-  final List<DayInWeek> days = [
-    DayInWeek("Mo", dayKey: "monday"),
-    DayInWeek("Tu", dayKey: "tuesday"),
-    DayInWeek("We", dayKey: "wednesday"),
-    DayInWeek("Th", dayKey: "thursday"),
-    DayInWeek("Fr", dayKey: "friday"),
-    DayInWeek("Sa", dayKey: "saturday"),
-    DayInWeek("Su", dayKey: "sunday"),
-  ];
   get audioPlayer => _audioPlayer;
 
   @override
