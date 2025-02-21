@@ -67,9 +67,9 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       categoryDetails = data['category'] as Category;
       selectedLanguage = data['language'] as String;
       menuItem = data['menuItem'] as String;
-      if (menuItem.isEmpty) {
-        menuItem = categoryDetails.category;
-      }
+      // if (menuItem.isEmpty) {
+      //   menuItem = categoryDetails.category;
+      // }
       if (data['fromBookmark'] == true) {
         log("Navigating from bookmark");
         isBookmarked = true;

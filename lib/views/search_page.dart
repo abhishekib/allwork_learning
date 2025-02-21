@@ -132,7 +132,7 @@ class SearchPage extends StatelessWidget {
                         subtitle: Text(TextCleanerService.cleanText(postType)),
                         onTap: () {
                           // Navigate to CategoryDetailView with required arguments
-                          log("postType in search page ${postType}");
+                          //log("postType in search page ${postType}");
                           Get.to(
                             () => const CategoryDetailView(),
                             arguments: {
@@ -144,7 +144,7 @@ class SearchPage extends StatelessWidget {
                                 cdata: post.cdata,
                               ),
                               'language': 'English',
-                              'menuItem': '',
+                              'menuItem': postType,
                             },
                           );
                         },
