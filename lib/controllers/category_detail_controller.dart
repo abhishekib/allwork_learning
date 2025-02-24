@@ -4,9 +4,11 @@ import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
+import 'package:allwork/providers/deep_linking_provider.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/services/local_notification_services.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:day_picker/model/day_in_week.dart';
 import 'package:flutter/material.dart';
@@ -34,6 +36,8 @@ class CategoryDetailController extends GetxController {
   var showTranslation = true.obs;
 
   final LoginController _loginController = Get.put(LoginController());
+    final DeepLinkingProvider deepLinkingProvider =
+      DeepLinkingProvider(ApiConstants.token);
 
   List<String> selectedDaysForReminder = [];
 

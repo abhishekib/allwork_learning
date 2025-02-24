@@ -74,9 +74,7 @@ class CategoryListController extends GetxController {
               if (response.data['data'].length == 1) {
                 isItemSingle(true);
               }
-
               //log("Api Response Handler successfully converted \n ${response.toString()}");
-
               categoryData(response);
               isLoading(false);
               log("Response getting successfully saved in controller");

@@ -4,6 +4,7 @@ import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/views/category_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
@@ -274,10 +275,24 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
+              final response = await controller.deepLinkingProvider
+                  .getDeepLinkingResponse(url);
+
+              Category category = Category.fromJson(response.data['data']);
+              log(category.toString());
+
+              Get.to(() => CategoryDetailView(), arguments: {
+                'fromBookmark': false,
+                'category': category,
+                'language': 'English',
+                'menuItem': '',
+                //'bookmarkedTab': bookmarkData.lyricsType,
+                //'lyricsIndex': bookmarkData.lyricsIndex,
+              });
+              // await launchUrl(
+              //   uri,
+              //   mode: LaunchMode.externalApplication,
+              // );
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
@@ -322,10 +337,24 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
+              final response = await controller.deepLinkingProvider
+                  .getDeepLinkingResponse(url);
+
+              Category category = Category.fromJson(response.data['data']);
+              log(category.toString());
+
+              Get.to(() => CategoryDetailView(), arguments: {
+                'fromBookmark': false,
+                'category': category,
+                'language': 'English',
+                'menuItem': '',
+                //'bookmarkedTab': bookmarkData.lyricsType,
+                //'lyricsIndex': bookmarkData.lyricsIndex,
+              });
+              // await launchUrl(
+              //   uri,
+              //   mode: LaunchMode.externalApplication,
+              // );
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
@@ -365,10 +394,24 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
+              final response = await controller.deepLinkingProvider
+                  .getDeepLinkingResponse(url);
+
+              Category category = Category.fromJson(response.data['data']);
+              log(category.toString());
+
+              Get.to(() => CategoryDetailView(), arguments: {
+                'fromBookmark': false,
+                'category': category,
+                'language': 'English',
+                'menuItem': '',
+                //'bookmarkedTab': bookmarkData.lyricsType,
+                //'lyricsIndex': bookmarkData.lyricsIndex,
+              });
+              // await launchUrl(
+              //   uri,
+              //   mode: LaunchMode.externalApplication,
+              // );
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
@@ -416,10 +459,24 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              await launchUrl(
-                uri,
-                mode: LaunchMode.externalApplication,
-              );
+              final response = await controller.deepLinkingProvider
+                  .getDeepLinkingResponse(url);
+
+              Category category = Category.fromJson(response.data['data']);
+              log(category.toString());
+
+              Get.to(() => CategoryDetailView(), arguments: {
+                'fromBookmark': false,
+                'category': category,
+                'language': 'English',
+                'menuItem': '',
+                //'bookmarkedTab': bookmarkData.lyricsType,
+                //'lyricsIndex': bookmarkData.lyricsIndex,
+              });
+              // await launchUrl(
+              //   uri,
+              //   mode: LaunchMode.externalApplication,
+              // );
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
