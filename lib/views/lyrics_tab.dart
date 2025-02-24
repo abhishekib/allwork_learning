@@ -275,24 +275,7 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              final response = await controller.deepLinkingProvider
-                  .getDeepLinkingResponse(url);
-
-              Category category = Category.fromJson(response.data['data']);
-              log(category.toString());
-
-              Get.to(() => CategoryDetailView(), arguments: {
-                'fromBookmark': false,
-                'category': category,
-                'language': 'English',
-                'menuItem': '',
-                //'bookmarkedTab': bookmarkData.lyricsType,
-                //'lyricsIndex': bookmarkData.lyricsIndex,
-              });
-              // await launchUrl(
-              //   uri,
-              //   mode: LaunchMode.externalApplication,
-              // );
+              controller.tapDeepLink(url);
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
@@ -337,24 +320,7 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              final response = await controller.deepLinkingProvider
-                  .getDeepLinkingResponse(url);
-
-              Category category = Category.fromJson(response.data['data']);
-              log(category.toString());
-
-              Get.to(() => CategoryDetailView(), arguments: {
-                'fromBookmark': false,
-                'category': category,
-                'language': 'English',
-                'menuItem': '',
-                //'bookmarkedTab': bookmarkData.lyricsType,
-                //'lyricsIndex': bookmarkData.lyricsIndex,
-              });
-              // await launchUrl(
-              //   uri,
-              //   mode: LaunchMode.externalApplication,
-              // );
+              controller.tapDeepLink(url);
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
@@ -394,24 +360,7 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              final response = await controller.deepLinkingProvider
-                  .getDeepLinkingResponse(url);
-
-              Category category = Category.fromJson(response.data['data']);
-              log(category.toString());
-
-              Get.to(() => CategoryDetailView(), arguments: {
-                'fromBookmark': false,
-                'category': category,
-                'language': 'English',
-                'menuItem': '',
-                //'bookmarkedTab': bookmarkData.lyricsType,
-                //'lyricsIndex': bookmarkData.lyricsIndex,
-              });
-              // await launchUrl(
-              //   uri,
-              //   mode: LaunchMode.externalApplication,
-              // );
+              controller.tapDeepLink(url);
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }
@@ -459,24 +408,7 @@ class LyricsTabState extends State<LyricsTab> {
           if (url != null) {
             final uri = Uri.parse(url);
             try {
-              final response = await controller.deepLinkingProvider
-                  .getDeepLinkingResponse(url);
-
-              Category category = Category.fromJson(response.data['data']);
-              log(category.toString());
-
-              Get.to(() => CategoryDetailView(), arguments: {
-                'fromBookmark': false,
-                'category': category,
-                'language': 'English',
-                'menuItem': '',
-                //'bookmarkedTab': bookmarkData.lyricsType,
-                //'lyricsIndex': bookmarkData.lyricsIndex,
-              });
-              // await launchUrl(
-              //   uri,
-              //   mode: LaunchMode.externalApplication,
-              // );
+              controller.tapDeepLink(url);
             } catch (e) {
               debugPrint('Could not launch $url: $e');
             }

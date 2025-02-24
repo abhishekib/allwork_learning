@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
@@ -32,6 +32,12 @@ class MenuDetailsHelpers {
     //developer.log("Converting to MenuDetailEntity");
     return MenuDetailEntity(endpoint,
         apiResponseEntity: _convertToApiResponseEntity(apiResponsehandler));
+  }
+
+  static DeepLinkDataEntity toDeepLinkDataEntity(
+      String url, Category category) {
+    return DeepLinkDataEntity(url,
+        category:  CategoryHelpers.toCategoryEntity(category));
   }
 
   // Helper function to convert ApiResponseHandler to _ApiResponseEntity
@@ -271,8 +277,8 @@ class CategoryHelpers {
   }
 
   static LyricsEntity convertToLyricsEntity(Lyrics lyrics) {
-    return LyricsEntity(
-        lyrics.time, lyrics.arabic, lyrics.translitration, lyrics.translation, lyrics.english ?? '');
+    return LyricsEntity(lyrics.time, lyrics.arabic, lyrics.translitration,
+        lyrics.translation, lyrics.english ?? '');
   }
 
   static Category toCategory(CategoryEntity categoryEntity) {
@@ -313,6 +319,6 @@ class CategoryHelpers {
         arabic: lyricsEntity.arabic,
         translitration: lyricsEntity.translitration,
         translation: lyricsEntity.translation,
-        english:lyricsEntity.english);
+        english: lyricsEntity.english);
   }
 }

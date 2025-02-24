@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:allwork/controllers/bookmark_controller.dart';
+import 'package:allwork/controllers/deep_linking_controller.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/modals/category.dart';
@@ -36,8 +37,8 @@ class CategoryDetailController extends GetxController {
   var showTranslation = true.obs;
 
   final LoginController _loginController = Get.put(LoginController());
-    final DeepLinkingProvider deepLinkingProvider =
-      DeepLinkingProvider(ApiConstants.token);
+  final DeepLinkingController _deepLinkingController =
+      Get.put(DeepLinkingController());
 
   List<String> selectedDaysForReminder = [];
 
@@ -280,7 +281,8 @@ class CategoryDetailController extends GetxController {
 
 //method to get the next Date of the week of the given day
   DateTime _getNextDay(String day, Duration timeOfDay) {
-    DateTime now = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    DateTime now =
+        DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     int daysUntilSameDay = 0;
 
     switch (day) {
@@ -314,9 +316,16 @@ class CategoryDetailController extends GetxController {
       daysUntilSameDay += 7;
     }
 
-    return now.add(Duration(days: daysUntilSameDay, minutes: timeOfDay.inMinutes));
+    return now
+        .add(Duration(days: daysUntilSameDay, minutes: timeOfDay.inMinutes));
+  }
+
+  void tapDeepLink(String url) {
+    _deepLinkingController.handleDeepLink(url);
   }
 }
+
+
 
  // final String? initialAudioUrl = isAudioDownloaded
   //     ? cdata[0].offlineAudioPath!

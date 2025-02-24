@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:allwork/entities/about_us_entity.dart';
 import 'package:allwork/entities/audio_download_mapping_entity.dart';
-import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/entities/menu_entities/animated_text_entities.dart';
@@ -50,7 +50,8 @@ class DbServices {
       ReminderEntity.schema,
       ReminderDataEntity.schema,
       AudioDownloadMapping.schema,
-      AboutUsEntity.schema
+      AboutUsEntity.schema,
+      DeepLinkDataEntity.schema
     ]);
     realm = Realm(config);
   }
@@ -294,10 +295,11 @@ class DbServices {
     return realm.all<ReminderEntity>().query("title == '$title'").length;
   }
 
-  Future<void> writeAudioDownloadPath(
-      String audioUrl, String audioDownloadPath, String categoryName, String categoryType) async {
+  Future<void> writeAudioDownloadPath(String audioUrl, String audioDownloadPath,
+      String categoryName, String categoryType) async {
     realm.write(() {
-      realm.add(AudioDownloadMapping(audioUrl, audioDownloadPath, categoryName, categoryType));
+      realm.add(AudioDownloadMapping(
+          audioUrl, audioDownloadPath, categoryName, categoryType));
     });
   }
 
@@ -319,9 +321,36 @@ class DbServices {
 
   Future<void> deleteAudioDownloadPath(String audioDownloadPath) async {
     realm.write(() {
-      realm.delete<AudioDownloadMapping>(
-          realm.all<AudioDownloadMapping>().query("audioDownloadPath == '$audioDownloadPath'").first);
+      realm.delete<AudioDownloadMapping>(realm
+          .all<AudioDownloadMapping>()
+          .query("audioDownloadPath == '$audioDownloadPath'")
+          .first);
     });
   }
 
+  Future<void> writeDeepLink(
+      String deeplink, Category category) async {
+    realm.write(() {
+      DeepLinkDataEntity? deepLinkDataEntity =
+          realm.find<DeepLinkDataEntity>(deeplink);
+
+      if (deepLinkDataEntity != null) {
+        realm.delete<DeepLinkDataEntity>(deepLinkDataEntity);
+      }
+
+      realm.add(
+          MenuDetailsHelpers.toDeepLinkDataEntity(deeplink, category));
+      log("Deep Link written in DB");
+    });
+  }
+
+  Future<Category?> getDeepLink(String url) async {
+    DeepLinkDataEntity? deepLinkDataEntity =
+        realm.find<DeepLinkDataEntity>(url);
+    if (deepLinkDataEntity == null) return null;
+
+    Category category = CategoryHelpers.toCategory(deepLinkDataEntity.category!);
+
+    return category;
+  }
 }

@@ -1,5 +1,5 @@
 import 'package:realm/realm.dart';
-part 'bookmark_reminder_data_entity.realm.dart';
+part 'bookmark_reminder_deep_link_data_entity.realm.dart';
 
 @RealmModel()
 class _BookmarkDataEntity {
@@ -14,6 +14,13 @@ class _BookmarkDataEntity {
 class _ReminderDataEntity {
   @PrimaryKey()
   late String title;
+  _CategoryEntity? category;
+}
+
+@RealmModel()
+class _DeepLinkDataEntity{
+  @PrimaryKey()
+  late String endpoint;
   _CategoryEntity? category;
 }
 

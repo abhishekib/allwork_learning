@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:allwork/entities/menu_detail_entity.dart';
 import 'package:allwork/modals/api_response_handler.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/category_response.dart';
+import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 
@@ -31,7 +33,14 @@ class DeepLinkingProvider {
 
       if (response.statusCode == 200) {
         log(response.data.toString());
-        return ApiResponseHandler.fromJson(response.data);
+        ApiResponseHandler apiResponseHandler =
+            ApiResponseHandler.fromJson(response.data);
+
+        Category category = Category.fromJson(apiResponseHandler.data['data']);
+
+        DbServices.instance
+            .writeDeepLink(deepLink, category);
+        return apiResponseHandler;
       } else {
         throw Exception('Failed to fetch data from $endpoint');
       }

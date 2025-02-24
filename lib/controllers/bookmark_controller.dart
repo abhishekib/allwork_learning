@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/helpers.dart';

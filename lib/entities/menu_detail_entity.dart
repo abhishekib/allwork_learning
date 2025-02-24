@@ -1,5 +1,5 @@
 import 'package:realm/realm.dart';
-    part 'menu_detail_entity.realm.dart';
+part 'menu_detail_entity.realm.dart';
     
 @RealmModel()
 class _MenuDetailEntity {
@@ -7,6 +7,7 @@ class _MenuDetailEntity {
   late String endpoint;
   _ApiResponseEntity? apiResponseEntity; // List of category groups
 }
+
 
 @RealmModel()
 // Define a top-level wrapper class

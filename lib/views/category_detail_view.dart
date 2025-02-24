@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
-import 'package:allwork/entities/bookmark_reminder_data_entity.dart';
+import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'bookmark_reminder_data_entity.dart';
+part of 'bookmark_reminder_deep_link_data_entity.dart';
 
 // **************************************************************************
 // RealmObjectGenerator
@@ -168,6 +168,81 @@ class ReminderDataEntity extends _ReminderDataEntity
     return const SchemaObject(
         ObjectType.realmObject, ReminderDataEntity, 'ReminderDataEntity', [
       SchemaProperty('title', RealmPropertyType.string, primaryKey: true),
+      SchemaProperty('category', RealmPropertyType.object,
+          optional: true, linkTarget: 'CategoryEntity'),
+    ]);
+  }();
+
+  @override
+  SchemaObject get objectSchema => RealmObjectBase.getSchema(this) ?? schema;
+}
+
+class DeepLinkDataEntity extends _DeepLinkDataEntity
+    with RealmEntity, RealmObjectBase, RealmObject {
+  DeepLinkDataEntity(
+    String endpoint, {
+    CategoryEntity? category,
+  }) {
+    RealmObjectBase.set(this, 'endpoint', endpoint);
+    RealmObjectBase.set(this, 'category', category);
+  }
+
+  DeepLinkDataEntity._();
+
+  @override
+  String get endpoint =>
+      RealmObjectBase.get<String>(this, 'endpoint') as String;
+  @override
+  set endpoint(String value) => RealmObjectBase.set(this, 'endpoint', value);
+
+  @override
+  CategoryEntity? get category =>
+      RealmObjectBase.get<CategoryEntity>(this, 'category') as CategoryEntity?;
+  @override
+  set category(covariant CategoryEntity? value) =>
+      RealmObjectBase.set(this, 'category', value);
+
+  @override
+  Stream<RealmObjectChanges<DeepLinkDataEntity>> get changes =>
+      RealmObjectBase.getChanges<DeepLinkDataEntity>(this);
+
+  @override
+  Stream<RealmObjectChanges<DeepLinkDataEntity>> changesFor(
+          [List<String>? keyPaths]) =>
+      RealmObjectBase.getChangesFor<DeepLinkDataEntity>(this, keyPaths);
+
+  @override
+  DeepLinkDataEntity freeze() =>
+      RealmObjectBase.freezeObject<DeepLinkDataEntity>(this);
+
+  EJsonValue toEJson() {
+    return <String, dynamic>{
+      'endpoint': endpoint.toEJson(),
+      'category': category.toEJson(),
+    };
+  }
+
+  static EJsonValue _toEJson(DeepLinkDataEntity value) => value.toEJson();
+  static DeepLinkDataEntity _fromEJson(EJsonValue ejson) {
+    if (ejson is! Map<String, dynamic>) return raiseInvalidEJson(ejson);
+    return switch (ejson) {
+      {
+        'endpoint': EJsonValue endpoint,
+      } =>
+        DeepLinkDataEntity(
+          fromEJson(endpoint),
+          category: fromEJson(ejson['category']),
+        ),
+      _ => raiseInvalidEJson(ejson),
+    };
+  }
+
+  static final schema = () {
+    RealmObjectBase.registerFactory(DeepLinkDataEntity._);
+    register(_toEJson, _fromEJson);
+    return const SchemaObject(
+        ObjectType.realmObject, DeepLinkDataEntity, 'DeepLinkDataEntity', [
+      SchemaProperty('endpoint', RealmPropertyType.string, primaryKey: true),
       SchemaProperty('category', RealmPropertyType.object,
           optional: true, linkTarget: 'CategoryEntity'),
     ]);

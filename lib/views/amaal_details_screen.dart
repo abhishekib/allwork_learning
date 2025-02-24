@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:allwork/controllers/deep_linking_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/deep_linking_provider.dart';
 import 'package:allwork/services/TextCleanerService.dart';
@@ -16,8 +17,8 @@ import 'package:url_launcher/url_launcher.dart';
 class AmaalDetailsScreen extends StatelessWidget {
   final Category item;
 
-  final DeepLinkingProvider deepLinkingProvider =
-      DeepLinkingProvider(ApiConstants.token);
+  final DeepLinkingController deepLinkingController =
+      Get.put(DeepLinkingController());
 
   AmaalDetailsScreen({super.key, required this.item});
 
@@ -50,26 +51,7 @@ class AmaalDetailsScreen extends StatelessWidget {
                   if (url != null) {
                     final uri = Uri.parse(url);
                     try {
-                      final response =
-                          await deepLinkingProvider.getDeepLinkingResponse(url);
-
-                      Category category = Category.fromJson(response.data['data']);
-                      log(category.toString());
-
-                      Get.to(() => CategoryDetailView(), arguments: {
-                        'fromBookmark': false,
-                        'category': category,
-                        'language': 'English',
-                        'menuItem': '',
-                        //'bookmarkedTab': bookmarkData.lyricsType,
-                        //'lyricsIndex': bookmarkData.lyricsIndex,
-                      });
-
-                      //Get.to(() => CategoryDetailView(), arguments: );
-                      // await launchUrl(
-                      //   uri,
-                      //   mode: LaunchMode.externalApplication,
-                      // );
+                      deepLinkingController.handleDeepLink(url);
                     } catch (e) {
                       debugPrint('Could not launch $url: $e');
                     }
