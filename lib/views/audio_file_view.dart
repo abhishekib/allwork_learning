@@ -46,20 +46,14 @@ class AudioFileView extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                            "${TextCleanerService.cleanText(
-                                                controller
-                                                    .audioDownloadMappings[
-                                                        index]
-                                                    .categoryName)} - ${controller
-                                                    .audioDownloadMappings[
-                                                        index]
-                                                    .categoryType}",
+                                            "${TextCleanerService.cleanText(controller.audioDownloadMappings[index].categoryName)} - ${controller.audioDownloadMappings[index].categoryType}",
                                             style: AppTextStyles.whiteText),
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          controller.deleteAudioFile(
-                                              controller.audioDownloadMappings[index].audioDownloadPath);
+                                          controller.deleteAudioFile(controller
+                                              .audioDownloadMappings[index]
+                                              .audioDownloadPath);
                                         },
                                         child: Icon(Icons.delete,
                                             color: Colors.white),

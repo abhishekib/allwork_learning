@@ -14,16 +14,41 @@ class AudioFileController extends GetxController {
 
   @override
   void onInit() {
+    log("on init called");
     audioDownloadMappings.value =
         DbServices.instance.getAudioDownloadMappings();
     super.onInit();
   }
 
   void deleteAudioFile(String audioDownloadpath) {
-    audioDownloadMappings.removeWhere(
-        (AudioDownloadMapping audioDownloadMapping) =>
+    log(audioDownloadpath);
+
+    log("audio controllers initial length ${audioControllers.length.toString()}");
+//get audio download path
+    AudioDownloadMapping audioDownloadMapping = audioDownloadMappings
+        .firstWhere((AudioDownloadMapping audioDownloadMapping) =>
             audioDownloadMapping.audioDownloadPath == audioDownloadpath);
+
+    ///get index of audio download path
+    int index = audioDownloadMappings.indexOf(audioDownloadMapping);
+
+    log(index.toString());
+
+//if audio is running stop it
+    AudioController controller = audioControllers[index];
+
+    controller.onClose();
+
+    audioControllers = [];
+
+    log("audio controllers length after removal ${audioControllers.length.toString()}");
+
+    audioDownloadMappings.remove(audioDownloadMapping);
+
     DbServices.instance.deleteAudioDownloadPath(audioDownloadpath);
+
+    log("audio download mappings getting reset ${audioDownloadMappings.length.toString()}");
+
     final file = File(audioDownloadpath);
     file.delete();
   }
