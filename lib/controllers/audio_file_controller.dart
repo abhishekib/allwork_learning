@@ -1,13 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 
+import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/entities/audio_download_mapping_entity.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 
 class AudioFileController extends GetxController {
   RxList<AudioDownloadMapping> audioDownloadMappings =
       <AudioDownloadMapping>[].obs;
+
+  List<AudioController> audioControllers = [];
 
   @override
   void onInit() {
@@ -28,4 +31,13 @@ class AudioFileController extends GetxController {
   // String extractAudioName(String audioDownloadpath) {
   //   return audioDownloadpath.split('/').last;
   // }
+
+  @override
+  InternalFinalCallback<void> get onDelete {
+    log("On delete called");
+    for (var controller in audioControllers) {
+      controller.onClose();
+    }
+    return super.onDelete;
+  }
 }

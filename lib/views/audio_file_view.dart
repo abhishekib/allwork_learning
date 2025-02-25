@@ -36,6 +36,7 @@ class AudioFileView extends StatelessWidget {
                           itemCount: controller.audioDownloadMappings.length,
                           itemBuilder: (context, index) {
                             AudioController audioController = AudioController();
+                            controller.audioControllers.add(audioController);
                             return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListTile(
