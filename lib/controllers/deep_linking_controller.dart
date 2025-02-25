@@ -31,7 +31,7 @@ class DeepLinkingController extends GetxController {
       'fromBookmark': false,
       'category': category,
       'language': 'English',
-      'menuItem': '',
+      'menuItem': category.menuItem,
       //'bookmarkedTab': bookmarkData.lyricsType,
       //'lyricsIndex': bookmarkData.lyricsIndex,
     });
@@ -51,7 +51,7 @@ class DeepLinkingController extends GetxController {
       'fromBookmark': false,
       'category': category,
       'language': 'English',
-      'menuItem': '',
+      'menuItem': category.menuItem,
       //'bookmarkedTab': bookmarkData.lyricsType,
       //'lyricsIndex': bookmarkData.lyricsIndex,
     });

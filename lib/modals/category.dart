@@ -4,6 +4,7 @@ class Category {
   final String category;
   final String? postType;
   final int id;
+  final String? menuItem;
   final String title;
   final String? link;
   final String? isFav;
@@ -15,6 +16,7 @@ class Category {
     required this.id,
     required this.title,
     required this.isFav,
+    this.menuItem,
     this.link,
     this.postType,
     this.cdata,
@@ -26,6 +28,7 @@ class Category {
         category: json['cat'] ?? '',
         postType: json['posttype'] ?? '',
         id: _parseId(json['id']),
+        menuItem: json['menuItem'] ?? '',
         title: json['title'] ?? '',
         link: json['link'] ?? '',
         isFav: json['isfav'] ?? 'No',

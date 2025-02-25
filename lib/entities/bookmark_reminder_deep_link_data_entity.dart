@@ -18,7 +18,7 @@ class _ReminderDataEntity {
 }
 
 @RealmModel()
-class _DeepLinkDataEntity{
+class _DeepLinkDataEntity {
   @PrimaryKey()
   late String endpoint;
   _CategoryEntity? category;
@@ -29,6 +29,7 @@ class _CategoryEntity {
   late String category;
   late String postType;
   late int id;
+  late String menuItem;
   late String title;
   late String link;
   late String isFav;

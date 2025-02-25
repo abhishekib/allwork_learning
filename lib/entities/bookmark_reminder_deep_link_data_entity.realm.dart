@@ -258,6 +258,7 @@ class CategoryEntity extends _CategoryEntity
     String category,
     String postType,
     int id,
+    String menuItem,
     String title,
     String link,
     String isFav,
@@ -267,6 +268,7 @@ class CategoryEntity extends _CategoryEntity
     RealmObjectBase.set(this, 'category', category);
     RealmObjectBase.set(this, 'postType', postType);
     RealmObjectBase.set(this, 'id', id);
+    RealmObjectBase.set(this, 'menuItem', menuItem);
     RealmObjectBase.set(this, 'title', title);
     RealmObjectBase.set(this, 'link', link);
     RealmObjectBase.set(this, 'isFav', isFav);
@@ -293,6 +295,12 @@ class CategoryEntity extends _CategoryEntity
   int get id => RealmObjectBase.get<int>(this, 'id') as int;
   @override
   set id(int value) => RealmObjectBase.set(this, 'id', value);
+
+  @override
+  String get menuItem =>
+      RealmObjectBase.get<String>(this, 'menuItem') as String;
+  @override
+  set menuItem(String value) => RealmObjectBase.set(this, 'menuItem', value);
 
   @override
   String get title => RealmObjectBase.get<String>(this, 'title') as String;
@@ -339,6 +347,7 @@ class CategoryEntity extends _CategoryEntity
       'category': category.toEJson(),
       'postType': postType.toEJson(),
       'id': id.toEJson(),
+      'menuItem': menuItem.toEJson(),
       'title': title.toEJson(),
       'link': link.toEJson(),
       'isFav': isFav.toEJson(),
@@ -355,6 +364,7 @@ class CategoryEntity extends _CategoryEntity
         'category': EJsonValue category,
         'postType': EJsonValue postType,
         'id': EJsonValue id,
+        'menuItem': EJsonValue menuItem,
         'title': EJsonValue title,
         'link': EJsonValue link,
         'isFav': EJsonValue isFav,
@@ -364,6 +374,7 @@ class CategoryEntity extends _CategoryEntity
           fromEJson(category),
           fromEJson(postType),
           fromEJson(id),
+          fromEJson(menuItem),
           fromEJson(title),
           fromEJson(link),
           fromEJson(isFav),
@@ -382,6 +393,7 @@ class CategoryEntity extends _CategoryEntity
       SchemaProperty('category', RealmPropertyType.string),
       SchemaProperty('postType', RealmPropertyType.string),
       SchemaProperty('id', RealmPropertyType.int),
+      SchemaProperty('menuItem', RealmPropertyType.string),
       SchemaProperty('title', RealmPropertyType.string),
       SchemaProperty('link', RealmPropertyType.string),
       SchemaProperty('isFav', RealmPropertyType.string),

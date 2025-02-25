@@ -257,6 +257,7 @@ class CategoryHelpers {
         category.category,
         category.postType ?? '',
         category.id,
+        category.menuItem??'',
         category.title,
         category.link ?? '',
         category.isFav ?? 'No',
