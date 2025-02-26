@@ -48,17 +48,6 @@ class PopupView extends StatelessWidget {
         return GestureDetector(
           onTap: () async {
             Get.back();
-            if (popupType == PopupType.AMAL_NAMAZ_POPUP) {
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              if (prefs.getString('selectedLanguage') == "ગુજરાતી") {
-                Get.to(() => MenuDetailView(
-                    menuItem: "અમલ અને નમાઝ", selectedLanguage: "ગુજરાતી"));
-              }
-              else{
-                Get.to(() => MenuDetailView(
-                    menuItem: "Amaal & Namaz", selectedLanguage: "English"));
-              }
-            }
           },
           child: Dialog(
             backgroundColor: Colors.transparent,
@@ -87,26 +76,45 @@ class PopupView extends StatelessWidget {
                             ),
                           )
                         else
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              imageUrl,
-                              fit: BoxFit.contain,
-                              loadingBuilder:
-                                  (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return const Center(
-                                    child: CircularProgressIndicator(
-                                        color: Colors.white));
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Center(
-                                  child: Text(
-                                    'Failed to load image',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                );
-                              },
+                          GestureDetector(
+                            onTap: () async {
+                              Get.back();
+                              if (popupType == PopupType.AMAL_NAMAZ_POPUP) {
+                                SharedPreferences prefs =
+                                    await SharedPreferences.getInstance();
+                                if (prefs.getString('selectedLanguage') ==
+                                    "ગુજરાતી") {
+                                  Get.to(() => MenuDetailView(
+                                      menuItem: "અમલ અને નમાઝ",
+                                      selectedLanguage: "ગુજરાતી"));
+                                } else {
+                                  Get.to(() => MenuDetailView(
+                                      menuItem: "Amaal & Namaz",
+                                      selectedLanguage: "English"));
+                                }
+                              }
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(10),
+                              child: Image.network(
+                                imageUrl,
+                                fit: BoxFit.contain,
+                                loadingBuilder:
+                                    (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return const Center(
+                                      child: CircularProgressIndicator(
+                                          color: Colors.white));
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Center(
+                                    child: Text(
+                                      'Failed to load image',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         Positioned(
