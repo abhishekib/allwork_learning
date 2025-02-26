@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/controllers/reminder_controller.dart';
 import 'package:allwork/services/TextCleanerService.dart';
@@ -34,7 +36,17 @@ class ReminderView extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: controller.reminders.length,
                           itemBuilder: (context, index) {
-                            DateTime localDateTime = controller.reminders[index].scheduledDateTime.toLocal();
+                            DateTime localDateTime = controller
+                                .reminders[index].scheduledDateTime
+                                .toLocal();
+                            log("weekday ${localDateTime.weekday.toString()}");
+                            log("weekday from api constants ${ApiConstants.days[localDateTime.weekday].dayKey}");
+                            log("weekday from api constants ${ApiConstants.days[1].dayKey}");
+                            log("weekday from api constants ${ApiConstants.days[2].dayKey}");
+                            log("weekday from api constants ${ApiConstants.days[3].dayKey}");
+                            log("weekday from api constants ${ApiConstants.days[5].dayKey}");
+                            log("weekday from api constants ${ApiConstants.days[6].dayKey}");
+                            log("weekday from api constants ${ApiConstants.days[7].dayKey}");
                             return Column(
                               children: [
                                 Container(
@@ -43,9 +55,9 @@ class ReminderView extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(9.5),
                                   ),
                                   child: ListTile(
-                                    onTap: () {
-                                      controller.openReminder(index);
-                                    },
+                                      onTap: () {
+                                        controller.openReminder(index);
+                                      },
                                       title: Column(
                                         children: [
                                           Text(
@@ -65,7 +77,10 @@ class ReminderView extends StatelessWidget {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                ApiConstants.days[localDateTime.weekday].dayKey,
+                                                  ApiConstants
+                                                      .days[
+                                                          localDateTime.weekday]
+                                                      .dayKey,
                                                   style:
                                                       AppTextStyles.customStyle(
                                                     fontFamily: 'Roboto',
@@ -101,10 +116,12 @@ class ReminderView extends StatelessWidget {
                                               shape: BoxShape.circle,
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(3.0),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  controller.removeReminder(index);
+                                                  controller
+                                                      .removeReminder(index);
                                                 },
                                                 child: Icon(
                                                   Icons.remove,
@@ -119,13 +136,16 @@ class ReminderView extends StatelessWidget {
                                               shape: BoxShape.circle,
                                             ),
                                             child: Padding(
-                                              padding: const EdgeInsets.all(3.0),
+                                              padding:
+                                                  const EdgeInsets.all(3.0),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  controller.openReminder(index);
+                                                  controller
+                                                      .openReminder(index);
                                                 },
                                                 child: Icon(
-                                                  Icons.arrow_forward_ios_rounded,
+                                                  Icons
+                                                      .arrow_forward_ios_rounded,
                                                   color: Colors.white,
                                                 ),
                                               ),
