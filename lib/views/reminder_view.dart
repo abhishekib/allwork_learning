@@ -122,7 +122,7 @@ class ReminderView extends StatelessWidget {
                                               padding: const EdgeInsets.all(3.0),
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  controller.removeReminder(index);
+                                                  controller.openReminder(index);
                                                 },
                                                 child: Icon(
                                                   Icons.arrow_forward_ios_rounded,

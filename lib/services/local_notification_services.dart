@@ -28,7 +28,7 @@ class LocalNotificationServices {
   }
 
   // Channel IDs for different notification types
-  static const String _simpleChannelId = 'simple_channel';
+  //static const String _simpleChannelId = 'simple_channel';
   static const String _scheduledChannelId = 'scheduled_channel';
 
   /// Initializes the local notifications plugin and requests necessary permissions.
@@ -36,7 +36,7 @@ class LocalNotificationServices {
     // Initialize timezone data first
     tz.initializeTimeZones();
 
-    log(await FlutterTimezone.getLocalTimezone());
+    print(await FlutterTimezone.getLocalTimezone());
 
     String timeZone = await FlutterTimezone.getLocalTimezone();
     if (timeZone == 'Asia/Calcutta') {
@@ -121,7 +121,7 @@ class LocalNotificationServices {
     final scheduledTime = tz.TZDateTime.from(dateTime, tz.local);
 
     try {
-      log("Scheduling local notification with payload: ${category.title}");
+      print("Scheduling local notification with payload: ${category.title}");
       await _notificationsPlugin.zonedSchedule(
         DbServices.instance.getNextReminderId(),
         TextCleanerService.cleanText(category.title),
@@ -135,7 +135,7 @@ class LocalNotificationServices {
         matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime
       );
 
-      log("Notification scheduled for: $scheduledTime");
+      print("Notification scheduled for: $scheduledTime");
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setInt(
@@ -148,7 +148,7 @@ class LocalNotificationServices {
       //     await _notificationsPlugin.pendingNotificationRequests();
       // log("Pending notifications count: ${pendingNotifications.length}");
     } catch (e) {
-      log("Error scheduling notification: $e");
+      print("Error scheduling notification: $e");
     }
   }
 

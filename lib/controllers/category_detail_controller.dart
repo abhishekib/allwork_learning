@@ -272,7 +272,7 @@ class CategoryDetailController extends GetxController {
     for (String day in selectedDaysForReminder) {
       //get the exact dates and time when the reminders will be set
       DateTime nextDay = _getNextDay(day, timeOfDay);
-      log("next day $nextDay");
+      print("next day $nextDay");
       nextDay.add(timeOfDay);
       LocalNotificationServices.showScheduleNotification(
           category: category, dateTime: nextDay);
