@@ -1,8 +1,10 @@
 import 'package:allwork/controllers/popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/popupEnums.dart';
+import 'package:allwork/views/menu_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PopupView extends StatelessWidget {
   final PopupController eventPopupController = Get.put(PopupController());
@@ -44,8 +46,19 @@ class PopupView extends StatelessWidget {
         }
 
         return GestureDetector(
-          onTap: () {
+          onTap: () async {
             Get.back();
+            if (popupType == PopupType.AMAL_NAMAZ_POPUP) {
+              SharedPreferences prefs = await SharedPreferences.getInstance();
+              if (prefs.getString('selectedLanguage') == "ગુજરાતી") {
+                Get.to(() => MenuDetailView(
+                    menuItem: "અમલ અને નમાઝ", selectedLanguage: "ગુજરાતી"));
+              }
+              else{
+                Get.to(() => MenuDetailView(
+                    menuItem: "Amaal & Namaz", selectedLanguage: "English"));
+              }
+            }
           },
           child: Dialog(
             backgroundColor: Colors.transparent,
@@ -83,8 +96,8 @@ class PopupView extends StatelessWidget {
                                   (context, child, loadingProgress) {
                                 if (loadingProgress == null) return child;
                                 return const Center(
-                                  child: CircularProgressIndicator(color: Colors.white)
-                                );
+                                    child: CircularProgressIndicator(
+                                        color: Colors.white));
                               },
                               errorBuilder: (context, error, stackTrace) {
                                 return const Center(
