@@ -312,6 +312,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   context, categoryDetails, menuItem),
               child: const Icon(Icons.favorite),
             ),
+            /*
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.access_alarm),
@@ -374,6 +375,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                         ));
               },
             ),
+            */
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.settings),
@@ -454,6 +456,47 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                   }).toList(),
                 ),
               ),
+              Visibility(
+                visible: categoryDetails.nextPostTitle?.isNotEmpty ?? false,
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context, // Ensure you pass the context
+                      builder: (BuildContext context) {
+                        return CupertinoAlertDialog(
+                          title: Text('Clicked'),
+                          actions: <Widget>[
+                            CupertinoDialogAction(
+                              child: Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 28.0, left: 10),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(
+                          categoryDetails.nextPostTitle ?? '',
+                          style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              )
             ],
           ),
         ),

@@ -10,6 +10,8 @@ class Category {
   final String? isFav;
   final List<ContentData>? cdata;
   final String? data;
+  final String? nextPostTitle;
+  final int? nextPostId;
 
   Category({
     required this.category,
@@ -21,6 +23,8 @@ class Category {
     this.postType,
     this.cdata,
     this.data,
+    this.nextPostId,
+    this.nextPostTitle,
   });
 
   factory Category.fromJson(Map<String, dynamic> json) {
@@ -30,6 +34,8 @@ class Category {
         id: _parseId(json['id']),
         menuItem: json['menuItem'] ?? '',
         title: json['title'] ?? '',
+        nextPostTitle: json['next_post_title'] ?? '',
+        nextPostId: json['next_post_id'] ?? '',
         link: json['link'] ?? '',
         isFav: json['isfav'] ?? 'No',
         cdata: json['cdata'] != null
