@@ -41,12 +41,12 @@ class ReminderView extends StatelessWidget {
                                 .toLocal();
                             log("weekday ${localDateTime.weekday.toString()}");
                             log("weekday from api constants ${ApiConstants.days[localDateTime.weekday].dayKey}");
-                            log("weekday from api constants ${ApiConstants.days[1].dayKey}");
-                            log("weekday from api constants ${ApiConstants.days[2].dayKey}");
-                            log("weekday from api constants ${ApiConstants.days[3].dayKey}");
-                            log("weekday from api constants ${ApiConstants.days[5].dayKey}");
-                            log("weekday from api constants ${ApiConstants.days[6].dayKey}");
-                            log("weekday from api constants ${ApiConstants.days[7].dayKey}");
+                            // log("weekday from api constants ${ApiConstants.days[0].dayKey}");
+                            // log("weekday from api constants ${ApiConstants.days[1].dayKey}");
+                            // log("weekday from api constants ${ApiConstants.days[2].dayKey}");
+                            // log("weekday from api constants ${ApiConstants.days[3].dayKey}");
+                            // log("weekday from api constants ${ApiConstants.days[4].dayKey}");
+                            // log("weekday from api constants ${ApiConstants.days[5].dayKey}");
                             return Column(
                               children: [
                                 Container(
