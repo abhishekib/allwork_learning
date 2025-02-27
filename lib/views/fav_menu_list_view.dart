@@ -66,7 +66,11 @@ class _FavMenuListViewState extends State<FavMenuListView> {
                             textColor: AppColors.backgroundBlue,
                             title: Center(
                               child: Text(
-                                menuItem,
+                                menuItem == "Surah"
+                                    ? "The Holy Quran"
+                                    : menuItem == "સુરાહ"
+                                        ? "કુરાન"
+                                        : menuItem,
                                 style: AppTextStyles.blueBoldText,
                               ),
                             ),
