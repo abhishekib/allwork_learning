@@ -21,9 +21,15 @@ class FavCategoryListView extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.white),
-          title: Text(
-            "Favourite $menuItem",
-            style: AppTextStyles.whiteBoldTitleText,
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                "Favourite ${menuItem == "Surah" ? "The Holy Quran" : menuItem == "સુરાહ" ? "કુરાન" : menuItem}",
+                style: AppTextStyles.whiteBoldTitleText,
+              ),
+            ),
           ),
         ),
         body: Obx(() {
