@@ -18,6 +18,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:upgrader/upgrader.dart';
 import 'views/category_detail_view.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -31,6 +32,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await Upgrader.clearSavedSettings();
+  
 //Remove this method to stop OneSignal Debugging
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
@@ -73,6 +76,8 @@ Future<void> main() async {
       'menuItem': category.category
     });
   });
+
+
 
   runApp(MyApp(fromNotification: fromNotification));
 
