@@ -274,8 +274,8 @@ class CategoryDetailController extends GetxController {
       DateTime nextDay = _getNextDay(day, timeOfDay);
       print("next day $nextDay");
       nextDay.add(timeOfDay);
-      LocalNotificationServices.showScheduleNotification(
-          category: category, dateTime: nextDay);
+      // LocalNotificationServices.showScheduleNotification(
+      //     category: category, dateTime: nextDay);
     }
   }
 

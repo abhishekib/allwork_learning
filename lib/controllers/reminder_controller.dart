@@ -21,7 +21,7 @@ class ReminderController extends GetxController {
   void removeReminder(int index) {
     log("index to be removed and cancelled ${index.toString()}");
     DbServices.instance.deleteReminder(reminders[index].id);
-    LocalNotificationServices.cancelNotification(reminders[index].id);
+    //LocalNotificationServices.cancelNotification(reminders[index].id);
     reminders.removeAt(index);
     Get.snackbar("Deleted", "Deleted the reminder");
   }

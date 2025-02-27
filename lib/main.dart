@@ -14,21 +14,22 @@ import 'package:allwork/views/menu_detail_view.dart';
 import 'package:allwork/views/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 import 'views/category_detail_view.dart';
 
+/*
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
+*/
 Future<void> main() async {
   bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
-  await LocalNotificationServices.init();
+  //await LocalNotificationServices.init();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -41,6 +42,9 @@ Future<void> main() async {
 
 // The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
   OneSignal.Notifications.requestPermission(true);
+
+
+/*
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
@@ -63,6 +67,7 @@ Future<void> main() async {
   }
 
 //listen to the stream of notification click event when the app is running
+  
   LocalNotificationServices.onClickNotification.stream.listen((event) {
     log("Notification clicked");
     log(event);
@@ -76,7 +81,7 @@ Future<void> main() async {
       'menuItem': category.category
     });
   });
-
+*/
 
 
   runApp(MyApp(fromNotification: fromNotification));
