@@ -19,7 +19,7 @@ class FavouriteController extends GetxController {
       "Surah": ApiConstants.listFavSuraha,
       "Dua": ApiConstants.listFavDua,
       "Ziyarat": ApiConstants.listFavZiyarat,
-      "Amaal": ApiConstants.listFavAmaalNamaaz,
+      "Amaal & Namaz": ApiConstants.listFavAmaalNamaaz,
       "Munajat": ApiConstants.listFavMunajat,
       "Travel Ziyarat": ApiConstants.listFavTravelZiyarat,
     };
