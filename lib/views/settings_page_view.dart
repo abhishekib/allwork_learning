@@ -12,9 +12,9 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  double arabicFontSize = 18.0;
-  double transliterationFontSize = 16.0;
-  double translationFontSize = 16.0;
+  double arabicFontSize = 30.0;
+  double transliterationFontSize = 23.0;
+  double translationFontSize = 21.3;
   bool isCompactAudioView = true;
 
   @override
@@ -26,10 +26,10 @@ class SettingsPageState extends State<SettingsPage> {
   Future<void> _loadSettings() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      arabicFontSize = prefs.getDouble('arabicFontSize') ?? 18.0;
+      arabicFontSize = prefs.getDouble('arabicFontSize') ?? arabicFontSize;
       transliterationFontSize =
-          prefs.getDouble('transliterationFontSize') ?? 16.0;
-      translationFontSize = prefs.getDouble('translationFontSize') ?? 16.0;
+          prefs.getDouble('transliterationFontSize') ?? transliterationFontSize;
+      translationFontSize = prefs.getDouble('translationFontSize') ?? translationFontSize;
       isCompactAudioView = prefs.getBool('isCompactView') ?? true;
     });
   }
