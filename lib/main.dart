@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
-
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'views/category_detail_view.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -31,18 +31,23 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+//Remove this method to stop OneSignal Debugging
+  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
+  OneSignal.initialize("30eecd80-d98f-439a-b5e5-ddf3fe6248ce");
+
+// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.Notifications.requestPermission(true);
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
 //if the app starts with click on notification
   if (initialNotification?.didNotificationLaunchApp == true) {
     fromNotification = true;
-    
+
     Category category = CategoryHelpers.toCategory(DbServices.instance
-            .getReminderData(
-                initialNotification!.notificationResponse!.payload!)!
-            .category!);
+        .getReminderData(initialNotification!.notificationResponse!.payload!)!
+        .category!);
 
     Future.delayed(Duration(seconds: 1), () {
       Get.to(() => CategoryDetailView(), arguments: {
