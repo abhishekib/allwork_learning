@@ -20,6 +20,7 @@ import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 import 'views/category_detail_view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /*
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -33,8 +34,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await SharedPreferences.getInstance();
   await Upgrader.clearSavedSettings();
-  
 //Remove this method to stop OneSignal Debugging
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
