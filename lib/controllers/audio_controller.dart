@@ -30,6 +30,7 @@ class AudioController extends GetxController {
       isLoading.value = true;
 
       // Load playback speed before setting the source to ensure it applies correctlFy
+      // Load playback speed before setting the source to ensure it applies correctlFy
       await loadPlaybackSpeed();
 
       //check if audio is already downloaded or not
@@ -44,8 +45,8 @@ class AudioController extends GetxController {
         await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
       } else {
         log("audio url: $audioUrl");
-        // _audioPlayer.setSourceUrl(audioUrl);
-        await _audioPlayer.setSource(UrlSource(audioUrl));
+        await _audioPlayer.setSourceUrl(audioUrl);
+        //await _audioPlayer.setSource(UrlSource(audioUrl));
       }
 
       await Future.delayed(const Duration(milliseconds: 500));
