@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:allwork/providers/prayer_time_provider.dart';
 import 'package:allwork/modals/prayer_time_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
 
 class PrayerTimeController extends GetxController {
@@ -22,9 +23,12 @@ class PrayerTimeController extends GetxController {
     if (hasInternet) {
       _prayerTimeProvider = PrayerTimeProvider(ApiConstants.dailyDuaToken);
 
-      final position = await LocationService.getUserLocation();
-      final lat = position?.latitude ?? '';
-      final long = position?.longitude ?? '';
+      // final position = await LocationService.getUserLocation();
+      // final lat = position?.latitude ?? '';
+      // final long = position?.longitude ?? '';
+      final prefs = await SharedPreferences.getInstance();
+      final double lat = prefs.getDouble('latitude') ?? 0.0;
+      final double long = prefs.getDouble('longitude') ?? 0.0;
 
       fetchPrayerTimesFromAPI(lat, long);
       log('Internet connection is active');
