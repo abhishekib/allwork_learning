@@ -62,7 +62,8 @@ class MainMenuViewState extends State<MainMenuView> {
               // Static content that should not scroll
               Container(
                 color: AppColors.backgroundBlue,
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.only(
+                    left: 8.0, right: 8.0, top: Platform.isIOS ? 25.0 : 0),
                 child: Row(
                   children: [
                     IconButton(
