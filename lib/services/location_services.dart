@@ -1,15 +1,15 @@
 import 'dart:developer';
 import 'package:geolocator/geolocator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LocationService {
-static Future<Position?> getUserLocation() async {
+  static Future<Position?> getUserLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       log('Location services are disabled.');
-
       return null;
     }
 
@@ -19,7 +19,6 @@ static Future<Position?> getUserLocation() async {
       if (permission != LocationPermission.whileInUse &&
           permission != LocationPermission.always) {
         log('Location permission denied');
-
         return null;
       }
     }
@@ -33,9 +32,18 @@ static Future<Position?> getUserLocation() async {
       locationSettings: locationSettings,
     );
 
-    log("Position lat ${position.latitude}");
-    log("Position long ${position.longitude}");
+    log("Position lat: ${position.latitude}");
+    log("Position long: ${position.longitude}");
+
+    await saveLocation(position);
 
     return position;
+  }
+
+  static Future<void> saveLocation(Position position) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('latitude', position.latitude);
+    await prefs.setDouble('longitude', position.longitude);
+    log('Location saved in shared preferences.');
   }
 }
