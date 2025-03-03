@@ -44,8 +44,8 @@ class AudioController extends GetxController {
         await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
       } else {
         log("audio url: $audioUrl");
-        await _audioPlayer.setSourceUrl(audioUrl);
-        //await _audioPlayer.setSource(UrlSource(audioUrl));
+        // _audioPlayer.setSourceUrl(audioUrl);
+        await _audioPlayer.setSource(UrlSource(audioUrl));
       }
 
       await Future.delayed(const Duration(milliseconds: 500));
