@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:allwork/controllers/popup_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/views/menu_list_view.dart';
@@ -62,15 +65,23 @@ class MainMenuViewState extends State<MainMenuView> {
               // Static content that should not scroll
               Container(
                 color: AppColors.backgroundBlue,
-                padding: EdgeInsets.only(
-                    left: 8.0, right: 8.0, top: Platform.isIOS ? 25.0 : 0),
+                padding: Platform.isIOS
+                    ? const EdgeInsets.only(left: 8.0, right: 8.0, top: 25)
+                    : const EdgeInsets.only(left: 8.0, right: 8.0),
                 child: Row(
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.menu, color: Colors.white),
+                      icon: const Icon(
+                        Icons.menu,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                       onPressed: () {
                         // Scaffold.of(context).openDrawer();
-                        _scaffoldKey.currentState?.openDrawer();
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          _scaffoldKey.currentState?.openDrawer();
+                        });
+                        log('TAPPED');
                       },
                     ),
                     Expanded(
@@ -115,7 +126,7 @@ class MainMenuViewState extends State<MainMenuView> {
                     ),
                     DailyDateWidget(),
                     PrayerTimeWidget(),
-      
+
                     // Language selection dropdown
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -169,9 +180,9 @@ class MainMenuViewState extends State<MainMenuView> {
                         ],
                       ),
                     ),
-      
+
                     const SizedBox(height: 10),
-      
+
                     MenuListView(selectedLanguage: selectedLanguage),
                   ],
                 ),

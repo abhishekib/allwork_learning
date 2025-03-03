@@ -23,7 +23,7 @@ class AudioPlayerWidget extends StatefulWidget {
     required this.categoryType,
     required this.onPositionChanged,
     required this.controller,
-  });
+  }){log("Audio url passed here is : $audioUrl");}
 
   @override
   AudioPlayerWidgetState createState() => AudioPlayerWidgetState();
@@ -44,6 +44,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     //   widget.controller.downloaded.value = true;
     // }
 
+log("initializig audio player widget with audio url ${widget.audioUrl}");
     widget.controller.setupAudio(widget.audioUrl);
     widget.controller.loadViewPreference();
     widget.controller.loadPlaybackSpeed();
@@ -53,6 +54,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   void didUpdateWidget(covariant AudioPlayerWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.audioUrl != oldWidget.audioUrl) {
+      log("Did update widget called");
       widget.controller.setupAudio(widget.audioUrl);
     }
   }

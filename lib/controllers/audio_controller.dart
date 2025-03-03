@@ -29,7 +29,7 @@ class AudioController extends GetxController {
     try {
       isLoading.value = true;
 
-      // Load playback speed before setting the source to ensure it applies correctly
+      // Load playback speed before setting the source to ensure it applies correctlFy
       await loadPlaybackSpeed();
 
       //check if audio is already downloaded or not
@@ -43,7 +43,9 @@ class AudioController extends GetxController {
         downloaded.value = true;
         await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
       } else {
-        await _audioPlayer.setSource(UrlSource(audioUrl));
+        log("audio url: $audioUrl");
+        await _audioPlayer.setSourceUrl(audioUrl);
+        //await _audioPlayer.setSource(UrlSource(audioUrl));
       }
 
       await Future.delayed(const Duration(milliseconds: 500));
@@ -124,6 +126,7 @@ class AudioController extends GetxController {
     isPlaying.value = false;
     isCompleted.value = false;
 
+    log("Retrying loading audio");
     await setupAudio(audioUrl);
   }
 
@@ -150,7 +153,7 @@ class AudioController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    await setupAudio(audioUrl.value);
+    //await setupAudio(audioUrl.value);
   }
 
   @override
