@@ -122,7 +122,7 @@ class LoginView extends StatelessWidget {
                               ElevatedButton(
                                 onPressed: () {
                                   if (!loginController.isLoading.value) {
-                                    // _onGoogleLogin();
+                                     _onAppleLogin();
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -163,6 +163,16 @@ class LoginView extends StatelessWidget {
     loginController.loginWithGoogle().then((_) {
       if (loginController.errorMessage.isNotEmpty) {
         _showErrorAlert("Error", loginController.errorMessage.value);
+      } else {
+        _showSuccessDialog();
+      }
+    });
+  }
+
+  void _onAppleLogin() {
+    loginController.loginWithApple().then((_) {
+      if (loginController.errorMessage.isNotEmpty) {
+        _showErrorAlert("Error", "Login Failed! Please try again later");
       } else {
         _showSuccessDialog();
       }

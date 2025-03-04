@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/views/login_view.dart';
 import 'package:allwork/views/main_menu_view.dart';
@@ -17,6 +19,16 @@ class SignUpOrLoginView extends StatelessWidget {
     loginController.loginWithGoogle().then((_) {
       if (loginController.errorMessage.isNotEmpty) {
         _showErrorAlert("Error", loginController.errorMessage.value);
+      } else {
+        _showSuccessDialog();
+      }
+    });
+  }
+
+    void _onAppleLogin() {
+    loginController.loginWithApple().then((_) {
+      if (loginController.errorMessage.isNotEmpty) {
+        _showErrorAlert("Error", "Login Failed! Please try again later");
       } else {
         _showSuccessDialog();
       }
@@ -170,7 +182,10 @@ class SignUpOrLoginView extends StatelessWidget {
                       color: Colors.white,
                     );
                   } else {
-                    return ElevatedButton(
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
                       onPressed: () => _onGoogleLogin(),
                       style: ElevatedButton.styleFrom(
                         shape: CircleBorder(),
@@ -190,6 +205,37 @@ class SignUpOrLoginView extends StatelessWidget {
                           ),
                         ),
                       ),
+                        ),
+                        if (Platform.isIOS)
+                          Text('or', style: TextStyle(color: Colors.white)),
+                        if (Platform.isIOS)
+                          ElevatedButton(
+                            onPressed: () {
+                              if (!loginController.isLoading.value) {
+                                _onAppleLogin();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: const CircleBorder(),
+                              backgroundColor: Colors.white,
+                              elevation: 20,
+                            ),
+                            child: Container(
+                              width: 50,
+                              height: 50,
+                              margin: const EdgeInsets.all(5),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/icons/apple_login.png'),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     );
                   }
                 }),
