@@ -35,7 +35,7 @@ class Category {
         menuItem: json['menuItem'] ?? '',
         title: json['title'] ?? '',
         nextPostTitle: json['next_post_title'] ?? '',
-        nextPostId: json['next_post_id'] ?? 0,
+        nextPostId: json['next_post_id'] ?? '',
         link: json['link'] ?? '',
         isFav: json['isfav'] ?? 'No',
         cdata: json['cdata'] != null

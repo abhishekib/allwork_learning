@@ -61,6 +61,7 @@ class CategoryProvider {
 
         final receivePort = ReceivePort();
         if (save) {
+          log("save is true");
           await Isolate.spawn((SendPort sendPort) {
             DbServices.instance
                 .writeApiResponseHandler(endpoint, apiResponseHandler);

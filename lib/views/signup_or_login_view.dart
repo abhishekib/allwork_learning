@@ -28,7 +28,7 @@ class SignUpOrLoginView extends StatelessWidget {
     void _onAppleLogin() {
     loginController.loginWithApple().then((_) {
       if (loginController.errorMessage.isNotEmpty) {
-        _showErrorAlert("Error", "Login Failed! Please try again later");
+        _showErrorAlert("Error", loginController.errorMessage.value);
       } else {
         _showSuccessDialog();
       }

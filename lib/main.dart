@@ -1,14 +1,8 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:allwork/firebase_options.dart';
-import 'package:allwork/modals/category.dart';
-import 'package:allwork/services/db_services.dart';
-import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
-import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:allwork/views/splash_screen.dart';
@@ -36,6 +30,7 @@ Future<void> main() async {
   );
   await SharedPreferences.getInstance();
   await Upgrader.clearSavedSettings();
+  
 //Remove this method to stop OneSignal Debugging
   OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
