@@ -36,7 +36,7 @@ class FavouriteController extends GetxController {
       "દોઆઓ": ApiConstants.addFavdua,
       "ઝિયરાત": ApiConstants.addFavziyarat,
       "મુનાજાત": ApiConstants.addFavmunajat,
-      "મુકદ્દસ મઝારાતની ઝિયારાત" : ApiConstants.addFavTravelZiyarat,
+      "મુકદ્દસ મઝારાતની ઝિયારાત": ApiConstants.addFavTravelZiyarat,
     };
 
     if (isFetching) {
@@ -96,6 +96,7 @@ class FavouriteController extends GetxController {
 
       if (success) {
         log('Item added to favourites successfully!');
+        fetchFavouriteItems(menuItem);
       } else {
         log('Failed to add item to favourites.');
       }
