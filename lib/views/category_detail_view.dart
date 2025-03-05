@@ -99,7 +99,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         category: "",
         id: int.parse(data.id),
         title: data.title,
-        isFav: "",
+        isFav: "Yes",
         cdata: data.cdata,
       );
       if (DbServices.instance.isBookmarked(categoryDetails.title)) {
@@ -311,8 +311,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             FloatingActionButton.small(
               heroTag: null,
               onPressed: () => controller.handleAddToFavourite(
-                  context, categoryDetails, menuItem),
-              child: const Icon(Icons.favorite),
+                  context, categoryDetails, menuItem, categoryDetails.isFav =="Yes"? true: false),
+              child: Icon(Icons.favorite, color: categoryDetails.isFav =="Yes"? Colors.red: Colors.purple),
             ),
             /*
             FloatingActionButton.small(

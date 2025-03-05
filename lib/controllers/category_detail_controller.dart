@@ -217,7 +217,7 @@ class CategoryDetailController extends GetxController {
   }
 
   void addToFavourite(
-      BuildContext context, Category categoryDetails, String menuItem) async {
+      BuildContext context, Category categoryDetails, String menuItem, bool isFavourite) async {
     try {
       final favouriteController = Get.find<FavouriteController>();
 
@@ -228,9 +228,16 @@ class CategoryDetailController extends GetxController {
       
 
       if (context.mounted) {
+        if(!isFavourite) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("Added to favorites!")),
-        );
+        ); 
+        }
+        else {
+          ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Removed from favorites!")),
+        ); 
+        }
       }
     } catch (e) {
       if (context.mounted) {
@@ -243,9 +250,9 @@ class CategoryDetailController extends GetxController {
   }
 
   void handleAddToFavourite(
-      BuildContext context, Category categoryDetails, String menuItem) {
+      BuildContext context, Category categoryDetails, String menuItem, bool isFavourite) {
     if (_loginController.isLoggedIn.value) {
-      addToFavourite(context, categoryDetails, menuItem);
+      addToFavourite(context, categoryDetails, menuItem, isFavourite);
     } else {
       showLoginPrompt(context);
     }

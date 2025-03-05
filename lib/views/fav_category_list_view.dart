@@ -1,3 +1,4 @@
+import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/category_detail_view.dart';
@@ -71,10 +72,9 @@ class FavCategoryListView extends StatelessWidget {
                       ),
                       child: ListTile(
                         title: Text(
-                          favouriteItem.title,
+                         TextCleanerService.cleanText(favouriteItem.title),
                           style: AppTextStyles.blueBoldText,
                         ),
-                        // subtitle: Text('Tap to view details'),
                         onTap: () {
                           Get.to(() => CategoryDetailView(),
                               arguments: favouriteItem);
