@@ -92,9 +92,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         log(isBookmarked.toString());
       }
     } else if (data is FavouriteModel) {
-
       log("Data coming in the format of favourite model");
-      menuItem = data.menuItem??'';
+      menuItem = data.menuItem ?? '';
       categoryDetails = Category(
         category: "",
         id: int.parse(data.id),
@@ -309,11 +308,19 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               },
             ),
             FloatingActionButton.small(
-              heroTag: null,
-              onPressed: () => controller.handleAddToFavourite(
-                  context, categoryDetails, menuItem, categoryDetails.isFav =="Yes"? true: false),
-              child: Icon(Icons.favorite, color: categoryDetails.isFav =="Yes"? Colors.red: Colors.purple),
-            ),
+                heroTag: null,
+                onPressed: () {
+                  controller.handleAddToFavourite(context, categoryDetails,
+                      menuItem, categoryDetails.isFav == "Yes" ? true : false);
+                  setState(() {
+                    categoryDetails.isFav =
+                        categoryDetails.isFav == "Yes" ? "No" : "Yes";
+                  });
+                },
+                child: Icon(Icons.favorite,
+                    color: categoryDetails.isFav == "Yes"
+                        ? Colors.red
+                        : Colors.purple)),
             /*
             FloatingActionButton.small(
               heroTag: null,

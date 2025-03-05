@@ -7,7 +7,7 @@ class Category {
   final String? menuItem;
   final String title;
   final String? link;
-  final String? isFav;
+  String? isFav;
   final List<ContentData>? cdata;
   final String? data;
   final String? nextPostTitle;
