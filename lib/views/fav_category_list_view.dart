@@ -60,6 +60,7 @@ class FavCategoryListView extends StatelessWidget {
               itemCount: favouriteController.favouriteItems.length,
               itemBuilder: (context, index) {
                 final favouriteItem = favouriteController.favouriteItems[index];
+                favouriteItem.menuItem = menuItem;
 
                 return Column(
                   children: [

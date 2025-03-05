@@ -92,10 +92,12 @@ class CategoryDetailViewState extends State<CategoryDetailView>
         log(isBookmarked.toString());
       }
     } else if (data is FavouriteModel) {
+
       log("Data coming in the format of favourite model");
+      menuItem = data.menuItem??'';
       categoryDetails = Category(
         category: "",
-        id: 0,
+        id: int.parse(data.id),
         title: data.title,
         isFav: "",
         cdata: data.cdata,

@@ -225,6 +225,7 @@ class CategoryDetailController extends GetxController {
       log("$itemId");
 
       await favouriteController.addToFavourite(menuItem, itemId);
+      
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

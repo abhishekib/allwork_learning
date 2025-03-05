@@ -43,7 +43,7 @@ class FavouriteProvider {
   Future addToFavourite(String endpoint, String userId, int itemId) async {
     try {
       log("Item Id from provider: $itemId");
-
+      log("Endpoint availble: $endpoint");
       final response = await _dio.post(
         endpoint,
         queryParameters: {
