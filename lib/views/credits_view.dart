@@ -58,7 +58,7 @@ class CreditsView extends StatelessWidget {
       Text("Mukhatarali A Nayani", style: AppTextStyles.whiteBoldCreditText),
       Text("Haji Naji Library", style: AppTextStyles.whiteBoldCreditText),
       Text("Duas Org", style: AppTextStyles.whiteBoldCreditText),
-      Text("Ammal and Namaz App", style: AppTextStyles.whiteBoldCreditText),
+      Text("Duas and Aamal App", style: AppTextStyles.whiteBoldCreditText),
       Text("Audio Support", style: AppTextStyles.whiteBoldCreditText),
       Text("Debal Bhai Bhojani", style: AppTextStyles.whiteBoldCreditText),
       Text("App Developers Gauri S Prasad",
