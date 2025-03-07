@@ -1,30 +1,23 @@
 import 'dart:developer';
+
 import 'package:allwork/controllers/audio_controller.dart';
-import 'package:allwork/controllers/login_controller.dart';
+import 'package:allwork/controllers/category_detail_controller.dart';
+import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/utils/colors.dart';
-import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/styles.dart';
-import 'package:allwork/views/login_view.dart';
+import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
-import 'package:bottom_picker/bottom_picker.dart';
-import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:get/get.dart';
-import 'package:allwork/controllers/category_detail_controller.dart';
-import 'package:allwork/views/lyrics_tab.dart';
-import 'package:allwork/controllers/favourite_controller.dart';
-import 'package:get_ip_address/get_ip_address.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CategoryDetailView extends StatefulWidget {
@@ -37,9 +30,7 @@ class CategoryDetailView extends StatefulWidget {
 class CategoryDetailViewState extends State<CategoryDetailView>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  String? currentAudioUrl;
   bool isAudioDownloaded = false;
-  // final AudioController _audioController = Get.find<AudioController>();
   final AudioController _audioController = Get.put(AudioController());
 
   late final CategoryDetailController controller;
@@ -146,10 +137,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       _tabController.index = bookmarkedTab;
       controller.changeType(availableTypes[bookmarkedTab]);
 
-      currentAudioUrl = cdata[bookmarkedTab].audiourl;
+      _audioController.audioUrl.value = cdata[bookmarkedTab].audiourl;
       currentContentDataId = bookmarkedTab;
     } else {
-      currentAudioUrl = cdata[0].audiourl;
+      _audioController.audioUrl.value = cdata[0].audiourl;
       currentContentDataId = 0;
     }
 
@@ -162,10 +153,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
       log("boolean values ${newAudioUrl.isNotEmpty.toString()}");
       // if (newAudioUrl != currentAudioUrl && newAudioUrl.isNotEmpty) {
       //   log("Setting state");
-      setState(() {
-        currentAudioUrl = newAudioUrl;
-      });
-      controller.initializeAudio(newAudioUrl);
+      if (newAudioUrl != _audioController.audioUrl.value) {
+        _audioController.audioUrl.value = newAudioUrl;
+        _audioController.setupAudio(_audioController.audioUrl.value);
+      }
     });
     //});
 
@@ -205,7 +196,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     }
 
     log("Re build Screen");
-    log("Current audio url is ${currentAudioUrl?.isNotEmpty}");
+    log("Current audio url is ${_audioController.audioUrl.value?.isNotEmpty}");
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -398,7 +389,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           length: availableTypes.length,
           child: Column(
             children: [
-              if (currentAudioUrl != null && currentAudioUrl!.isNotEmpty)
+              if (_audioController.audioUrl.value != null &&
+                  _audioController.audioUrl.value!.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
@@ -406,10 +398,9 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     categoryType:
                         categoryDetails.cdata![_tabController.index].type,
                     controller: _audioController,
-                    audioUrl: currentAudioUrl!,
+                    audioUrl: _audioController.audioUrl.value,
                     onPositionChanged: (currentPosition) {
-                      controller.currentTime.value =
-                          currentPosition.inMilliseconds.toDouble();
+                      _audioController.currentTime.value;
                     },
                   ),
                 ),

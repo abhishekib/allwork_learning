@@ -30,18 +30,18 @@ Future<void> main() async {
   await LocationService.getUserLocation();
   //await LocalNotificationServices.init();
 
-  _registerFirebase();
-
+  OneSignal.initialize("30eecd80-d98f-439a-b5e5-ddf3fe6248ce");
+  await OneSignal.Notifications.requestPermission(true);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await SharedPreferences.getInstance();
   await Upgrader.clearSavedSettings();
+  _registerFirebase();
 
 //Remove this method to stop OneSignal Debugging
   //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-  OneSignal.initialize("30eecd80-d98f-439a-b5e5-ddf3fe6248ce");
-
-// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-  OneSignal.Notifications.requestPermission(true);
 
 /*
   var initialNotification =
