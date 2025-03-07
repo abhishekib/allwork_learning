@@ -17,7 +17,7 @@ class LoginProvider {
           ),
         );
 
-  Future<LoginResponse> loginUser(String username, String password) async {
+  Future<LoginResponse> loginUser(String username, String password, String fcm) async {
     try {
       final response = await _dio.post(
         ApiConstants.loginEndpoint,
@@ -54,7 +54,7 @@ class LoginProvider {
     }
   }
 
-  Future<LoginResponse> socialLogin(firstname, lastname, email) async {
+  Future<LoginResponse> socialLogin(firstname, lastname, email, String fcm) async {
     try {
       final response = await _dio.post(
         ApiConstants.googleLoginEndpoint,
@@ -64,6 +64,7 @@ class LoginProvider {
           'firstname': firstname,
           'lastname': lastname,
           'email': email,
+          'fcm': fcm
         },
         options: Options(responseType: ResponseType.json),
       );

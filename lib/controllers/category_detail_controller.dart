@@ -180,7 +180,7 @@ class CategoryDetailController extends GetxController {
       int itemId = categoryDetails.id;
       log("$itemId");
 
-      await favouriteController.addToFavourite(menuItem, itemId);
+      favouriteController.addToFavourite(menuItem, itemId);
       
 
       if (context.mounted) {

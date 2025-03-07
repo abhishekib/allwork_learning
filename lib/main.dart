@@ -1,12 +1,16 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:allwork/firebase_options.dart';
+import 'package:allwork/providers/install_provider.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:allwork/views/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 //import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -25,6 +29,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
   //await LocalNotificationServices.init();
+
   OneSignal.initialize("30eecd80-d98f-439a-b5e5-ddf3fe6248ce");
   await OneSignal.Notifications.requestPermission(true);
   await Firebase.initializeApp(
@@ -32,11 +37,11 @@ Future<void> main() async {
   );
   await SharedPreferences.getInstance();
   await Upgrader.clearSavedSettings();
+  _registerFirebase();
 
 //Remove this method to stop OneSignal Debugging
-// OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-// The promptForPushNotificationsWithUserResponse function will show the iOS or Android push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
 
 /*
   var initialNotification =
@@ -82,6 +87,47 @@ Future<void> main() async {
   if (Platform.isAndroid || Platform.isIOS) {
     KeepScreenOn.turnOn();
   }
+}
+
+Future<void> _registerFirebase() async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  // Request permission (for iOS)
+  NotificationSettings settings = await messaging.requestPermission(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    String? token = await messaging.getToken();
+    log("FCM Token: $token");
+
+    if (token != null) {
+      // Send the token to your server
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString("FCM_TOKEN", token);
+      InstallProvider ip = InstallProvider(ApiConstants.token);
+      await ip.sendFCMToken(token);
+    } else {
+      log("Token is null");
+    }
+
+    // If you want to handle messages while the app is in the background, // make sure to call this method
+
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  } else {
+    log("User declined permission");
+  }
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  log('Handling a background message ${message.messageId}');
 }
 
 class MyApp extends StatelessWidget {
