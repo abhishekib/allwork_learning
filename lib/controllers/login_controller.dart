@@ -20,11 +20,14 @@ class LoginController extends GetxController {
   final LoginProvider _loginProvider = LoginProvider(ApiConstants.token);
   final GoogleSignInModel _model = GoogleSignInModel();
   final AppleSignInModel _appleSignInModel = AppleSignInModel();
+  late String fcmToken;
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     _loadUserLoginState();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    fcmToken = prefs.getString("FCM_TOKEN")??'';
   }
 
   Future<void> loginUser(String username, String password) async {
@@ -32,7 +35,7 @@ class LoginController extends GetxController {
       isLoading(true);
       errorMessage.value = '';
       LoginResponse response =
-          await _loginProvider.loginUser(username, password);
+          await _loginProvider.loginUser(username, password, fcmToken);
 
       if (response.type == 'success') {
         loginResponse.value = response;
@@ -142,9 +145,9 @@ class LoginController extends GetxController {
   Future<void> loginWithGoogle() async {
     isLoading(true);
     errorMessage.value = '';
-
     try {
       final result = await _model.signInWithGoogle();
+      
       if (result != null) {
         final firebase_auth.UserCredential? userCredential =
             result['userCredential'];
@@ -161,6 +164,7 @@ class LoginController extends GetxController {
             firstName,
             lastName,
             user.email,
+            fcmToken
           );
 
           isLoggedIn.value = true;
@@ -204,6 +208,7 @@ class LoginController extends GetxController {
             firstName,
             lastName,
             user.email,
+            fcmToken
           );
           isLoggedIn.value = true;
 
