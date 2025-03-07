@@ -261,9 +261,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                               onPressed: () async {
                                 if (!await Helpers
                                     .hasActiveInternetConnection()) {
-                                  Get.snackbar('No internet avaliable',
-                                          "Failed to download")
-                                      .show();
+                                  Get.dialog(NoInternetDialog());
                                   log("No internet avaliable");
                                 } else {
                                   if (!widget.controller.downloaded.value) {
@@ -342,6 +340,10 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               )
             : IconButton(
                 onPressed: () async {
+                  if(!await Helpers.hasActiveInternetConnection() && !widget.controller.downloaded.value){
+                    Get.dialog(NoInternetDialog());
+                  }
+
                   widget.controller.playPause();
                 },
                 icon: Icon(
@@ -432,9 +434,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     onPressed: () async {
                       if (!await Helpers.hasActiveInternetConnection()) {
                         Get.dialog(NoInternetDialog());
-                        Get.snackbar(
-                                'No internet avaliable', "Failed to download")
-                            .show();
+                       
                         log("No internet avaliable");
                       } else {
                         if (!widget.controller.downloaded.value) {

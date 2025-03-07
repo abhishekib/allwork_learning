@@ -86,3 +86,8 @@ flutter:
     - family: Baskervville-Regular
       fonts:
         - asset: assets/font/Baskervville-Regular.ttf
+    
+    - family: QALAM
+      fonts:
+        - asset: assets/font/qalam.ttf
+    

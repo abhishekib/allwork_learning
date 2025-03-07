@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
 import 'package:audioplayers/audioplayers.dart';
@@ -27,7 +28,12 @@ class AudioController extends GetxController {
   Future<void> setupAudio(String audioUrl) async {
     log("Setup audio called with url: $audioUrl");
     try {
-      isLoading.value = true;
+      if (await Helpers.hasActiveInternetConnection()) {
+        isLoading.value = true;
+      }
+      else{
+        isLoading.value = false;
+      }
 
       // Load playback speed before setting the source to ensure it applies correctlFy
       // Load playback speed before setting the source to ensure it applies correctlFy
@@ -38,7 +44,6 @@ class AudioController extends GetxController {
           DbServices.instance.getAudioDownloadPath(audioUrl);
       log("Audio download path: $audioDownloadPath");
 
-      
       if (audioDownloadPath != null) {
         log("Audio already downloaded in path: $audioDownloadPath");
         downloaded.value = true;
