@@ -266,12 +266,11 @@ log("initializig audio player widget with audio url ${widget.audioUrl}");
                                           widget.audioUrl, widget.categoryName, widget.categoryType)
                                       .then((savedPath) {
                                     log("Download complete");
-                                    setState(() {
-                                      widget.controller.downloaded.value = true;
-                                      widget.controller.isDownloading.value =
-                                          false;
-                                      widget.audioUrl = savedPath!;
-                                    });
+
+                                    widget.controller.downloaded.value = true;
+                                    widget.controller.isDownloading.value =
+                                        false;
+                                    widget.audioUrl = savedPath!;
                                   }).catchError((error) {
                                     widget.controller.isDownloading.value =
                                         false;
@@ -322,16 +321,22 @@ log("initializig audio player widget with audio url ${widget.audioUrl}");
               showHours: widget.controller.totalTime.value.inHours > 0),
           style: const TextStyle(color: Colors.black, fontSize: 12),
         ),
-        IconButton(
-          onPressed: () async {
-            widget.controller.playPause();
-          },
-          icon: Icon(
-            widget.controller.isPlaying.value ? Icons.pause : Icons.play_arrow,
-            color: AppColors.backgroundBlue,
-            size: 30,
-          ),
-        ),
+        widget.controller.isLoading.value == true
+            ? CircularProgressIndicator(
+                color: AppColors.backgroundBlue,
+              )
+            : IconButton(
+                onPressed: () async {
+                  widget.controller.playPause();
+                },
+                icon: Icon(
+                  widget.controller.isPlaying.value
+                      ? Icons.pause
+                      : Icons.play_arrow,
+                  color: AppColors.backgroundBlue,
+                  size: 30,
+                ),
+              ),
         IconButton(
           onPressed: () async {
             widget.controller.muteUnmute();

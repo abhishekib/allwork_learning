@@ -1,21 +1,18 @@
 import 'dart:developer';
+
 import 'package:allwork/controllers/bookmark_controller.dart';
 import 'package:allwork/controllers/deep_linking_controller.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
-import 'package:allwork/providers/deep_linking_provider.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/services/local_notification_services.dart';
-import 'package:allwork/utils/constants.dart';
 import 'package:allwork/views/login_view.dart';
-import 'package:day_picker/model/day_in_week.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class CategoryDetailController extends GetxController {
   // Audio Player Instance
@@ -82,46 +79,6 @@ class CategoryDetailController extends GetxController {
     }
   }
 
-  // Method to seek to a specific position in the audio
-  void seekTo(double position) {
-    _audioPlayer.seek(Duration(seconds: position.toInt()));
-    log("Audio seeked to position: ${position.toInt()} seconds");
-  }
-
-  // Method to initialize and load the audio from URL
-  Future<void> initializeAudio(String audioUrl) async {
-    try {
-      if (audioUrl.isEmpty) return;
-
-      log("Attempting to load audio from URL: $audioUrl");
-      await _audioPlayer.stop();
-      await _audioPlayer.setSource(UrlSource(audioUrl));
-
-      log("Audio successfully loaded");
-
-      _audioPlayer.onDurationChanged.listen((duration) {
-        log("Audio duration changed: ${duration.inMilliseconds} ms");
-        totalTime.value = duration.inSeconds.toDouble();
-      });
-
-      _audioPlayer.onPositionChanged.listen((position) {
-        log("Current audio position: ${position.inMilliseconds} ms");
-        currentTime.value = position.inSeconds.toDouble();
-      });
-
-      _audioPlayer.onPlayerComplete.listen((event) {
-        log("Audio playback completed");
-        currentTime.value = 0.0;
-        isLoading.value = false;
-      });
-
-      isLoading.value = false;
-    } catch (e) {
-      // Handle any errors here
-      log('Error initializing audio: $e');
-      isLoading.value = false;
-    }
-  }
 
   void loadCategoryData(List<dynamic> cdata) {
     isLoading(true);
@@ -136,7 +93,6 @@ class CategoryDetailController extends GetxController {
     // Initialize the audio with the first available audio URL
     if (cdata.isNotEmpty && cdata[0]['audiourl'] != null) {
       log("Initializing audio with URL: ${cdata[0]['audiourl']}");
-      initializeAudio(cdata[0]['audiourl']);
     } else {
       log("No valid audio URL found in category data");
       isLoading.value = false;
