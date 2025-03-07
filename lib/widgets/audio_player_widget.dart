@@ -4,12 +4,13 @@ import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/constants.dart';
+import 'package:allwork/utils/menu_helpers/helpers.dart';
+import 'package:allwork/widgets/no_internet_dialog.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  
   String audioUrl;
   final ValueChanged<Duration> onPositionChanged;
   final AudioController controller;
@@ -23,7 +24,9 @@ class AudioPlayerWidget extends StatefulWidget {
     required this.categoryType,
     required this.onPositionChanged,
     required this.controller,
-  }){log("Audio url passed here is : $audioUrl");}
+  }) {
+    log("Audio url passed here is : $audioUrl");
+  }
 
   @override
   AudioPlayerWidgetState createState() => AudioPlayerWidgetState();
@@ -44,7 +47,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     //   widget.controller.downloaded.value = true;
     // }
 
-log("initializig audio player widget with audio url ${widget.audioUrl}");
+    log("initializig audio player widget with audio url ${widget.audioUrl}");
     widget.controller.setupAudio(widget.audioUrl);
     widget.controller.loadViewPreference();
     widget.controller.loadPlaybackSpeed();
@@ -252,33 +255,45 @@ log("initializig audio player widget with audio url ${widget.audioUrl}");
                   widget.controller.downloaded.value
                       ? const SizedBox.shrink()
                       : widget.controller.isDownloading.value
-                          ? const CircularProgressIndicator(color: AppColors.backgroundBlue)
+                          ? const CircularProgressIndicator(
+                              color: AppColors.backgroundBlue)
                           : IconButton(
-                              onPressed: () {
-                                if (!widget.controller.downloaded.value) {
-                                  log("Changing the state: Starting download");
-                                  widget.controller.isDownloading.value = true;
-
-                                  log("Let us download the audio");
-
-                                  audioProvider
-                                      .downloadAudio(
-                                          widget.audioUrl, widget.categoryName, widget.categoryType)
-                                      .then((savedPath) {
-                                    log("Download complete");
-
-                                    widget.controller.downloaded.value = true;
-                                    widget.controller.isDownloading.value =
-                                        false;
-                                    widget.audioUrl = savedPath!;
-                                  }).catchError((error) {
-                                    widget.controller.isDownloading.value =
-                                        false;
-
-                                    log("Download failed: $error");
-                                  });
+                              onPressed: () async {
+                                if (!await Helpers
+                                    .hasActiveInternetConnection()) {
+                                  Get.snackbar('No internet avaliable',
+                                          "Failed to download")
+                                      .show();
+                                  log("No internet avaliable");
                                 } else {
-                                  log("Audio is already downloaded");
+                                  if (!widget.controller.downloaded.value) {
+                                    log("Changing the state: Starting download");
+                                    widget.controller.isDownloading.value =
+                                        true;
+
+                                    log("Let us download the audio");
+
+                                    audioProvider
+                                        .downloadAudio(
+                                            widget.audioUrl,
+                                            widget.categoryName,
+                                            widget.categoryType)
+                                        .then((savedPath) {
+                                      log("Download complete");
+
+                                      widget.controller.downloaded.value = true;
+                                      widget.controller.isDownloading.value =
+                                          false;
+                                      widget.audioUrl = savedPath!;
+                                    }).catchError((error) {
+                                      widget.controller.isDownloading.value =
+                                          false;
+
+                                      log("Download failed: $error");
+                                    });
+                                  } else {
+                                    log("Audio is already downloaded");
+                                  }
                                 }
                               },
                               icon: const Icon(Icons.download),
@@ -411,30 +426,40 @@ log("initializig audio player widget with audio url ${widget.audioUrl}");
         widget.controller.downloaded.value
             ? const SizedBox.shrink()
             : widget.controller.isDownloading.value
-                ? const CircularProgressIndicator(color: AppColors.backgroundBlue)
+                ? const CircularProgressIndicator(
+                    color: AppColors.backgroundBlue)
                 : IconButton(
-                    onPressed: () {
-                      if (!widget.controller.downloaded.value) {
-                        log("Changing the state: Starting download");
-                        widget.controller.isDownloading.value = true;
-
-                        log("Let us download the audio");
-
-                        audioProvider
-                            .downloadAudio(widget.audioUrl, widget.categoryName, widget.categoryType)
-                            .then((savedPath) {
-                          widget.controller.downloaded.value = true;
-                          widget.controller.isDownloading.value = false;
-                          widget.audioUrl = savedPath!;
-
-                          log("Download complete");
-                        }).catchError((error) {
-                          widget.controller.isDownloading.value = false;
-
-                          log("Download failed: $error");
-                        });
+                    onPressed: () async {
+                      if (!await Helpers.hasActiveInternetConnection()) {
+                        Get.dialog(NoInternetDialog());
+                        Get.snackbar(
+                                'No internet avaliable', "Failed to download")
+                            .show();
+                        log("No internet avaliable");
                       } else {
-                        log("Audio is already downloaded");
+                        if (!widget.controller.downloaded.value) {
+                          log("Changing the state: Starting download");
+                          widget.controller.isDownloading.value = true;
+
+                          log("Let us download the audio");
+
+                          audioProvider
+                              .downloadAudio(widget.audioUrl,
+                                  widget.categoryName, widget.categoryType)
+                              .then((savedPath) {
+                            widget.controller.downloaded.value = true;
+                            widget.controller.isDownloading.value = false;
+                            widget.audioUrl = savedPath!;
+
+                            log("Download complete");
+                          }).catchError((error) {
+                            widget.controller.isDownloading.value = false;
+
+                            log("Download failed: $error");
+                          });
+                        } else {
+                          log("Audio is already downloaded");
+                        }
                       }
                     },
                     icon: const Icon(Icons.download),
