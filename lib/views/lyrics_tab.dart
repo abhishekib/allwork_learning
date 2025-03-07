@@ -1,17 +1,15 @@
 import 'dart:developer';
 
 import 'package:allwork/controllers/audio_controller.dart';
+import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
-import 'package:allwork/views/category_detail_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
-import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
