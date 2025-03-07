@@ -46,9 +46,11 @@ class CategoryListController extends GetxController {
         ApiResponseHandler? response;
 
         if (DbServices.instance.endpointExists(endpoint) &&
-            !save &&
-            endpoint != 'amaal-namaz?lang=english' &&
-            endpoint != 'amaal-namaz?lang=gujarati') {
+            !save 
+            //&&
+            //endpoint != 'amaal-namaz?lang=english' &&
+            //endpoint != 'amaal-namaz?lang=gujarati'
+            ) {
           ReceivePort receivePort = ReceivePort();
           await Isolate.spawn((SendPort sendPort) {
             ApiResponseHandler? response =
