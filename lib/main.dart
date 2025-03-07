@@ -32,7 +32,7 @@ Future<void> main() async {
   await Upgrader.clearSavedSettings();
   
 //Remove this method to stop OneSignal Debugging
-  OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
   OneSignal.initialize("30eecd80-d98f-439a-b5e5-ddf3fe6248ce");
 

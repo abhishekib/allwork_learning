@@ -25,6 +25,7 @@ class FavouriteController extends GetxController {
     };
 
     final Map<String, String> addEndpoints = {
+      "Amaal & Namaz": ApiConstants.addFavAmaalNamaaz,
       "Daily Dua": ApiConstants.addFavdailydua,
       "Surah": ApiConstants.addFavSurah,
       "Dua": ApiConstants.addFavdua,
