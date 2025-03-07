@@ -34,9 +34,9 @@ dependencies:
   bottom_picker: ^2.9.0
   flutter_html: ^3.0.0-beta.2
   #flutter_local_notifications: ^17.0.1
-  firebase_core: ^3.10.1
-  firebase_analytics: ^11.4.1
-  firebase_auth: ^5.4.1
+  firebase_core: ^3.12.1
+  firebase_analytics: ^11.4.4
+  firebase_auth: ^5.5.1
   sign_in_with_apple: ^6.1.4
   timezone: ^0.10.0
   flutter_timezone: ^4.1.0
@@ -44,6 +44,7 @@ dependencies:
   rxdart: ^0.28.0
   onesignal_flutter: ^5.3.0
   upgrader: ^11.3.1
+  firebase_messaging: ^15.2.4
 
 dev_dependencies:
   flutter_test:
