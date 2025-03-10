@@ -149,6 +149,16 @@ class CategoryDetailController extends GetxController {
     );
   }
 
+  void copyAmaalDataToClipboard(BuildContext context, String data, String title) {
+    data = TextCleanerService.cleanText("$title \n\n ${data}");
+
+    Clipboard.setData(ClipboardData(text: data));
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Data copied to clipboard!")),
+    );
+  }
+
   void showLoginPrompt(BuildContext context) {
     showDialog(
       context: context,
