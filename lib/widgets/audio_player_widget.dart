@@ -172,18 +172,12 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   ),
                   IconButton(
                     onPressed: () async {
-                      if (widget.controller.isPlaying.value) {
-                        await _audioPlayer.pause();
-                        widget.controller.isPlaying.value = false;
-                      } else {
-                        if (widget.controller.isCompleted.value) {
-                          await _audioPlayer.seek(Duration.zero);
-                          widget.controller.isCompleted.value = false;
+                       log("Hit on play pause Normal view");
+                        if (!await Helpers.hasActiveInternetConnection() &&
+                            !widget.controller.downloaded.value) {
+                          Get.dialog(NoInternetDialog());
                         }
-                        //await _audioPlayer.resume();
-                        await _audioPlayer.play();
-                        widget.controller.isPlaying.value = true;
-                      }
+                        widget.controller.playPause();
                     },
                     icon: Icon(
                       widget.controller.isPlaying.value
