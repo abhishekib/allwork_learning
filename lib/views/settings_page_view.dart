@@ -15,7 +15,7 @@ class SettingsPageState extends State<SettingsPage> {
   double arabicFontSize = 30.0;
   double transliterationFontSize = 23.0;
   double translationFontSize = 21.3;
-  bool isCompactAudioView = true;
+  bool isCompactAudioView = false;
 
   @override
   void initState() {
@@ -132,6 +132,7 @@ class SettingsPageState extends State<SettingsPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
+                /*
                 const Text(
                   "Audio Player View",
                   style: AppTextStyles.whiteBoldText,
@@ -152,6 +153,7 @@ class SettingsPageState extends State<SettingsPage> {
                   inactiveTrackColor: Colors.black38,
                 ),
                 const SizedBox(height: 30),
+                */
                 Center(
                   child: ElevatedButton(
                     onPressed: () {

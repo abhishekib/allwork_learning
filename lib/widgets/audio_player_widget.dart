@@ -79,9 +79,9 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: Colors.white),
       ),
-      child: Obx(() => widget.controller.isCompactView.value
-          ? _buildCompactView()
-          : _buildNormalView()),
+      child: Obx(() => //widget.controller.isCompactView.value
+          //? _buildCompactView():
+          _buildNormalView()),
     );
   }
 
@@ -307,6 +307,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     );
   }
 
+  /*
   Widget _buildCompactView() {
     return Row(
       children: [
@@ -470,4 +471,5 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       ],
     );
   }
+  */
 }
