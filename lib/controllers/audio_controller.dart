@@ -37,7 +37,6 @@ class AudioController extends GetxController {
       }
 
       // Load playback speed before setting the source to ensure it applies correctlFy
-      // Load playback speed before setting the source to ensure it applies correctlFy
       await loadPlaybackSpeed();
 
       //check if audio is already downloaded or not

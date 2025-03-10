@@ -4,6 +4,7 @@ part 'audio_download_mapping_entity.realm.dart';
 @RealmModel()
 class _AudioDownloadMapping {
   @PrimaryKey()
+  late String audioName;
   late String audioUrl;
 
   late String audioDownloadPath;

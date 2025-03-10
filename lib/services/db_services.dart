@@ -298,21 +298,25 @@ class DbServices {
   Future<void> writeAudioDownloadPath(String audioUrl, String audioDownloadPath,
       String categoryName, String categoryType) async {
     realm.write(() {
-      realm.add(AudioDownloadMapping(
-          audioUrl, audioDownloadPath, categoryName, categoryType));
+      realm.add(AudioDownloadMapping(audioUrl.split('/').last, audioUrl,
+          audioDownloadPath, categoryName, categoryType));
     });
   }
 
-  String? getAudioDownloadPath(String audioUrl) {
-    try {
-      return realm
-          .all<AudioDownloadMapping>()
-          .query("audioUrl == '$audioUrl'")
-          .first
-          .audioDownloadPath;
-    } catch (e) {
-      return null;
-    }
+  // String? getAudioDownloadPath(String audioUrl) {
+  //   try {
+  //     return realm
+  //         .all<AudioDownloadMapping>()
+  //         .query("audioUrl == '$audioUrl'")
+  //         .first
+  //         .audioDownloadPath;
+  //   } catch (e) {
+  //     return null;
+  //   }
+  // }
+
+  String? getAudioDownloadPath(String audioName) {
+    return realm.find<AudioDownloadMapping>(audioName)?.audioDownloadPath;
   }
 
   List<AudioDownloadMapping> getAudioDownloadMappings() {
@@ -328,8 +332,7 @@ class DbServices {
     });
   }
 
-  Future<void> writeDeepLink(
-      String deeplink, Category category) async {
+  Future<void> writeDeepLink(String deeplink, Category category) async {
     realm.write(() {
       DeepLinkDataEntity? deepLinkDataEntity =
           realm.find<DeepLinkDataEntity>(deeplink);
@@ -338,8 +341,7 @@ class DbServices {
         realm.delete<DeepLinkDataEntity>(deepLinkDataEntity);
       }
 
-      realm.add(
-          MenuDetailsHelpers.toDeepLinkDataEntity(deeplink, category));
+      realm.add(MenuDetailsHelpers.toDeepLinkDataEntity(deeplink, category));
       log("Deep Link written in DB");
     });
   }
@@ -349,7 +351,8 @@ class DbServices {
         realm.find<DeepLinkDataEntity>(url);
     if (deepLinkDataEntity == null) return null;
 
-    Category category = CategoryHelpers.toCategory(deepLinkDataEntity.category!);
+    Category category =
+        CategoryHelpers.toCategory(deepLinkDataEntity.category!);
 
     return category;
   }
