@@ -32,10 +32,11 @@ class FavouriteController extends GetxController {
       "Ziyarat": ApiConstants.addFavziyarat,
       "Munajat": ApiConstants.addFavmunajat,
       "Travel Ziyarat": ApiConstants.addFavTravelZiyarat,
+      "અમલ અને નમાઝ": ApiConstants.addFavAmaalNamaaz,
       "રોજની દોઆઓ": ApiConstants.addFavdailydua,
       "સુરાહ": ApiConstants.addFavSurah,
       "દોઆઓ": ApiConstants.addFavdua,
-      "ઝિયરાત": ApiConstants.addFavziyarat,
+      "ઝિયારાત": ApiConstants.addFavziyarat,
       "મુનાજાત": ApiConstants.addFavmunajat,
       "મુકદ્દસ મઝારાતની ઝિયારાત": ApiConstants.addFavTravelZiyarat,
     };
