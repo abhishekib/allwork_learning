@@ -4,11 +4,13 @@ import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
-import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart'; // For kDebugMode
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:just_audio/just_audio.dart';
 
 class AudioController extends GetxController {
+  //final AudioPlayer _audioPlayer = AudioPlayer();
   final AudioPlayer _audioPlayer = AudioPlayer();
   RxBool isPlaying = false.obs;
   RxBool isLoading = true.obs;
@@ -30,8 +32,7 @@ class AudioController extends GetxController {
     try {
       if (await Helpers.hasActiveInternetConnection()) {
         isLoading.value = true;
-      }
-      else{
+      } else {
         isLoading.value = false;
       }
 
@@ -47,35 +48,47 @@ class AudioController extends GetxController {
       if (audioDownloadPath != null) {
         log("Audio already downloaded in path: $audioDownloadPath");
         downloaded.value = true;
-        await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
+        await _audioPlayer.setFilePath(audioDownloadPath);
+        //await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
       } else {
         log("audio url: $audioUrl");
-        // _audioPlayer.setSourceUrl(audioUrl);
-        await _audioPlayer.setSource(UrlSource(audioUrl));
+        await _audioPlayer.setUrl(audioUrl);
+        //await _audioPlayer.setSource(UrlSource(audioUrl));
       }
 
       await Future.delayed(const Duration(milliseconds: 500));
 
-      final duration = await _audioPlayer.getDuration();
+      //final duration = await _audioPlayer.getDuration();
+      final duration = _audioPlayer.duration;
       if (duration != null) {
         totalTime.value = duration;
       }
 
-      _audioPlayer.onDurationChanged.listen((duration) {
-        totalTime.value = duration;
+      // _audioPlayer.onDurationChanged.listen((duration) {
+      //   totalTime.value = duration;
+      // });
+
+      _audioPlayer.durationStream.listen((event) {
+        totalTime.value = event ?? Duration.zero;
       });
 
-      _audioPlayer.onPositionChanged.listen((position) {
-        currentTime.value = Duration(
-          seconds: math.min(position.inSeconds, totalTime.value.inSeconds),
-        );
+      // _audioPlayer.onPositionChanged.listen((position) {
+      //   currentTime.value = Duration(
+      //     seconds: math.min(position.inSeconds, totalTime.value.inSeconds),
+      //   );
+      // });
+
+_audioPlayer.positionStream.listen((event) {
+        currentTime.value = event;
       });
 
-      _audioPlayer.onPlayerComplete.listen((event) {
-        currentTime.value = Duration.zero;
-        isPlaying.value = false;
-        isCompleted.value = true;
-      });
+      // _audioPlayer.onPlayerComplete.listen((event) {
+      //   currentTime.value = Duration.zero;
+      //   isPlaying.value = false;
+      //   isCompleted.value = true;
+      // });
+
+//on player complete left
 
       isLoading.value = false;
       hasError.value = false;
@@ -90,11 +103,15 @@ class AudioController extends GetxController {
 
   Future<void> playPause() async {
     if (isPlaying.value) {
-      await _audioPlayer.pause();
+      log("Pausing audio");
+      _audioPlayer.pause();
     } else {
-      await _audioPlayer.resume();
+      //await _audioPlayer.resume();
+      log("Playing audio");
+      _audioPlayer.play();
     }
     isPlaying.value = !isPlaying.value;
+    log("Is playing: ${isPlaying.value}");
   }
 
   Future<void> muteUnmute() async {
@@ -110,14 +127,16 @@ class AudioController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setDouble('playbackSpeedKey', speed);
     playbackSpeed.value = speed; // Update the observable playback speed
-    _audioPlayer.setPlaybackRate(speed); // Apply new speed immediately
+    //_audioPlayer.setPlaybackRate(speed);
+    _audioPlayer.setSpeed(speed); // Apply new speed immediately
   }
 
   Future<void> loadPlaybackSpeed() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     double speed = prefs.getDouble('playbackSpeedKey') ?? 1.0;
     playbackSpeed.value = speed; // Set the loaded speed
-    _audioPlayer.setPlaybackRate(speed); // Apply the speed
+    //_audioPlayer.setPlaybackRate(speed); // Apply the speed
+    _audioPlayer.setSpeed(speed);
   }
 
   Future<void> loadViewPreference() async {

@@ -9,10 +9,11 @@ import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/views/login_view.dart';
-import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
 
 class CategoryDetailController extends GetxController {
   // Audio Player Instance
@@ -70,15 +71,18 @@ class CategoryDetailController extends GetxController {
 
   // Method to play or pause the audio
   void playPauseAudio() {
-    if (_audioPlayer.state == PlayerState.playing) {
+    //if (_audioPlayer.state == PlayerState.playing) {
+    if (_audioPlayer.playing) {
       _audioPlayer.pause();
       log("Audio paused");
-    } else {
-      _audioPlayer.resume();
+    }
+    //}
+    else {
+      _audioPlayer.play();
+      //_audioPlayer.resume();
       log("Audio resumed");
     }
   }
-
 
   void loadCategoryData(List<dynamic> cdata) {
     isLoading(true);
@@ -172,8 +176,8 @@ class CategoryDetailController extends GetxController {
     );
   }
 
-  void addToFavourite(
-      BuildContext context, Category categoryDetails, String menuItem, bool isFavourite) async {
+  void addToFavourite(BuildContext context, Category categoryDetails,
+      String menuItem, bool isFavourite) async {
     try {
       final favouriteController = Get.find<FavouriteController>();
 
@@ -181,18 +185,16 @@ class CategoryDetailController extends GetxController {
       log("$itemId");
 
       favouriteController.addToFavourite(menuItem, itemId);
-      
 
       if (context.mounted) {
-        if(!isFavourite) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Added to favorites!")),
-        ); 
-        }
-        else {
+        if (!isFavourite) {
           ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Removed from favorites!")),
-        ); 
+            const SnackBar(content: Text("Added to favorites!")),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Removed from favorites!")),
+          );
         }
       }
     } catch (e) {
@@ -205,8 +207,8 @@ class CategoryDetailController extends GetxController {
     }
   }
 
-  void handleAddToFavourite(
-      BuildContext context, Category categoryDetails, String menuItem, bool isFavourite) {
+  void handleAddToFavourite(BuildContext context, Category categoryDetails,
+      String menuItem, bool isFavourite) {
     if (_loginController.isLoggedIn.value) {
       addToFavourite(context, categoryDetails, menuItem, isFavourite);
     } else {

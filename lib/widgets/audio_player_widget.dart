@@ -6,7 +6,8 @@ import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:allwork/widgets/no_internet_dialog.dart';
-import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -179,7 +180,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                           await _audioPlayer.seek(Duration.zero);
                           widget.controller.isCompleted.value = false;
                         }
-                        await _audioPlayer.resume();
+                        //await _audioPlayer.resume();
+                        await _audioPlayer.play();
                         widget.controller.isPlaying.value = true;
                       }
                     },
@@ -211,9 +213,10 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     ),
                     onSelected: (value) {
                       widget.controller.playbackSpeed.value = value;
-
-                      _audioPlayer.setPlaybackRate(
-                          widget.controller.playbackSpeed.value);
+                      _audioPlayer
+                          .setSpeed(widget.controller.playbackSpeed.value);
+                      // _audioPlayer.setPlaybackRate(
+                      //     widget.controller.playbackSpeed.value);
                       widget.controller.savePlaybackSpeed(
                           widget.controller.playbackSpeed.value);
                     },
@@ -340,10 +343,10 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
               )
             : IconButton(
                 onPressed: () async {
-                  if(!await Helpers.hasActiveInternetConnection() && !widget.controller.downloaded.value){
+                  if (!await Helpers.hasActiveInternetConnection() &&
+                      !widget.controller.downloaded.value) {
                     Get.dialog(NoInternetDialog());
                   }
-
                   widget.controller.playPause();
                 },
                 icon: Icon(
@@ -385,8 +388,8 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
           ),
           onSelected: (value) {
             widget.controller.playbackSpeed.value = value;
-
-            _audioPlayer.setPlaybackRate(widget.controller.playbackSpeed.value);
+            _audioPlayer.setSpeed(widget.controller.playbackSpeed.value);
+            //_audioPlayer.setPlaybackRate(widget.controller.playbackSpeed.value);
             widget.controller
                 .savePlaybackSpeed(widget.controller.playbackSpeed.value);
           },
@@ -434,7 +437,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     onPressed: () async {
                       if (!await Helpers.hasActiveInternetConnection()) {
                         Get.dialog(NoInternetDialog());
-                       
+
                         log("No internet avaliable");
                       } else {
                         if (!widget.controller.downloaded.value) {
