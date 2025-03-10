@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/controllers/deep_linking_controller.dart';
+import 'package:allwork/controllers/favourite_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/deep_linking_provider.dart';
 import 'package:allwork/services/TextCleanerService.dart';
@@ -37,6 +38,9 @@ String menuItem = "Amaal";
 
   @override
   Widget build(BuildContext context) {
+    
+    Get.put(FavouriteController());
+    
     return BackgroundWrapper(
       child: Scaffold(
         floatingActionButtonLocation: ExpandableFab.location,
