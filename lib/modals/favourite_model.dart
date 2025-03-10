@@ -13,7 +13,7 @@ class FavouriteModel {
     this.menuItem,
   });
 
-  factory FavouriteModel.fromJson(Map<String, dynamic> json) {
+  factory FavouriteModel.fromJson(Map<String, dynamic> json) {    
     return FavouriteModel(
       id: json['id'] ?? '',
       title: json['title'] ?? '',

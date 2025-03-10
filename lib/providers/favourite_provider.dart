@@ -29,7 +29,7 @@ class FavouriteProvider {
 
       if (response.statusCode == 200) {
         List<dynamic> data = response.data['data'] ?? [];
-        return data.map((item) => FavouriteModel.fromJson(item)).toList();
+        return data.map((item) => FavouriteModel.fromJson(item)).where((item)=>item.id.isNotEmpty).toList();
       } else {
         throw Exception(
             'Failed to fetch favourite list: ${response.statusCode}');
