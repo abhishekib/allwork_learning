@@ -91,4 +91,7 @@ flutter:
     - family: QALAM
       fonts:
         - asset: assets/font/qalam.ttf
-    
+
+    - family: Neirizi
+      fonts:
+        - asset: assets/font/Neirizi.ttf

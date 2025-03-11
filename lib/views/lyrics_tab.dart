@@ -57,7 +57,7 @@ class LyricsTabState extends State<LyricsTab> {
       ItemPositionsListener.create();
   final AudioController audioController = Get.find<AudioController>();
 
-  double arabicFontSize = 18.0;
+  double arabicFontSize = 30.0;
   double transliterationFontSize = 16.0;
   double translationFontSize = 16.0;
 
@@ -333,7 +333,7 @@ class LyricsTabState extends State<LyricsTab> {
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
             textAlign: TextAlign.start,
             direction: TextDirection.rtl,
-            fontFamily: "QALAM",
+            fontFamily: "Neirizi",
           ),
         },
       ),
@@ -353,7 +353,7 @@ class LyricsTabState extends State<LyricsTab> {
     return Visibility(
       visible: lyrics.translitration.isNotEmpty && showTransliteration,
       child: Html(
-        data: lyrics.translitration,
+        data: lyrics.translitration.toUpperCase(),
         onLinkTap: (String? url, _, __) async {
           if (url != null) {
             final uri = Uri.parse(url);
