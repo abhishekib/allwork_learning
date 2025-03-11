@@ -70,14 +70,16 @@ class DailyDateWidget extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 10),
-                Visibility(
-                  visible: hijriText.isNotEmpty,
-                  child: Text(
-                    '(${hijriText.toString()})',
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.whiteBoldText.copyWith(
-                      fontSize: 18,
-                      color: parseColor(hijriColor),
+                Container( color: Colors.white,
+                  child: Visibility(
+                    visible: hijriText.isNotEmpty,
+                    child: Text(
+                      '(${hijriText.toString()})',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.whiteBoldText.copyWith(
+                        fontSize: 18,
+                        color: parseColor(hijriColor),
+                      ),
                     ),
                   ),
                 ),
