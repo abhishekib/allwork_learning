@@ -20,11 +20,13 @@ class FavouriteController extends GetxController {
       "Dua": ApiConstants.listFavDua,
       "Ziyarat": ApiConstants.listFavZiyarat,
       "Amaal & Namaz": ApiConstants.listFavAmaalNamaaz,
+      "Amaal": ApiConstants.listFavAmaal,
       "Munajat": ApiConstants.listFavMunajat,
       "Travel Ziyarat": ApiConstants.listFavTravelZiyarat,
     };
 
     final Map<String, String> addEndpoints = {
+      "Amaal" : ApiConstants.addFavAmaal,
       "Amaal & Namaz": ApiConstants.addFavAmaalNamaaz,
       "Daily Dua": ApiConstants.addFavdailydua,
       "Surah": ApiConstants.addFavSurah,
@@ -37,6 +39,7 @@ class FavouriteController extends GetxController {
       "સુરાહ": ApiConstants.addFavSurah,
       "દોઆઓ": ApiConstants.addFavdua,
       "ઝિયારાત": ApiConstants.addFavziyarat,
+      "અમલ" : ApiConstants.addFavAmaal,
       "મુનાજાત": ApiConstants.addFavmunajat,
       "મુકદ્દસ મઝારાતની ઝિયારાત": ApiConstants.addFavTravelZiyarat,
     };
