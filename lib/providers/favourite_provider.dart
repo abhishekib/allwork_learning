@@ -28,7 +28,13 @@ class FavouriteProvider {
       );
 
       if (response.statusCode == 200) {
+        //log(response.data.toString());
         List<dynamic> data = response.data['data'] ?? [];
+
+        if(endpoint==ApiConstants.listFavAmaal){
+          log("Data from fetchFavouriteList: $data");
+        }
+
         return data.map((item) => FavouriteModel.fromJson(item)).where((item)=>item.id.isNotEmpty).toList();
       } else {
         throw Exception(
