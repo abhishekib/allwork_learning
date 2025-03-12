@@ -65,6 +65,7 @@ class ApiConstants {
 
   static const String listFavDailyDua = 'favdailydualist';
   static const String listFavDua = 'favdualist';
+  static const String listFavAmaal = 'favamaallist';
   static const String listFavZiyarat = 'favziyaratlist';
   static const String listFavMunajat = 'favmunajatlist';
   static const String listFavAmaalNamaaz = 'favamaalnamaazlist';
@@ -73,11 +74,11 @@ class ApiConstants {
 
   static const String addFavAmaalNamaaz = 'favamaalnamaaz';
   static const String addFavdua = 'favdua';
+  static const String addFavAmaal = 'favamaal';
   static const String addFavziyarat = 'favziyarat';
   static const String addFavSurah = 'favsurah';
   static const String addFavmunajat = 'favmunajat';
   static const String addFavdailydua = 'favdailydua';
-  // static const String addFavSuraha = 'favsurahlist';
   static const String addFavTravelZiyarat = 'favtravelziyarat';
 
   static const String searchEndpoint = 'search';
