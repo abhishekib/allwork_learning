@@ -91,4 +91,8 @@ flutter:
     - family: QALAM
       fonts:
         - asset: assets/font/qalam.ttf
+
+    - family: DivinePearls
+      fonts:
+        - asset: assets/font/DivinePearls.ttf
     

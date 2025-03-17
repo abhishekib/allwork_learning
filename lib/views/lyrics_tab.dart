@@ -333,7 +333,7 @@ class LyricsTabState extends State<LyricsTab> {
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
             textAlign: TextAlign.start,
             direction: TextDirection.rtl,
-            fontFamily: "MUHAMMADI",
+            fontFamily: "DivinePearls",
           ),
         },
       ),
