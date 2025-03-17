@@ -30,6 +30,8 @@ class CategoryProvider {
       final date = DateFormat('yyyy-MM-dd').format(now);
       final time = DateFormat('HH:mm:ss').format(now);
 
+      final timezoneName = now.timeZoneName;
+
       // log("Date going $date");
       // log("Time going $time");
 
@@ -37,11 +39,15 @@ class CategoryProvider {
       String url = '$baseurl$endpoint';
       if (day != null) {
         url = '$url&day=$day';
-      } else if (endpoint == 'amaal-namaz?lang=english' ||
-          endpoint == 'amaal-namaz?lang=gujarati') {
+      } else if (endpoint == ApiConstants.amalAndNamazEndpoint ||
+          endpoint == ApiConstants.gujaratiAmalAndNamazEndpoint) {
         url =
             '$url&dd=$setHijiriDate&date=$date&time=$time&lat=$lat&long=$long';
         // log("hehe boi ----> $url");
+      }
+      else if(endpoint == ApiConstants.surahEndpoint || endpoint == ApiConstants.gujaratiSurahEndpoint){
+        //url = '$url&&'
+        log("timezone name = $timezoneName");
       }
       // log(url);
 
