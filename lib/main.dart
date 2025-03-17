@@ -42,7 +42,6 @@ Future<void> main() async {
 //Remove this method to stop OneSignal Debugging
   //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-
 /*
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -104,15 +103,21 @@ Future<void> _registerFirebase() async {
   );
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+    // if(Platform.isIOS){
+    //   String? apnsToken = await messaging.getAPNSToken(); 
+    //   log(apnsToken.toString());
+    // }
     String? token = await messaging.getToken();
     log("FCM Token: $token");
 
     if (token != null) {
       // Send the token to your server
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString("FCM_TOKEN", token);
-      InstallProvider ip = InstallProvider(ApiConstants.token);
-      await ip.sendFCMToken(token);
+      if (!prefs.containsKey("FCM_TOKEN")) {
+        prefs.setString("FCM_TOKEN", token);
+        InstallProvider ip = InstallProvider(ApiConstants.token);
+        await ip.sendFCMToken(token);
+      }
     } else {
       log("Token is null");
     }

@@ -161,6 +161,7 @@ class LoginController extends GetxController {
           final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
 
           final response = await _loginProvider.socialLogin(
+            'google',
             firstName,
             lastName,
             user.email,
@@ -205,6 +206,7 @@ class LoginController extends GetxController {
           final lastName = names.length > 1 ? names.sublist(1).join(' ') : '';
 
           final response = await _loginProvider.socialLogin(
+            'apple',
             firstName,
             lastName,
             user.email,

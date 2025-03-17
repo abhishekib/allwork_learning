@@ -24,6 +24,7 @@ class LoginProvider {
         queryParameters: {
           'username': username,
           'password': password,
+          'fcm_token': fcm
         },
       );
 
@@ -54,17 +55,16 @@ class LoginProvider {
     }
   }
 
-  Future<LoginResponse> socialLogin(firstname, lastname, email, String fcm) async {
+  Future<LoginResponse> socialLogin(String provider, String firstname, String lastname, String? email, String fcm) async {
     try {
       final response = await _dio.post(
         ApiConstants.googleLoginEndpoint,
         data: {
-          'provider': 'google',
-          'access_token': "dummy_access_token",
+          'provider': provider,
           'firstname': firstname,
           'lastname': lastname,
           'email': email,
-          'fcm': fcm
+          'fcm_token': fcm
         },
         options: Options(responseType: ResponseType.json),
       );
