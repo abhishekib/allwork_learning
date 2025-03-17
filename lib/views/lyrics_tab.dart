@@ -72,7 +72,7 @@ class LyricsTabState extends State<LyricsTab> {
     controller.onReset();
     _loadFontSizes();
 
-    fontFamily = widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika Three Bold_0';
+    fontFamily = widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
 
     // Listen to the current audio time from the controller
@@ -333,7 +333,7 @@ class LyricsTabState extends State<LyricsTab> {
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
             textAlign: TextAlign.start,
             direction: TextDirection.rtl,
-            fontFamily: "DivinePearls",
+            fontFamily: "Neirizi",
           ),
         },
       ),

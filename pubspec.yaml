@@ -75,13 +75,9 @@ flutter:
     - assets/icons/apple_login.png
 
   fonts:
-    - family: Gopika Three Bold_0
-      fonts:
-        - asset: assets/font/GopikaThreeBold_0.otf
-          
     - family: Gopika
       fonts:
-        - asset: assets/font/Gopika.ttf
+        - asset: assets/font/GopikaThreeBold_0.otf
           weight: 700
 
     - family: MUHAMMADI
@@ -99,11 +95,3 @@ flutter:
     - family: Neirizi
       fonts:
         - asset: assets/font/Neirizi.ttf
-
-    - family: Al Qalam Quran Majeed 1
-      fonts:
-        - asset: assets/font/Al_Qalam_Quran_Majeed_1.ttf
-
-    - family: DivinePearls
-      fonts:
-        - asset: assets/font/DivinePearls.ttf
