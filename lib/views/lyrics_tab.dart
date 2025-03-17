@@ -167,6 +167,10 @@ class LyricsTabState extends State<LyricsTab> {
       case "arabic":
       case "અરબી":
         contentWidgets.addAll([
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            _getBookmarkWidget(
+                widget.lyricsList.indexOf(lyrics), widget.tabIndex)
+          ]),
           _buildEnglishText(lyrics),
           GestureDetector(
             onTap: () => _seekToLyricsTime(lyrics.time),
@@ -183,12 +187,15 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       case "transliteration":
       case "તરજુમા":
         contentWidgets.addAll([
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            _getBookmarkWidget(
+                widget.lyricsList.indexOf(lyrics), widget.tabIndex)
+          ]),
           _buildEnglishText(lyrics),
           GestureDetector(
             onTap: () => _seekToLyricsTime(lyrics.time),
@@ -205,13 +212,15 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
           ),
-
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       case "translation":
       case "ગુજરાતી":
         contentWidgets.addAll([
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            _getBookmarkWidget(
+                widget.lyricsList.indexOf(lyrics), widget.tabIndex)
+          ]),
           _buildEnglishText(lyrics),
           GestureDetector(
             onTap: () => _seekToLyricsTime(lyrics.time),
@@ -228,12 +237,13 @@ class LyricsTabState extends State<LyricsTab> {
             child: _buildTransliterationText(lyrics, showTransliteration),
             // const SizedBox(height: 8),
           ),
-
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), widget.tabIndex)
         ]);
         break;
       default:
         contentWidgets.addAll([
+          Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
+          ]),
           _buildEnglishText(lyrics),
           GestureDetector(
             onTap: () => _seekToLyricsTime(lyrics.time),
@@ -249,8 +259,7 @@ class LyricsTabState extends State<LyricsTab> {
             onTap: () => _seekToLyricsTime(lyrics.time),
             child: _buildTranslationText(lyrics, showTranslation),
             // const SizedBox(height: 8),
-          ),
-          _getBookmarkWidget(widget.lyricsList.indexOf(lyrics), 0)
+          )
         ]);
     }
     contentWidgets.add(const SizedBox(height: 10));
