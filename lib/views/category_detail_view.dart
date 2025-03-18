@@ -9,11 +9,14 @@ import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/modals/favourite_model.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/utils/colors.dart';
+import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/styles.dart';
 import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
+import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
@@ -312,7 +315,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     color: categoryDetails.isFav == "Yes"
                         ? Colors.red
                         : Colors.purple)),
-            /*
+            
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.access_alarm),
@@ -375,7 +378,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                         ));
               },
             ),
-            */
+            
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.settings),

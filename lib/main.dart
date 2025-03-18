@@ -2,17 +2,21 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:allwork/firebase_options.dart';
+import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/install_provider.dart';
+import 'package:allwork/services/db_services.dart';
+import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/constants.dart';
+import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/views/main_menu_view.dart';
 import 'package:allwork/views/menu_detail_view.dart';
 import 'package:allwork/views/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:keep_screen_on/keep_screen_on.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -20,10 +24,10 @@ import 'package:upgrader/upgrader.dart';
 import 'views/category_detail_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/*
+
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-*/
+
 Future<void> main() async {
   bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,7 +46,7 @@ Future<void> main() async {
 //Remove this method to stop OneSignal Debugging
   //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
 
-/*
+
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
@@ -79,7 +83,6 @@ Future<void> main() async {
       'menuItem': category.category
     });
   });
-*/
 
   runApp(MyApp(fromNotification: fromNotification));
 
