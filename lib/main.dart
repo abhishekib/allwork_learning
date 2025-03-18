@@ -32,7 +32,7 @@ Future<void> main() async {
   bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
   await LocationService.getUserLocation();
-  //await LocalNotificationServices.init();
+  await LocalNotificationServices.init();
 
   OneSignal.initialize("30eecd80-d98f-439a-b5e5-ddf3fe6248ce");
   await OneSignal.Notifications.requestPermission(true);
@@ -106,10 +106,7 @@ Future<void> _registerFirebase() async {
   );
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    // if(Platform.isIOS){
-    //   String? apnsToken = await messaging.getAPNSToken(); 
-    //   log(apnsToken.toString());
-    // }
+    
     String? token = await messaging.getToken();
     log("FCM Token: $token");
 

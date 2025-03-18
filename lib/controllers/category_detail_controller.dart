@@ -8,6 +8,7 @@ import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/views/login_view.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -250,8 +251,8 @@ class CategoryDetailController extends GetxController {
       DateTime nextDay = _getNextDay(day, timeOfDay);
       print("next day $nextDay");
       nextDay.add(timeOfDay);
-      // LocalNotificationServices.showScheduleNotification(
-      //     category: category, dateTime: nextDay);
+      LocalNotificationServices.showScheduleNotification(
+          category: category, dateTime: nextDay);
     }
   }
 

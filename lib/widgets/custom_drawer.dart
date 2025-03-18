@@ -75,19 +75,19 @@ class CustomDrawer extends StatelessWidget {
                       Get.to(() => BookmarkView());
                     },
                   ),
-                  // ListTile(
-                  //   leading: const Icon(
-                  //     Icons.lock_clock,
-                  //     color: Colors.white,
-                  //   ),
-                  //   title: const Text(
-                  //     'Reminders',
-                  //     style: AppTextStyles.whiteBoldText,
-                  //   ),
-                  //   onTap: () {
-                  //     Get.to(() => ReminderView());
-                  //   },
-                  // ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.lock_clock,
+                      color: Colors.white,
+                    ),
+                    title: const Text(
+                      'Reminders',
+                      style: AppTextStyles.whiteBoldText,
+                    ),
+                    onTap: () {
+                      Get.to(() => ReminderView());
+                    },
+                  ),
                   ListTile(
                     leading: const Icon(
                       Icons.audiotrack_outlined,
