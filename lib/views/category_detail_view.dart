@@ -389,8 +389,8 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           length: availableTypes.length,
           child: Column(
             children: [
-              if (_audioController.audioUrl.value != null &&
-                  _audioController.audioUrl.value!.isNotEmpty)
+              Obx(() =>
+                   _audioController.audioUrl.value.isNotEmpty ?
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: AudioPlayerWidget(
@@ -403,7 +403,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                       _audioController.currentTime.value;
                     },
                   ),
-                ),
+                ): SizedBox.shrink()),
               const SizedBox(height: 10),
               TabBar(
                 isScrollable: true,
