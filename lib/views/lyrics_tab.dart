@@ -330,6 +330,8 @@ class LyricsTabState extends State<LyricsTab> {
             textAlign: TextAlign.start,
             direction: TextDirection.rtl,
             fontFamily: "MUHAMMADI",
+            wordSpacing: 10,
+            textOverflow: TextOverflow.visible,
           ),
         },
       ),
