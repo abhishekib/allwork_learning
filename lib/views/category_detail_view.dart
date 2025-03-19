@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/controllers/favourite_controller.dart';
+import 'package:allwork/controllers/settings_controller.dart';
 import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
@@ -51,7 +52,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
   void initState() {
     super.initState();
     Get.put(FavouriteController());
-
+    Get.put(SettingsController());
     controller = Get.put(CategoryDetailController());
 
     final dynamic data = Get.arguments;
@@ -383,7 +384,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.settings),
               onPressed: () {
-                Get.to(SettingsPage());
+                Get.to(() => SettingsPage());
               },
             ),
           ],

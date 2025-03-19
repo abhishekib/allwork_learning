@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:allwork/controllers/audio_controller.dart';
 import 'package:allwork/controllers/category_detail_controller.dart';
+import 'package:allwork/controllers/settings_controller.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/content_data.dart';
 import 'package:allwork/utils/colors.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LyricsTab extends StatefulWidget {
   final List<Lyrics> lyricsList;
@@ -56,10 +56,7 @@ class LyricsTabState extends State<LyricsTab> {
   final ItemPositionsListener _itemPositionsListener =
       ItemPositionsListener.create();
   final AudioController audioController = Get.find<AudioController>();
-
-  double arabicFontSize = 18.0;
-  double transliterationFontSize = 16.0;
-  double translationFontSize = 16.0;
+  final SettingsController settingsController = Get.find<SettingsController>();
 
   int _currentHighlightedIndex = 0;
   bool _isUserInteraction = false;
@@ -70,7 +67,6 @@ class LyricsTabState extends State<LyricsTab> {
   void initState() {
     super.initState();
     controller.onReset();
-    _loadFontSizes();
 
     fontFamily = widget.selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
     debugPrint("LyricsTab initialized with ${widget.lyricsList.length} items");
@@ -101,17 +97,7 @@ class LyricsTabState extends State<LyricsTab> {
       }
     });
   }
-
-  // Load font sizes from SharedPreferences
-  Future<void> _loadFontSizes() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      arabicFontSize = prefs.getDouble('arabicFontSize') ?? 18.0;
-      transliterationFontSize =
-          prefs.getDouble('transliterationFontSize') ?? 16.0;
-      translationFontSize = prefs.getDouble('translationFontSize') ?? 16.0;
-    });
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -335,8 +321,9 @@ class LyricsTabState extends State<LyricsTab> {
         },
         style: {
           "html": Style(
-            fontSize: FontSize(
-                isArabicHighlighted ? arabicFontSize + 6 : arabicFontSize),
+            fontSize: FontSize(isArabicHighlighted
+                ? settingsController.arabicFontSize.value + 6
+                : settingsController.arabicFontSize.value),
             fontWeight:
                 isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
@@ -376,8 +363,8 @@ class LyricsTabState extends State<LyricsTab> {
         style: {
           "html": Style(
             fontSize: FontSize(isTransliterationHighlighted
-                ? transliterationFontSize + 4
-                : transliterationFontSize),
+                ? settingsController.transliterationFontSize.value + 4
+                : settingsController.transliterationFontSize.value),
             fontWeight: isTransliterationHighlighted
                 ? FontWeight.bold
                 : FontWeight.normal,
@@ -424,8 +411,8 @@ class LyricsTabState extends State<LyricsTab> {
         style: {
           "html": Style(
             fontSize: FontSize(isTranslationHighlighted
-                ? translationFontSize + 4
-                : translationFontSize),
+                ? settingsController.translationFontSize.value + 4
+                : settingsController.translationFontSize.value),
             fontWeight:
                 isTranslationHighlighted ? FontWeight.bold : FontWeight.normal,
             color: isTranslationHighlighted ? Colors.black87 : Colors.black54,
