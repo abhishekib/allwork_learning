@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsController extends GetxController {
-  var arabicFontSize = 30.0.obs;
+  var arabicFontSize = 35.0.obs;
   var transliterationFontSize = 23.0.obs;
   var translationFontSize = 21.3.obs;
   var isCompactAudioView = false.obs;

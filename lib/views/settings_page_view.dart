@@ -33,7 +33,7 @@ class SettingsPage extends StatelessWidget {
                 Obx(() {
                   return Slider(
                     min: 18.0,
-                    max: 30.0,
+                    max: 35.0,
                     divisions: 16,
                     value: settingsController.arabicFontSize.value,
                     onChanged: (value) {
