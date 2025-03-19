@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/entities/bookmark_entity.dart';

@@ -4,7 +4,6 @@ import 'package:allwork/entities/bookmark_reminder_deep_link_data_entity.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/modals/reminder_model.dart';
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/views/category_detail_view.dart';
 import 'package:get/get.dart';

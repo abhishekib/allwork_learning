@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:allwork/controllers/search_custom_controller.dart';
 import 'package:allwork/modals/category.dart';

@@ -22,7 +22,6 @@ import 'package:allwork/modals/reminder_model.dart';
 import 'package:allwork/utils/helpers.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:realm/realm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DbServices {
   static final DbServices _instance = DbServices._internal();

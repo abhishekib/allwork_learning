@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:allwork/controllers/category_detail_controller.dart';
 import 'package:allwork/controllers/reminder_controller.dart';
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';

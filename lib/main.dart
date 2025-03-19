@@ -24,13 +24,13 @@ import 'package:upgrader/upgrader.dart';
 import 'views/category_detail_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPreferences.getInstance();
   await LocationService.getUserLocation();
   await LocalNotificationServices.init();
 
@@ -39,13 +39,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await SharedPreferences.getInstance();
   await Upgrader.clearSavedSettings();
   _registerFirebase();
 
 //Remove this method to stop OneSignal Debugging
   //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
-
 
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
@@ -69,7 +67,7 @@ Future<void> main() async {
   }
 
 //listen to the stream of notification click event when the app is running
-  
+
   LocalNotificationServices.onClickNotification.stream.listen((event) {
     log("Notification clicked");
     log(event);
@@ -106,7 +104,6 @@ Future<void> _registerFirebase() async {
   );
 
   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    
     String? token = await messaging.getToken();
     log("FCM Token: $token");
 
