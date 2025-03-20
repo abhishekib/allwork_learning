@@ -45,6 +45,7 @@ dependencies:
   upgrader: ^11.3.1
   firebase_messaging: ^15.2.4
   just_audio: ^0.9.46
+  file_picker:
 
 dev_dependencies:
   flutter_test:
@@ -82,16 +83,3 @@ flutter:
     - family: MUHAMMADI
       fonts:
         - asset: assets/font/MUHAMMADI_QURANIC.ttf
-
-    - family: Baskervville-Regular
-      fonts:
-        - asset: assets/font/Baskervville-Regular.ttf
-    
-    - family: QALAM
-      fonts:
-        - asset: assets/font/qalam.ttf
-
-    - family: DivinePearls
-      fonts:
-        - asset: assets/font/DivinePearls.ttf
-    

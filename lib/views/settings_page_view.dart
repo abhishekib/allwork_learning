@@ -47,7 +47,10 @@ class SettingsPage extends StatelessWidget {
                     style: TextStyle(
                       fontSize: settingsController.arabicFontSize.value,
                       color: Colors.white,
-                      fontFamily: "MUHAMMADI",
+                      fontFamily:
+                          settingsController.arabicFontFamily.value.isEmpty
+                              ? 'MUHAMMADI'
+                              : settingsController.arabicFontFamily.value,
                     ),
                   );
                 }),
@@ -102,6 +105,82 @@ class SettingsPage extends StatelessWidget {
                     ),
                   );
                 }),
+                const SizedBox(height: 20),
+
+                ElevatedButton(
+                  onPressed: () {
+                    settingsController.selectFonts();
+                  },
+                  child: const Text('Select Arabic Fonts'),
+                ),
+                const SizedBox(height: 20),
+
+                Obx(() {
+                  if (settingsController.fontList.isEmpty) {
+                    return const Text(
+                      'No fonts selected yet',
+                      style: TextStyle(color: Colors.white),
+                    );
+                  }
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Available Fonts:',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      ...settingsController.fontList.map((fontName) {
+                        bool isApplied =
+                            settingsController.arabicFontFamily.value ==
+                                fontName;
+                        return ListTile(
+                          title: Text(
+                            fontName,
+                            style: TextStyle(
+                              color: isApplied ? Colors.green : Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.check, color: Colors.green),
+                                onPressed: () {
+                                  settingsController.applyFont(fontName);
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: Colors.red),
+                                onPressed: () {
+                                  settingsController.removeFont(fontName);
+                                },
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ],
+                  );
+                }),
+
+                const SizedBox(height: 20),
+                Obx(() {
+                  return settingsController.arabicFontFamily.value.isNotEmpty
+                      ? Text(
+                          'Preview of Arabic Text: "1| 1| الْحَمْدُ لله رَبِّ الْعَالَمِيْنَ"',
+                          style: TextStyle(
+                            fontSize: settingsController.arabicFontSize.value,
+                            fontFamily: settingsController
+                                    .arabicFontFamily.value.isEmpty
+                                ? 'MUHAMMADI'
+                                : settingsController.arabicFontFamily.value,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const SizedBox.shrink();
+                }),
+
                 // const SizedBox(height: 20),
                 // Center(
                 //   child: ElevatedButton(
