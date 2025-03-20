@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:linkable/linkable.dart';
 import 'package:get/get.dart';
 import 'package:allwork/controllers/about_us_controller.dart';
 import 'package:allwork/utils/styles.dart';
