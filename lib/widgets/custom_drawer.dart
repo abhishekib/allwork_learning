@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/login_controller.dart';
 import 'package:allwork/controllers/settings_controller.dart';
 import 'package:allwork/utils/styles.dart';
@@ -20,6 +21,8 @@ import '../views/profile_view.dart';
 class CustomDrawer extends StatelessWidget {
   final LoginController loginController = Get.put(LoginController());
   final SettingsController settingsController = Get.put(SettingsController());
+  final CategoryListController categoryListController =
+      Get.put(CategoryListController());
 
   CustomDrawer({super.key});
 

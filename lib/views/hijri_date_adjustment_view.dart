@@ -1,3 +1,4 @@
+import 'package:allwork/controllers/category_list_controller.dart';
 import 'package:allwork/controllers/daily_date_controller.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:allwork/utils/styles.dart';
@@ -10,6 +11,8 @@ class HijriDateAdjustmentView extends StatelessWidget {
   HijriDateAdjustmentView({super.key});
 
   final DailyDateController controller = Get.put(DailyDateController());
+  final CategoryListController categoryListController =
+      Get.find<CategoryListController>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +69,8 @@ class HijriDateAdjustmentView extends StatelessWidget {
                                 .toList(),
                             onSelected: (value) {
                               controller.setDayDifference(value.toString());
+                              categoryListController.fetchCategoryData(
+                                  'Amaal & Namaz', true);
                             }),
                       ),
                     ]),
