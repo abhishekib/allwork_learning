@@ -35,6 +35,10 @@ class CategoryDetailController extends GetxController {
   var showTransliteration = true.obs;
   var showTranslation = true.obs;
 
+  var copyArabic = false.obs;
+  var copyTransliteration = false.obs;
+  var copyTranslation = false.obs;
+
   final LoginController _loginController = Get.put(LoginController());
   final DeepLinkingController _deepLinkingController =
       Get.put(DeepLinkingController());
@@ -61,6 +65,40 @@ class CategoryDetailController extends GetxController {
     currentTime.close();
     totalTime.close();
     log("Audio player disposed");
+  }
+
+  void toggleCopyOption(String option) {
+    switch (option) {
+      case 'Arabic':
+        copyArabic.toggle();
+        break;
+      case 'Transliteration':
+        copyTransliteration.toggle();
+        break;
+      case 'Translation':
+        copyTranslation.toggle();
+        break;
+    }
+  }
+
+  void copySelectedLyricsToClipboard(BuildContext context, Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
+    String combinedLyrics = '${TextCleanerService.cleanText(categoryTitle)}\n\n';
+    Set<Lyrics> uniqueLyricsSet = {};
+
+    for (var lyricsList in availableLyrics.values) {
+      for (var lyrics in lyricsList) {
+        uniqueLyricsSet.add(lyrics);
+      }
+    }
+
+    for (var lyrics in uniqueLyricsSet) {
+      if (copyArabic.isTrue) combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
+      if (copyTransliteration.isTrue) combinedLyrics += '${TextCleanerService.cleanText(lyrics.translitration)}\n';
+      if (copyTranslation.isTrue) combinedLyrics += '${TextCleanerService.cleanText(lyrics.translation)}\n\n';
+    }
+
+    Clipboard.setData(ClipboardData(text: combinedLyrics));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Selected lyrics copied to clipboard!")));
   }
 
   // Method to toggle visibility

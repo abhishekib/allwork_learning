@@ -298,8 +298,114 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               child: const Icon(Icons.copy),
               onPressed: () {
                 // Call the copy functionality from LyricsTab
-                controller.copyAllLyricsToClipboard(
-                    context, availableLyrics, categoryDetails.title);
+                // controller.copyAllLyricsToClipboard(
+                //     context, availableLyrics, categoryDetails.title);
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      actionsAlignment: MainAxisAlignment.center,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      backgroundColor: Colors.white,
+                      title: Text('Select Lyrics Parts to Copy'),
+                      content: SingleChildScrollView(
+                        child: ListBody(
+                          children: <Widget>[
+                            Obx(() => CheckboxListTile(
+                                  activeColor: AppColors.backgroundBlue,
+                                  title: Text(
+                                    'Arabic',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  value: controller.copyArabic.value,
+                                  onChanged: (bool? value) {
+                                    controller.copyArabic(value!);
+                                  },
+                                )),
+                            Obx(() => CheckboxListTile(
+                                  activeColor: AppColors.backgroundBlue,
+                                  title: Text(
+                                    'Transliteration',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  value: controller.copyTransliteration.value,
+                                  onChanged: (bool? value) {
+                                    controller.copyTransliteration(value!);
+                                  },
+                                )),
+                            Obx(() => CheckboxListTile(
+                                  activeColor: AppColors.backgroundBlue,
+                                  title: Text(
+                                    'Translation',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  value: controller.copyTranslation.value,
+                                  onChanged: (bool? value) {
+                                    controller.copyTranslation(value!);
+                                  },
+                                )),
+                          ],
+                        ),
+                      ),
+                      actions: <Widget>[
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor:
+                                WidgetStateProperty.all(Colors.white),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                          child: Text('Cancel',
+                              style: TextStyle(
+                                color: AppColors.backgroundBlue,
+                                fontSize: 18,
+                              )),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(
+                                AppColors.backgroundBlue),
+                            shape: WidgetStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  8,
+                                ),
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            'Copy',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            controller.copySelectedLyricsToClipboard(context,
+                                availableLyrics, categoryDetails.title);
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
             ),
             FloatingActionButton.small(
