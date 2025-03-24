@@ -31,6 +31,13 @@
 			<array>
 				<string>com.googleusercontent.apps.284263985070-555qs2aqse6g03rh0cf13bmlv6r51u0j</string>
 			</array>
+			<array>
+            	<string>https</string>
+        	</array>
+			<key>LSApplicationQueriesSchemes</key>
+			<array>
+				<string>https</string>
+			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
@@ -62,5 +69,6 @@
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+
 </dict>
 </plist>

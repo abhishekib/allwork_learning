@@ -5,6 +5,7 @@ import 'package:allwork/firebase_options.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/install_provider.dart';
 import 'package:allwork/services/db_services.dart';
+import 'package:allwork/services/deep_link_service.dart';
 import 'package:allwork/services/local_notification_services.dart';
 import 'package:allwork/services/location_services.dart';
 import 'package:allwork/utils/colors.dart';
@@ -44,6 +45,12 @@ Future<void> main() async {
 
 //Remove this method to stop OneSignal Debugging
   //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  //   DeepLinkService deepLinkService = DeepLinkService();
+  // await deepLinkService.initialize();
+
+   WidgetsBinding.instance.addPostFrameCallback((_) {
+    DeepLinkService();
+  });
 
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
