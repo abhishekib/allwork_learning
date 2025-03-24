@@ -38,8 +38,10 @@ class ReminderView extends StatelessWidget {
                             DateTime localDateTime = controller
                                 .reminders[index].scheduledDateTime
                                 .toLocal();
-                            log("weekday ${localDateTime.weekday.toString()}");
-                            log("weekday from api constants ${ApiConstants.days[localDateTime.weekday].dayKey}");
+                            log("weekday ${[
+                              localDateTime.weekday - 1
+                            ].toString()}");
+                            log("weekday from api constants ${ApiConstants.days[localDateTime.weekday - 1].dayKey}");
                             // log("weekday from api constants ${ApiConstants.days[0].dayKey}");
                             // log("weekday from api constants ${ApiConstants.days[1].dayKey}");
                             // log("weekday from api constants ${ApiConstants.days[2].dayKey}");
@@ -77,8 +79,9 @@ class ReminderView extends StatelessWidget {
                                             children: [
                                               Text(
                                                   ApiConstants
-                                                      .days[
-                                                          localDateTime.weekday]
+                                                      .days[localDateTime
+                                                              .weekday -
+                                                          1]
                                                       .dayKey,
                                                   style:
                                                       AppTextStyles.customStyle(
