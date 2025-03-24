@@ -97,7 +97,6 @@ class LyricsTabState extends State<LyricsTab> {
       }
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -324,8 +323,7 @@ class LyricsTabState extends State<LyricsTab> {
             fontSize: FontSize(isArabicHighlighted
                 ? settingsController.arabicFontSize.value + 6
                 : settingsController.arabicFontSize.value),
-            fontWeight:
-                isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
+            // fontWeight: isArabicHighlighted ? FontWeight.bold : FontWeight.normal,
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
             textAlign: TextAlign.start,
             direction: TextDirection.rtl,
