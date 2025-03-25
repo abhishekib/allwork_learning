@@ -83,3 +83,7 @@ flutter:
     - family: MUHAMMADI
       fonts:
         - asset: assets/font/MUHAMMADI_QURANIC.ttf
+
+    - family: Al_Qalam_Quran_Majeed_2
+      fonts:
+        - asset: assets/font/Al_Qalam_Quran_Majeed_2.ttf

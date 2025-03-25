@@ -347,11 +347,13 @@ class LyricsTabState extends State<LyricsTab> {
         lyrics.translitration.trim() == "&nbsp;") {
       return Visibility(visible: false, child: SizedBox.shrink());
     }
+    String capitalizedTransliteration = lyrics.translitration.toUpperCase();
 
     return Visibility(
       visible: lyrics.translitration.isNotEmpty && showTransliteration,
       child: Html(
-        data: lyrics.translitration,
+        // data: lyrics.translitration,
+        data: capitalizedTransliteration,
         onLinkTap: (String? url, _, __) async {
           if (url != null) {
             final uri = Uri.parse(url);
