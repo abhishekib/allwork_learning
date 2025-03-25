@@ -153,7 +153,6 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
