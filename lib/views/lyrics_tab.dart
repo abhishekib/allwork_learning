@@ -327,9 +327,9 @@ class LyricsTabState extends State<LyricsTab> {
             color: isArabicHighlighted ? Colors.black87 : Colors.black54,
             textAlign: TextAlign.start,
             direction: TextDirection.rtl,
-            fontFamily: settingsController.arabicFontFamily.value.isEmpty
-                ? 'MUHAMMADI'
-                : settingsController.arabicFontFamily.value,
+            fontFamily: /*  settingsController.arabicFontFamily.value.isEmpty
+                ?  */
+                'Al_Qalam_Quran_Majeed_2' /*   : settingsController.arabicFontFamily.value */,
             wordSpacing: 10,
             textOverflow: TextOverflow.visible,
           ),

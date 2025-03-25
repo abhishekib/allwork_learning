@@ -107,7 +107,7 @@ class SettingsPage extends StatelessWidget {
                 }),
                 const SizedBox(height: 20),
 
-                ElevatedButton(
+                /* ElevatedButton(
                   onPressed: () {
                     settingsController.selectFonts();
                   },
@@ -179,7 +179,7 @@ class SettingsPage extends StatelessWidget {
                           ),
                         )
                       : const SizedBox.shrink();
-                }),
+                }), */
 
                 // const SizedBox(height: 20),
                 // Center(
