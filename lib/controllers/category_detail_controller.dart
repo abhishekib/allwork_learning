@@ -39,6 +39,8 @@ class CategoryDetailController extends GetxController {
   var copyTransliteration = false.obs;
   var copyTranslation = false.obs;
 
+  final Rx<Duration> duration = Duration(hours: 0, minutes: 0).obs;
+
   final LoginController _loginController = Get.put(LoginController());
   final DeepLinkingController _deepLinkingController =
       Get.put(DeepLinkingController());
@@ -292,6 +294,12 @@ class CategoryDetailController extends GetxController {
       LocalNotificationServices.showScheduleNotification(
           category: category, dateTime: nextDay);
     }
+  }
+
+    String formatTime(Duration duration) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes % 60;
+    return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
   }
 
 //method to get the next Date of the week of the given day

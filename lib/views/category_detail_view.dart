@@ -422,12 +422,10 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     color: categoryDetails.isFav == "Yes"
                         ? Colors.red
                         : Colors.purple)),
-            
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.access_alarm),
               onPressed: () async {
-                Duration duration = Duration(hours: 0, minutes: 0);
                 showModalBottomSheet(
                     backgroundColor: Colors.white,
                     constraints: BoxConstraints.tight(Size.fromHeight(
@@ -435,14 +433,71 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                     context: context,
                     builder: (context) => Column(
                           children: [
-                            CupertinoTimerPicker(
-                              backgroundColor: CupertinoColors.white,
-                              mode: CupertinoTimerPickerMode.hm,
-                              onTimerDurationChanged: (value) {
-                                log("Time selected: $value");
-                                duration = value;
-                              },
-                            ),
+                            if (Theme.of(context).platform ==
+                                TargetPlatform.iOS)
+                              CupertinoTimerPicker(
+                                backgroundColor: CupertinoColors.white,
+                                mode: CupertinoTimerPickerMode.hm,
+                                onTimerDurationChanged: (value) {
+                                  log("Time selected: $value");
+                                  controller.duration.value = value;
+                                },
+                              )
+                            else
+                              // Default Material time picker for Android and other platforms
+                              Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Obx(
+                                    () {
+                                      return TextButton(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              controller.formatTime(
+                                                  controller.duration.value),
+                                              style: TextStyle(fontSize: 60),
+                                            ),
+                                            SizedBox(width: 10),
+                                            Icon(
+                                              Icons.timer,
+                                              size: 50,
+                                              color: AppColors.backgroundBlue,
+                                            )
+                                          ],
+                                        ),
+                                        onPressed: () async {
+                                          final TimeOfDay? pickedTime =
+                                              await showTimePicker(
+                                            context: context,
+                                            initialTime: TimeOfDay(
+                                                hour: controller
+                                                    .duration.value.inHours,
+                                                minute: controller.duration
+                                                        .value.inMinutes %
+                                                    60),
+                                            builder: (context, child) {
+                                              return MediaQuery(
+                                                data: MediaQuery.of(context)
+                                                    .copyWith(
+                                                        alwaysUse24HourFormat:
+                                                            true),
+                                                child: child!,
+                                              );
+                                            },
+                                          );
+                                          if (pickedTime != null) {
+                                            log("Time selected: ${pickedTime.format(context)}");
+                                            controller.duration.value =
+                                                Duration(
+                                                    hours: pickedTime.hour,
+                                                    minutes: pickedTime.minute);
+                                          }
+                                        },
+                                      );
+                                    },
+                                  )),
                             //SizedBox(height: 20),
                             // Select Week Days with improved UI
                             SelectWeekDays(
@@ -474,7 +529,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                                 Get.snackbar(
                                     "Reminder", "Reminder set up successfully");
                                 controller.scheduleNotification(
-                                    categoryDetails, duration);
+                                    categoryDetails, controller.duration.value);
                               },
                               child: const Text(
                                 "Set Reminder",
@@ -485,7 +540,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
                         ));
               },
             ),
-            
             FloatingActionButton.small(
               heroTag: null,
               child: const Icon(Icons.settings),
