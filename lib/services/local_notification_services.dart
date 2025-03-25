@@ -1,4 +1,3 @@
-
 import 'dart:core';
 import 'dart:developer';
 import 'package:allwork/modals/category.dart';
@@ -33,12 +32,17 @@ class LocalNotificationServices {
 
   /// Initializes the local notifications plugin and requests necessary permissions.
   static Future<void> init() async {
+    // Request Android notification permissions
+    final androidImplementation =
+        _notificationsPlugin.resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    await androidImplementation?.requestNotificationsPermission();
+
     // Initialize timezone data first
     tz.initializeTimeZones();
 
-    print(await FlutterTimezone.getLocalTimezone());
-
     String timeZone = await FlutterTimezone.getLocalTimezone();
+    print("Time Zone:::----->$timeZone");
     if (timeZone == 'Asia/Calcutta') {
       timeZone = 'Asia/Kolkata';
     }
@@ -53,12 +57,6 @@ class LocalNotificationServices {
         requestSoundPermission: true,
       ),
     );
-
-    // Request Android notification permissions
-    final androidImplementation =
-        _notificationsPlugin.resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    await androidImplementation?.requestNotificationsPermission();
 
     // Initialize with callback for handling notification taps
 
@@ -93,7 +91,6 @@ class LocalNotificationServices {
   //     payload: categoryPayload.toString(),
   //   );
   // }
-  
 
   /// Schedules a notification to be shown after a specific delay
   static Future<void> showScheduleNotification({
@@ -124,17 +121,16 @@ class LocalNotificationServices {
     try {
       print("Scheduling local notification with payload: ${category.title}");
       await _notificationsPlugin.zonedSchedule(
-        DbServices.instance.getNextReminderId(),
-        TextCleanerService.cleanText(category.title),
-        TextCleanerService.cleanText("reminder for ${category.title}"),
-        scheduledTime,
-        notificationDetails,
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        payload: category.title,
-        matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime
-      );
+          DbServices.instance.getNextReminderId(),
+          TextCleanerService.cleanText(category.title),
+          TextCleanerService.cleanText("reminder for ${category.title}"),
+          scheduledTime,
+          notificationDetails,
+          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          payload: category.title,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime);
 
       print("Notification scheduled for: $scheduledTime");
 
