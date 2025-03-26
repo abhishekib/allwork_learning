@@ -101,7 +101,8 @@ class CategoryDetailController extends GetxController {
           lyrics.english!.trim() != '') {
         combinedLyrics += '\n';
         combinedLyrics += '\n';
-        combinedLyrics += TextCleanerService.cleanText(lyrics.english!);
+        combinedLyrics +=
+            '* ${TextCleanerService.cleanText(lyrics.english!)} *\n';
       }
       if (copyArabic.isTrue &&
           lyrics.arabic.isNotEmpty &&
@@ -124,7 +125,7 @@ class CategoryDetailController extends GetxController {
     }
     combinedLyrics += '\n\n';
     combinedLyrics +=
-        'Copied from: *MAFATI Ul JINAN*  https://mafatihuljinan.org/app';
+        'Copied from: *MAFATI Ul JINAN* \n  https://mafatihuljinan.org/app';
     Clipboard.setData(ClipboardData(text: combinedLyrics));
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Selected lyrics copied to clipboard!")));
