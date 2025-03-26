@@ -101,14 +101,17 @@ class CategoryDetailController extends GetxController {
           lyrics.english!.trim() != '') {
         combinedLyrics += '${TextCleanerService.cleanText(lyrics.english!)}\n';
       }
-      if (copyArabic.isTrue)
+      if (copyArabic.isTrue) {
         combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
-      if (copyTransliteration.isTrue)
+      }
+      if (copyTransliteration.isTrue) {
         combinedLyrics +=
-            '${TextCleanerService.cleanText(lyrics.translitration)}\n';
-      if (copyTranslation.isTrue)
+            '${TextCleanerService.cleanText(lyrics.translitration).toUpperCase()}\n';
+      }
+      if (copyTranslation.isTrue) {
         combinedLyrics +=
             '${TextCleanerService.cleanText(lyrics.translation)}\n';
+      }
     }
     combinedLyrics += '\n\n';
     combinedLyrics +=
@@ -205,7 +208,8 @@ class CategoryDetailController extends GetxController {
     );
   }
 
-  void copyAmaalDataToClipboard(BuildContext context, String data, String title) {
+  void copyAmaalDataToClipboard(
+      BuildContext context, String data, String title) {
     data = TextCleanerService.cleanText("$title \n\n ${data}");
 
     Clipboard.setData(ClipboardData(text: data));
@@ -311,7 +315,7 @@ class CategoryDetailController extends GetxController {
     }
   }
 
-    String formatTime(Duration duration) {
+  String formatTime(Duration duration) {
     final hours = duration.inHours;
     final minutes = duration.inMinutes % 60;
     return '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}';
