@@ -32,7 +32,9 @@ class DeepLinkService {
     log('Received deep link: $uri');
 
     // Extract the path segments
-    final segments = uri.pathSegments;
+    final segments = uri.pathSegments
+        .map((segment) => segment.replaceAll('/', ''))
+        .toList();
     if (segments.isEmpty) {
       Get.toNamed('/');
       return;
@@ -72,7 +74,10 @@ class DeepLinkService {
   }
 
   void _navigateToMenuDetail(String menuItem) {
-    _categoryListController.fetchCategoryData(menuItem, false).then((_) {
+    log('------> $menuItem <------');
+    _categoryListController
+        .fetchCategoryData(menuItem.capitalizeFirst!, true)
+        .then((_) {
       Get.to(() => MenuDetailView(
             menuItem: menuItem,
             selectedLanguage: 'English',
