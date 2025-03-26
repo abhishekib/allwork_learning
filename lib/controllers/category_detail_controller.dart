@@ -97,18 +97,27 @@ class CategoryDetailController extends GetxController {
 
     for (var lyrics in uniqueLyricsSet) {
       if (lyrics.english != null &&
-          lyrics.english!.trim() != '&nbsp;' &&
+          lyrics.english!.trim() != '&nbsp' &&
           lyrics.english!.trim() != '') {
-        combinedLyrics += '${TextCleanerService.cleanText(lyrics.english!)}\n';
+        combinedLyrics += '\n';
+        combinedLyrics += '\n';
+        combinedLyrics += TextCleanerService.cleanText(lyrics.english!);
       }
-      if (copyArabic.isTrue) {
+      if (copyArabic.isTrue &&
+          lyrics.arabic.isNotEmpty &&
+          lyrics.arabic != " ") {
         combinedLyrics += '${TextCleanerService.cleanText(lyrics.arabic)}\n';
       }
-      if (copyTransliteration.isTrue) {
+      if (copyTransliteration.isTrue &&
+          lyrics.translitration != null &&
+          lyrics.translitration!.isNotEmpty &&
+          lyrics.translitration != " ") {
         combinedLyrics +=
             '${TextCleanerService.cleanText(lyrics.translitration).toUpperCase()}\n';
       }
-      if (copyTranslation.isTrue) {
+      if (copyTranslation.isTrue &&
+          lyrics.translation != " " &&
+          lyrics.translation!.isNotEmpty) {
         combinedLyrics +=
             '${TextCleanerService.cleanText(lyrics.translation)}\n';
       }
