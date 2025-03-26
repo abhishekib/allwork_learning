@@ -290,7 +290,9 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               heroTag: null,
               child: const Icon(Icons.share),
               onPressed: () {
-                Share.shareUri(Uri.parse(categoryDetails.link!));
+                final shareText =
+                    "${categoryDetails.link!}\n\nCopied from: *MAFATI Ul JINAN*  https://mafatihuljinan.org/app";
+                Share.share(shareText);
               },
             ),
             FloatingActionButton.small(
