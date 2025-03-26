@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:allwork/controllers/deep_link_handler.dart';
 import 'package:allwork/firebase_options.dart';
 import 'package:allwork/modals/category.dart';
 import 'package:allwork/providers/install_provider.dart';
@@ -30,6 +31,8 @@ FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 Future<void> main() async {
   bool fromNotification = false;
   WidgetsFlutterBinding.ensureInitialized();
+  DeepLinkService();
+
   await SharedPreferences.getInstance();
   await LocationService.getUserLocation();
   await LocalNotificationServices.init();
@@ -44,6 +47,11 @@ Future<void> main() async {
 
 //Remove this method to stop OneSignal Debugging
   //OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
+  //   DeepLinkService deepLinkService = DeepLinkService();
+  // await deepLinkService.initialize();
+
+/*   WidgetsBinding.instance.addPostFrameCallback((_) {
+  }); */
 
   var initialNotification =
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
