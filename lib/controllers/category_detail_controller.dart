@@ -86,7 +86,7 @@ class CategoryDetailController extends GetxController {
   void copySelectedLyricsToClipboard(BuildContext context,
       Map<String, List<Lyrics>> availableLyrics, String categoryTitle) {
     String combinedLyrics =
-        '${TextCleanerService.cleanText(categoryTitle)}\n\n';
+        '*${TextCleanerService.cleanText(categoryTitle)}*\n\n';
     Set<Lyrics> uniqueLyricsSet = {};
 
     for (var lyricsList in availableLyrics.values) {
@@ -124,7 +124,7 @@ class CategoryDetailController extends GetxController {
     }
     combinedLyrics += '\n\n';
     combinedLyrics +=
-        'Copied from: MAFATI Ul JINAN  https://mafatihuljinan.org/app';
+        'Copied from: *MAFATI Ul JINAN*  https://mafatihuljinan.org/app';
     Clipboard.setData(ClipboardData(text: combinedLyrics));
     ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Selected lyrics copied to clipboard!")));
