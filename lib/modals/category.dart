@@ -11,7 +11,7 @@ class Category {
   final List<ContentData>? cdata;
   final String? data;
   final String? nextPostTitle;
-  final int? nextPostId;
+  var nextPostId;
 
   Category({
     required this.category,

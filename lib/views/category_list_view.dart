@@ -88,7 +88,10 @@ class CategoryListView extends StatelessWidget {
 
                               //  log(menuItem);
                               if (menuItem == 'Amaal' || menuItem == "અમલ") {
-                                Get.to(AmaalDetailsScreen(item: category));
+                                Get.to(AmaalDetailsScreen(item: category), arguments: {
+                                    'language': selectedLanguage,
+                                    'menuItem': menuItem
+                                  });
                               } else {
                                 Get.toNamed(
                                   '/category-detail',
