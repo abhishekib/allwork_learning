@@ -36,12 +36,9 @@ class _FavCategoryListViewState extends State<FavCategoryListView> {
           iconTheme: IconThemeData(color: Colors.white),
           title: FittedBox(
             fit: BoxFit.scaleDown,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                "Favourite ${widget.menuItem == "Surah" ? "The Holy Quran" : widget.menuItem == "સુરાહ" ? "કુરાન" : widget.menuItem}",
-                style: AppTextStyles.whiteBoldTitleText,
-              ),
+            child: Text(
+              "Favourite ${widget.menuItem == "Surah" ? "The Holy Quran" : widget.menuItem == "સુરાહ" ? "કુરાન" : widget.menuItem}",
+              style: AppTextStyles.whiteBoldTitleText,
             ),
           ),
           actions: [
@@ -80,14 +77,12 @@ class _FavCategoryListViewState extends State<FavCategoryListView> {
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: ReorderableListView(
               onReorder: (oldIndex, newIndex) {
-                setState(() {
-                  if (newIndex > oldIndex) {
-                    newIndex -= 1;
-                  }
-                  final item =
-                      favouriteController.favouriteItems.removeAt(oldIndex);
-                  favouriteController.favouriteItems.insert(newIndex, item);
-                });
+                if (newIndex > oldIndex) {
+                  newIndex -= 1;
+                }
+                final item =
+                    favouriteController.favouriteItems.removeAt(oldIndex);
+                favouriteController.favouriteItems.insert(newIndex, item);
                 _saveOrder(favouriteController.favouriteItems);
               },
               children: List.generate(favouriteController.favouriteItems.length,
