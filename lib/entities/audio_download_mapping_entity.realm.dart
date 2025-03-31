@@ -11,13 +11,14 @@ class AudioDownloadMapping extends _AudioDownloadMapping
     with RealmEntity, RealmObjectBase, RealmObject {
   AudioDownloadMapping(
     String audioName,
-    String audioUrl,
     String audioDownloadPath,
     String categoryName,
-    String categoryType,
-  ) {
+    String categoryType, {
+    Iterable<String> sourceUrls = const [],
+  }) {
     RealmObjectBase.set(this, 'audioName', audioName);
-    RealmObjectBase.set(this, 'audioUrl', audioUrl);
+    RealmObjectBase.set<RealmList<String>>(
+        this, 'sourceUrls', RealmList<String>(sourceUrls));
     RealmObjectBase.set(this, 'audioDownloadPath', audioDownloadPath);
     RealmObjectBase.set(this, 'categoryName', categoryName);
     RealmObjectBase.set(this, 'categoryType', categoryType);
@@ -32,10 +33,11 @@ class AudioDownloadMapping extends _AudioDownloadMapping
   set audioName(String value) => RealmObjectBase.set(this, 'audioName', value);
 
   @override
-  String get audioUrl =>
-      RealmObjectBase.get<String>(this, 'audioUrl') as String;
+  RealmList<String> get sourceUrls =>
+      RealmObjectBase.get<String>(this, 'sourceUrls') as RealmList<String>;
   @override
-  set audioUrl(String value) => RealmObjectBase.set(this, 'audioUrl', value);
+  set sourceUrls(covariant RealmList<String> value) =>
+      throw RealmUnsupportedSetError();
 
   @override
   String get audioDownloadPath =>
@@ -74,7 +76,7 @@ class AudioDownloadMapping extends _AudioDownloadMapping
   EJsonValue toEJson() {
     return <String, dynamic>{
       'audioName': audioName.toEJson(),
-      'audioUrl': audioUrl.toEJson(),
+      'sourceUrls': sourceUrls.toEJson(),
       'audioDownloadPath': audioDownloadPath.toEJson(),
       'categoryName': categoryName.toEJson(),
       'categoryType': categoryType.toEJson(),
@@ -87,17 +89,16 @@ class AudioDownloadMapping extends _AudioDownloadMapping
     return switch (ejson) {
       {
         'audioName': EJsonValue audioName,
-        'audioUrl': EJsonValue audioUrl,
         'audioDownloadPath': EJsonValue audioDownloadPath,
         'categoryName': EJsonValue categoryName,
         'categoryType': EJsonValue categoryType,
       } =>
         AudioDownloadMapping(
           fromEJson(audioName),
-          fromEJson(audioUrl),
           fromEJson(audioDownloadPath),
           fromEJson(categoryName),
           fromEJson(categoryType),
+          sourceUrls: fromEJson(ejson['sourceUrls']),
         ),
       _ => raiseInvalidEJson(ejson),
     };
@@ -109,7 +110,8 @@ class AudioDownloadMapping extends _AudioDownloadMapping
     return const SchemaObject(
         ObjectType.realmObject, AudioDownloadMapping, 'AudioDownloadMapping', [
       SchemaProperty('audioName', RealmPropertyType.string, primaryKey: true),
-      SchemaProperty('audioUrl', RealmPropertyType.string),
+      SchemaProperty('sourceUrls', RealmPropertyType.string,
+          collectionType: RealmCollectionType.list),
       SchemaProperty('audioDownloadPath', RealmPropertyType.string),
       SchemaProperty('categoryName', RealmPropertyType.string),
       SchemaProperty('categoryType', RealmPropertyType.string),

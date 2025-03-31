@@ -169,7 +169,7 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                     onPressed: () async {
                       log("Hit on play pause Normal view");
                       if (!await Helpers.hasActiveInternetConnection() &&
-                          !widget.controller.downloaded.value) {
+                          !widget.controller.isDownloaded(widget.audioUrl)) {
                         Get.dialog(NoInternetDialog());
                       }
                       widget.controller.playPause();
@@ -244,46 +244,59 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       ),
                     ],
                   ),
-                  
-                  Obx(() {
-                    if (widget.controller.downloaded.value) {
-                      return const SizedBox.shrink();
-                    } else if (widget.controller.isDownloading.value) {
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            value: widget.controller.downloadProgress.value,
-                            color: AppColors.backgroundBlue,
-                            strokeWidth: 3,
-                          ),
-                          Text(
-                            '${(widget.controller.downloadProgress.value * 100).toStringAsFixed(0)}%',
-                            style: TextStyle(
-                              fontSize: 10,
-                              color: AppColors.backgroundBlue,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      );
-                    } else {
-                      return IconButton(
-                        onPressed: () => widget.controller.downloadAudio(
-                          widget.audioUrl,
-                          widget.categoryName,
-                          widget.categoryType,
-                        ),
-                        icon: const Icon(Icons.download),
-                      );
-                    }
-                  }),
+                  _buildDownloadButton(),
                 ],
               ),
             ],
           ),
       ],
     );
+  }
+
+  Widget _buildDownloadButton() {
+    return Obx(() {
+      final isDownloaded = widget.controller.isDownloaded(widget.audioUrl);
+      final isDownloading = widget.controller.isDownloading.value;
+      final progress = widget.controller.getProgress(widget.audioUrl);
+
+      if (isDownloaded) {
+        return const SizedBox.shrink();
+      } else if (isDownloading) {
+        return Stack(
+          alignment: Alignment.center,
+          children: [
+            CircularProgressIndicator(
+              value: progress,
+              color: AppColors.backgroundBlue,
+              strokeWidth: 3,
+            ),
+            Text(
+              '${(progress * 100).toStringAsFixed(0)}%',
+              style: TextStyle(
+                fontSize: 10,
+                color: AppColors.backgroundBlue,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        );
+      } else {
+        return IconButton(
+          onPressed: () async {
+            if (!await Helpers.hasActiveInternetConnection()) {
+              Get.dialog(NoInternetDialog());
+              return;
+            }
+            widget.controller.downloadAudio(
+              widget.audioUrl,
+              widget.categoryName,
+              widget.categoryType,
+            );
+          },
+          icon: const Icon(Icons.download),
+        );
+      }
+    });
   }
 
   /*

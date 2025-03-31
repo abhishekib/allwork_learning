@@ -294,7 +294,6 @@ class DbServices {
     return realm.all<ReminderEntity>().query("title == '$title'").length;
   }
 
-
   Future<void> writeAudioDownloadPath(
     String audioUrl,
     String audioDownloadPath,
@@ -304,19 +303,20 @@ class DbServices {
     final audioName = audioUrl.split('/').last;
 
     realm.write(() {
-      
       final existing = realm.find<AudioDownloadMapping>(audioName);
 
       if (existing != null) {
         existing
-          ..audioUrl = audioUrl
           ..audioDownloadPath = audioDownloadPath
           ..categoryName = categoryName
           ..categoryType = categoryType;
+        if (!existing.sourceUrls.contains(audioUrl)) {
+          existing.sourceUrls.add(audioUrl);
+        }
       } else {
         realm.add(AudioDownloadMapping(
           audioName,
-          audioUrl,
+          sourceUrls: [audioUrl],
           audioDownloadPath,
           categoryName,
           categoryType,
@@ -337,7 +337,7 @@ class DbServices {
   //     return null;
   //   }
   // }
-  
+
   String? getAudioDownloadPath(String audioUrl) {
     try {
       final audioName = audioUrl.split('/').last;
@@ -350,11 +350,25 @@ class DbServices {
 
   bool hasAudioDownload(String audioUrl) {
     final audioName = audioUrl.split('/').last;
-    return realm.find<AudioDownloadMapping>(audioName) != null;
+    final mapping = realm.find<AudioDownloadMapping>(audioName);
+    return mapping != null && mapping.sourceUrls.contains(audioUrl);
+  }
+
+  AudioDownloadMapping? getAudioDownloadMapping(String audioName) {
+    return realm.find<AudioDownloadMapping>(audioName);
   }
 
   List<AudioDownloadMapping> getAudioDownloadMappings() {
     return realm.all<AudioDownloadMapping>().toList();
+  }
+
+  void addSourceUrlToMapping(String audioName, String url) {
+    realm.write(() {
+      final mapping = realm.find<AudioDownloadMapping>(audioName);
+      if (mapping != null && !mapping.sourceUrls.contains(url)) {
+        mapping.sourceUrls.add(url);
+      }
+    });
   }
 
   Future<void> deleteAudioDownloadPath(String audioDownloadPath) async {

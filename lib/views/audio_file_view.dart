@@ -35,8 +35,12 @@ class AudioFileView extends StatelessWidget {
                       child: ListView.builder(
                           itemCount: controller.audioDownloadMappings.length,
                           itemBuilder: (context, index) {
-                            AudioController audioController = AudioController();
-                            controller.audioControllers.add(audioController);
+                            /*   AudioController audioController = AudioController();
+                            controller.audioControllers.add(audioController); */
+                            final mapping =
+                                controller.audioDownloadMappings[index];
+                            final audioController =
+                                controller.audioControllers[index];
                             return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ListTile(
@@ -46,14 +50,13 @@ class AudioFileView extends StatelessWidget {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                            "${TextCleanerService.cleanText(controller.audioDownloadMappings[index].categoryName)} - ${controller.audioDownloadMappings[index].categoryType}",
+                                            "${TextCleanerService.cleanText(mapping.categoryName)} - ${mapping.categoryType}",
                                             style: AppTextStyles.whiteText),
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          controller.deleteAudioFile(controller
-                                              .audioDownloadMappings[index]
-                                              .audioDownloadPath);
+                                          controller.deleteAudioFile(
+                                              mapping.audioDownloadPath);
                                         },
                                         child: Icon(Icons.delete,
                                             color: Colors.white),
@@ -69,7 +72,7 @@ class AudioFileView extends StatelessWidget {
                                           .categoryType,
                                       audioUrl: controller
                                           .audioDownloadMappings[index]
-                                          .audioUrl,
+                                          .sourceUrls[0],
                                       onPositionChanged: (currentPosition) {
                                         audioController.currentTime.value =
                                             currentPosition;

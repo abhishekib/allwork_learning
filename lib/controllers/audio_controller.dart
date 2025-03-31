@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/services/db_services.dart';
@@ -25,17 +26,42 @@ class AudioController extends GetxController {
   RxDouble volume = 1.0.obs;
   var audioUrl = ''.obs;
   var isDownloading = false.obs;
-  var downloaded = false.obs;
-  RxDouble downloadProgress = 0.0.obs;
+  final RxMap<String, bool> downloadedStatus = <String, bool>{}.obs;
+  final RxMap<String, double> downloadProgress = <String, double>{}.obs;
   CancelToken cancelToken = CancelToken();
 
   AudioPlayer get audioplayer => _audioPlayer;
   final AudioProvider _audioProvider = AudioProvider();
 
+  bool isDownloaded(String url) {
+    return downloadedStatus[url] ?? false;
+  }
+
+  double getProgress(String url) {
+    return downloadProgress[url] ?? 0.0;
+  }
+
   Future<void> downloadAudio(
-      String url, String categoryName, String categoryType) async {
+    String url,
+    String categoryName,
+    String categoryType,
+  ) async {
     try {
-      if (DbServices.instance.hasAudioDownload(url)) {
+      final fileName = url.split('/').last;
+      final existingMapping =
+          DbServices.instance.getAudioDownloadMapping(fileName);
+      if (existingMapping != null) {
+        // File exists - register this URL if not already present
+        if (!existingMapping.sourceUrls.contains(url)) {
+          DbServices.instance.addSourceUrlToMapping(fileName, url);
+        }
+
+        downloadedStatus[url] = true;
+        audioUrl.value = existingMapping.audioDownloadPath;
+        await setupAudio(existingMapping.audioDownloadPath);
+        return;
+      }
+      /* if (DbServices.instance.hasAudioDownload(url)) {
         final existingPath = DbServices.instance.getAudioDownloadPath(url);
         if (existingPath != null) {
           downloaded.value = true;
@@ -43,9 +69,9 @@ class AudioController extends GetxController {
           await setupAudio(existingPath);
           return;
         }
-      }
+      } */
       isDownloading.value = true;
-      downloadProgress.value = 0.0;
+      downloadProgress[url] = 0.0;
       cancelToken = CancelToken();
 
       final savedPath = await _audioProvider.downloadAudio(
@@ -53,13 +79,19 @@ class AudioController extends GetxController {
         categoryName: categoryName,
         categoryType: categoryType,
         onProgress: (progress) {
-          downloadProgress.value = progress;
+          downloadProgress[url] = progress;
         },
         cancelToken: cancelToken,
       );
 
       if (savedPath != null) {
-        downloaded.value = true;
+        await DbServices.instance.writeAudioDownloadPath(
+          url,
+          savedPath,
+          categoryName,
+          categoryType,
+        );
+        downloadedStatus[url] = true;
         audioUrl.value = savedPath;
         await setupAudio(savedPath);
       }
@@ -68,7 +100,7 @@ class AudioController extends GetxController {
           e.message.contains('RLM_ERR_OBJECT_ALREADY_EXISTS')) {
         final existingPath = DbServices.instance.getAudioDownloadPath(url);
         if (existingPath != null) {
-          downloaded.value = true;
+          downloadedStatus[url] = true;
           audioUrl.value = existingPath;
           await setupAudio(existingPath);
         }
@@ -77,84 +109,84 @@ class AudioController extends GetxController {
       }
     } finally {
       isDownloading.value = false;
+      downloadProgress.remove(url);
     }
   }
 
-  void cancelDownload() {
+/*   void cancelDownload() {
     cancelToken.cancel();
     isDownloading.value = false;
     downloadProgress.value = 0.0;
-  }
+  } */
 
   Future<void> setupAudio(String audioUrl) async {
     log("Setup audio called with url: $audioUrl");
     try {
-      if (await Helpers.hasActiveInternetConnection()) {
-        isLoading.value = true;
-      } else {
-        isLoading.value = false;
-      }
+      isLoading.value = true;
 
-      // Load playback speed before setting the source to ensure it applies correctlFy
+      // Load playback speed first
       await loadPlaybackSpeed();
 
-      //check if audio is already downloaded or not
-      String? audioDownloadPath =
-          DbServices.instance.getAudioDownloadPath(audioUrl);
-      log("Audio download path: $audioDownloadPath");
+      // Check if this specific URL is downloaded
+      final isDownloaded = downloadedStatus[audioUrl] ?? false;
+      final audioName = audioUrl.split('/').last;
+      String? audioDownloadPath;
 
-      if (audioDownloadPath != null) {
+      if (isDownloaded) {
+        // Get path from database
+        audioDownloadPath = DbServices.instance.getAudioDownloadPath(audioName);
         log("Audio already downloaded in path: $audioDownloadPath");
-        downloaded.value = true;
-        await _audioPlayer.setFilePath(audioDownloadPath);
-        //await _audioPlayer.setSource(DeviceFileSource(audioDownloadPath));
-      } else {
-        log("audio url: $audioUrl");
-        await _audioPlayer.setUrl(audioUrl);
-        //await _audioPlayer.setSource(UrlSource(audioUrl));
       }
 
+      // Set audio source based on download status
+      if (isDownloaded && audioDownloadPath != null) {
+        await _audioPlayer.setFilePath(audioDownloadPath);
+        downloadedStatus[audioUrl] = true; // Ensure status is set
+      } else {
+        // Check if file exists but URL wasn't marked as downloaded
+        final existingFile =
+            DbServices.instance.getAudioDownloadMapping(audioName);
+        if (existingFile != null) {
+          await _audioPlayer.setFilePath(existingFile.audioDownloadPath);
+          downloadedStatus[audioUrl] = true; // Update status
+        } else {
+          // Fallback to streaming
+          log("Playing audio from URL: $audioUrl");
+          await _audioPlayer.setUrl(audioUrl);
+          downloadedStatus[audioUrl] = false;
+        }
+      }
+
+      // Wait for audio to initialize
       await Future.delayed(const Duration(milliseconds: 500));
 
-      //final duration = await _audioPlayer.getDuration();
+      // Get duration
       final duration = _audioPlayer.duration;
       if (duration != null) {
         totalTime.value = duration;
       }
 
-      // _audioPlayer.onDurationChanged.listen((duration) {
-      //   totalTime.value = duration;
-      // });
-
+      // Setup listeners
       _audioPlayer.durationStream.listen((event) {
         totalTime.value = event ?? Duration.zero;
       });
 
-      // _audioPlayer.onPositionChanged.listen((position) {
-      //   currentTime.value = Duration(
-      //     seconds: math.min(position.inSeconds, totalTime.value.inSeconds),
-      //   );
-      // });
-
       _audioPlayer.positionStream.listen((event) {
         currentTime.value = event;
       });
-
-      // _audioPlayer.onPlayerComplete.listen((event) {
-      //   currentTime.value = Duration.zero;
-      //   isPlaying.value = false;
-      //   isCompleted.value = true;
-      // });
-
-//on player complete left
 
       isLoading.value = false;
       hasError.value = false;
     } catch (e) {
       isLoading.value = false;
       hasError.value = true;
-      if (kDebugMode) {
-        print("Error loading audio: $e");
+      log("Error loading audio: $e");
+
+      // Fallback to URL if file playback fails
+      if (downloadedStatus[audioUrl] == true) {
+        log("Attempting fallback to streaming");
+        downloadedStatus[audioUrl] = false;
+        await _audioPlayer.setUrl(audioUrl);
       }
     }
   }
@@ -162,14 +194,22 @@ class AudioController extends GetxController {
   Future<void> playPause() async {
     if (isPlaying.value) {
       log("Pausing audio");
-      _audioPlayer.pause();
+      await _audioPlayer.pause();
+      isPlaying.value = false;
     } else {
-      //await _audioPlayer.resume();
       log("Playing audio");
-      _audioPlayer.play();
+      // Verify we have a valid source before playing
+      if ((downloadedStatus[audioUrl.value] == true &&
+          !(await File(DbServices.instance
+                  .getAudioDownloadPath(audioUrl.value.split('/').last)!)
+              .exists()))) {
+        // Handle case where file was deleted externally
+        downloadedStatus[audioUrl.value] = false;
+        await setupAudio(audioUrl.value);
+      }
+      await _audioPlayer.play();
+      isPlaying.value = true;
     }
-    isPlaying.value = !isPlaying.value;
-    log("Is playing: ${isPlaying.value}");
   }
 
   Future<void> muteUnmute() async {
