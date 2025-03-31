@@ -1,36 +1,42 @@
 import 'dart:developer';
 
 import 'package:allwork/services/db_services.dart';
-import 'package:allwork/utils/constants.dart';
 import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AudioProvider {
-  final String token;
   final Dio _dio = Dio();
-  final String baseurl = ApiConstants.baseUrl;
 
-  AudioProvider(this.token);
-
-  Future<String?> downloadAudio(String url, String categoryName, String categoryType) async {
+  Future<String?> downloadAudio({
+    required String url,
+    required String categoryName,
+    required String categoryType,
+    required Function(double) onProgress,
+    required CancelToken cancelToken,
+  }) async {
     try {
       final directory = await getTemporaryDirectory();
-      final filePath = Uri.parse(url).path;
-      final savePath = '${directory.path}/$filePath';
+      final fileName = url.split('/').last;
+      final savePath = '${directory.path}/$fileName';
 
-      await _dio.download(url, savePath, onReceiveProgress: (received, total) {
-        if (total != -1) {
-          double progress = (received / total) * 100;
-          log("Download progress: ${progress.toStringAsFixed(0)}%");
-        }
-      });
+      await _dio.download(
+        url,
+        savePath,
+        cancelToken: cancelToken,
+        onReceiveProgress: (received, total) {
+          if (total != -1) {
+            final progress = received / total;
+            onProgress(progress);
+          }
+        },
+      );
 
-      // Save the audio file to the database
-      DbServices.instance.writeAudioDownloadPath(url, savePath, categoryName, categoryType);
-      
+      await DbServices.instance
+          .writeAudioDownloadPath(url, savePath, categoryName, categoryType);
+
       return savePath;
     } catch (e) {
-      log(e.toString());
+      log('Download error: $e');
       return null;
     }
   }

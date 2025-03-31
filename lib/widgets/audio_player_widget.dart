@@ -1,15 +1,13 @@
 import 'dart:developer';
 
 import 'package:allwork/controllers/audio_controller.dart';
-import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/utils/colors.dart';
-import 'package:allwork/utils/constants.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
 import 'package:allwork/widgets/no_internet_dialog.dart';
-//import 'package:audioplayers/audioplayers.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+//import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   String audioUrl;
@@ -37,8 +35,6 @@ const String playbackSpeedKey = 'playback_speed';
 
 class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
   late AudioPlayer _audioPlayer;
-
-  final AudioProvider audioProvider = AudioProvider(ApiConstants.token);
 
   @override
   void initState() {
@@ -171,12 +167,12 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                   ),
                   IconButton(
                     onPressed: () async {
-                       log("Hit on play pause Normal view");
-                        if (!await Helpers.hasActiveInternetConnection() &&
-                            !widget.controller.downloaded.value) {
-                          Get.dialog(NoInternetDialog());
-                        }
-                        widget.controller.playPause();
+                      log("Hit on play pause Normal view");
+                      if (!await Helpers.hasActiveInternetConnection() &&
+                          !widget.controller.downloaded.value) {
+                        Get.dialog(NoInternetDialog());
+                      }
+                      widget.controller.playPause();
                     },
                     icon: Icon(
                       widget.controller.isPlaying.value
@@ -248,50 +244,40 @@ class AudioPlayerWidgetState extends State<AudioPlayerWidget> {
                       ),
                     ],
                   ),
-                  widget.controller.downloaded.value
-                      ? const SizedBox.shrink()
-                      : widget.controller.isDownloading.value
-                          ? const CircularProgressIndicator(
-                              color: AppColors.backgroundBlue)
-                          : IconButton(
-                              onPressed: () async {
-                                if (!await Helpers
-                                    .hasActiveInternetConnection()) {
-                                  Get.dialog(NoInternetDialog());
-                                  log("No internet avaliable");
-                                } else {
-                                  if (!widget.controller.downloaded.value) {
-                                    log("Changing the state: Starting download");
-                                    widget.controller.isDownloading.value =
-                                        true;
-
-                                    log("Let us download the audio");
-
-                                    audioProvider
-                                        .downloadAudio(
-                                            widget.audioUrl,
-                                            widget.categoryName,
-                                            widget.categoryType)
-                                        .then((savedPath) {
-                                      log("Download complete");
-
-                                      widget.controller.downloaded.value = true;
-                                      widget.controller.isDownloading.value =
-                                          false;
-                                      widget.audioUrl = savedPath!;
-                                    }).catchError((error) {
-                                      widget.controller.isDownloading.value =
-                                          false;
-
-                                      log("Download failed: $error");
-                                    });
-                                  } else {
-                                    log("Audio is already downloaded");
-                                  }
-                                }
-                              },
-                              icon: const Icon(Icons.download),
+                  
+                  Obx(() {
+                    if (widget.controller.downloaded.value) {
+                      return const SizedBox.shrink();
+                    } else if (widget.controller.isDownloading.value) {
+                      return Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          CircularProgressIndicator(
+                            value: widget.controller.downloadProgress.value,
+                            color: AppColors.backgroundBlue,
+                            strokeWidth: 3,
+                          ),
+                          Text(
+                            '${(widget.controller.downloadProgress.value * 100).toStringAsFixed(0)}%',
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: AppColors.backgroundBlue,
+                              fontWeight: FontWeight.bold,
                             ),
+                          ),
+                        ],
+                      );
+                    } else {
+                      return IconButton(
+                        onPressed: () => widget.controller.downloadAudio(
+                          widget.audioUrl,
+                          widget.categoryName,
+                          widget.categoryType,
+                        ),
+                        icon: const Icon(Icons.download),
+                      );
+                    }
+                  }),
                 ],
               ),
             ],
