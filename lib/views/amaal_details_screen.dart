@@ -22,18 +22,21 @@ class AmaalDetailsScreen extends StatefulWidget {
 }
 
 class _AmaalDetailsScreenState extends State<AmaalDetailsScreen> {
-String menuItem = "Amaal";
+  String menuItem = "Amaal";
 
   final DeepLinkingController deepLinkingController =
       Get.put(DeepLinkingController());
 
-  final CategoryDetailController controller = Get.put(CategoryDetailController());
+  final CategoryDetailController controller =
+      Get.put(CategoryDetailController());
 
   @override
   Widget build(BuildContext context) {
-    
     Get.put(FavouriteController());
-    
+    final argumentsData = Get.arguments;
+
+    String language = argumentsData['language'];
+
     return BackgroundWrapper(
       child: Scaffold(
         floatingActionButtonLocation: ExpandableFab.location,
@@ -84,7 +87,7 @@ String menuItem = "Amaal";
                 child: Icon(Icons.favorite,
                     color: widget.item.isFav == "Yes"
                         ? Colors.red
-                        : Colors.purple)), 
+                        : Colors.purple)),
             /*
             FloatingActionButton.small(
               heroTag: null,
@@ -192,6 +195,7 @@ String menuItem = "Amaal";
                 style: {
                   "p": Style(
                     fontSize: FontSize(16.0),
+                    fontFamily: language == 'English' ? 'Roboto' : 'Gopika',
                     fontWeight: FontWeight.w500,
                   ),
                   "br": Style(
