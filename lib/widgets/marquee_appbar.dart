@@ -1,4 +1,3 @@
-
 import 'package:allwork/services/TextCleanerService.dart';
 import 'package:allwork/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +6,8 @@ import 'package:allwork/utils/styles.dart';
 
 class MarqueeTextWidget extends StatelessWidget {
   final List<String> marqueeTexts;
-
-  const MarqueeTextWidget({super.key, required this.marqueeTexts});
+  final TextStyle? style;
+  const MarqueeTextWidget({super.key, required this.marqueeTexts, this.style});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +23,7 @@ class MarqueeTextWidget extends StatelessWidget {
               child: Marquee(
                 text: TextCleanerService.cleanText(marqueeTexts.join(
                     '   ||   ')), // Joining all the text items with separator
-                style:
+                style:style ??
                     AppTextStyles.whiteText, // Custom TextStyle for the marquee
                 blankSpace: 50.0,
                 velocity: 30.0,

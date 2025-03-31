@@ -17,11 +17,13 @@ import 'package:allwork/views/lyrics_tab.dart';
 import 'package:allwork/views/settings_page_view.dart';
 import 'package:allwork/widgets/audio_player_widget.dart';
 import 'package:allwork/widgets/background_wrapper.dart';
+import 'package:allwork/widgets/marquee_appbar.dart';
 import 'package:day_picker/day_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:get/get.dart';
+import 'package:marquee/marquee.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CategoryDetailView extends StatefulWidget {
@@ -181,26 +183,37 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     super.dispose();
   }
 
+  AppBar buildAppBar(String fontFamily) {
+    return AppBar(
+      title: Marquee(
+        text: TextCleanerService.cleanText(categoryDetails.title),
+        style: AppTextStyles.customStyle(
+          fontFamily: fontFamily,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
     if (availableTypes.isEmpty) {
       return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            TextCleanerService.cleanText(categoryDetails.title),
-            style: TextStyle(
-              fontFamily: fontFamily,
-            ),
-          ),
-        ),
+        appBar: buildAppBar(fontFamily),
         body: const Center(child: Text("No data available")),
       );
     }
 
     log("Re build Screen");
     log("Current audio url is ${_audioController.audioUrl.value?.isNotEmpty}");
+
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    String text = TextCleanerService.cleanText(categoryDetails.title);
+
     return BackgroundWrapper(
       child: Scaffold(
         appBar: AppBar(
@@ -208,18 +221,28 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             color: Colors.white,
             size: 30,
           ),
-          title: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              TextCleanerService.cleanText(categoryDetails.title),
-              style: AppTextStyles.customStyle(
-                fontFamily: fontFamily,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-            ),
-          ),
+          title: (mediaQuery.size.width < 600 && text.length > 30)
+              ? MarqueeTextWidget(
+                  marqueeTexts: [text],
+                  style: AppTextStyles.customStyle(
+                    fontFamily: fontFamily,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                )
+              : FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    TextCleanerService.cleanText(categoryDetails.title),
+                    style: AppTextStyles.customStyle(
+                      fontFamily: fontFamily,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
           actions: [
             PopupMenuButton<int>(
               icon: const Icon(Icons.settings, color: Colors.white),
@@ -555,21 +578,21 @@ class CategoryDetailViewState extends State<CategoryDetailView>
           length: availableTypes.length,
           child: Column(
             children: [
-              Obx(() =>
-                   _audioController.audioUrl.value.isNotEmpty ?
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: AudioPlayerWidget(
-                    categoryName: categoryDetails.title,
-                    categoryType:
-                        categoryDetails.cdata![_tabController.index].type,
-                    controller: _audioController,
-                    audioUrl: _audioController.audioUrl.value,
-                    onPositionChanged: (currentPosition) {
-                      _audioController.currentTime.value;
-                    },
-                  ),
-                ): SizedBox.shrink()),
+              Obx(() => _audioController.audioUrl.value.isNotEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: AudioPlayerWidget(
+                        categoryName: categoryDetails.title,
+                        categoryType:
+                            categoryDetails.cdata![_tabController.index].type,
+                        controller: _audioController,
+                        audioUrl: _audioController.audioUrl.value,
+                        onPositionChanged: (currentPosition) {
+                          _audioController.currentTime.value;
+                        },
+                      ),
+                    )
+                  : SizedBox.shrink()),
               const SizedBox(height: 10),
               TabBar(
                 isScrollable: true,
