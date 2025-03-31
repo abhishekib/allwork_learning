@@ -183,27 +183,38 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     super.dispose();
   }
 
-  AppBar buildAppBar(String fontFamily) {
-    return AppBar(
-      title: Marquee(
-        text: TextCleanerService.cleanText(categoryDetails.title),
-        style: AppTextStyles.customStyle(
-          fontFamily: fontFamily,
-          fontSize: 30,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+
 
   @override
   Widget build(BuildContext context) {
     final fontFamily = selectedLanguage == 'English' ? 'Roboto' : 'Gopika';
 
+
+    MediaQueryData mediaQuery = MediaQuery.of(context);
+    String title = TextCleanerService.cleanText(categoryDetails.title);
+
     if (availableTypes.isEmpty) {
       return Scaffold(
-        appBar: buildAppBar(fontFamily),
+        appBar: AppBar(
+          title:(mediaQuery.size.width < 600 && title.length > 30)
+              ? MarqueeTextWidget(
+                  marqueeTexts: [title],
+                  style: AppTextStyles.customStyle(
+                    fontFamily: fontFamily,
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                )
+              :  FittedBox(
+                child: Text(
+                            title,
+                            style: TextStyle(
+                fontFamily: fontFamily,
+                            ),
+                          ),
+              ),
+        ),
         body: const Center(child: Text("No data available")),
       );
     }
@@ -211,8 +222,6 @@ class CategoryDetailViewState extends State<CategoryDetailView>
     log("Re build Screen");
     log("Current audio url is ${_audioController.audioUrl.value?.isNotEmpty}");
 
-    MediaQueryData mediaQuery = MediaQuery.of(context);
-    String text = TextCleanerService.cleanText(categoryDetails.title);
 
     return BackgroundWrapper(
       child: Scaffold(
@@ -221,9 +230,9 @@ class CategoryDetailViewState extends State<CategoryDetailView>
             color: Colors.white,
             size: 30,
           ),
-          title: (mediaQuery.size.width < 600 && text.length > 30)
+          title: (mediaQuery.size.width < 600 && title.length > 30)
               ? MarqueeTextWidget(
-                  marqueeTexts: [text],
+                  marqueeTexts: [title],
                   style: AppTextStyles.customStyle(
                     fontFamily: fontFamily,
                     fontSize: 25,
@@ -234,7 +243,7 @@ class CategoryDetailViewState extends State<CategoryDetailView>
               : FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    TextCleanerService.cleanText(categoryDetails.title),
+                    title,
                     style: AppTextStyles.customStyle(
                       fontFamily: fontFamily,
                       fontSize: 30,
