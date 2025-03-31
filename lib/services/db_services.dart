@@ -294,12 +294,36 @@ class DbServices {
     return realm.all<ReminderEntity>().query("title == '$title'").length;
   }
 
-  Future<void> writeAudioDownloadPath(String audioUrl, String audioDownloadPath,
-      String categoryName, String categoryType) async {
+
+  Future<void> writeAudioDownloadPath(
+    String audioUrl,
+    String audioDownloadPath,
+    String categoryName,
+    String categoryType,
+  ) async {
+    final audioName = audioUrl.split('/').last;
+
     realm.write(() {
-      realm.add(AudioDownloadMapping(audioUrl.split('/').last, audioUrl,
-          audioDownloadPath, categoryName, categoryType));
+      
+      final existing = realm.find<AudioDownloadMapping>(audioName);
+
+      if (existing != null) {
+        existing
+          ..audioUrl = audioUrl
+          ..audioDownloadPath = audioDownloadPath
+          ..categoryName = categoryName
+          ..categoryType = categoryType;
+      } else {
+        realm.add(AudioDownloadMapping(
+          audioName,
+          audioUrl,
+          audioDownloadPath,
+          categoryName,
+          categoryType,
+        ));
+      }
     });
+    log("Audio download path saved/updated for $audioName");
   }
 
   // String? getAudioDownloadPath(String audioUrl) {
@@ -313,9 +337,20 @@ class DbServices {
   //     return null;
   //   }
   // }
+  
+  String? getAudioDownloadPath(String audioUrl) {
+    try {
+      final audioName = audioUrl.split('/').last;
+      return realm.find<AudioDownloadMapping>(audioName)?.audioDownloadPath;
+    } catch (e) {
+      log("Error getting audio path: $e");
+      return null;
+    }
+  }
 
-  String? getAudioDownloadPath(String audioName) {
-    return realm.find<AudioDownloadMapping>(audioName)?.audioDownloadPath;
+  bool hasAudioDownload(String audioUrl) {
+    final audioName = audioUrl.split('/').last;
+    return realm.find<AudioDownloadMapping>(audioName) != null;
   }
 
   List<AudioDownloadMapping> getAudioDownloadMappings() {

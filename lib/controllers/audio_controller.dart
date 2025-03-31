@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:allwork/providers/audio_provider.dart';
 import 'package:allwork/services/db_services.dart';
 import 'package:allwork/utils/menu_helpers/helpers.dart';
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 //import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart'; // For kDebugMode
+import 'package:realm/realm.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -23,8 +26,65 @@ class AudioController extends GetxController {
   var audioUrl = ''.obs;
   var isDownloading = false.obs;
   var downloaded = false.obs;
+  RxDouble downloadProgress = 0.0.obs;
+  CancelToken cancelToken = CancelToken();
 
   AudioPlayer get audioplayer => _audioPlayer;
+  final AudioProvider _audioProvider = AudioProvider();
+
+  Future<void> downloadAudio(
+      String url, String categoryName, String categoryType) async {
+    try {
+      if (DbServices.instance.hasAudioDownload(url)) {
+        final existingPath = DbServices.instance.getAudioDownloadPath(url);
+        if (existingPath != null) {
+          downloaded.value = true;
+          audioUrl.value = existingPath;
+          await setupAudio(existingPath);
+          return;
+        }
+      }
+      isDownloading.value = true;
+      downloadProgress.value = 0.0;
+      cancelToken = CancelToken();
+
+      final savedPath = await _audioProvider.downloadAudio(
+        url: url,
+        categoryName: categoryName,
+        categoryType: categoryType,
+        onProgress: (progress) {
+          downloadProgress.value = progress;
+        },
+        cancelToken: cancelToken,
+      );
+
+      if (savedPath != null) {
+        downloaded.value = true;
+        audioUrl.value = savedPath;
+        await setupAudio(savedPath);
+      }
+    } catch (e) {
+      if (e is RealmException &&
+          e.message.contains('RLM_ERR_OBJECT_ALREADY_EXISTS')) {
+        final existingPath = DbServices.instance.getAudioDownloadPath(url);
+        if (existingPath != null) {
+          downloaded.value = true;
+          audioUrl.value = existingPath;
+          await setupAudio(existingPath);
+        }
+      } else {
+        Get.snackbar('Error', 'Download failed: ${e.toString()}');
+      }
+    } finally {
+      isDownloading.value = false;
+    }
+  }
+
+  void cancelDownload() {
+    cancelToken.cancel();
+    isDownloading.value = false;
+    downloadProgress.value = 0.0;
+  }
 
   Future<void> setupAudio(String audioUrl) async {
     log("Setup audio called with url: $audioUrl");

@@ -10,8 +10,7 @@ class FavouriteController extends GetxController {
   var isLoading = true.obs;
   var hasError = false.obs;
 
-  final FavouriteProvider _favouriteProvider =
-      FavouriteProvider(ApiConstants.token);
+  final FavouriteProvider _favouriteProvider = FavouriteProvider(ApiConstants.token);
 
   String _getEndpoint(String menuItem, {bool isFetching = true}) {
     final Map<String, String> fetchEndpoints = {
@@ -26,7 +25,7 @@ class FavouriteController extends GetxController {
     };
 
     final Map<String, String> addEndpoints = {
-      "Amaal" : ApiConstants.addFavAmaal,
+      "Amaal": ApiConstants.addFavAmaal,
       "Amaal & Namaz": ApiConstants.addFavAmaalNamaaz,
       "Daily Dua": ApiConstants.addFavdailydua,
       "Surah": ApiConstants.addFavSurah,
@@ -34,14 +33,6 @@ class FavouriteController extends GetxController {
       "Ziyarat": ApiConstants.addFavziyarat,
       "Munajat": ApiConstants.addFavmunajat,
       "Travel Ziyarat": ApiConstants.addFavTravelZiyarat,
-      "અમલ અને નમાઝ": ApiConstants.addFavAmaalNamaaz,
-      "રોજની દોઆઓ": ApiConstants.addFavdailydua,
-      "સુરાહ": ApiConstants.addFavSurah,
-      "દોઆઓ": ApiConstants.addFavdua,
-      "ઝિયારાત": ApiConstants.addFavziyarat,
-      "અમલ" : ApiConstants.addFavAmaal,
-      "મુનાજાત": ApiConstants.addFavmunajat,
-      "મુકદ્દસ મઝારાતની ઝિયારાત": ApiConstants.addFavTravelZiyarat,
     };
 
     if (isFetching) {
@@ -71,9 +62,11 @@ class FavouriteController extends GetxController {
         throw Exception("User ID is empty");
       }
 
-      var fetchedItems =
-          await _favouriteProvider.fetchFavouriteList(endpoint, userId);
+      var fetchedItems = await _favouriteProvider.fetchFavouriteList(endpoint, userId);
       favouriteItems.value = fetchedItems;
+
+      // Load the saved order from SharedPreferences and reorder items
+      await _loadSavedOrder(menuItem);
 
       log("Mapped Favourite Items: ${favouriteItems.length}");
       log(favouriteItems.toString());
@@ -96,8 +89,7 @@ class FavouriteController extends GetxController {
 
       String endpoint = _getEndpoint(menuItem, isFetching: false);
 
-      bool success =
-          await _favouriteProvider.addToFavourite(endpoint, userId, itemId);
+      bool success = await _favouriteProvider.addToFavourite(endpoint, userId, itemId);
 
       if (success) {
         log('Item added to favourites successfully!');
@@ -114,5 +106,29 @@ class FavouriteController extends GetxController {
     favouriteItems.clear();
     isLoading.value = true;
     hasError.value = false;
+  }
+
+  // Save the reordered list to SharedPreferences
+  Future<void> _saveOrder(String menuItem) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> orderedIds = favouriteItems.map((e) => e.id).toList();
+    await prefs.setStringList('favourite_order_$menuItem', orderedIds);
+    log("Saved favourite order: $orderedIds");
+  }
+
+  // Load the saved order from SharedPreferences and reorder the list
+  Future<void> _loadSavedOrder(String menuItem) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? orderedIds = prefs.getStringList('favourite_order_$menuItem');
+    
+    if (orderedIds != null && orderedIds.isNotEmpty) {
+      List<FavouriteModel> reorderedItems = [];
+      for (var id in orderedIds) {
+        final item = favouriteItems.firstWhere((e) => e.id == id, orElse: () => FavouriteModel(id: id, title: '', cdata: [])); 
+        reorderedItems.add(item);
+      }
+      favouriteItems.value = reorderedItems;
+      log("Loaded favourite order: $orderedIds");
+    }
   }
 }
